@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <vector>
 #include <cstring>
+#include <map>
 
 const uint32_t WIDTH = 800;
 const uint32_t HEIGHT = 600;
@@ -53,6 +54,7 @@ private:
 	GLFWwindow* window;
 	VkInstance instance;
 	VkDebugUtilsMessengerEXT debugMessenger;
+	VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
 
 	void initWindow() {
 		glfwInit();
@@ -66,6 +68,7 @@ private:
 	void initVulkan() {
 		createInstance();
 		setupDebugMessenger();
+		pickPhysicalDevice();
 	}
 
 	void mainLoop() {
@@ -147,6 +150,61 @@ private:
 			throw std::runtime_error("failed to set up debug messenger!");
 		}
 	}
+
+
+	void pickPhysicalDevice() {
+		uint32_t deviceCount = 0;
+		vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
+		if (deviceCount == 0) {
+			throw std::runtime_error("failed to find any GPUs with vulkan support!");
+		}
+		std::vector<VkPhysicalDevice> devices(deviceCount);
+		vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data());
+
+		std::multimap<int, VkPhysicalDevice> candidates;
+
+		for (const auto& device : devices) {
+			int score = rateDeviceSuitability(device);
+			candidates.insert(std::make_pair(score, device));
+		}
+
+		if (candidates.rbegin()->first > 0) {
+			physicalDevice = candidates.rbegin()->second;
+		}
+		else {
+			throw std::runtime_error("failed to find any suitable GPU!");
+		}
+	}
+
+	int rateDeviceSuitability(VkPhysicalDevice device) {
+		VkPhysicalDeviceProperties deviceProperties;
+		vkGetPhysicalDeviceProperties(device, &deviceProperties);
+		VkPhysicalDeviceFeatures deviceFeatures;
+		vkGetPhysicalDeviceFeatures(device, &deviceFeatures);
+		int score = 0;
+		if (deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) {
+			score += 1000;
+		}
+
+		score += deviceProperties.limits.maxImageDimension2D; // more textures more better :)
+
+		if (!deviceFeatures.geometryShader) {
+			score = 0;
+		}
+		std::cout << deviceProperties.deviceName << ": " << score << std::endl;
+		return score;
+	}
+
+	// Instead of using this method, we are gonna rate the available GPUs and select the most suitable
+	// 
+	//bool isDeviceSuitable(VkPhysicalDevice device) {
+	//	VkPhysicalDeviceProperties deviceProperties;
+	//	VkPhysicalDeviceFeatures deviceFeatures;
+	//	vkGetPhysicalDeviceProperties(device, &deviceProperties);
+	//	vkGetPhysicalDeviceFeatures(device, &deviceFeatures);
+
+	//	return deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU && deviceFeatures.geometryShader;
+	//}
 
 
 	static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
