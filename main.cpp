@@ -7,6 +7,7 @@
 #include <vector>
 #include <cstring>
 #include <map>
+#include <optional>
 
 const uint32_t WIDTH = 800;
 const uint32_t HEIGHT = 600;
@@ -39,6 +40,14 @@ void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT
 		func(instance, debugMessenger, pAllocator);
 	}
 }
+
+struct QueueFamilyIndices {
+	std::optional<uint32_t> graphicsFamily;
+
+	bool isComplete() {
+		return graphicsFamily.has_value();
+	}
+};
 
 
 class HelloTriangleApplication {
@@ -177,6 +186,7 @@ private:
 	}
 
 	int rateDeviceSuitability(VkPhysicalDevice device) {
+		QueueFamilyIndices indices = findQueueFamilies(device);
 		VkPhysicalDeviceProperties deviceProperties;
 		vkGetPhysicalDeviceProperties(device, &deviceProperties);
 		VkPhysicalDeviceFeatures deviceFeatures;
@@ -188,7 +198,7 @@ private:
 
 		score += deviceProperties.limits.maxImageDimension2D; // more textures more better :)
 
-		if (!deviceFeatures.geometryShader) {
+		if (!deviceFeatures.geometryShader || !indices.isComplete()) {
 			score = 0;
 		}
 		std::cout << deviceProperties.deviceName << ": " << score << std::endl;
@@ -206,6 +216,28 @@ private:
 	//	return deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU && deviceFeatures.geometryShader;
 	//}
 
+
+	QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device) {
+		QueueFamilyIndices indices;
+		uint32_t queueFamilyCount = 0;
+		vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
+		std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
+		vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies.data());
+
+		int i = 0;
+		for (const auto& queueFamily : queueFamilies) {
+			if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT) {
+				indices.graphicsFamily = i;
+			}
+
+			if (indices.isComplete())
+				break;
+
+			++i;
+		}
+
+		return indices;
+	}
 
 	static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
 		VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
