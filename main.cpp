@@ -20,17 +20,16 @@ const bool enableValidationLayers = false;
 const bool enableValidationLayers = true;
 #endif
 
-VkResult CreateDebutUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger) {
+VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pCallback) {
 	auto func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
 	if (func != nullptr) {
-		return func(instance, pCreateInfo, pAllocator, pDebugMessenger);
+		return func(instance, pCreateInfo, pAllocator, pCallback);
 	}
 	else {
 		return VK_ERROR_EXTENSION_NOT_PRESENT;
 	}
 }
 
-// clean up
 void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT callback, const VkAllocationCallbacks* pAllocator) {
 	auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
 	if (func != nullptr) {
@@ -133,7 +132,8 @@ private:
 
 	void setupDebugCallback() {
 		if (!enableValidationLayers) return;
-		vk::DebugUtilsMessengerCreateInfoEXT createInfo(
+
+		auto createInfo = vk::DebugUtilsMessengerCreateInfoEXT(
 			vk::DebugUtilsMessengerCreateFlagsEXT(),
 			vk::DebugUtilsMessageSeverityFlagBitsEXT::eVerbose | vk::DebugUtilsMessageSeverityFlagBitsEXT::eWarning | vk::DebugUtilsMessageSeverityFlagBitsEXT::eError,
 			vk::DebugUtilsMessageTypeFlagBitsEXT::eGeneral | vk::DebugUtilsMessageTypeFlagBitsEXT::eValidation | vk::DebugUtilsMessageTypeFlagBitsEXT::ePerformance,
@@ -145,7 +145,7 @@ private:
 		//instance->createDebugUtilsMessengerEXTUnique(createInfo);
 
 		// NOTE: reinterpret_cast is also used by vulkan.hpp internally for all these structs
-		if (CreateDebutUtilsMessengerEXT(*instance, reinterpret_cast<const VkDebugUtilsMessengerCreateInfoEXT*>(&createInfo), nullptr, &callback) != VK_SUCCESS) {
+		if (CreateDebugUtilsMessengerEXT(*instance, reinterpret_cast<const VkDebugUtilsMessengerCreateInfoEXT*>(&createInfo), nullptr, &callback) != VK_SUCCESS) {
 			throw std::runtime_error("failed to set up debug callback!");
 		}
 	}
