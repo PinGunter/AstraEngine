@@ -1,6 +1,5 @@
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
-
 #include <iostream>
 #include <stdexcept>
 #include <cstdlib>
@@ -57,13 +56,12 @@ public:
 		initVulkan();
 		mainLoop();
 		cleanup();
-		createLogicalDevice();
 	}
 
 private:
 	GLFWwindow* window;
-	VkInstance instance;
-	VkDebugUtilsMessengerEXT debugMessenger;
+	VkInstance instance;	VkDebugUtilsMessengerEXT debugMessenger;
+	VkSurfaceKHR surface;
 	VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
 	VkDevice device;
 	VkQueue graphicsQueue;
@@ -80,7 +78,9 @@ private:
 	void initVulkan() {
 		createInstance();
 		setupDebugMessenger();
+		createSurface();
 		pickPhysicalDevice();
+		createLogicalDevice();
 	}
 
 	void mainLoop() {
@@ -97,7 +97,7 @@ private:
 			DestroyDebugUtilsMessengerEXT(instance, debugMessenger, nullptr);
 		}
 
-
+		vkDestroySurfaceKHR(instance, surface, nullptr);
 		vkDestroyInstance(instance, nullptr);
 
 		glfwDestroyWindow(window);
@@ -279,13 +279,27 @@ private:
 		vkGetDeviceQueue(device, indices.graphicsFamily.value(), 0, &graphicsQueue);
 	}
 
+	void createSurface() {
+		if (glfwCreateWindowSurface(instance, window, nullptr, &surface) != VK_SUCCESS) {
+			throw std::runtime_error("Error creating surface!");
+		}
+	}
+
 	static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
 		VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
 		VkDebugUtilsMessageTypeFlagsEXT messageType,
 		const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
 		void* pUserData) {
 
-		std::cerr << "validation layer: " << pCallbackData->pMessage << std::endl;
+		std::string severity;
+		if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT)
+			severity = "VERBOSE";
+		else if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT)
+			severity = "WARNING";
+		else
+			severity = "ERROR";
+
+		std::cerr << "[" << severity << "]" << " validation layer : " << pCallbackData->pMessage << std::endl;
 
 		return VK_FALSE;
 	}
