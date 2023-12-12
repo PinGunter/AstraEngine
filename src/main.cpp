@@ -102,7 +102,7 @@ private:
 
 	void createInstance() {
 		if (enableValidationLayers && !checkValidationLayerSupport()) {
-			throw std::runtime_error("validation layers requestes, but not available!");
+			throw std::runtime_error("validation layers requested, but not available!");
 		}
 
 		vk::ApplicationInfo appInfo = vk::ApplicationInfo(
@@ -135,7 +135,7 @@ private:
 
 		auto createInfo = vk::DebugUtilsMessengerCreateInfoEXT(
 			vk::DebugUtilsMessengerCreateFlagsEXT(),
-			vk::DebugUtilsMessageSeverityFlagBitsEXT::eVerbose | vk::DebugUtilsMessageSeverityFlagBitsEXT::eWarning | vk::DebugUtilsMessageSeverityFlagBitsEXT::eError,
+			vk::DebugUtilsMessageSeverityFlagBitsEXT::eVerbose | vk::DebugUtilsMessageSeverityFlagBitsEXT::eWarning | vk::DebugUtilsMessageSeverityFlagBitsEXT::eError | vk::DebugUtilsMessageSeverityFlagBitsEXT::eInfo,
 			vk::DebugUtilsMessageTypeFlagBitsEXT::eGeneral | vk::DebugUtilsMessageTypeFlagBitsEXT::eValidation | vk::DebugUtilsMessageTypeFlagBitsEXT::ePerformance,
 			debugCallback,
 			nullptr
@@ -283,6 +283,8 @@ private:
 			severity = "VERBOSE";
 		else if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT)
 			severity = "WARNING";
+		else if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT)
+			severity = "INFO";
 		else
 			severity = "ERROR";
 
