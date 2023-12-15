@@ -8,6 +8,9 @@
 #include <map>
 #include <optional>
 #include <set>
+#include <cstdint>
+#include <limits>
+#include <algorithm>
 
 const uint32_t WIDTH = 800;
 const uint32_t HEIGHT = 600;
@@ -54,6 +57,11 @@ struct QueueFamilyIndices {
 	}
 };
 
+struct SwapchainSupportDetails {
+	VkSurfaceCapabilitiesKHR capabilities;
+	std::vector<VkSurfaceFormatKHR> formats;
+	std::vector<VkPresentModeKHR> presentModes;
+};
 
 class HelloTriangleApplication {
 public:
@@ -209,26 +217,21 @@ private:
 			score += 1000;
 		}
 
-		score += deviceProperties.limits.maxImageDimension2D; // more textures more better :)
+		// we could increase the score based on the gpu properties
+		// score += deviceProperties.limits.maxImageDimension2D; 
 
-		if (!(indices.isComplete() && extensionsSupported)) {
+		bool swapchainAdequate = false;
+		if (extensionsSupported) {
+			SwapchainSupportDetails swapchainSupport = querySwapchainSupport(device);
+			swapchainAdequate = !swapchainSupport.formats.empty() && !swapchainSupport.presentModes.empty();
+		}
+
+		if (!(indices.isComplete() && extensionsSupported && swapchainAdequate)) {
 			score = 0;
 		}
 		std::cout << deviceProperties.deviceName << ": " << score << std::endl;
 		return score;
 	}
-
-	// Instead of using this method, we are gonna rate the available GPUs and select the most suitable
-	// 
-	//bool isDeviceSuitable(VkPhysicalDevice device) {
-	//	VkPhysicalDeviceProperties deviceProperties;
-	//	VkPhysicalDeviceFeatures deviceFeatures;
-	//	vkGetPhysicalDeviceProperties(device, &deviceProperties);
-	//	vkGetPhysicalDeviceFeatures(device, &deviceFeatures);
-
-	//	return deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU && deviceFeatures.geometryShader;
-	//}
-
 
 	QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device) {
 		QueueFamilyIndices indices;
@@ -255,6 +258,79 @@ private:
 		}
 
 		return indices;
+	}
+
+	SwapchainSupportDetails querySwapchainSupport(VkPhysicalDevice device) {
+		SwapchainSupportDetails details;
+		uint32_t formatCount, presentModeCount;
+		vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, surface, &details.capabilities);
+		vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &formatCount, nullptr);
+		if (formatCount != 0) {
+			details.formats.resize(formatCount);
+			vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &formatCount, details.formats.data());
+		}
+		vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface, &presentModeCount, nullptr);
+		if (presentModeCount != 0) {
+			details.presentModes.resize(presentModeCount);
+			vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface, &presentModeCount, details.presentModes.data());
+		}
+
+		return details;
+	}
+
+	VkSurfaceFormatKHR chooseSwapchainSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats) {
+		for (const auto& format : availableFormats) {
+			if (format.format == VK_FORMAT_B8G8R8_SRGB && format.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
+				return format;
+			}
+		}
+		// maybe rate the available formats and color spaces
+		// in this case we'll just return the first one that's available
+		return availableFormats[0];
+	}
+
+	VkPresentModeKHR chooseSwapchainPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes) {
+		// there are 4 modes: IMMEDIATE, FIFO, FIFO relaxed, MAILBOX
+		/*
+		* IMMEDIATE: images generated are transferred immediately => tearing
+		* FIFO: image queue, if full => program waits for opening => vsync
+		* FIFO relaxed: same as FIFO but if app is late and queue was empty at last vertical blank => immediate next image => tearing
+		* MAILBOX: sames as FIFO, if full => last frames are switched for new ones => triple buffering
+		*
+		* We try to favour mailbox as the default presentmode
+		*/
+		for (const auto& presentMode : availablePresentModes) {
+			if (presentMode == VK_PRESENT_MODE_MAILBOX_KHR) {
+				return presentMode;
+			}
+		}
+		return VK_PRESENT_MODE_FIFO_KHR; // this is the only one guaranteed by spec
+	}
+
+	/*
+	* swapExtend is the resolution of the swapchain images, it should ~match the window resolution
+	* VkSurfaceCapabilitesKHR provides the range of possible resolutions
+	* we should set the current width and height in the currentExtent attribute
+	* we are gonna set the values as the uint32_t limit and then choose the resolution that bests matches the window resolution
+	*/
+	VkExtent2D chooseSwapExtend(const VkSurfaceCapabilitiesKHR& capabilities) {
+		if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
+			return capabilities.currentExtent;
+		}
+		else {
+			int width, height;
+			glfwGetFramebufferSize(window, &width, &height);
+
+			VkExtent2D actualExtent = {
+				static_cast<uint32_t>(width),
+				static_cast<uint32_t>(height)
+			};
+
+			actualExtent.width = std::clamp(actualExtent.width, capabilities.minImageExtent.width, capabilities.maxImageExtent.width);
+			actualExtent.height = std::clamp(actualExtent.height, capabilities.minImageExtent.height, capabilities.maxImageExtent.height);
+
+			return actualExtent;
+		}
 	}
 
 	void createLogicalDevice() {
