@@ -74,12 +74,23 @@ public:
 
 private:
 	GLFWwindow* window;
-	VkInstance instance;	VkDebugUtilsMessengerEXT debugMessenger;
+	VkInstance instance;
+	VkDebugUtilsMessengerEXT debugMessenger;
 	VkSurfaceKHR surface;
+
+	// devices
 	VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
 	VkDevice device;
+
+	// queues
 	VkQueue graphicsQueue;
 	VkQueue presentQueue;
+
+	// swapchain
+	VkSwapchainKHR swapchain;
+	std::vector<VkImage> swapchainImages;
+	VkFormat swapchainImageFormat;
+	VkExtent2D swapchainExtent;
 
 	void initWindow() {
 		glfwInit();
@@ -96,6 +107,7 @@ private:
 		createSurface();
 		pickPhysicalDevice();
 		createLogicalDevice();
+		createSwapchain();
 	}
 
 	void mainLoop() {
@@ -105,6 +117,8 @@ private:
 	}
 
 	void cleanup() {
+
+		vkDestroySwapchainKHR(device, swapchain, nullptr);
 
 		vkDestroyDevice(device, nullptr);
 
@@ -331,6 +345,85 @@ private:
 
 			return actualExtent;
 		}
+	}
+
+	/*
+	* Create the swapchain with the previously defined methods
+	*/
+	void createSwapchain() {
+		SwapchainSupportDetails swapchainSupport = querySwapchainSupport(physicalDevice);
+
+		VkSurfaceFormatKHR surfaceFormat = chooseSwapchainSurfaceFormat(swapchainSupport.formats);
+		VkPresentModeKHR presentMode = chooseSwapchainPresentMode(swapchainSupport.presentModes);
+		VkExtent2D extent = chooseSwapExtend(swapchainSupport.capabilities);
+
+		// at least 1 more than the minimun so there is less idle time
+		uint32_t imageCount = swapchainSupport.capabilities.minImageCount + 1;
+
+		// 0 is a special value that means that there is no maximum
+		if (swapchainSupport.capabilities.maxImageCount > 0 && imageCount > swapchainSupport.capabilities.maxImageCount) {
+			imageCount = swapchainSupport.capabilities.maxImageCount;
+		}
+
+		VkSwapchainCreateInfoKHR createInfo{};
+		createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+		createInfo.surface = surface;
+		createInfo.minImageCount = imageCount;
+		createInfo.imageFormat = surfaceFormat.format;
+		createInfo.imageColorSpace = surfaceFormat.colorSpace;
+		createInfo.imageExtent = extent;
+		createInfo.imageArrayLayers = 1; // Always 1, except if developing estereoscopic 3d images :)
+
+		// This bit specifies what kind of operation are the images generated in the swapchain used for.
+		// As of now, the images are going to be rendered directly into them => they are used as color attachment
+		// We could render images to a separate image first to perform operations like post-processing
+		// In that case, maybe using VK_IMAGE_USAGE_TRANSFER_DST_BIT 
+		// and then use a memory operation to transfer the rendered image to the swapchain
+		createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+
+		/*
+		* We need to specify how to handle swapchain images in the different queue families
+		* We will draw the image in the swapchain from the graphics queue and then submit it to the presentation queue
+		*
+		* There are two ways to handle that:
+		* * CONCURRENT: images can be used across multiple queues without explicit ownership transfers
+		* * EXCLUSIVE: an image is owned by one queue family at a time. Ownership must be explicitly transferred. Better performance
+		*
+		* As of now, we'll stick to concurrent so that we don't have to handle ownership transfers
+		*/
+		QueueFamilyIndices indices = findQueueFamilies(physicalDevice);
+		uint32_t queueFamilyIndices[] = { indices.graphicsFamily.value(), indices.presentFamily.value() };
+
+		if (indices.graphicsFamily != indices.presentFamily) {
+			createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
+			createInfo.queueFamilyIndexCount = 2;
+			createInfo.pQueueFamilyIndices = queueFamilyIndices;
+		}
+		else {
+			createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+			createInfo.queueFamilyIndexCount = 0; // Optional
+			createInfo.pQueueFamilyIndices = nullptr; // Optional
+		}
+
+		createInfo.preTransform = swapchainSupport.capabilities.currentTransform; // no transformations
+
+		createInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+
+		createInfo.presentMode = presentMode;
+		createInfo.clipped = VK_TRUE;
+
+		createInfo.oldSwapchain = VK_NULL_HANDLE; // Future
+
+		if (vkCreateSwapchainKHR(device, &createInfo, nullptr, &swapchain) != VK_SUCCESS) {
+			throw std::runtime_error("failed to create swapchain");
+		}
+
+		vkGetSwapchainImagesKHR(device, swapchain, &imageCount, nullptr);
+		swapchainImages.resize(imageCount);
+		vkGetSwapchainImagesKHR(device, swapchain, &imageCount, swapchainImages.data());
+
+		swapchainImageFormat = surfaceFormat.format;
+		swapchainExtent = extent;
 	}
 
 	void createLogicalDevice() {
