@@ -27,6 +27,7 @@ static std::vector<char> readFile(const std::string& filename) {
 	std::vector<char> buffer(fileSize);
 	file.seekg(0); // back to the begginning to read bytes
 	file.read(buffer.data(), fileSize);
+	std::cout << filename << ": " << fileSize << " bytes" << std::endl;
 	file.close();
 	return buffer;
 }
@@ -112,7 +113,9 @@ private:
 	std::vector<VkImageView> swapchainImageViews;
 
 	// pipeline
+	VkRenderPass renderPass;
 	VkPipelineLayout pipelineLayout;
+	VkPipeline graphicsPipeline;
 
 
 	void initWindow() {
@@ -132,6 +135,7 @@ private:
 		createLogicalDevice();
 		createSwapchain();
 		createImageViews();
+		createRenderPass();
 		createGraphicsPipeline();
 	}
 
@@ -142,7 +146,9 @@ private:
 	}
 
 	void cleanup() {
+		vkDestroyPipeline(device, graphicsPipeline, nullptr);
 		vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
+		vkDestroyRenderPass(device, renderPass, nullptr);
 
 		for (auto imageView : swapchainImageViews) {
 			vkDestroyImageView(device, imageView, nullptr);
@@ -483,10 +489,41 @@ private:
 		}
 	}
 
+	void createRenderPass() {
+		VkAttachmentDescription colorAttachment{};
+		colorAttachment.format = swapchainImageFormat;
+		colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT; // not doing multisampling yet
+		colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR; // clear buffer after render
+		colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE; // store values
+		colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE; // we are not doing anything with the stencil buffer as of now
+		colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+		colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+		colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+
+		VkAttachmentReference colorAttachmentRef{};
+		colorAttachmentRef.attachment = 0; // index of attachment, since we only have 1, its 0
+		colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+		VkSubpassDescription subpass{};
+		subpass.colorAttachmentCount = 1;
+		subpass.pColorAttachments = &colorAttachmentRef;
+
+		VkRenderPassCreateInfo createInfo{};
+		createInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+		createInfo.attachmentCount = 1;
+		createInfo.pAttachments = &colorAttachment;
+		createInfo.subpassCount = 1;
+		createInfo.pSubpasses = &subpass;
+
+		if (vkCreateRenderPass(device, &createInfo, nullptr, &renderPass) != VK_SUCCESS) {
+			throw std::runtime_error("Error creating renderpass");
+		}
+	}
+
 	void createGraphicsPipeline() {
 		// read the bytecode
-		auto vertShaderCode = readFile("shaders/vert.spv");
-		auto fragShaderCode = readFile("shaders/frag.spv");
+		auto vertShaderCode = readFile("shaders/shader_vert.spv");
+		auto fragShaderCode = readFile("shaders/shader_frag.spv");
 
 		// wrap it in VkShaderModule struct
 		VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);
@@ -500,10 +537,10 @@ private:
 		vertShaderStageInfo.pName = "main";
 
 		VkPipelineShaderStageCreateInfo fragShaderStageInfo{};
-		vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-		vertShaderStageInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-		vertShaderStageInfo.module = fragShaderModule;
-		vertShaderStageInfo.pName = "main";
+		fragShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+		fragShaderStageInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+		fragShaderStageInfo.module = fragShaderModule;
+		fragShaderStageInfo.pName = "main";
 
 
 		VkPipelineShaderStageCreateInfo shaderStages[] = { vertShaderStageInfo, fragShaderStageInfo };
@@ -625,6 +662,28 @@ private:
 
 		if (vkCreatePipelineLayout(device, &pipelineLayoutCreateInfo, nullptr, &pipelineLayout) != VK_SUCCESS) {
 			throw std::runtime_error("Error creating pipeline layot!");
+		}
+
+		VkGraphicsPipelineCreateInfo pipelineInfo{};
+		pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+		pipelineInfo.stageCount = 2;
+		pipelineInfo.pStages = shaderStages;
+		pipelineInfo.pVertexInputState = &vertexInputInfo;
+		pipelineInfo.pInputAssemblyState = &inputAssembly;
+		pipelineInfo.pViewportState = &viewportState;
+		pipelineInfo.pRasterizationState = &rasterizer;
+		pipelineInfo.pMultisampleState = &multisampling;
+		pipelineInfo.pDepthStencilState = nullptr;
+		pipelineInfo.pColorBlendState = &colorBlending;
+		pipelineInfo.pDynamicState = &dynamicState;
+		pipelineInfo.layout = pipelineLayout;
+		pipelineInfo.renderPass = renderPass;
+		pipelineInfo.subpass = 0;
+		pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // could be used to derive pipelines. Needs to have VK_PIPELINE_CREATE_DERIVATIVE_BIT flag
+		pipelineInfo.basePipelineIndex = -1;
+
+		if (vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &graphicsPipeline) != VK_SUCCESS) {
+			throw std::runtime_error("Error creating graphics pipeline");
 		}
 
 		// destroy shaders
