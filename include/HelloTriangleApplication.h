@@ -4,15 +4,30 @@
 #include <vector>
 #include <string>
 #include <optional>
+#include <glm/glm.hpp>
+#include <Vertex.h>
+
+// CONSTANTS
+const uint32_t WIDTH = 900;
+const uint32_t HEIGHT = 1200;
+
+const std::vector<Vertex> vertices = {
+	{{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+	{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
+	{{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
+	{{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
+};
+
+const std::vector<uint16_t> indices = {
+	0, 1, 2, 2, 3, 0
+};
+
+const int MAX_FRAMES_IN_FLIGHT = 2;
+
 
 // function to get the address for vkCreateDebugUtilsMessengerEXT function, since its an extension function we first have to get the address
 VkResult CreateDebutUtilsMessengerExt(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger);
 void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT  debugMessenger, const VkAllocationCallbacks* pAllocator);
-
-const uint32_t WIDTH = 900;
-const uint32_t HEIGHT = 1200;
-
-const int MAX_FRAMES_IN_FLIGHT = 2;
 
 const std::vector<const char*> validationLayers = {
 	"VK_LAYER_KHRONOS_validation"
@@ -30,6 +45,7 @@ const bool enableValidationLayers = true;
 
 // utils function
 static std::vector<char> readFile(const std::string& filename);
+
 
 /**
 * Struct to store the different queueu family indices
@@ -114,6 +130,13 @@ private:
 	bool framebufferResized = false;
 
 	uint32_t currentFrame = 0;
+
+	// draw info
+	VkBuffer vertexBuffer;
+	VkDeviceMemory vertexBufferMemory;
+	VkBuffer indexBuffer;
+	VkDeviceMemory indexBufferMemory;
+
 
 	// -----------
 	// METHODS
@@ -220,6 +243,30 @@ private:
 	* creates the command pool
 	*/
 	void createCommandPool();
+
+	/**
+	* creates buffers
+	*/
+	void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
+
+	/**
+	* copies buffer contents
+	*/
+	void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
+
+	/**
+	* creates the vertex buffers for the shaders
+	*/
+	void createVertexBuffer();
+
+	/**
+	* creates the index buffers for the shaders
+	*/
+	void createIndexBuffer();
+	/**
+	* gets the needed memory type for the @param properties struct
+	*/
+	uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
 
 	/**
 	* creates the command buffers

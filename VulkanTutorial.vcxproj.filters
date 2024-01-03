@@ -26,5 +26,8 @@
     <ClInclude Include="include\HelloTriangleApplication.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Vertex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
