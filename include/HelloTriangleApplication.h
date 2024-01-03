@@ -1,5 +1,7 @@
 #pragma once
 #define GLFW_INCLUDE_VULKAN
+#define GLM_FORCE_RADIANS
+#define GLM_FORCE_DEFAULT_ALIGNED_GENTYPES
 #include <GLFW/glfw3.h>
 #include <vector>
 #include <string>
@@ -8,19 +10,65 @@
 #include <Vertex.h>
 
 // CONSTANTS
-const uint32_t WIDTH = 900;
-const uint32_t HEIGHT = 1200;
+const uint32_t WIDTH = 800;
+const uint32_t HEIGHT = 800;
 
+const float sideLength = 0.5f;
 const std::vector<Vertex> vertices = {
-	{{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-	{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
-	{{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
-	{{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
+	{{sideLength,sideLength,-sideLength}, {1.0f, 1.0f, 0.0f}}, // 0 a
+	{{sideLength,sideLength,sideLength}, {1.0f, 1.0f, 1.0f}}, // 1 b
+	{{sideLength,-sideLength,-sideLength}, {1.0f, 0.0f, 0.0f}}, // 2 c
+	{{sideLength,-sideLength,sideLength}, {1.0f, 0.0f, 1.0f}}, // 3 d
+	{{-sideLength,sideLength,-sideLength}, {0.0f, 1.0f, 0.0f}}, // 4 e
+	{{-sideLength,sideLength,sideLength}, {0.0f, 1.0f, 0.0f}}, // 5 f
+	{{-sideLength,-sideLength,-sideLength}, {0.0f, 0.0f, 0.0f}}, // 6 g
+	{{-sideLength,-sideLength,sideLength}, {0.0f, 0.0f, 1.0f}}, // 7 h
 };
 
 const std::vector<uint16_t> indices = {
-	0, 1, 2, 2, 3, 0
+	0, 1, 2,
+	1, 3, 2,
+	4, 6, 7,
+	7, 5, 4,
+	2, 3, 6,
+	6, 3, 7,
+	0, 4, 5,
+	0, 5, 1,
+	1, 5, 7,
+	1, 7, 3,
+	2, 6, 4,
+	2, 4, 0
 };
+//const std::vector<Vertex> vertices = {
+//	{{0.0f, 0.0f}, {1.0f,1.0f, 0.0f}}, // center 0
+//	{{0.0f, -0.7f}, {1.0f,0.0f, 0.0f}}, // a 1
+//	{{-0.2f, -0.85f}, {1.0f,0.0f, 0.0f}}, // b 2
+//	{{-0.6f, -0.8f}, {1.0f,0.0f, 0.0f}}, // c 3
+//	{{-0.75f, -0.4f}, {1.0f,0.0f, 0.0f}}, // d 4
+//	{{-0.7f, -0.1f}, {1.0f,0.0f, 0.0f}}, // e 5
+//	{{-0.4f, 0.4f}, {1.0f,0.0f, 0.0f}}, // f 6
+//	{{0.0f, 0.8f}, {1.0f,0.0f, 0.0f}}, //g 7
+//	{{0.4f, 0.4f}, {1.0f,0.0f, 0.0f}}, // f' 8
+//	{{0.7f, -0.1f}, {1.0f,0.0f, 0.0f}}, // e' 9
+//	{{0.75f, -0.4f}, {1.0f,0.0f, 0.0f}}, // d' 10
+//	{{0.6f, -0.8f}, {1.0f,0.0f, 0.0f}}, // c' 11
+//	{{0.2f, -0.85f}, {1.0f,0.0f, 0.0f}}, // b' 12
+//};
+//
+//const std::vector<uint16_t> indices = {
+//	0, 1, 2,
+//	0, 2, 3,
+//	0, 3, 4,
+//	0, 4, 5,
+//	0, 5, 6,
+//	0, 6, 7,
+//	0, 7 ,8,
+//	0, 8, 9,
+//	0, 9, 10,
+//	0, 10, 11,
+//	0, 11, 12,
+//	0, 12, 1
+//};
 
 const int MAX_FRAMES_IN_FLIGHT = 2;
 
@@ -68,6 +116,15 @@ struct SwapchainSupportDetails {
 	std::vector<VkPresentModeKHR> presentModes;
 };
 
+/**
+* Uniform Buffer Object
+*/
+
+struct UniformBufferObject {
+	alignas(16) glm::mat4 model;
+	alignas(16) glm::mat4 view;
+	alignas(16) glm::mat4 proj;
+};
 
 class HelloTriangleApplication {
 public:
@@ -114,6 +171,9 @@ private:
 
 	// pipeline
 	VkRenderPass renderPass;
+	VkDescriptorSetLayout descriptorSetLayout;
+	VkDescriptorPool descriptorPool;
+	std::vector<VkDescriptorSet> descriptorSets;
 	VkPipelineLayout pipelineLayout;
 	VkPipeline graphicsPipeline;
 
@@ -137,6 +197,10 @@ private:
 	VkBuffer indexBuffer;
 	VkDeviceMemory indexBufferMemory;
 
+	// uniform buffers
+	std::vector<VkBuffer> uniformBuffers;
+	std::vector<VkDeviceMemory> uniformBuffersMemory;
+	std::vector<void*> uniformBuffersMapped;
 
 	// -----------
 	// METHODS
@@ -228,6 +292,10 @@ private:
 	void createRenderPass();
 
 	/**
+	* creates the descriptorsetlayout which will specifies the resources to be accessed from the pipeline
+	*/
+	void createDescriptorSetLayout();
+	/**
 	* reads and creates the shadermodules for the current vertex and fragment shaders
 	* creates all the fixed function stages of the render pipeline
 	* finally creates the pipeline
@@ -263,6 +331,27 @@ private:
 	* creates the index buffers for the shaders
 	*/
 	void createIndexBuffer();
+
+	/**
+	* creates the uniform buffers for the shaders
+	*/
+	void createUniformBuffers();
+
+	/**
+	* creates the descriptor pools for the descriptor sets
+	*/
+	void createDescriptorPool();
+
+	/**
+	* creates and allocates the descriptor sets
+	*/
+	void createDescriptorSets();
+
+	/**
+	* updates the uniform buffer for the current frame
+	*/
+	void updateUniformBuffer(uint32_t currentImage);
+
 	/**
 	* gets the needed memory type for the @param properties struct
 	*/
