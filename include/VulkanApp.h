@@ -413,5 +413,8 @@ private:
 		VkDebugUtilsMessageTypeFlagsEXT messageType,
 		const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
 		void* pUserData);
+
+	void DestroyDebugUtilsMessengerEXT(const VkAllocationCallbacks* pAllocator);
 };
+
 
