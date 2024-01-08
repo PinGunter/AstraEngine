@@ -1,10 +1,8 @@
-#include <exception>
+#include "VulkanApp.h"
 #include <iostream>
-#include "HelloTriangleApplication.h"
-
 
 int main() {
-	HelloTriangleApplication app;
+	VulkanApp app;
 
 	try {
 		app.run();
@@ -13,6 +11,5 @@ int main() {
 		std::cerr << e.what() << std::endl;
 		return EXIT_FAILURE;
 	}
-
 	return EXIT_SUCCESS;
 }

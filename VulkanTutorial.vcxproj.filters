@@ -18,15 +18,15 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\HelloTriangleApplication.cpp">
+    <ClCompile Include="src\VulkanApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\HelloTriangleApplication.h">
+    <ClInclude Include="include\Vertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Vertex.h">
+    <ClInclude Include="include\VulkanApp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

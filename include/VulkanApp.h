@@ -1,7 +1,7 @@
 #pragma once
-#define GLFW_INCLUDE_VULKAN
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEFAULT_ALIGNED_GENTYPES
+#include <vulkan/vulkan.hpp>
 #include <GLFW/glfw3.h>
 #include <vector>
 #include <string>
@@ -11,7 +11,8 @@
 
 // CONSTANTS
 const uint32_t WIDTH = 800;
-const uint32_t HEIGHT = 800;
+const uint32_t HEIGHT = 600;
+const int MAX_FRAMES_IN_FLIGHT = 2;
 
 const float sideLength = 0.5f;
 const std::vector<Vertex> vertices = {
@@ -39,43 +40,6 @@ const std::vector<uint16_t> indices = {
 	2, 6, 4,
 	2, 4, 0
 };
-//const std::vector<Vertex> vertices = {
-//	{{0.0f, 0.0f}, {1.0f,1.0f, 0.0f}}, // center 0
-//	{{0.0f, -0.7f}, {1.0f,0.0f, 0.0f}}, // a 1
-//	{{-0.2f, -0.85f}, {1.0f,0.0f, 0.0f}}, // b 2
-//	{{-0.6f, -0.8f}, {1.0f,0.0f, 0.0f}}, // c 3
-//	{{-0.75f, -0.4f}, {1.0f,0.0f, 0.0f}}, // d 4
-//	{{-0.7f, -0.1f}, {1.0f,0.0f, 0.0f}}, // e 5
-//	{{-0.4f, 0.4f}, {1.0f,0.0f, 0.0f}}, // f 6
-//	{{0.0f, 0.8f}, {1.0f,0.0f, 0.0f}}, //g 7
-//	{{0.4f, 0.4f}, {1.0f,0.0f, 0.0f}}, // f' 8
-//	{{0.7f, -0.1f}, {1.0f,0.0f, 0.0f}}, // e' 9
-//	{{0.75f, -0.4f}, {1.0f,0.0f, 0.0f}}, // d' 10
-//	{{0.6f, -0.8f}, {1.0f,0.0f, 0.0f}}, // c' 11
-//	{{0.2f, -0.85f}, {1.0f,0.0f, 0.0f}}, // b' 12
-//};
-//
-//const std::vector<uint16_t> indices = {
-//	0, 1, 2,
-//	0, 2, 3,
-//	0, 3, 4,
-//	0, 4, 5,
-//	0, 5, 6,
-//	0, 6, 7,
-//	0, 7 ,8,
-//	0, 8, 9,
-//	0, 9, 10,
-//	0, 10, 11,
-//	0, 11, 12,
-//	0, 12, 1
-//};
-
-const int MAX_FRAMES_IN_FLIGHT = 2;
-
-
-// function to get the address for vkCreateDebugUtilsMessengerEXT function, since its an extension function we first have to get the address
-VkResult CreateDebutUtilsMessengerExt(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger);
-void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT  debugMessenger, const VkAllocationCallbacks* pAllocator);
 
 const std::vector<const char*> validationLayers = {
 	"VK_LAYER_KHRONOS_validation"
@@ -111,9 +75,9 @@ struct QueueFamilyIndices {
 * Struct storing the swapchain support details
 */
 struct SwapchainSupportDetails {
-	VkSurfaceCapabilitiesKHR capabilities;
-	std::vector<VkSurfaceFormatKHR> formats;
-	std::vector<VkPresentModeKHR> presentModes;
+	vk::SurfaceCapabilitiesKHR capabilities;
+	std::vector<vk::SurfaceFormatKHR> formats;
+	std::vector<vk::PresentModeKHR> presentModes;
 };
 
 /**
@@ -126,65 +90,61 @@ struct UniformBufferObject {
 	alignas(16) glm::mat4 proj;
 };
 
-class HelloTriangleApplication {
+class VulkanApp
+{
 public:
 	/**
 	* Application entrypoint: runs the app
 	*/
-	void run() {
-		initWindow();
-		initVulkan();
-		mainLoop();
-		cleanup();
-	}
+	void run();
 
 private:
 	// window
 	GLFWwindow* window;
 
 	// vulkan instance
-	VkInstance instance;
+	vk::UniqueInstance instance;
 
 	// debug
-	VkDebugUtilsMessengerEXT debugMessenger;
+	vk::DebugUtilsMessengerEXT debugMessenger;
 
 	// surface (screen area)
-	VkSurfaceKHR surface;
+	vk::SurfaceKHR surface;
 
 	// devices
-	VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
-	VkDevice device;
+	vk::PhysicalDevice physicalDevice;
+	vk::UniqueDevice device;
 
 	// queues
-	VkQueue graphicsQueue;
-	VkQueue presentQueue;
+	vk::Queue graphicsQueue;
+	vk::Queue presentQueue;
 
-	// swapchain
-	VkSwapchainKHR swapchain;
-	std::vector<VkImage> swapchainImages;
-	VkFormat swapchainImageFormat;
-	VkExtent2D swapchainExtent;
+	//swapchain
+	vk::SwapchainKHR swapchain;
+	std::vector<vk::Image> swapchainImages;
+	vk::Format swapchainImageFormat;
+	vk::Extent2D swapchainExtent;
 	// image views
-	std::vector<VkImageView> swapchainImageViews;
+	std::vector<vk::ImageView> swapchainImageViews;
 	// framebuffer
-	std::vector<VkFramebuffer> swapchainFramebuffers;
+	std::vector<vk::Framebuffer> swapchainFramebuffers;
 
 	// pipeline
-	VkRenderPass renderPass;
-	VkDescriptorSetLayout descriptorSetLayout;
-	VkDescriptorPool descriptorPool;
-	std::vector<VkDescriptorSet> descriptorSets;
-	VkPipelineLayout pipelineLayout;
-	VkPipeline graphicsPipeline;
+	vk::RenderPass renderPass;
+	vk::DescriptorSetLayout descriptorSetLayout;
+	vk::DescriptorPool descriptorPool;
+	std::vector<vk::DescriptorSet> descriptorSets;
+	vk::PipelineLayout pipelineLayout;
+	vk::Pipeline graphicsPipeline;
 
 	// command pools
-	VkCommandPool commandPool;
-	std::vector<VkCommandBuffer> commandBuffers;
+	vk::CommandPool commandPool;
+	std::vector<vk::CommandBuffer> commandBuffers;
 
 	// synchronization
-	std::vector <VkSemaphore> imageAvailableSemaphores;
-	std::vector <VkSemaphore> renderFinishedSemaphores;
-	std::vector <VkFence> inFlightFences;
+	std::vector <vk::Semaphore> imageAvailableSemaphores;
+	std::vector <vk::Semaphore> renderFinishedSemaphores;
+	std::vector <vk::Fence> inFlightFences;
 
 	// explicit resize
 	bool framebufferResized = false;
@@ -192,14 +152,14 @@ private:
 	uint32_t currentFrame = 0;
 
 	// draw info
-	VkBuffer vertexBuffer;
-	VkDeviceMemory vertexBufferMemory;
-	VkBuffer indexBuffer;
-	VkDeviceMemory indexBufferMemory;
+	vk::Buffer vertexBuffer;
+	vk::DeviceMemory vertexBufferMemory;
+	vk::Buffer indexBuffer;
+	vk::DeviceMemory indexBufferMemory;
 
 	// uniform buffers
-	std::vector<VkBuffer> uniformBuffers;
-	std::vector<VkDeviceMemory> uniformBuffersMemory;
+	std::vector<vk::Buffer> uniformBuffers;
+	std::vector<vk::DeviceMemory> uniformBuffersMemory;
 	std::vector<void*> uniformBuffersMapped;
 
 	// -----------
@@ -242,7 +202,7 @@ private:
 	/*
 	* populates the createInfo struct needed for the debug messenger creation
 	*/
-	void populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
+	vk::DebugUtilsMessengerCreateInfoEXT populateDebugMessengerCreateInfo();
 
 	/**
 	* setups the debug messenger
@@ -315,12 +275,12 @@ private:
 	/**
 	* creates buffers
 	*/
-	void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
+	void createBuffer(vk::DeviceSize size, vk::BufferUsageFlags usage, vk::MemoryPropertyFlags properties, vk::Buffer& buffer, vk::DeviceMemory& bufferMemory);
 
 	/**
 	* copies buffer contents
 	*/
-	void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
+	void copyBuffer(vk::Buffer srcBuffer, vk::Buffer dstBuffer, vk::DeviceSize size);
 
 	/**
 	* creates the vertex buffers for the shaders
@@ -355,7 +315,7 @@ private:
 	/**
 	* gets the needed memory type for the @param properties struct
 	*/
-	uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
+	uint32_t findMemoryType(uint32_t typeFilter, vk::MemoryPropertyFlags properties);
 
 	/**
 	* creates the command buffers
@@ -366,7 +326,7 @@ private:
 	* submits the commands to the command buffer
 	* the actual "draw" function
 	*/
-	void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex);
+	void recordCommandBuffer(vk::CommandBuffer commandBuffer, uint32_t imageIndex);
 
 	/**
 	* creates all the necessary sync objects:
@@ -383,14 +343,14 @@ private:
 	/**
 	* creathes the shader module for a specified shader
 	*/
-	VkShaderModule createShaderModule(const std::vector<char>& code);
+	vk::ShaderModule createShaderModule(const std::vector<char>& code);
 
 	/**
 	* chooses the swapchain surface format
 	* tries to pick VK_FORMAT_B8G8R8_SRGB and VK_COLOR_SPACE_SRGB_NONLINEAR_KHR values
 	* if not, picks the first one availables
 	*/
-	VkSurfaceFormatKHR chooseSwapchainSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
+	vk::SurfaceFormatKHR chooseSwapchainSurfaceFormat(const std::vector<vk::SurfaceFormatKHR>& availableFormats);
 
 	/**
 	* picks the present mode for the swapchain
@@ -403,7 +363,7 @@ private:
 	* We try to favour mailbox as the default presentmode
 	* if mailbox is not present, FIFO is choosed
 	*/
-	VkPresentModeKHR chooseSwapchainPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
+	vk::PresentModeKHR chooseSwapchainPresentMode(const std::vector<vk::PresentModeKHR>& availablePresentModes);
 
 	/**
 	*swapExtend is the resolution of the swapchain images, it should ~match the window resolution
@@ -411,28 +371,28 @@ private:
 	* we should set the current width and height in the currentExtent attribute
 	* we are gonna set the values as the uint32_t limit and then choose the resolution that bests matches the window resolution
 	*/
-	VkExtent2D chooseSwapExtend(const VkSurfaceCapabilitiesKHR& capabilities);
+	vk::Extent2D chooseSwapExtend(const vk::SurfaceCapabilitiesKHR& capabilities);
 
 	/**
 	* since the swapchain is part of a vulkan extension, we need to query its support
 	*/
-	SwapchainSupportDetails querySwapchainSupport(VkPhysicalDevice device);
+	SwapchainSupportDetails querySwapchainSupport(vk::PhysicalDevice device);
 
 	/**
 	* gives points to the @param device physical device.
 	* currently, it only values whether or not the gpu is a dedicated graphics card
 	*/
-	int rateDeviceSuitability(VkPhysicalDevice device);
+	int rateDeviceSuitability(vk::PhysicalDevice device);
 
 	/**
 	* checks if the extensions in @e deviceExtensions vector are supported by the device
 	*/
-	bool checkDeviceExtensionSupport(VkPhysicalDevice device);
+	bool checkDeviceExtensionSupport(vk::PhysicalDevice device);
 
 	/**
 	* finds the queue families (graphic and present) for the @param device
 	*/
-	QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
+	QueueFamilyIndices findQueueFamilies(vk::PhysicalDevice device);
 
 	/**
 	* gets the glfw-required extensions
@@ -453,4 +413,8 @@ private:
 		VkDebugUtilsMessageTypeFlagsEXT messageType,
 		const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
 		void* pUserData);
+
+	void DestroyDebugUtilsMessengerEXT(const VkAllocationCallbacks* pAllocator);
 };
+
+

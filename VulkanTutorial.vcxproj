@@ -21,10 +21,11 @@
   <ItemGroup>
     <ClCompile Include="src\HelloTriangleApplication.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\VulkanApp.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\HelloTriangleApplication.h" />
     <ClInclude Include="include\Vertex.h" />
+    <ClInclude Include="include\VulkanApp.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -123,7 +124,8 @@
     </Link>
     <PreBuildEvent>
       <Command>cd shaders
-compile_shaders.bat</Command>
+compile_shaders.bat
+</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -147,7 +149,8 @@ compile_shaders.bat</Command>
     </Link>
     <PreBuildEvent>
       <Command>cd shaders
-compile_shaders.bat</Command>
+compile_shaders.bat
+</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
