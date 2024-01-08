@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\HelloTriangleApplication.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\VulkanApp.cpp" />
   </ItemGroup>
