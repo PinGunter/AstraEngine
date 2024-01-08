@@ -558,7 +558,7 @@ void VulkanApp::createGraphicsPipeline()
 	// attachmentState-> per framebuffer
 	// createinfo -> global
 	vk::PipelineColorBlendAttachmentState colorBlendAttachment(vk::False);
-	colorBlendAttachment.colorWriteMask = vk::ColorComponentFlags();
+	colorBlendAttachment.colorWriteMask = vk::ColorComponentFlagBits::eR | vk::ColorComponentFlagBits::eG | vk::ColorComponentFlagBits::eB | vk::ColorComponentFlagBits::eA;
 
 	vk::PipelineColorBlendStateCreateInfo colorBlending(
 		{}, // flags
@@ -600,7 +600,7 @@ void VulkanApp::createGraphicsPipeline()
 		-1 // basePipelineindex
 	);
 
-	graphicsPipeline = device->createGraphicsPipelines({}, pipelineInfo).value[0];
+	graphicsPipeline = device->createGraphicsPipeline(nullptr, pipelineInfo).value;
 
 	device->destroyShaderModule(vertShaderModule);
 	device->destroyShaderModule(fragShaderModule);
@@ -845,8 +845,8 @@ void VulkanApp::recordCommandBuffer(vk::CommandBuffer commandBuffer, uint32_t im
 	commandBuffer.beginRenderPass(renderPassInfo, vk::SubpassContents::eInline);
 	commandBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, graphicsPipeline);
 
-	std::vector<vk::Buffer> vertexBuffers = { vertexBuffer };
-	std::vector<vk::DeviceSize> offsets = { 0 };
+	vk::Buffer vertexBuffers[] = { vertexBuffer };
+	vk::DeviceSize offsets[] = { 0 };
 	commandBuffer.bindVertexBuffers(0, vertexBuffers, offsets);
 	commandBuffer.bindIndexBuffer(indexBuffer, 0, vk::IndexType::eUint16);
 
@@ -854,11 +854,11 @@ void VulkanApp::recordCommandBuffer(vk::CommandBuffer commandBuffer, uint32_t im
 		0, 0, (float)swapchainExtent.width, (float)swapchainExtent.height, 0.0f, 1.0f
 		// x, y, width, height, minDepth, maxDepth
 	);
-	commandBuffer.setViewport(0, { viewport });
+	commandBuffer.setViewport(0, viewport);
 	vk::Rect2D scissor(
 		{ 0,0 }, swapchainExtent // offset, extent
 	);
-	commandBuffer.setScissor(0, { scissor });
+	commandBuffer.setScissor(0, scissor);
 
 	commandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, pipelineLayout, 0, descriptorSets[currentFrame], nullptr);
 	commandBuffer.drawIndexed(static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
@@ -887,17 +887,20 @@ void VulkanApp::drawFrame()
 {
 	auto waitResult = device->waitForFences(inFlightFences[currentFrame], vk::True, UINT64_MAX);
 
+	uint32_t imageIndex;
+	try {
+		auto result = device->acquireNextImageKHR(swapchain, UINT64_MAX, imageAvailableSemaphores[currentFrame]);
 
-	auto result = device->acquireNextImageKHR(swapchain, UINT64_MAX, imageAvailableSemaphores[currentFrame]);
-	if (result.result == vk::Result::eErrorOutOfDateKHR) {
+		if (result.result != vk::Result::eSuccess && result.result != vk::Result::eSuboptimalKHR) {
+			throw std::runtime_error("failed to acquire swapchain image");
+		}
+
+		imageIndex = result.value;
+	}
+	catch (vk::OutOfDateKHRError err) {
 		recreateSwapchain();
 		return;
 	}
-	else if (result.result != vk::Result::eSuccess && result.result != vk::Result::eSuboptimalKHR) {
-		throw std::runtime_error("failed to acquire swapchain image");
-	}
-
-	auto imageIndex = result.value;
 
 	updateUniformBuffer(currentFrame);
 
@@ -927,15 +930,20 @@ void VulkanApp::drawFrame()
 	// waitSemaphoreCount, pWaitSemaphores, swapchaincount, pSwapchains, pImageIndices
 	vk::PresentInfoKHR presentInfo(1, signalSemaphores, 1, swapchains, &imageIndex);
 
-	auto presentResult = presentQueue.presentKHR(presentInfo);
-	if (presentResult == vk::Result::eErrorOutOfDateKHR || presentResult == vk::Result::eSuboptimalKHR || framebufferResized) {
+	try {
+		auto presentResult = presentQueue.presentKHR(presentInfo);
+		if (framebufferResized || presentResult == vk::Result::eSuboptimalKHR) {
+			framebufferResized = false;
+			recreateSwapchain();
+		}
+	}
+	catch (vk::OutOfDateKHRError err) {
 		framebufferResized = false;
 		recreateSwapchain();
 	}
-	else if (presentResult != vk::Result::eSuccess) {
+	catch (...) {
 		throw std::runtime_error("failed to present swapchain image");
 	}
-
 	currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
 
 }
