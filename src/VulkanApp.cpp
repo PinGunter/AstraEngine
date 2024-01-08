@@ -8,8 +8,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <chrono>
 
-
-
 std::vector<char> readFile(const std::string& filename)
 {
 	std::ifstream file(filename, std::ios::ate | std::ios::binary); // start reading at the end so we now file size
@@ -136,7 +134,7 @@ void VulkanApp::createInstance()
 		VK_MAKE_VERSION(1, 0, 0),
 		"No Engine",
 		VK_MAKE_VERSION(1, 0, 0),
-		vk::ApiVersion10
+		VK_API_VERSION_1_0
 	);
 
 	auto createInfo = vk::InstanceCreateInfo(vk::InstanceCreateFlags(), &appInfo);
@@ -341,7 +339,7 @@ void VulkanApp::createSwapchain()
 	createInfo.compositeAlpha = vk::CompositeAlphaFlagBitsKHR::eOpaque;
 
 	createInfo.presentMode = presentMode;
-	createInfo.clipped = vk::True;
+	createInfo.clipped = VK_TRUE;
 
 	createInfo.oldSwapchain = nullptr; // Future
 
@@ -497,7 +495,7 @@ void VulkanApp::createGraphicsPipeline()
 	vk::PipelineInputAssemblyStateCreateInfo inputAssembly(
 		{}, // flags
 		vk::PrimitiveTopology::eTriangleList, // topology
-		vk::False // primite restart enablk
+		VK_FALSE // primite restart enablk
 	);
 
 	vk::Viewport viewport(
@@ -529,12 +527,12 @@ void VulkanApp::createGraphicsPipeline()
 
 	vk::PipelineRasterizationStateCreateInfo rasterizer(
 		{}, // flags
-		vk::False, // depthClampEnable -> clamps objects outside of near/far to these planes
-		vk::False, // rasterizerDiscardEnable -> if true no geometry passes through the rasterizer
+        VK_FALSE, // depthClampEnable -> clamps objects outside of near/far to these planes
+        VK_FALSE, // rasterizerDiscardEnable -> if true no geometry passes through the rasterizer
 		vk::PolygonMode::eFill, // polygonMode
 		vk::CullModeFlagBits::eBack, // cullMode
 		vk::FrontFace::eCounterClockwise, // frontFace
-		vk::False, // deptBiasEnable
+        VK_FALSE, // deptBiasEnable
 		0.0f, // depthBiasConstantFactor
 		0.0f, // depthBiasClamp
 		0.0f, // depthBiasSlopeFactor
@@ -544,11 +542,11 @@ void VulkanApp::createGraphicsPipeline()
 	vk::PipelineMultisampleStateCreateInfo multisampling(
 		{}, // flags
 		vk::SampleCountFlagBits::e1, // rasterization samples
-		vk::False, // sampleShadingEnable
+        VK_FALSE, // sampleShadingEnable
 		1.0f, // minSampleShading
 		nullptr, // pSampleMask
-		vk::False, // alphatoOneCoverageEnable
-		vk::False // alphatoOneEnable
+        VK_FALSE, // alphatoOneCoverageEnable
+        VK_FALSE // alphatoOneEnable
 	);
 
 	// depth and stencil test
@@ -557,12 +555,12 @@ void VulkanApp::createGraphicsPipeline()
 	// color blending
 	// attachmentState-> per framebuffer
 	// createinfo -> global
-	vk::PipelineColorBlendAttachmentState colorBlendAttachment(vk::False);
+	vk::PipelineColorBlendAttachmentState colorBlendAttachment(VK_FALSE);
 	colorBlendAttachment.colorWriteMask = vk::ColorComponentFlagBits::eR | vk::ColorComponentFlagBits::eG | vk::ColorComponentFlagBits::eB | vk::ColorComponentFlagBits::eA;
 
 	vk::PipelineColorBlendStateCreateInfo colorBlending(
 		{}, // flags
-		vk::False, // logicOpEnable
+        VK_FALSE, // logicOpEnable
 		vk::LogicOp::eCopy, // logicOp
 		1, // attachment count
 		&colorBlendAttachment, // attachment ptr
@@ -829,8 +827,10 @@ void VulkanApp::recordCommandBuffer(vk::CommandBuffer commandBuffer, uint32_t im
 	vk::CommandBufferBeginInfo beginInfo;
 	commandBuffer.begin(beginInfo);
 
+    std::array<float, 4> color = {0.0f, 0.0f, 0.0f, 1.0f};
+	vk::ClearValue clearColor;
+    clearColor.color = color;
 
-	vk::ClearValue clearColor = { {0.0f, 0.0f, 0.0f, 1.0f} };
 	vk::RenderPassBeginInfo renderPassInfo(
 		renderPass, // renderPass
 		swapchainFramebuffers[imageIndex], // framebuffer
@@ -885,7 +885,7 @@ void VulkanApp::createSyncObjects()
 
 void VulkanApp::drawFrame()
 {
-	auto waitResult = device->waitForFences(inFlightFences[currentFrame], vk::True, UINT64_MAX);
+	device->waitForFences(inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
 
 	uint32_t imageIndex;
 	try {

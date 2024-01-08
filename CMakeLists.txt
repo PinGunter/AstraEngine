@@ -34,7 +34,7 @@ endif(WIN32)
 if (UNIX)
 	add_custom_command(
 		TARGET ${PROJECT_NAME}
-		COMMAND compile_shaders.sh
+		COMMAND ./compile_shaders.sh
 		WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/shaders
 		VERBATIM
 	)
