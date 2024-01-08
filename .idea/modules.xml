@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/VulkanTutorial.iml" filepath="$PROJECT_DIR$/.idea/VulkanTutorial.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/AstraEngine_old.iml" filepath="$PROJECT_DIR$/.idea/AstraEngine_old.iml" />
     </modules>
   </component>
 </project>

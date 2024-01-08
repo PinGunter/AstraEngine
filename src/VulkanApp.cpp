@@ -830,7 +830,7 @@ void VulkanApp::recordCommandBuffer(vk::CommandBuffer commandBuffer, uint32_t im
 	commandBuffer.begin(beginInfo);
 
 
-	vk::ClearValue clearColor({ {0.0f, 0.0f, 0.0f, 1.0f} });
+	vk::ClearValue clearColor = { {0.0f, 0.0f, 0.0f, 1.0f} };
 	vk::RenderPassBeginInfo renderPassInfo(
 		renderPass, // renderPass
 		swapchainFramebuffers[imageIndex], // framebuffer
