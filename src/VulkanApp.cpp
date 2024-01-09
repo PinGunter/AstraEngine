@@ -739,8 +739,8 @@ void VulkanApp::transitionImageLayout(vk::Image image, vk::Format format, vk::Im
     vk::CommandBuffer commandBuffer = beginSingleTimeCommands();
 
     vk::ImageMemoryBarrier barrier(
-            {}, // TODO
-            {}, // TODO
+            {},
+            {},
             oldLayout,
             newLayout,
             vk::QueueFamilyIgnored,
