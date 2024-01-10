@@ -9,6 +9,7 @@
 #include <optional>
 #include <glm/glm.hpp>
 #include <Vertex.h>
+#include <chrono>
 
 // CONSTANTS
 const uint32_t WIDTH = 800;
@@ -16,34 +17,57 @@ const uint32_t HEIGHT = 600;
 const int MAX_FRAMES_IN_FLIGHT = 2;
 
 const float sideLength = 0.5f;
+//const std::vector<Vertex> vertices = {
+//        {{-0.5f, -0.5f, 0.0f},  {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
+//        {{0.5f,  -0.5f, 0.0f},  {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
+//        {{0.5f,  0.5f,  0.0f},  {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
+//        {{-0.5f, 0.5f,  0.0f},  {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
+//
+//        {{-0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
+//        {{0.5f,  -0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
+//        {{0.5f,  0.5f,  -0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
+//        {{-0.5f, 0.5f,  -0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}}
+//};
+//
+//const std::vector<uint16_t> indices = {
+//        0, 1, 2, 2, 3, 0,
+//        4, 5, 6, 6, 7, 4
+//};
 const std::vector<Vertex> vertices = {
-		{{sideLength,  sideLength,  -sideLength}, {1.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},   // 0 a
-		{{sideLength,  sideLength,  sideLength},  {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}},       // 1 b
-		{{sideLength,  -sideLength, -sideLength}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}},  // 2 c
-		{{sideLength,  -sideLength, sideLength},  {1.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},   // 3 d
-		{{-sideLength, sideLength,  -sideLength}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}},  // 4 e
-		{{-sideLength, sideLength,  sideLength},  {0.0f, 1.0f, 0.0f}, {0.0f, 1.0f}},   // 5 f
-		{{-sideLength, -sideLength, -sideLength}, {0.0f, 0.0f, 0.0f}, {1.0f, 0.0f}}, // 6 g
-		{{-sideLength, -sideLength, sideLength},  {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},  // 7 h
+		{{sideLength,  sideLength,  -sideLength}, {1.0f, 1.0f, 0.0f}, {0.67f, 0.25f}},    // 0 a
+		{{sideLength,  sideLength,  sideLength},  {1.0f, 1.0f, 1.0f}, {0.67f, 0.5f}},    // 1 b
+		{{sideLength,  -sideLength, -sideLength}, {1.0f, 0.0f, 0.0f}, {0.34f, 0.25f}},    // 2 c
+		{{sideLength,  -sideLength, sideLength},  {1.0f, 0.0f, 1.0f}, {0.34f, 0.5f}},    // 3 d
+		{{-sideLength, sideLength,  -sideLength}, {0.0f, 1.0f, 0.0f}, {0.67f, 1.0f}},    // 4 e
+		{{-sideLength, sideLength,  sideLength},  {0.0f, 1.0f, 0.0f}, {0.67f, 0.75f}},    // 5 f
+		{{-sideLength, -sideLength, -sideLength}, {0.0f, 0.0f, 0.0f}, {0.34f, 1.0f}},    // 6 g
+		{{-sideLength, -sideLength, sideLength},  {0.0f, 0.0f, 1.0f}, {0.34f, 0.75f}},    // 7 h
+		{{sideLength,  sideLength,  -sideLength}, {1.0f, 1.0f, 0.0f}, {1.0f,  0.5f}},    // 8 a'
+		{{sideLength,  -sideLength, -sideLength}, {1.0f, 0.0f, 0.0f}, {0.0f,  0.5f}},    // 9 c'
+		{{-sideLength, sideLength,  -sideLength}, {0.0f, 1.0f, 0.0f}, {1.0f,  0.75f}},    // 10 e'
+		{{-sideLength, -sideLength, -sideLength}, {0.0f, 0.0f, 0.0f}, {0.0f,  0.25f}},    // 11 g'
+		{{-sideLength, sideLength,  -sideLength}, {0.0f, 1.0f, 0.0f}, {0.67f, 0.0f}},    // 12 e''
+		{{-sideLength, -sideLength, -sideLength}, {0.0f, 0.0f, 0.0f}, {0.34f, 0.0f}},    // 13 g''
 };
 
 const std::vector<uint16_t> indices = {
-		0, 1, 2,
-		1, 3, 2,
-		4, 6, 7,
+		7, 4, 6,
 		7, 5, 4,
-		2, 3, 6,
-		6, 3, 7,
-		0, 4, 5,
-		0, 5, 1,
-		1, 5, 7,
-		1, 7, 3,
-		2, 6, 4,
-		2, 4, 0 };
+		3, 5, 7,
+		3, 1, 5,
+		2, 1, 3,
+		2, 0, 1,
+		13, 0, 2,
+		13, 12, 0,
+		11, 9, 7,
+		9, 3, 7,
+		5, 1, 10,
+		1, 8, 10
+};
 
 const std::vector<const char*> validationLayers = {
 		"VK_LAYER_KHRONOS_validation",
-				"VK_LAYER_LUNARG_monitor"
+		"VK_LAYER_LUNARG_monitor"
 };
 
 const std::vector<const char*> deviceExtensions = {
@@ -166,6 +190,11 @@ private:
 	vk::ImageView textureImageView;
 	vk::Sampler textureSampler;
 
+	bool rx = false, ry = false, rz = false;
+	int dir = 1;
+	bool autoRotate = false;
+	glm::mat4 transform = glm::mat4(1.0f);
+	std::chrono::time_point<std::chrono::high_resolution_clock> startTime = std::chrono::high_resolution_clock::now();
 	// -----------
 	// METHODS
 	// -----------
@@ -175,6 +204,11 @@ private:
 	 * uses GLFW
 	 */
 	void initWindow();
+
+	/**
+	 * callback for key presses
+	 */
+	static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
 	/**
 	 * callback for the framebufferresized event in GLFW

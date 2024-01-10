@@ -1,10 +1,18 @@
 #!/bin/bash
 for shader in `ls *.vert` 
-do 
-    glslc $shader -o $shader_vert.spv 
+do
+    echo Compiling $shader
+    filename=$(basename -- "shader")
+    extension="${filename##*.}"
+    filename="${filename%.*}"
+    glslc $shader -o `echo $filename`_vert.spv && echo done
 done
 
 for shader in `ls *.frag` 
 do
-    glslc $shader -o $shader_frag.spv 
+    echo Compiling $shader
+    filename=$(basename -- "$shader")
+    extension="${filename##*.}"
+    filename="${filename%.*}"
+    glslc $shader -o `echo $filename`_frag.spv && echo done
 done

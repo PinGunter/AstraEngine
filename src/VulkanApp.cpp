@@ -44,6 +44,28 @@ void VulkanApp::initWindow() {
 
 	glfwSetWindowUserPointer(window, this);
 	glfwSetFramebufferSizeCallback(window, framebufferResizedCallback);
+	glfwSetKeyCallback(window, keyCallback);
+}
+
+void VulkanApp::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+	auto app = reinterpret_cast<VulkanApp*> (glfwGetWindowUserPointer(window));
+	if (key == GLFW_KEY_X) {
+		app->rx = action == GLFW_PRESS || action == GLFW_REPEAT;
+	}
+	if (key == GLFW_KEY_Y) {
+		app->ry = action == GLFW_PRESS || action == GLFW_REPEAT;
+	}
+	if (key == GLFW_KEY_Z) {
+		app->rz = action == GLFW_PRESS || action == GLFW_REPEAT;
+	}
+	if (key == GLFW_KEY_R) {
+		app->transform = glm::mat4(1.0f);
+	}
+	app->dir = mods == GLFW_MOD_SHIFT ? -1 : 1;
+
+	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
+		app->autoRotate = !app->autoRotate;
+	}
 }
 
 void VulkanApp::framebufferResizedCallback(GLFWwindow* window, int width, int height) {
@@ -422,7 +444,7 @@ void VulkanApp::createDescriptorSetLayout() {
 	std::array<vk::DescriptorSetLayoutBinding, 2> bindings = { uboLayoutBinding, samplerLayoutBinding };
 
 	vk::DescriptorSetLayoutCreateInfo layoutInfo(
-		{},      // flags                  
+		{},      // flags
 		static_cast<uint32_t>(bindings.size()),// binding count
 		bindings.data()// pBindings
 	);
@@ -619,7 +641,7 @@ void VulkanApp::createCommandPool() {
 
 void VulkanApp::createTextureImage() {
 	int texWidth, texHeight, texChannels;
-	stbi_uc* pixels = stbi_load("textures/texture.jpg", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+	stbi_uc* pixels = stbi_load("textures/grass.png", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
 	vk::DeviceSize imageSize = texWidth * texHeight * 4;
 	if (!pixels) {
 		throw std::runtime_error("failed to load texture image!");
@@ -655,14 +677,12 @@ void VulkanApp::createTextureImage() {
 	device->freeMemory(stagingBufferMemory, nullptr);
 }
 
-void VulkanApp::createTextureImageView()
-{
+void VulkanApp::createTextureImageView() {
 	textureImageView = createImageViews(textureImage, vk::Format::eR8G8B8A8Srgb);
 
 }
 
-void VulkanApp::createTextureSampler()
-{
+void VulkanApp::createTextureSampler() {
 	vk::SamplerCreateInfo samplerInfo(
 		{}, // flags
 		vk::Filter::eLinear, //magFilter
@@ -693,29 +713,29 @@ void VulkanApp::createTextureSampler()
 	textureSampler = device->createSampler(samplerInfo);
 }
 
-vk::ImageView VulkanApp::createImageViews(vk::Image image, vk::Format format)
-{
+vk::ImageView VulkanApp::createImageViews(vk::Image image, vk::Format format) {
 	vk::ImageViewCreateInfo viewInfo(
 		{},
 		image,
 		vk::ImageViewType::e2D,
 		format,
 		{
-			vk::ComponentSwizzle::eIdentity, // components.r
-			vk::ComponentSwizzle::eIdentity, // components.g
-			vk::ComponentSwizzle::eIdentity, // components.b
-			vk::ComponentSwizzle::eIdentity     // components.a
+				vk::ComponentSwizzle::eIdentity, // components.r
+				vk::ComponentSwizzle::eIdentity, // components.g
+				vk::ComponentSwizzle::eIdentity, // components.b
+				vk::ComponentSwizzle::eIdentity     // components.a
 		},
-		{
-			vk::ImageAspectFlagBits::eColor, // subresourceRange.aspectMask
-			0,                                 // subresourceRange.baseMipmaplevel
-			1,                                 // subresourceRange.levelCount
-			0,                                 // subresourceRange.baseArrayLayer
-			1                                 // subresourceRange.layerCount
-		});
+			{
+					vk::ImageAspectFlagBits::eColor, // subresourceRange.aspectMask
+					0,                                 // subresourceRange.baseMipmaplevel
+					1,                                 // subresourceRange.levelCount
+					0,                                 // subresourceRange.baseArrayLayer
+					1                                 // subresourceRange.layerCount
+			});
 	vk::ImageView view = device->createImageView(viewInfo);
 	return view;
 }
+
 vk::CommandBuffer VulkanApp::beginSingleTimeCommands() {
 	vk::CommandBufferAllocateInfo allocInfo(
 		commandPool,
@@ -981,13 +1001,33 @@ void VulkanApp::createDescriptorSets() {
 }
 
 void VulkanApp::updateUniformBuffer(uint32_t currentImage) {
-	static auto startTime = std::chrono::high_resolution_clock::now();
 	auto currentTime = std::chrono::high_resolution_clock::now();
 	float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+	startTime = currentTime;
 
 	UniformBufferObject ubo{};
-	ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	if (autoRotate) {
+		transform = glm::rotate(glm::mat4(transform), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	}
+	else {
+
+		if (rx) {
+			transform = glm::rotate(glm::mat4(transform), dir * time * glm::radians(90.0f),
+				glm::vec3(1.0f, 0.0f, 0.0f));
+		}
+		if (ry) {
+			transform = glm::rotate(glm::mat4(transform), dir * time * glm::radians(90.0f),
+				glm::vec3(0.0f, 1.0f, 0.0f));
+		}
+		if (rz) {
+			transform = glm::rotate(glm::mat4(transform), dir * time * glm::radians(90.0f),
+				glm::vec3(0.0f, 0.0f, 1.0f));
+		}
+	}
+
+	ubo.model = transform;
+	//    ubo.model = glm::rotate(ubo.model, time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	ubo.proj = glm::perspective(glm::radians(45.0f), swapchainExtent.width / (float)swapchainExtent.height, 0.1f,
 		10.0f);
 	ubo.proj[1][1] *= -1; // since glm was designed for opengl where y-up is positive whereas in vulkan y-up is negative
