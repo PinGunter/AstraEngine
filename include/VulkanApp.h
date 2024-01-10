@@ -1,6 +1,7 @@
 #pragma once
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEFAULT_ALIGNED_GENTYPES
+#define GLM_FORCE_DEPTH_ZERO_TO_ONE
 
 #include <vulkan/vulkan.hpp>
 #include <GLFW/glfw3.h>
@@ -17,53 +18,53 @@ const uint32_t HEIGHT = 600;
 const int MAX_FRAMES_IN_FLIGHT = 2;
 
 const float sideLength = 0.5f;
-//const std::vector<Vertex> vertices = {
-//        {{-0.5f, -0.5f, 0.0f},  {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
-//        {{0.5f,  -0.5f, 0.0f},  {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
-//        {{0.5f,  0.5f,  0.0f},  {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
-//        {{-0.5f, 0.5f,  0.0f},  {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
-//
-//        {{-0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
-//        {{0.5f,  -0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
-//        {{0.5f,  0.5f,  -0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
-//        {{-0.5f, 0.5f,  -0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}}
-//};
-//
-//const std::vector<uint16_t> indices = {
-//        0, 1, 2, 2, 3, 0,
-//        4, 5, 6, 6, 7, 4
-//};
 const std::vector<Vertex> vertices = {
-		{{sideLength,  sideLength,  -sideLength}, {1.0f, 1.0f, 0.0f}, {0.67f, 0.25f}},    // 0 a
-		{{sideLength,  sideLength,  sideLength},  {1.0f, 1.0f, 1.0f}, {0.67f, 0.5f}},    // 1 b
-		{{sideLength,  -sideLength, -sideLength}, {1.0f, 0.0f, 0.0f}, {0.34f, 0.25f}},    // 2 c
-		{{sideLength,  -sideLength, sideLength},  {1.0f, 0.0f, 1.0f}, {0.34f, 0.5f}},    // 3 d
-		{{-sideLength, sideLength,  -sideLength}, {0.0f, 1.0f, 0.0f}, {0.67f, 1.0f}},    // 4 e
-		{{-sideLength, sideLength,  sideLength},  {0.0f, 1.0f, 0.0f}, {0.67f, 0.75f}},    // 5 f
-		{{-sideLength, -sideLength, -sideLength}, {0.0f, 0.0f, 0.0f}, {0.34f, 1.0f}},    // 6 g
-		{{-sideLength, -sideLength, sideLength},  {0.0f, 0.0f, 1.0f}, {0.34f, 0.75f}},    // 7 h
-		{{sideLength,  sideLength,  -sideLength}, {1.0f, 1.0f, 0.0f}, {1.0f,  0.5f}},    // 8 a'
-		{{sideLength,  -sideLength, -sideLength}, {1.0f, 0.0f, 0.0f}, {0.0f,  0.5f}},    // 9 c'
-		{{-sideLength, sideLength,  -sideLength}, {0.0f, 1.0f, 0.0f}, {1.0f,  0.75f}},    // 10 e'
-		{{-sideLength, -sideLength, -sideLength}, {0.0f, 0.0f, 0.0f}, {0.0f,  0.25f}},    // 11 g'
-		{{-sideLength, sideLength,  -sideLength}, {0.0f, 1.0f, 0.0f}, {0.67f, 0.0f}},    // 12 e''
-		{{-sideLength, -sideLength, -sideLength}, {0.0f, 0.0f, 0.0f}, {0.34f, 0.0f}},    // 13 g''
+		{{-0.5f, -0.5f, 0.0f},  {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
+		{{0.5f,  -0.5f, 0.0f},  {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
+		{{0.5f,  0.5f,  0.0f},  {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
+		{{-0.5f, 0.5f,  0.0f},  {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
+
+		{{-0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
+		{{0.5f,  -0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
+		{{0.5f,  0.5f,  -0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
+		{{-0.5f, 0.5f,  -0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}}
 };
 
 const std::vector<uint16_t> indices = {
-		7, 4, 6,
-		7, 5, 4,
-		3, 5, 7,
-		3, 1, 5,
-		2, 1, 3,
-		2, 0, 1,
-		13, 0, 2,
-		13, 12, 0,
-		11, 9, 7,
-		9, 3, 7,
-		5, 1, 10,
-		1, 8, 10
+		0, 1, 2, 2, 3, 0,
+		4, 5, 6, 6, 7, 4
 };
+//const std::vector<Vertex> vertices = {
+//		{{sideLength,  sideLength,  -sideLength}, {1.0f, 1.0f, 0.0f}, {0.67f, 1.0f - 0.25f}},    // 0 a
+//		{{sideLength,  sideLength,  sideLength},  {1.0f, 1.0f, 1.0f}, {0.67f, 1.0f - 0.5f}},    // 1 b
+//		{{sideLength,  -sideLength, -sideLength}, {1.0f, 0.0f, 0.0f}, {0.34f, 1.0f - 0.25f}},    // 2 c
+//		{{sideLength,  -sideLength, sideLength},  {1.0f, 0.0f, 1.0f}, {0.34f,1.0f - 0.5f}},    // 3 d
+//		{{-sideLength, sideLength,  -sideLength}, {0.0f, 1.0f, 0.0f}, {0.67f, 1.0f - 1.0f}},    // 4 e
+//		{{-sideLength, sideLength,  sideLength},  {0.0f, 1.0f, 0.0f}, {0.67f,1.0f - 0.75f}},    // 5 f
+//		{{-sideLength, -sideLength, -sideLength}, {0.0f, 0.0f, 0.0f}, {0.34f, 1.0f - 1.0f}},    // 6 g
+//		{{-sideLength, -sideLength, sideLength},  {0.0f, 0.0f, 1.0f}, {0.34f,1.0f - 0.75f}},    // 7 h
+//		{{sideLength,  sideLength,  -sideLength}, {1.0f, 1.0f, 0.0f}, {1.0f, 1.0f - 0.5f}},    // 8 a'
+//		{{sideLength,  -sideLength, -sideLength}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f - 0.5f}},    // 9 c'
+//		{{-sideLength, sideLength,  -sideLength}, {0.0f, 1.0f, 0.0f}, {1.0f, 1.0f - 0.75f}},    // 10 e'
+//		{{-sideLength, -sideLength, -sideLength}, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f - 0.25f}},    // 11 g'
+//		{{-sideLength, sideLength,  -sideLength}, {0.0f, 1.0f, 0.0f}, {0.67f,1.0f - 0.0f}},    // 12 e''
+//		{{-sideLength, -sideLength, -sideLength}, {0.0f, 0.0f, 0.0f}, {0.34f,1.0f - 0.0f}},    // 13 g''
+//};
+//
+//const std::vector<uint16_t> indices = {
+//		7, 4, 6,
+//		7, 5, 4,
+//		3, 5, 7,
+//		3, 1, 5,
+//		2, 1, 3,
+//		2, 0, 1,
+//		13, 0, 2,
+//		13, 12, 0,
+//		11, 9, 7,
+//		9, 3, 7,
+//		5, 1, 10,
+//		1, 8, 10
+//};
 
 const std::vector<const char*> validationLayers = {
 		"VK_LAYER_KHRONOS_validation",
@@ -190,6 +191,13 @@ private:
 	vk::ImageView textureImageView;
 	vk::Sampler textureSampler;
 
+	// depth
+	vk::Image depthImage;
+	vk::DeviceMemory depthImageMemory;
+	vk::ImageView depthImageView;
+
+
+	// interaction
 	bool rx = false, ry = false, rz = false;
 	int dir = 1;
 	bool autoRotate = false;
@@ -312,6 +320,25 @@ private:
 	void createCommandPool();
 
 	/**
+	* creates the depth resources
+	*/
+	void createDepthResources();
+
+	/**
+	* chooses the best format available
+	*/
+	vk::Format findSupportedFormats(const std::vector<vk::Format>& candidates, vk::ImageTiling tiling, vk::FormatFeatureFlagBits features);
+
+	/**
+	* chooses the depth format
+	*/
+	vk::Format findDepthFormat();
+
+	/**
+	* checks whether or not the @format contains stencil component.
+	*/
+	bool hasStencilComponent(vk::Format format);
+	/**
 	 * creates the texture images
 	 */
 	void createTextureImage();
@@ -324,7 +351,7 @@ private:
 	/**
 	* abstraction to create image views
 	*/
-	vk::ImageView createImageViews(vk::Image image, vk::Format format);
+	vk::ImageView createImageView(vk::Image image, vk::Format format, vk::ImageAspectFlags aspectFlags);
 
 	/**
 	* creates the texture sampler

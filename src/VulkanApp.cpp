@@ -84,8 +84,9 @@ void VulkanApp::initVulkan() {
 	createRenderPass();
 	createDescriptorSetLayout();
 	createGraphicsPipeline();
-	createFramebuffers();
 	createCommandPool();
+	createDepthResources();
+	createFramebuffers();
 	createTextureImage();
 	createTextureImageView();
 	createTextureSampler();
@@ -272,6 +273,10 @@ void VulkanApp::createLogicalDevice() {
 }
 
 void VulkanApp::cleanupSwapchain() {
+	device->destroyImageView(depthImageView);
+	device->destroyImage(depthImage);
+	device->freeMemory(depthImageMemory);
+
 	for (auto fb : swapchainFramebuffers) {
 		device->destroyFramebuffer(fb, nullptr);
 	}
@@ -297,6 +302,7 @@ void VulkanApp::recreateSwapchain() {
 
 	createSwapchain();
 	createImageViews();
+	createDepthResources();
 	createFramebuffers();
 }
 
@@ -377,7 +383,7 @@ void VulkanApp::createImageViews() {
 	swapchainImageViews.resize(swapchainImages.size());
 
 	for (size_t i = 0; i < swapchainImageViews.size(); i++) {
-		swapchainImageViews[i] = createImageViews(swapchainImages[i], swapchainImageFormat);
+		swapchainImageViews[i] = createImageView(swapchainImages[i], swapchainImageFormat, vk::ImageAspectFlagBits::eColor);
 	}
 }
 
@@ -399,23 +405,43 @@ void VulkanApp::createRenderPass() {
 		vk::ImageLayout::eColorAttachmentOptimal // layout
 	);
 
+	vk::AttachmentDescription depthAttachment(
+		{},
+		findDepthFormat(),
+		vk::SampleCountFlagBits::e1,
+		vk::AttachmentLoadOp::eClear,
+		vk::AttachmentStoreOp::eDontCare,
+		vk::AttachmentLoadOp::eDontCare,
+		vk::AttachmentStoreOp::eDontCare,
+		vk::ImageLayout::eUndefined,
+		vk::ImageLayout::eDepthStencilAttachmentOptimal
+	);
+
+	vk::AttachmentReference depthReference(
+		1, vk::ImageLayout::eDepthStencilAttachmentOptimal
+	);
+
 	vk::SubpassDescription subpass;
+	subpass.pipelineBindPoint = vk::PipelineBindPoint::eGraphics;
 	subpass.colorAttachmentCount = 1;
 	subpass.pColorAttachments = &colorAttachmentRef;
+	subpass.pDepthStencilAttachment = &depthReference;
 
 	// make the renderpass wait until image is acquired
 	vk::SubpassDependency dependency;
 	dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
 	dependency.dstSubpass = 0;
-	dependency.srcStageMask = vk::PipelineStageFlagBits::eColorAttachmentOutput;
-	dependency.dstStageMask = vk::PipelineStageFlagBits::eColorAttachmentOutput;
+	dependency.srcStageMask = vk::PipelineStageFlagBits::eColorAttachmentOutput | vk::PipelineStageFlagBits::eEarlyFragmentTests;
+	dependency.dstStageMask = vk::PipelineStageFlagBits::eColorAttachmentOutput | vk::PipelineStageFlagBits::eEarlyFragmentTests;
 	dependency.srcAccessMask = {};
-	dependency.dstAccessMask = vk::AccessFlagBits::eColorAttachmentWrite;
+	dependency.dstAccessMask = vk::AccessFlagBits::eColorAttachmentWrite | vk::AccessFlagBits::eDepthStencilAttachmentWrite;
+
+	std::array<vk::AttachmentDescription, 2> attachments = { colorAttachment, depthAttachment };
 
 	vk::RenderPassCreateInfo createInfo(
 		{},                  // flags
-		1,                  // attachment count
-		&colorAttachment, // attachment ptr
+		static_cast<uint32_t>(attachments.size()),                  // attachment count
+		attachments.data(), // attachment ptr
 		1,                  // subpass count
 		&subpass,          // subpass ptr
 		1,                  // dependency count
@@ -578,6 +604,15 @@ void VulkanApp::createGraphicsPipeline() {
 				0.0f, 0.0f, 0.0f, 0.0f // blend constants
 		});
 
+	vk::PipelineDepthStencilStateCreateInfo depthStencil(
+		{},
+		vk::True, // depthTestEnable
+		vk::True, // depthWriteEnable
+		vk::CompareOp::eLess,
+		vk::False, //depthboundstestenable
+		vk::False //stenciltestenable
+	);
+
 	// pipeline layout
 	vk::PipelineLayoutCreateInfo pipelineLayoutCreateInfo(
 		{},                     // flags
@@ -597,7 +632,7 @@ void VulkanApp::createGraphicsPipeline() {
 		&viewportState,      // viewport state ptr
 		&rasterizer,      // rasterization state ptr
 		&multisampling,      // multisample state ptr
-		nullptr,          // depth stencil state ptr
+		&depthStencil,          // depth stencil state ptr
 		&colorBlending,      // color blend state ptr
 		&dynamicState,      // dynamic state ptr
 		pipelineLayout,      // layout
@@ -617,12 +652,12 @@ void VulkanApp::createFramebuffers() {
 	swapchainFramebuffers.resize(swapchainImageViews.size());
 
 	for (size_t i = 0; i < swapchainImageViews.size(); i++) {
-		vk::ImageView attachments[] = { swapchainImageViews[i] };
+		std::array<vk::ImageView, 2> attachments = { swapchainImageViews[i], depthImageView };
 		vk::FramebufferCreateInfo createInfo(
 			{},                        // flags
 			renderPass,                // renderpass
-			1,                        // attachment count
-			attachments,            // attachments ptr
+			static_cast<uint32_t>(attachments.size()),                        // attachment count
+			attachments.data(),            // attachments ptr
 			swapchainExtent.width,    // width
 			swapchainExtent.height, // height
 			1);
@@ -639,9 +674,39 @@ void VulkanApp::createCommandPool() {
 	commandPool = device->createCommandPool(poolInfo);
 }
 
+void VulkanApp::createDepthResources()
+{
+	vk::Format depthFormat = findDepthFormat();
+	createImage(swapchainExtent.width, swapchainExtent.height, depthFormat, vk::ImageTiling::eOptimal, vk::ImageUsageFlagBits::eDepthStencilAttachment, vk::MemoryPropertyFlagBits::eDeviceLocal, depthImage, depthImageMemory);
+	depthImageView = createImageView(depthImage, depthFormat, vk::ImageAspectFlagBits::eDepth);
+}
+
+vk::Format VulkanApp::findSupportedFormats(const std::vector<vk::Format>& candidates, vk::ImageTiling tiling, vk::FormatFeatureFlagBits features)
+{
+	for (auto format : candidates) {
+		vk::FormatProperties properties = physicalDevice.getFormatProperties(format);
+		if (tiling == vk::ImageTiling::eLinear && (properties.linearTilingFeatures & features) == features) {
+			return format;
+		}
+		else if (tiling == vk::ImageTiling::eOptimal && (properties.optimalTilingFeatures & features) == features) {
+			return format;
+		}
+	}
+	throw std::runtime_error("failed to find supported formats!");
+}
+
+vk::Format VulkanApp::findDepthFormat() {
+	return findSupportedFormats({ vk::Format::eD32Sfloat, vk::Format::eD32SfloatS8Uint, vk::Format::eD24UnormS8Uint },
+		vk::ImageTiling::eOptimal, vk::FormatFeatureFlagBits::eDepthStencilAttachment);
+}
+
+bool VulkanApp::hasStencilComponent(vk::Format format) {
+	return format == vk::Format::eD32SfloatS8Uint || format == vk::Format::eD24UnormS8Uint;
+}
+
 void VulkanApp::createTextureImage() {
 	int texWidth, texHeight, texChannels;
-	stbi_uc* pixels = stbi_load("textures/grass.png", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+	stbi_uc* pixels = stbi_load("textures/texture.jpg", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
 	vk::DeviceSize imageSize = texWidth * texHeight * 4;
 	if (!pixels) {
 		throw std::runtime_error("failed to load texture image!");
@@ -678,7 +743,7 @@ void VulkanApp::createTextureImage() {
 }
 
 void VulkanApp::createTextureImageView() {
-	textureImageView = createImageViews(textureImage, vk::Format::eR8G8B8A8Srgb);
+	textureImageView = createImageView(textureImage, vk::Format::eR8G8B8A8Srgb, vk::ImageAspectFlagBits::eColor);
 
 }
 
@@ -713,7 +778,7 @@ void VulkanApp::createTextureSampler() {
 	textureSampler = device->createSampler(samplerInfo);
 }
 
-vk::ImageView VulkanApp::createImageViews(vk::Image image, vk::Format format) {
+vk::ImageView VulkanApp::createImageView(vk::Image image, vk::Format format, vk::ImageAspectFlags aspectFlags) {
 	vk::ImageViewCreateInfo viewInfo(
 		{},
 		image,
@@ -726,7 +791,7 @@ vk::ImageView VulkanApp::createImageViews(vk::Image image, vk::Format format) {
 				vk::ComponentSwizzle::eIdentity     // components.a
 		},
 			{
-					vk::ImageAspectFlagBits::eColor, // subresourceRange.aspectMask
+					aspectFlags, // subresourceRange.aspectMask
 					0,                                 // subresourceRange.baseMipmaplevel
 					1,                                 // subresourceRange.levelCount
 					0,                                 // subresourceRange.baseArrayLayer
@@ -1060,8 +1125,10 @@ void VulkanApp::recordCommandBuffer(vk::CommandBuffer commandBuffer, uint32_t im
 	commandBuffer.begin(beginInfo);
 
 	std::array<float, 4> color = { 0.0f, 0.0f, 0.0f, 1.0f };
-	vk::ClearValue clearColor;
-	clearColor.color = color;
+	vk::ClearDepthStencilValue depthValue = { 1.0f, 0 };
+	std::array<vk::ClearValue, 2 > clearValues;
+	clearValues[0].color = color;
+	clearValues[1].depthStencil = depthValue;
 
 	vk::RenderPassBeginInfo renderPassInfo(
 		renderPass,                           // renderPass
@@ -1071,8 +1138,8 @@ void VulkanApp::recordCommandBuffer(vk::CommandBuffer commandBuffer, uint32_t im
 			{0, 0},            // renderArea.offset
 			swapchainExtent // renderArea.extent
 		},
-		1,            // clearValueCount
-		&clearColor // pclearValues
+		static_cast<uint32_t>(clearValues.size()),            // clearValueCount
+		clearValues.data() // pclearValues
 	);
 
 	commandBuffer.beginRenderPass(renderPassInfo, vk::SubpassContents::eInline);
