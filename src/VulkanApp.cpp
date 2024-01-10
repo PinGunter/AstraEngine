@@ -392,7 +392,7 @@ void VulkanApp::createImageViews() {
 	swapchainImageViews.resize(swapchainImages.size());
 
 	for (size_t i = 0; i < swapchainImageViews.size(); i++) {
-		swapchainImageViews[i] = createImageView(swapchainImages[i], swapchainImageFormat, vk::ImageAspectFlagBits::eColor);
+		swapchainImageViews[i] = createImageView(swapchainImages[i], swapchainImageFormat, vk::ImageAspectFlagBits::eColor, 1);
 	}
 }
 
@@ -686,8 +686,8 @@ void VulkanApp::createCommandPool() {
 void VulkanApp::createDepthResources()
 {
 	vk::Format depthFormat = findDepthFormat();
-	createImage(swapchainExtent.width, swapchainExtent.height, depthFormat, vk::ImageTiling::eOptimal, vk::ImageUsageFlagBits::eDepthStencilAttachment, vk::MemoryPropertyFlagBits::eDeviceLocal, depthImage, depthImageMemory);
-	depthImageView = createImageView(depthImage, depthFormat, vk::ImageAspectFlagBits::eDepth);
+	createImage(swapchainExtent.width, swapchainExtent.height, 1, depthFormat, vk::ImageTiling::eOptimal, vk::ImageUsageFlagBits::eDepthStencilAttachment, vk::MemoryPropertyFlagBits::eDeviceLocal, depthImage, depthImageMemory);
+	depthImageView = createImageView(depthImage, depthFormat, vk::ImageAspectFlagBits::eDepth, 1);
 }
 
 vk::Format VulkanApp::findSupportedFormats(const std::vector<vk::Format>& candidates, vk::ImageTiling tiling, vk::FormatFeatureFlagBits features)
@@ -717,6 +717,7 @@ void VulkanApp::createTextureImage() {
 	int texWidth, texHeight, texChannels;
 	stbi_uc* pixels = stbi_load(TEXTURE_PATH.c_str(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
 	vk::DeviceSize imageSize = texWidth * texHeight * 4;
+	mipLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(texWidth, texHeight)))) + 1;
 	if (!pixels) {
 		throw std::runtime_error("failed to load texture image!");
 	}
@@ -736,24 +737,106 @@ void VulkanApp::createTextureImage() {
 	device->unmapMemory(stagingBufferMemory);
 	stbi_image_free(pixels);
 
-	createImage(texWidth, texHeight, vk::Format::eR8G8B8A8Srgb, vk::ImageTiling::eOptimal,
-		vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled,
+	createImage(texWidth, texHeight, mipLevels, vk::Format::eR8G8B8A8Srgb, vk::ImageTiling::eOptimal,
+		vk::ImageUsageFlagBits::eTransferSrc | vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled,
 		vk::MemoryPropertyFlagBits::eDeviceLocal, textureImage, textureImageMemory);
 
-	transitionImageLayout(textureImage, vk::Format::eR8G8B8A8Srgb, vk::ImageLayout::eUndefined,
-		vk::ImageLayout::eTransferDstOptimal);
+	transitionImageLayout(textureImage, vk::Format::eR8G8B8A8Srgb, vk::ImageLayout::eUndefined, vk::ImageLayout::eTransferDstOptimal, mipLevels);
 	copyBufferToImage(stagingBuffer, textureImage, static_cast<uint32_t> (texWidth), static_cast<uint32_t> (texHeight));
-	transitionImageLayout(textureImage, vk::Format::eR8G8B8A8Srgb, vk::ImageLayout::eTransferDstOptimal,
-		vk::ImageLayout::eShaderReadOnlyOptimal);
 
+	//transitionImageLayout(textureImage, vk::Format::eR8G8B8A8Srgb, vk::ImageLayout::eTransferDstOptimal, vk::ImageLayout::eShaderReadOnlyOptimal, mipLevels);
 
 	device->destroyBuffer(stagingBuffer, nullptr);
 	device->freeMemory(stagingBufferMemory, nullptr);
+
+	generateMipmaps(textureImage, vk::Format::eR8G8B8A8Srgb, texWidth, texHeight, mipLevels);
 }
 
 void VulkanApp::createTextureImageView() {
-	textureImageView = createImageView(textureImage, vk::Format::eR8G8B8A8Srgb, vk::ImageAspectFlagBits::eColor);
+	textureImageView = createImageView(textureImage, vk::Format::eR8G8B8A8Srgb, vk::ImageAspectFlagBits::eColor, mipLevels);
+}
 
+void VulkanApp::generateMipmaps(vk::Image image, vk::Format format, int32_t texWidth, int32_t texHeight, uint32_t mipLevels) {
+
+	auto formatProperties = physicalDevice.getFormatProperties(format);
+
+	if (!(formatProperties.optimalTilingFeatures & vk::FormatFeatureFlagBits::eSampledImageFilterLinear)) {
+		throw std::runtime_error("texture image format does not support linear blitting");
+	}
+
+	vk::CommandBuffer commandBuffer = beginSingleTimeCommands();
+
+	vk::ImageMemoryBarrier barrier;
+	barrier.image = image;
+	barrier.srcQueueFamilyIndex = vk::QueueFamilyIgnored;
+	barrier.dstQueueFamilyIndex = vk::QueueFamilyIgnored;
+	barrier.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
+	barrier.subresourceRange.baseArrayLayer = 0;
+	barrier.subresourceRange.layerCount = 1;
+	barrier.subresourceRange.levelCount = 1;
+
+	int32_t mipWidth = texWidth;
+	int32_t mipHeight = texHeight;
+
+	for (uint32_t i = 1; i < mipLevels; i++) {
+		barrier.subresourceRange.baseMipLevel = i - 1;
+		barrier.oldLayout = vk::ImageLayout::eTransferDstOptimal;
+		barrier.newLayout = vk::ImageLayout::eTransferSrcOptimal;
+		barrier.srcAccessMask = vk::AccessFlagBits::eTransferWrite;
+		barrier.dstAccessMask = vk::AccessFlagBits::eTransferRead;
+
+		commandBuffer.pipelineBarrier(vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eTransfer,
+			{},
+			0, nullptr,
+			0, nullptr,
+			1, &barrier);
+
+		vk::ImageBlit blit(
+			{ // srcSubresource
+				vk::ImageAspectFlagBits::eColor, // aspectMask
+				i - 1, // miplevel
+				0, // basearrraylayer
+				1 // layercount
+			},
+			{ // srcOffsets
+				vk::Offset3D{0,0,0},
+				vk::Offset3D{mipWidth, mipHeight, 1}
+			},
+			{ //dstSubresource
+				vk::ImageAspectFlagBits::eColor,
+				i,
+				0,
+				1
+			},
+			{ //dstOffsets
+				vk::Offset3D{0,0,0},
+				vk::Offset3D{ mipWidth > 1 ? mipWidth / 2 : 1, mipHeight > 1 ? mipHeight / 2 : 1, 1}
+			}
+			);
+
+		commandBuffer.blitImage(image, vk::ImageLayout::eTransferSrcOptimal, image, vk::ImageLayout::eTransferDstOptimal, 1, &blit, vk::Filter::eLinear);
+
+		barrier.oldLayout = vk::ImageLayout::eTransferSrcOptimal;
+		barrier.newLayout = vk::ImageLayout::eShaderReadOnlyOptimal;
+		barrier.srcAccessMask = vk::AccessFlagBits::eTransferRead;
+		barrier.dstAccessMask = vk::AccessFlagBits::eShaderRead;
+
+		commandBuffer.pipelineBarrier(vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eFragmentShader, {},
+			0, nullptr, 0, nullptr, 1, &barrier);
+
+		if (mipWidth > 1) mipWidth /= 2;
+		if (mipHeight > 1) mipHeight /= 2;
+	}
+
+	barrier.subresourceRange.baseMipLevel = mipLevels - 1;
+	barrier.oldLayout = vk::ImageLayout::eTransferDstOptimal;
+	barrier.newLayout = vk::ImageLayout::eShaderReadOnlyOptimal;
+	barrier.srcAccessMask = vk::AccessFlagBits::eTransferWrite;
+	barrier.dstAccessMask = vk::AccessFlagBits::eShaderRead;
+
+	commandBuffer.pipelineBarrier(vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eFragmentShader, {}, 0, nullptr, 0, nullptr, 1, &barrier);
+
+	endSingleTimeCommands(commandBuffer);
 }
 
 void VulkanApp::createTextureSampler() {
@@ -780,14 +863,14 @@ void VulkanApp::createTextureSampler() {
 	samplerInfo.compareEnable = vk::False;
 	samplerInfo.compareOp = vk::CompareOp::eAlways;
 	samplerInfo.mipmapMode = vk::SamplerMipmapMode::eLinear;
-	samplerInfo.mipLodBias = 0.0f;
 	samplerInfo.minLod = 0.0f;
-	samplerInfo.maxLod = 0.0f;
+	samplerInfo.maxLod = static_cast<float>(mipLevels);
+	samplerInfo.mipLodBias = 0.0f;
 
 	textureSampler = device->createSampler(samplerInfo);
 }
 
-vk::ImageView VulkanApp::createImageView(vk::Image image, vk::Format format, vk::ImageAspectFlags aspectFlags) {
+vk::ImageView VulkanApp::createImageView(vk::Image image, vk::Format format, vk::ImageAspectFlags aspectFlags, uint32_t mipLevels) {
 	vk::ImageViewCreateInfo viewInfo(
 		{},
 		image,
@@ -802,7 +885,7 @@ vk::ImageView VulkanApp::createImageView(vk::Image image, vk::Format format, vk:
 			{
 					aspectFlags, // subresourceRange.aspectMask
 					0,                                 // subresourceRange.baseMipmaplevel
-					1,                                 // subresourceRange.levelCount
+					mipLevels,                                 // subresourceRange.levelCount
 					0,                                 // subresourceRange.baseArrayLayer
 					1                                 // subresourceRange.layerCount
 			});
@@ -854,7 +937,7 @@ void VulkanApp::createBuffer(vk::DeviceSize size, vk::BufferUsageFlags usage, vk
 	device->bindBufferMemory(buffer, bufferMemory, 0);
 }
 
-void VulkanApp::createImage(uint32_t width, uint32_t height, vk::Format format, vk::ImageTiling tiling,
+void VulkanApp::createImage(uint32_t width, uint32_t height, uint32_t mipLevels, vk::Format format, vk::ImageTiling tiling,
 	vk::ImageUsageFlags usage, vk::MemoryPropertyFlags properties, vk::Image& image,
 	vk::DeviceMemory& imageMemory) {
 	vk::ImageCreateInfo imageInfo(
@@ -865,7 +948,7 @@ void VulkanApp::createImage(uint32_t width, uint32_t height, vk::Format format, 
 	imageInfo.extent.width = static_cast<uint32_t> (width);
 	imageInfo.extent.height = static_cast<uint32_t> (height);
 	imageInfo.extent.depth = 1;
-	imageInfo.mipLevels = 1;
+	imageInfo.mipLevels = mipLevels;
 	imageInfo.arrayLayers = 1;
 	imageInfo.tiling = tiling;
 	imageInfo.initialLayout = vk::ImageLayout::eUndefined;
@@ -892,22 +975,19 @@ void VulkanApp::copyBuffer(vk::Buffer srcBuffer, vk::Buffer dstBuffer, vk::Devic
 	endSingleTimeCommands(commandBuffer);
 }
 
-void VulkanApp::transitionImageLayout(vk::Image image, vk::Format format, vk::ImageLayout oldLayout,
-	vk::ImageLayout newLayout) {
+void VulkanApp::transitionImageLayout(vk::Image image, vk::Format format, vk::ImageLayout oldLayout, vk::ImageLayout newLayout, uint32_t mipLevels) {
 	vk::CommandBuffer commandBuffer = beginSingleTimeCommands();
 
-	vk::ImageMemoryBarrier barrier(
-		{},
-		{},
-		oldLayout,
-		newLayout,
-		vk::QueueFamilyIgnored,
-		vk::QueueFamilyIgnored,
-		image
-	);
+	vk::ImageMemoryBarrier barrier;
+	barrier.oldLayout = oldLayout;
+	barrier.newLayout = newLayout;
+	barrier.srcQueueFamilyIndex = vk::QueueFamilyIgnored;
+	barrier.dstQueueFamilyIndex = vk::QueueFamilyIgnored;
+	barrier.image = image;
+
 	barrier.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
 	barrier.subresourceRange.baseMipLevel = 0;
-	barrier.subresourceRange.levelCount = 1;
+	barrier.subresourceRange.levelCount = mipLevels;
 	barrier.subresourceRange.baseArrayLayer = 0;
 	barrier.subresourceRange.layerCount = 1;
 
@@ -915,7 +995,7 @@ void VulkanApp::transitionImageLayout(vk::Image image, vk::Format format, vk::Im
 	vk::PipelineStageFlags sourceStage, destinationStage;
 
 	if (oldLayout == vk::ImageLayout::eUndefined && newLayout == vk::ImageLayout::eTransferDstOptimal) {
-		barrier.srcAccessMask = vk::AccessFlagBits::eNone;
+		barrier.srcAccessMask = {};
 		barrier.dstAccessMask = vk::AccessFlagBits::eTransferWrite;
 		sourceStage = vk::PipelineStageFlagBits::eTopOfPipe;
 		destinationStage = vk::PipelineStageFlagBits::eTransfer;

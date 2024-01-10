@@ -17,43 +17,9 @@ const uint32_t WIDTH = 800;
 const uint32_t HEIGHT = 600;
 const int MAX_FRAMES_IN_FLIGHT = 2;
 
-const std::string MODEL_PATH = "models/spot.obj";
-const std::string TEXTURE_PATH = "textures/spot.png";
+const std::string MODEL_PATH = "models/viking_room.obj";
+const std::string TEXTURE_PATH = "textures/viking_room.png";
 
-
-//const float sideLength = 0.5f;
-
-//const std::vector<Vertex> vertices = {
-//		{{sideLength,  sideLength,  -sideLength}, {1.0f, 1.0f, 0.0f}, {0.67f, 1.0f - 0.25f}},    // 0 a
-//		{{sideLength,  sideLength,  sideLength},  {1.0f, 1.0f, 1.0f}, {0.67f, 1.0f - 0.5f}},    // 1 b
-//		{{sideLength,  -sideLength, -sideLength}, {1.0f, 0.0f, 0.0f}, {0.34f, 1.0f - 0.25f}},    // 2 c
-//		{{sideLength,  -sideLength, sideLength},  {1.0f, 0.0f, 1.0f}, {0.34f,1.0f - 0.5f}},    // 3 d
-//		{{-sideLength, sideLength,  -sideLength}, {0.0f, 1.0f, 0.0f}, {0.67f, 1.0f - 1.0f}},    // 4 e
-//		{{-sideLength, sideLength,  sideLength},  {0.0f, 1.0f, 0.0f}, {0.67f,1.0f - 0.75f}},    // 5 f
-//		{{-sideLength, -sideLength, -sideLength}, {0.0f, 0.0f, 0.0f}, {0.34f, 1.0f - 1.0f}},    // 6 g
-//		{{-sideLength, -sideLength, sideLength},  {0.0f, 0.0f, 1.0f}, {0.34f,1.0f - 0.75f}},    // 7 h
-//		{{sideLength,  sideLength,  -sideLength}, {1.0f, 1.0f, 0.0f}, {1.0f, 1.0f - 0.5f}},    // 8 a'
-//		{{sideLength,  -sideLength, -sideLength}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f - 0.5f}},    // 9 c'
-//		{{-sideLength, sideLength,  -sideLength}, {0.0f, 1.0f, 0.0f}, {1.0f, 1.0f - 0.75f}},    // 10 e'
-//		{{-sideLength, -sideLength, -sideLength}, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f - 0.25f}},    // 11 g'
-//		{{-sideLength, sideLength,  -sideLength}, {0.0f, 1.0f, 0.0f}, {0.67f,1.0f - 0.0f}},    // 12 e''
-//		{{-sideLength, -sideLength, -sideLength}, {0.0f, 0.0f, 0.0f}, {0.34f,1.0f - 0.0f}},    // 13 g''
-//};
-//
-//const std::vector<uint16_t> indices = {
-//		7, 4, 6,
-//		7, 5, 4,
-//		3, 5, 7,
-//		3, 1, 5,
-//		2, 1, 3,
-//		2, 0, 1,
-//		13, 0, 2,
-//		13, 12, 0,
-//		11, 9, 7,
-//		9, 3, 7,
-//		5, 1, 10,
-//		1, 8, 10
-//};
 
 const std::vector<const char*> validationLayers = {
 		"VK_LAYER_KHRONOS_validation",
@@ -179,6 +145,7 @@ private:
 	vk::DeviceMemory textureImageMemory;
 	vk::ImageView textureImageView;
 	vk::Sampler textureSampler;
+	uint32_t mipLevels;
 
 	// depth
 	vk::Image depthImage;
@@ -351,7 +318,12 @@ private:
 	/**
 	* abstraction to create image views
 	*/
-	vk::ImageView createImageView(vk::Image image, vk::Format format, vk::ImageAspectFlags aspectFlags);
+	vk::ImageView createImageView(vk::Image image, vk::Format format, vk::ImageAspectFlags aspectFlags, uint32_t mipLevels);
+
+	/**
+	* creates the different mipmaps
+	*/
+	void generateMipmaps(vk::Image image, vk::Format format, int32_t texWidth, int32_t texHeight, uint32_t mipLevels);
 
 	/**
 	* creates the texture sampler
@@ -371,16 +343,13 @@ private:
 	/**
 	 * creates an image
 	 */
-	void
-		createImage(uint32_t width, uint32_t height, vk::Format format, vk::ImageTiling tiling, vk::ImageUsageFlags usage,
-			vk::MemoryPropertyFlags properties, vk::Image& image, vk::DeviceMemory& imageMemory);
+	void createImage(uint32_t width, uint32_t height, uint32_t mipLevels, vk::Format format, vk::ImageTiling tiling, vk::ImageUsageFlags usage, vk::MemoryPropertyFlags properties, vk::Image& image, vk::DeviceMemory& imageMemory);
 
 
 	/**
 	 * transitions from one image layout to another
 	 */
-	void
-		transitionImageLayout(vk::Image image, vk::Format format, vk::ImageLayout oldLayout, vk::ImageLayout newLayout);
+	void transitionImageLayout(vk::Image image, vk::Format format, vk::ImageLayout oldLayout, vk::ImageLayout newLayout, uint32_t mipLevels);
 
 	/**
 	 * copies buffer to image
@@ -390,8 +359,7 @@ private:
 	/**
 	 * creates buffers
 	 */
-	void createBuffer(vk::DeviceSize size, vk::BufferUsageFlags usage, vk::MemoryPropertyFlags properties,
-		vk::Buffer& buffer, vk::DeviceMemory& bufferMemory);
+	void createBuffer(vk::DeviceSize size, vk::BufferUsageFlags usage, vk::MemoryPropertyFlags properties, vk::Buffer& buffer, vk::DeviceMemory& bufferMemory);
 
 	/**
 	 * copies buffer contents
