@@ -17,23 +17,12 @@ const uint32_t WIDTH = 800;
 const uint32_t HEIGHT = 600;
 const int MAX_FRAMES_IN_FLIGHT = 2;
 
-const float sideLength = 0.5f;
-const std::vector<Vertex> vertices = {
-		{{-0.5f, -0.5f, 0.0f},  {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
-		{{0.5f,  -0.5f, 0.0f},  {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
-		{{0.5f,  0.5f,  0.0f},  {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
-		{{-0.5f, 0.5f,  0.0f},  {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
+const std::string MODEL_PATH = "models/spot.obj";
+const std::string TEXTURE_PATH = "textures/spot.png";
 
-		{{-0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
-		{{0.5f,  -0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
-		{{0.5f,  0.5f,  -0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
-		{{-0.5f, 0.5f,  -0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}}
-};
 
-const std::vector<uint16_t> indices = {
-		0, 1, 2, 2, 3, 0,
-		4, 5, 6, 6, 7, 4
-};
+//const float sideLength = 0.5f;
+
 //const std::vector<Vertex> vertices = {
 //		{{sideLength,  sideLength,  -sideLength}, {1.0f, 1.0f, 0.0f}, {0.67f, 1.0f - 0.25f}},    // 0 a
 //		{{sideLength,  sideLength,  sideLength},  {1.0f, 1.0f, 1.0f}, {0.67f, 1.0f - 0.5f}},    // 1 b
@@ -196,10 +185,16 @@ private:
 	vk::DeviceMemory depthImageMemory;
 	vk::ImageView depthImageView;
 
+	// model info
+	std::vector<Vertex> vertices;
+	std::vector<uint32_t> indices;
+
+
 
 	// interaction
 	bool rx = false, ry = false, rz = false;
 	int dir = 1;
+	float fov = 60.0f;
 	bool autoRotate = false;
 	glm::mat4 transform = glm::mat4(1.0f);
 	std::chrono::time_point<std::chrono::high_resolution_clock> startTime = std::chrono::high_resolution_clock::now();
@@ -217,6 +212,11 @@ private:
 	 * callback for key presses
 	 */
 	static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+
+	/**
+	* scrollwheel callback for zoom
+	*/
+	static void scrollCallback(GLFWwindow* window, double x, double y);
 
 	/**
 	 * callback for the framebufferresized event in GLFW
@@ -397,6 +397,11 @@ private:
 	 * copies buffer contents
 	 */
 	void copyBuffer(vk::Buffer srcBuffer, vk::Buffer dstBuffer, vk::DeviceSize size);
+
+	/**
+	* loads a model using tinyobjloader
+	*/
+	void loadModel();
 
 	/**
 	 * creates the vertex buffers for the shaders

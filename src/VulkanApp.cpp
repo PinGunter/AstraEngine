@@ -2,14 +2,15 @@
 #include <stdexcept>
 #include <map>
 #include <set>
+#include <unordered_map>
 #include <algorithm>
 #include <iostream>
 #include <fstream>
 #include <glm/gtc/matrix_transform.hpp>
 #include <chrono>
-
+#define TINYOBJLOADER_IMPLEMENTATION
+#include <tiny_obj_loader.h>
 #define STB_IMAGE_IMPLEMENTATION
-
 #include <stb_image.h>
 
 std::vector<char> readFile(const std::string& filename) {
@@ -45,6 +46,7 @@ void VulkanApp::initWindow() {
 	glfwSetWindowUserPointer(window, this);
 	glfwSetFramebufferSizeCallback(window, framebufferResizedCallback);
 	glfwSetKeyCallback(window, keyCallback);
+	glfwSetScrollCallback(window, scrollCallback);
 }
 
 void VulkanApp::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -66,6 +68,12 @@ void VulkanApp::keyCallback(GLFWwindow* window, int key, int scancode, int actio
 	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
 		app->autoRotate = !app->autoRotate;
 	}
+}
+
+void VulkanApp::scrollCallback(GLFWwindow* window, double x, double y)
+{
+	auto app = reinterpret_cast<VulkanApp*>(glfwGetWindowUserPointer(window));
+	app->fov = glm::clamp(app->fov + static_cast<float>(y), 0.0f, 180.0f);
 }
 
 void VulkanApp::framebufferResizedCallback(GLFWwindow* window, int width, int height) {
@@ -90,6 +98,7 @@ void VulkanApp::initVulkan() {
 	createTextureImage();
 	createTextureImageView();
 	createTextureSampler();
+	loadModel();
 	createVertexBuffer();
 	createIndexBuffer();
 	createUniformBuffers();
@@ -706,7 +715,7 @@ bool VulkanApp::hasStencilComponent(vk::Format format) {
 
 void VulkanApp::createTextureImage() {
 	int texWidth, texHeight, texChannels;
-	stbi_uc* pixels = stbi_load("textures/texture.jpg", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+	stbi_uc* pixels = stbi_load(TEXTURE_PATH.c_str(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
 	vk::DeviceSize imageSize = texWidth * texHeight * 4;
 	if (!pixels) {
 		throw std::runtime_error("failed to load texture image!");
@@ -991,6 +1000,42 @@ void VulkanApp::createIndexBuffer() {
 	device->freeMemory(stagingBufferMemory);
 }
 
+void VulkanApp::loadModel()
+{
+	tinyobj::attrib_t attrib;
+	std::vector<tinyobj::shape_t> shapes;
+	std::vector<tinyobj::material_t> materials;
+	std::string warn, err;
+
+	if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, MODEL_PATH.c_str())) {
+		throw std::runtime_error("failed to load model");
+	}
+
+	std::unordered_map<Vertex, uint32_t> uniqueVertices;
+
+	for (const auto& shape : shapes) {
+		for (const auto& index : shape.mesh.indices) {
+			Vertex vertex{};
+
+			vertex.pos = {
+				attrib.vertices[3 * index.vertex_index + 0],
+				attrib.vertices[3 * index.vertex_index + 1],
+				attrib.vertices[3 * index.vertex_index + 2]
+			};
+			vertex.texCoord = {
+				attrib.texcoords[2 * index.texcoord_index + 0],
+				1.0f - attrib.texcoords[2 * index.texcoord_index + 1]
+			};
+
+			if (uniqueVertices.count(vertex) == 0) {
+				uniqueVertices[vertex] = static_cast<uint32_t> (vertices.size());
+				vertices.push_back(vertex);
+			}
+			indices.push_back(uniqueVertices[vertex]);
+		}
+	}
+}
+
 void VulkanApp::createUniformBuffers() {
 	vk::DeviceSize bufferSize = sizeof(UniformBufferObject);
 	uniformBuffers.resize(MAX_FRAMES_IN_FLIGHT);
@@ -1072,7 +1117,7 @@ void VulkanApp::updateUniformBuffer(uint32_t currentImage) {
 
 	UniformBufferObject ubo{};
 	if (autoRotate) {
-		transform = glm::rotate(glm::mat4(transform), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		transform = glm::rotate(glm::mat4(transform), time * glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	}
 	else {
 
@@ -1091,9 +1136,11 @@ void VulkanApp::updateUniformBuffer(uint32_t currentImage) {
 	}
 
 	ubo.model = transform;
-	//    ubo.model = glm::rotate(ubo.model, time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	ubo.proj = glm::perspective(glm::radians(45.0f), swapchainExtent.width / (float)swapchainExtent.height, 0.1f,
+	ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
+	float aspect = swapchainExtent.width / (float)swapchainExtent.height;
+	float fovY = 2.0f * atanf(tanf(glm::radians(fov) / 2.0f) / aspect);
+	ubo.proj = glm::perspective(fovY, aspect, 0.1f,
 		10.0f);
 	ubo.proj[1][1] *= -1; // since glm was designed for opengl where y-up is positive whereas in vulkan y-up is negative
 
@@ -1148,7 +1195,7 @@ void VulkanApp::recordCommandBuffer(vk::CommandBuffer commandBuffer, uint32_t im
 	vk::Buffer vertexBuffers[] = { vertexBuffer };
 	vk::DeviceSize offsets[] = { 0 };
 	commandBuffer.bindVertexBuffers(0, vertexBuffers, offsets);
-	commandBuffer.bindIndexBuffer(indexBuffer, 0, vk::IndexType::eUint16);
+	commandBuffer.bindIndexBuffer(indexBuffer, 0, vk::IndexType::eUint32);
 
 	vk::Viewport viewport(
 		0, 0, (float)swapchainExtent.width, (float)swapchainExtent.height, 0.0f, 1.0f
