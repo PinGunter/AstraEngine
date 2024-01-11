@@ -156,7 +156,11 @@ private:
 	std::vector<Vertex> vertices;
 	std::vector<uint32_t> indices;
 
-
+	// MSAA
+	vk::SampleCountFlagBits msaaSamples = vk::SampleCountFlagBits::e1;
+	vk::Image colorImage;
+	vk::DeviceMemory colorImageMemory;
+	vk::ImageView colorImageView;
 
 	// interaction
 	bool rx = false, ry = false, rz = false;
@@ -287,6 +291,11 @@ private:
 	void createCommandPool();
 
 	/**
+	* creates the color resources for msaa
+	*/
+	void createColorResources();
+
+	/**
 	* creates the depth resources
 	*/
 	void createDepthResources();
@@ -343,7 +352,7 @@ private:
 	/**
 	 * creates an image
 	 */
-	void createImage(uint32_t width, uint32_t height, uint32_t mipLevels, vk::Format format, vk::ImageTiling tiling, vk::ImageUsageFlags usage, vk::MemoryPropertyFlags properties, vk::Image& image, vk::DeviceMemory& imageMemory);
+	void createImage(uint32_t width, uint32_t height, uint32_t mipLevels, vk::SampleCountFlagBits numSamples, vk::Format format, vk::ImageTiling tiling, vk::ImageUsageFlags usage, vk::MemoryPropertyFlags properties, vk::Image& image, vk::DeviceMemory& imageMemory);
 
 
 	/**
@@ -472,6 +481,12 @@ private:
 	 * currently, it only values whether or not the gpu is a dedicated graphics card
 	 */
 	int rateDeviceSuitability(vk::PhysicalDevice device);
+
+	/**
+	* get maximu sample count for the deviced
+	* used for msaa
+	*/
+	vk::SampleCountFlagBits getMaxUsableSampleCount();
 
 	/**
 	 * checks if the extensions in @e deviceExtensions vector are supported by the device

@@ -93,6 +93,7 @@ void VulkanApp::initVulkan() {
 	createDescriptorSetLayout();
 	createGraphicsPipeline();
 	createCommandPool();
+	createColorResources();
 	createDepthResources();
 	createFramebuffers();
 	createTextureImage();
@@ -240,6 +241,7 @@ void VulkanApp::pickPhysicalDevice() {
 
 	if (candidates.rbegin()->first > 0) {
 		physicalDevice = candidates.rbegin()->second;
+		msaaSamples = getMaxUsableSampleCount();
 	}
 	else {
 		throw std::runtime_error("failed to find any suitable GPU");
@@ -263,6 +265,8 @@ void VulkanApp::createLogicalDevice() {
 
 	vk::PhysicalDeviceFeatures deviceFeatures;
 	deviceFeatures.samplerAnisotropy = vk::True;
+	deviceFeatures.sampleRateShading = vk::True;
+	deviceFeatures.fillModeNonSolid = vk::True;
 
 	vk::DeviceCreateInfo createInfo({},
 		static_cast<uint32_t>(queueCreateInfos.size()),                                 // queueCreateInfoCount
@@ -282,6 +286,9 @@ void VulkanApp::createLogicalDevice() {
 }
 
 void VulkanApp::cleanupSwapchain() {
+	device->destroyImageView(colorImageView);
+	device->destroyImage(colorImage);
+	device->freeMemory(colorImageMemory);
 	device->destroyImageView(depthImageView);
 	device->destroyImage(depthImage);
 	device->freeMemory(depthImageMemory);
@@ -311,6 +318,7 @@ void VulkanApp::recreateSwapchain() {
 
 	createSwapchain();
 	createImageViews();
+	createColorResources();
 	createDepthResources();
 	createFramebuffers();
 }
@@ -400,13 +408,13 @@ void VulkanApp::createRenderPass() {
 	vk::AttachmentDescription colorAttachment(
 		{},                                  // flags
 		swapchainImageFormat,              // format
-		vk::SampleCountFlagBits::e1,      // samples
+		msaaSamples,      // samples
 		vk::AttachmentLoadOp::eClear,      // load op
 		vk::AttachmentStoreOp::eStore,      // store op
 		vk::AttachmentLoadOp::eDontCare,  // stencil load op
 		vk::AttachmentStoreOp::eDontCare, // stencil store op
 		vk::ImageLayout::eUndefined,      // initial layout
-		vk::ImageLayout::ePresentSrcKHR      // final layout
+		vk::ImageLayout::eColorAttachmentOptimal      // final layout
 	);
 
 	vk::AttachmentReference colorAttachmentRef(
@@ -414,10 +422,11 @@ void VulkanApp::createRenderPass() {
 		vk::ImageLayout::eColorAttachmentOptimal // layout
 	);
 
+
 	vk::AttachmentDescription depthAttachment(
 		{},
 		findDepthFormat(),
-		vk::SampleCountFlagBits::e1,
+		msaaSamples,
 		vk::AttachmentLoadOp::eClear,
 		vk::AttachmentStoreOp::eDontCare,
 		vk::AttachmentLoadOp::eDontCare,
@@ -430,11 +439,26 @@ void VulkanApp::createRenderPass() {
 		1, vk::ImageLayout::eDepthStencilAttachmentOptimal
 	);
 
+	vk::AttachmentDescription colorAttachmentResolve(
+		{},
+		swapchainImageFormat,
+		vk::SampleCountFlagBits::e1,
+		vk::AttachmentLoadOp::eDontCare,
+		vk::AttachmentStoreOp::eDontCare,
+		vk::AttachmentLoadOp::eDontCare,
+		vk::AttachmentStoreOp::eDontCare,
+		vk::ImageLayout::eUndefined,
+		vk::ImageLayout::ePresentSrcKHR
+	);
+
+	vk::AttachmentReference colorAttachmentResolveRef(2, vk::ImageLayout::eColorAttachmentOptimal);
+
 	vk::SubpassDescription subpass;
 	subpass.pipelineBindPoint = vk::PipelineBindPoint::eGraphics;
 	subpass.colorAttachmentCount = 1;
 	subpass.pColorAttachments = &colorAttachmentRef;
 	subpass.pDepthStencilAttachment = &depthReference;
+	subpass.pResolveAttachments = &colorAttachmentResolveRef;
 
 	// make the renderpass wait until image is acquired
 	vk::SubpassDependency dependency;
@@ -445,7 +469,7 @@ void VulkanApp::createRenderPass() {
 	dependency.srcAccessMask = {};
 	dependency.dstAccessMask = vk::AccessFlagBits::eColorAttachmentWrite | vk::AccessFlagBits::eDepthStencilAttachmentWrite;
 
-	std::array<vk::AttachmentDescription, 2> attachments = { colorAttachment, depthAttachment };
+	std::array<vk::AttachmentDescription, 3> attachments = { colorAttachment, depthAttachment, colorAttachmentResolve };
 
 	vk::RenderPassCreateInfo createInfo(
 		{},                  // flags
@@ -584,9 +608,9 @@ void VulkanApp::createGraphicsPipeline() {
 
 	vk::PipelineMultisampleStateCreateInfo multisampling(
 		{},                             // flags
-		vk::SampleCountFlagBits::e1, // rasterization samples
-		VK_FALSE,                     // sampleShadingEnable
-		1.0f,                         // minSampleShading
+		msaaSamples, // rasterization samples
+		vk::True,                     // sampleShadingEnable
+		0.2f,                         // minSampleShading
 		nullptr,                     // pSampleMask
 		VK_FALSE,                     // alphatoOneCoverageEnable
 		VK_FALSE                     // alphatoOneEnable
@@ -661,7 +685,7 @@ void VulkanApp::createFramebuffers() {
 	swapchainFramebuffers.resize(swapchainImageViews.size());
 
 	for (size_t i = 0; i < swapchainImageViews.size(); i++) {
-		std::array<vk::ImageView, 2> attachments = { swapchainImageViews[i], depthImageView };
+		std::array<vk::ImageView, 3> attachments = { colorImageView, depthImageView , swapchainImageViews[i] };
 		vk::FramebufferCreateInfo createInfo(
 			{},                        // flags
 			renderPass,                // renderpass
@@ -683,10 +707,18 @@ void VulkanApp::createCommandPool() {
 	commandPool = device->createCommandPool(poolInfo);
 }
 
+void VulkanApp::createColorResources()
+{
+	vk::Format colorFormat = swapchainImageFormat;
+
+	createImage(swapchainExtent.width, swapchainExtent.height, 1, msaaSamples, colorFormat, vk::ImageTiling::eOptimal, vk::ImageUsageFlagBits::eTransientAttachment | vk::ImageUsageFlagBits::eColorAttachment, vk::MemoryPropertyFlagBits::eDeviceLocal, colorImage, colorImageMemory);
+	colorImageView = createImageView(colorImage, colorFormat, vk::ImageAspectFlagBits::eColor, 1);
+}
+
 void VulkanApp::createDepthResources()
 {
 	vk::Format depthFormat = findDepthFormat();
-	createImage(swapchainExtent.width, swapchainExtent.height, 1, depthFormat, vk::ImageTiling::eOptimal, vk::ImageUsageFlagBits::eDepthStencilAttachment, vk::MemoryPropertyFlagBits::eDeviceLocal, depthImage, depthImageMemory);
+	createImage(swapchainExtent.width, swapchainExtent.height, 1, msaaSamples, depthFormat, vk::ImageTiling::eOptimal, vk::ImageUsageFlagBits::eDepthStencilAttachment, vk::MemoryPropertyFlagBits::eDeviceLocal, depthImage, depthImageMemory);
 	depthImageView = createImageView(depthImage, depthFormat, vk::ImageAspectFlagBits::eDepth, 1);
 }
 
@@ -737,7 +769,7 @@ void VulkanApp::createTextureImage() {
 	device->unmapMemory(stagingBufferMemory);
 	stbi_image_free(pixels);
 
-	createImage(texWidth, texHeight, mipLevels, vk::Format::eR8G8B8A8Srgb, vk::ImageTiling::eOptimal,
+	createImage(texWidth, texHeight, mipLevels, vk::SampleCountFlagBits::e1, vk::Format::eR8G8B8A8Srgb, vk::ImageTiling::eOptimal,
 		vk::ImageUsageFlagBits::eTransferSrc | vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled,
 		vk::MemoryPropertyFlagBits::eDeviceLocal, textureImage, textureImageMemory);
 
@@ -937,7 +969,7 @@ void VulkanApp::createBuffer(vk::DeviceSize size, vk::BufferUsageFlags usage, vk
 	device->bindBufferMemory(buffer, bufferMemory, 0);
 }
 
-void VulkanApp::createImage(uint32_t width, uint32_t height, uint32_t mipLevels, vk::Format format, vk::ImageTiling tiling,
+void VulkanApp::createImage(uint32_t width, uint32_t height, uint32_t mipLevels, vk::SampleCountFlagBits numSamples, vk::Format format, vk::ImageTiling tiling,
 	vk::ImageUsageFlags usage, vk::MemoryPropertyFlags properties, vk::Image& image,
 	vk::DeviceMemory& imageMemory) {
 	vk::ImageCreateInfo imageInfo(
@@ -954,7 +986,7 @@ void VulkanApp::createImage(uint32_t width, uint32_t height, uint32_t mipLevels,
 	imageInfo.initialLayout = vk::ImageLayout::eUndefined;
 	imageInfo.usage = usage;
 	imageInfo.sharingMode = vk::SharingMode::eExclusive;
-	imageInfo.samples = vk::SampleCountFlagBits::e1;
+	imageInfo.samples = numSamples;
 
 	image = device->createImage(imageInfo);
 
@@ -1422,6 +1454,19 @@ vk::Extent2D VulkanApp::chooseSwapExtend(const vk::SurfaceCapabilitiesKHR& capab
 
 		return actualExtent;
 	}
+}
+
+vk::SampleCountFlagBits VulkanApp::getMaxUsableSampleCount()
+{
+	vk::PhysicalDeviceProperties physicalDeviceProperties = physicalDevice.getProperties();
+	vk::SampleCountFlags counts = physicalDeviceProperties.limits.framebufferColorSampleCounts & physicalDeviceProperties.limits.framebufferDepthSampleCounts;
+	if (counts & vk::SampleCountFlagBits::e64) return vk::SampleCountFlagBits::e64;
+	if (counts & vk::SampleCountFlagBits::e32) return vk::SampleCountFlagBits::e32;
+	if (counts & vk::SampleCountFlagBits::e16) return vk::SampleCountFlagBits::e16;
+	if (counts & vk::SampleCountFlagBits::e8) return vk::SampleCountFlagBits::e8;
+	if (counts & vk::SampleCountFlagBits::e4) return vk::SampleCountFlagBits::e4;
+	if (counts & vk::SampleCountFlagBits::e2) return vk::SampleCountFlagBits::e2;
+	return vk::SampleCountFlagBits::e1;
 }
 
 SwapchainSupportDetails VulkanApp::querySwapchainSupport(vk::PhysicalDevice device) {
