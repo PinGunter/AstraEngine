@@ -17,8 +17,8 @@ const uint32_t WIDTH = 800;
 const uint32_t HEIGHT = 600;
 const int MAX_FRAMES_IN_FLIGHT = 2;
 
-const std::string MODEL_PATH = "models/spot.obj";
-const std::string TEXTURE_PATH = "textures/spot.png";
+const std::string MODEL_PATH = "models/f.obj";
+const std::string TEXTURE_PATH = "textures/f.png";
 
 
 const std::vector<const char*> validationLayers = {

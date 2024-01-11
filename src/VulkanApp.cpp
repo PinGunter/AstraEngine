@@ -1283,7 +1283,7 @@ void VulkanApp::recordCommandBuffer(vk::CommandBuffer commandBuffer, uint32_t im
 	vk::CommandBufferBeginInfo beginInfo;
 	commandBuffer.begin(beginInfo);
 
-	std::array<float, 4> color = { 0.0f, 0.0f, 0.0f, 1.0f };
+	std::array<float, 4> color = { 0.4549f, 0.6157f, 0.9098f, 1.0f };
 	vk::ClearDepthStencilValue depthValue = { 1.0f, 0 };
 	std::array<vk::ClearValue, 2 > clearValues;
 	clearValues[0].color = color;
