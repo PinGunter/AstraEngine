@@ -154,7 +154,7 @@ int main(int argc, char** argv)
 
 	// Creation of the example
 	//helloVk.loadModel(nvh::findFile("media/scenes/cube_multi.obj", defaultSearchPaths, true));
-	helloVk.loadModel(nvh::findFile("media/scenes/spot.obj", defaultSearchPaths, true));
+	helloVk.loadModel(nvh::findFile("media/scenes/mono.obj", defaultSearchPaths, true));
 
 	helloVk.createOffscreenRender();
 	helloVk.createDescriptorSetLayout();
