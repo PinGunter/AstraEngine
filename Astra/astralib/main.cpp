@@ -127,6 +127,15 @@ int main(int argc, char** argv)
 	contextInfo.addInstanceExtension(VK_EXT_DEBUG_UTILS_EXTENSION_NAME, true);  // Allow debug names
 	contextInfo.addDeviceExtension(VK_KHR_SWAPCHAIN_EXTENSION_NAME);            // Enabling ability to present rendering
 
+	// add vulkan raytracing extensions
+	vk::PhysicalDeviceAccelerationStructureFeaturesKHR accelFeatures;
+	contextInfo.addDeviceExtension(VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME, false, &accelFeatures); // to build acceleration structures
+	vk::PhysicalDeviceRayTracingPipelineFeaturesKHR rtPipelineFeatures;
+	contextInfo.addDeviceExtension(VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME, false, &rtPipelineFeatures); // raytracing pipeline
+	contextInfo.addDeviceExtension(VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME); // required by raytracing pipeline
+
+
+
 	// Creating Vulkan base application
 	nvvk::Context vkctx{};
 	vkctx.initInstance(contextInfo);
@@ -162,6 +171,10 @@ int main(int argc, char** argv)
 	helloVk.createUniformBuffer();
 	helloVk.createObjDescriptionBuffer();
 	helloVk.updateDescriptorSet();
+
+	helloVk.initRayTracing();
+	helloVk.createBottomLevelAS();
+	helloVk.createTopLevelAS();
 
 	helloVk.createPostDescriptor();
 	helloVk.createPostPipeline();
