@@ -634,7 +634,7 @@ void HelloVulkan::createBottomLevelAS()
 		allBlas.emplace_back(blas);
 	}
 
-	m_rtBuilder.buildBlas(allBlas, VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR);
+	m_rtBuilder.buildBlas(allBlas, VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR | VK_BUILD_ACCELERATION_STRUCTURE_ALLOW_COMPACTION_BIT_KHR);
 }
 
 void HelloVulkan::createTopLevelAS()
