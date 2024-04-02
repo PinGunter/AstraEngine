@@ -381,14 +381,16 @@ void HelloVulkan::destroyResources()
 	vkDestroyRenderPass(m_device, m_offscreenRenderPass, nullptr);
 	vkDestroyFramebuffer(m_device, m_offscreenFramebuffer, nullptr);
 
-	m_alloc.deinit();
 
 	m_rtBuilder.destroy();
 	vkDestroyDescriptorPool(m_device, m_rtDescPool, nullptr);
 	vkDestroyDescriptorSetLayout(m_device, m_rtDescSetLayout, nullptr);
 	vkDestroyPipeline(m_device, m_rtPipeline, nullptr);
-	vkDestroyPipelineLayout(m_device, m_pipelineLayout, nullptr);
+	vkDestroyPipelineLayout(m_device, m_rtPipelineLayout, nullptr);
 	m_alloc.destroy(m_rtSBTBuffer);
+
+
+	m_alloc.deinit();
 }
 
 //--------------------------------------------------------------------------------------------------
