@@ -30,7 +30,7 @@
 #include <algorithm>
 #include <string.h>
 #include <string>
-#include <vulkan/vulkan.hpp>
+#include "vulkan/vulkan_core.h"
 #include "nvh/nvprint.hpp"
 
 namespace nvvk {

@@ -78,11 +78,6 @@ public:
 	void destroyResources();
 	void rasterize(const VkCommandBuffer& cmdBuff);
 
-	void initRayTracing();
-	auto objectToVkGeometryKHR(const ObjModel& model);
-	void createBottomLevelAS();
-	void createTopLevelAS();
-
 
 	// Array of objects and instances in the scene
 	std::vector<ObjModel>    m_objModel;   // Model on host
@@ -127,6 +122,19 @@ public:
 	nvvk::Texture               m_offscreenDepth;
 	VkFormat                    m_offscreenColorFormat{ VK_FORMAT_R32G32B32A32_SFLOAT };
 	VkFormat                    m_offscreenDepthFormat{ VK_FORMAT_X8_D24_UNORM_PACK32 };
-	vk::PhysicalDeviceRayTracingPipelinePropertiesKHR m_rtProperties;
+
+	// # RayTracing
+	void initRayTracing();
+	auto objectToVkGeometryKHR(const ObjModel& model);
+	void createBottomLevelAS();
+	void createTopLevelAS();
+	void createRtDescriptorSet();
+	void updateRtDescriptorSet();
+
+	VkPhysicalDeviceRayTracingPipelinePropertiesKHR m_rtProperties{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_PROPERTIES_KHR };
 	nvvk::RaytracingBuilderKHR m_rtBuilder;
+	nvvk::DescriptorSetBindings m_rtDescSetLayoutBind;
+	VkDescriptorPool m_rtDescPool;
+	VkDescriptorSetLayout m_rtDescSetLayout;
+	VkDescriptorSet m_rtDescSet;
 };

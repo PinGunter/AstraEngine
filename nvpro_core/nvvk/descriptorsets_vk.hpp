@@ -23,7 +23,7 @@
 #include <assert.h>
 #include <platform.h>
 #include <vector>
-#include <vulkan/vulkan.hpp>
+#include "vulkan/vulkan_core.h"
 
 namespace nvvk {
 

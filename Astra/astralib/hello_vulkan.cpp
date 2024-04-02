@@ -207,10 +207,11 @@ void HelloVulkan::loadModel(const std::string& filename, glm::mat4 transform)
 	nvvk::CommandPool  cmdBufGet(m_device, m_graphicsQueueIndex);
 	VkCommandBuffer    cmdBuf = cmdBufGet.createCommandBuffer();
 	VkBufferUsageFlags flag = VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT;
-	model.vertexBuffer = m_alloc.createBuffer(cmdBuf, loader.m_vertices, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | flag);
-	model.indexBuffer = m_alloc.createBuffer(cmdBuf, loader.m_indices, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | flag);
-	model.matColorBuffer = m_alloc.createBuffer(cmdBuf, loader.m_materials, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | flag);
-	model.matIndexBuffer = m_alloc.createBuffer(cmdBuf, loader.m_matIndx, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | flag);
+	VkBufferUsageFlags rayTracingFlags = flag | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
+	model.vertexBuffer = m_alloc.createBuffer(cmdBuf, loader.m_vertices, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | rayTracingFlags);
+	model.indexBuffer = m_alloc.createBuffer(cmdBuf, loader.m_indices, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | rayTracingFlags);
+	model.matColorBuffer = m_alloc.createBuffer(cmdBuf, loader.m_materials, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | rayTracingFlags);
+	model.matIndexBuffer = m_alloc.createBuffer(cmdBuf, loader.m_matIndx, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | rayTracingFlags);
 	// Creates all textures found and find the offset for this model
 	auto txtOffset = static_cast<uint32_t>(m_textures.size());
 	createTextureImages(cmdBuf, loader.m_textures);
@@ -383,6 +384,8 @@ void HelloVulkan::destroyResources()
 	m_alloc.deinit();
 
 	m_rtBuilder.destroy();
+	vkDestroyDescriptorPool(m_device, m_rtDescPool, nullptr);
+	vkDestroyDescriptorSetLayout(m_device, m_rtDescSetLayout, nullptr);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -426,6 +429,7 @@ void HelloVulkan::onResize(int /*w*/, int /*h*/)
 {
 	createOffscreenRender();
 	updatePostDescriptorSet();
+	updateRtDescriptorSet();
 }
 
 
@@ -574,29 +578,28 @@ void HelloVulkan::drawPost(VkCommandBuffer cmdBuf)
 
 void HelloVulkan::initRayTracing()
 {
-	VkPhysicalDeviceProperties2  prop2{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2 };
+	VkPhysicalDeviceProperties2 prop2{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2 };
 	prop2.pNext = &m_rtProperties;
 	vkGetPhysicalDeviceProperties2(m_physicalDevice, &prop2);
 	m_rtBuilder.setup(m_device, &m_alloc, m_graphicsQueueIndex);
 }
 
-auto HelloVulkan::objectToVkGeometryKHR(const ObjModel& model) {
+auto HelloVulkan::objectToVkGeometryKHR(const ObjModel& model)
+{
 	// BLAS builder requires raw device addresses.
 	VkDeviceAddress vertexAddress = nvvk::getBufferDeviceAddress(m_device, model.vertexBuffer.buffer);
 	VkDeviceAddress indexAddress = nvvk::getBufferDeviceAddress(m_device, model.indexBuffer.buffer);
 
 	uint32_t maxPrimitiveCount = model.nbIndices / 3;
 
-	// Describe buffer as array of VertexObj
+	// Describe buffer as array of VertexObj.
 	VkAccelerationStructureGeometryTrianglesDataKHR triangles{ VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR };
-	triangles.vertexFormat = VK_FORMAT_R32G32B32_SFLOAT; // vec3
+	triangles.vertexFormat = VK_FORMAT_R32G32B32_SFLOAT;  // vec3 vertex position data.
 	triangles.vertexData.deviceAddress = vertexAddress;
 	triangles.vertexStride = sizeof(VertexObj);
-
-	// Describe index data (32 bit unsigned int)
+	// Describe index data (32-bit unsigned int)
 	triangles.indexType = VK_INDEX_TYPE_UINT32;
 	triangles.indexData.deviceAddress = indexAddress;
-
 	// Indicate identity transform by setting transformData to null device pointer.
 	//triangles.transformData = {};
 	triangles.maxVertex = model.nbVertices - 1;
@@ -613,7 +616,6 @@ auto HelloVulkan::objectToVkGeometryKHR(const ObjModel& model) {
 	offset.primitiveCount = maxPrimitiveCount;
 	offset.primitiveOffset = 0;
 	offset.transformOffset = 0;
-
 
 	// Our blas is made from only one geometry, but could be made of many geometries
 	nvvk::RaytracingBuilderKHR::BlasInput input;
@@ -653,4 +655,37 @@ void HelloVulkan::createTopLevelAS()
 		tlas.emplace_back(rayInst);
 	}
 	m_rtBuilder.buildTlas(tlas, VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR);
+}
+
+void HelloVulkan::createRtDescriptorSet()
+{
+	m_rtDescSetLayoutBind.addBinding(RtxBindings::eTlas, VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, 1, VK_SHADER_STAGE_RAYGEN_BIT_KHR);
+	m_rtDescSetLayoutBind.addBinding(RtxBindings::eOutImage, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1, VK_SHADER_STAGE_RAYGEN_BIT_KHR);
+
+	m_rtDescPool = m_rtDescSetLayoutBind.createPool(m_device);
+	m_rtDescSetLayout = m_rtDescSetLayoutBind.createLayout(m_device);
+
+	VkDescriptorSetAllocateInfo allocateInfo{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO };
+	allocateInfo.descriptorPool = m_rtDescPool;
+	allocateInfo.descriptorSetCount = 1;
+	allocateInfo.pSetLayouts = &m_rtDescSetLayout;
+	vkAllocateDescriptorSets(m_device, &allocateInfo, &m_rtDescSet);
+
+	VkAccelerationStructureKHR tlas = m_rtBuilder.getAccelerationStructure();
+	VkWriteDescriptorSetAccelerationStructureKHR descASInfo{ VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_KHR };
+	descASInfo.accelerationStructureCount = 1;
+	descASInfo.pAccelerationStructures = &tlas;
+	VkDescriptorImageInfo imageInfo{ {},m_offscreenColor.descriptor.imageView, VK_IMAGE_LAYOUT_GENERAL };
+
+	std::vector<VkWriteDescriptorSet> writes;
+	writes.emplace_back(m_rtDescSetLayoutBind.makeWrite(m_rtDescSet, RtxBindings::eTlas, &descASInfo));
+	writes.emplace_back(m_rtDescSetLayoutBind.makeWrite(m_rtDescSet, RtxBindings::eOutImage, &imageInfo));
+	vkUpdateDescriptorSets(m_device, static_cast<uint32_t>(writes.size()), writes.data(), 0, nullptr);
+}
+
+void HelloVulkan::updateRtDescriptorSet()
+{
+	VkDescriptorImageInfo imageInfo{ {}, m_offscreenColor.descriptor.imageView, VK_IMAGE_LAYOUT_GENERAL };
+	VkWriteDescriptorSet wds = m_descSetLayoutBind.makeWrite(m_rtDescSet, RtxBindings::eOutImage, &imageInfo);
+	vkUpdateDescriptorSets(m_device, 1, &wds, 0, nullptr);
 }
