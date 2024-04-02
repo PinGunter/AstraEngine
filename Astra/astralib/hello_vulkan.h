@@ -130,6 +130,8 @@ public:
 	void createTopLevelAS();
 	void createRtDescriptorSet();
 	void updateRtDescriptorSet();
+	void createRtPipeline();
+	void createRtShaderBindingTable();
 
 	VkPhysicalDeviceRayTracingPipelinePropertiesKHR m_rtProperties{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_PROPERTIES_KHR };
 	nvvk::RaytracingBuilderKHR m_rtBuilder;
@@ -137,4 +139,13 @@ public:
 	VkDescriptorPool m_rtDescPool;
 	VkDescriptorSetLayout m_rtDescSetLayout;
 	VkDescriptorSet m_rtDescSet;
+	std::vector<VkRayTracingShaderGroupCreateInfoKHR> m_rtShaderGroups;
+	VkPipelineLayout m_rtPipelineLayout;
+	VkPipeline m_rtPipeline;
+	PushConstantRay m_pcRay{};
+	nvvk::Buffer m_rtSBTBuffer;
+	VkStridedDeviceAddressRegionKHR m_rgenRegion{};
+	VkStridedDeviceAddressRegionKHR m_missRegion{};
+	VkStridedDeviceAddressRegionKHR m_hitRegion{};
+	VkStridedDeviceAddressRegionKHR m_callRegion{};
 };

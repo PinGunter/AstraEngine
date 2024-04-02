@@ -386,6 +386,9 @@ void HelloVulkan::destroyResources()
 	m_rtBuilder.destroy();
 	vkDestroyDescriptorPool(m_device, m_rtDescPool, nullptr);
 	vkDestroyDescriptorSetLayout(m_device, m_rtDescSetLayout, nullptr);
+	vkDestroyPipeline(m_device, m_rtPipeline, nullptr);
+	vkDestroyPipelineLayout(m_device, m_pipelineLayout, nullptr);
+	m_alloc.destroy(m_rtSBTBuffer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -689,3 +692,161 @@ void HelloVulkan::updateRtDescriptorSet()
 	VkWriteDescriptorSet wds = m_descSetLayoutBind.makeWrite(m_rtDescSet, RtxBindings::eOutImage, &imageInfo);
 	vkUpdateDescriptorSets(m_device, 1, &wds, 0, nullptr);
 }
+
+void HelloVulkan::createRtPipeline()
+{
+	enum StageIndices {
+		eRaygen,
+		eMiss,
+		eClosestHit,
+		eShaderGroupCount
+	};
+
+	// all stages
+	std::array<VkPipelineShaderStageCreateInfo, eShaderGroupCount> stages{};
+	VkPipelineShaderStageCreateInfo stage{ VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO };
+	stage.pName = "main";
+
+	// raygen
+	stage.module = nvvk::createShaderModule(m_device, nvh::loadFile("spv/raytrace.rgen.spv", true, defaultSearchPaths, true));
+	stage.stage = VK_SHADER_STAGE_RAYGEN_BIT_KHR;
+	stages[eRaygen] = stage;
+
+	// miss
+	stage.module = nvvk::createShaderModule(m_device, nvh::loadFile("spv/raytrace.rmiss.spv", true, defaultSearchPaths, true));
+	stage.stage = VK_SHADER_STAGE_MISS_BIT_KHR;
+	stages[eMiss] = stage;
+
+	// chit
+	stage.module = nvvk::createShaderModule(m_device, nvh::loadFile("spv/raytrace.rchit.spv", true, defaultSearchPaths, true));
+	stage.stage = VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR;
+	stages[eClosestHit] = stage;
+
+	// shader groups
+	VkRayTracingShaderGroupCreateInfoKHR group{ VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR };
+	group.anyHitShader = VK_SHADER_UNUSED_KHR;
+	group.closestHitShader = VK_SHADER_UNUSED_KHR;
+	group.generalShader = VK_SHADER_UNUSED_KHR;
+	group.intersectionShader = VK_SHADER_UNUSED_KHR;
+
+	// raygen
+	group.type = VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR;
+	group.generalShader = eRaygen;
+	m_rtShaderGroups.push_back(group);
+
+	// miss
+	group.type = VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR;
+	group.generalShader = eMiss;
+	m_rtShaderGroups.push_back(group);
+
+	// closest hit shader
+	group.type = VK_RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_KHR;
+	group.generalShader = VK_SHADER_UNUSED_KHR;
+	group.closestHitShader = eClosestHit;
+	m_rtShaderGroups.push_back(group);
+
+	// push constants
+	VkPushConstantRange pushConstant{ VK_SHADER_STAGE_RAYGEN_BIT_KHR |
+		VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_MISS_BIT_NV, 0, sizeof(PushConstantRay) };
+
+	VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo{ VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO };
+	pipelineLayoutCreateInfo.pushConstantRangeCount = 1;
+	pipelineLayoutCreateInfo.pPushConstantRanges = &pushConstant;
+
+	// descriptor sets: one specific to rt (set=0, tlas) , other shared with raster (set=1, scene data)
+	std::vector<VkDescriptorSetLayout> rtDescSetLayouts = { m_rtDescSetLayout, m_descSetLayout };
+	pipelineLayoutCreateInfo.setLayoutCount = static_cast<uint32_t> (rtDescSetLayouts.size());
+	pipelineLayoutCreateInfo.pSetLayouts = rtDescSetLayouts.data();
+
+	vkCreatePipelineLayout(m_device, &pipelineLayoutCreateInfo, nullptr, &m_rtPipelineLayout);
+
+	// assemble the stage shaders and recursion depth
+	VkRayTracingPipelineCreateInfoKHR rayPipelineInfo{ VK_STRUCTURE_TYPE_RAY_TRACING_PIPELINE_CREATE_INFO_KHR };
+	rayPipelineInfo.stageCount = static_cast<uint32_t>(stages.size());
+	rayPipelineInfo.pStages = stages.data();
+
+	// we indicate the shader groups
+	// miss and raygen are their own group each
+	// intersection, anyhit and chit form a hit group
+	rayPipelineInfo.groupCount = static_cast<uint32_t>(m_rtShaderGroups.size());
+	rayPipelineInfo.pGroups = m_rtShaderGroups.data();
+
+	// recursion depth
+	rayPipelineInfo.maxPipelineRayRecursionDepth = 1;
+	rayPipelineInfo.layout = m_rtPipelineLayout;
+
+	vkCreateRayTracingPipelinesKHR(m_device, {}, {}, 1, &rayPipelineInfo, nullptr, &m_rtPipeline);
+
+	for (auto& s : stages) {
+		vkDestroyShaderModule(m_device, s.module, nullptr);
+	}
+}
+
+void HelloVulkan::createRtShaderBindingTable()
+{
+	uint32_t missCount{ 1 };
+	uint32_t hitCount{ 1 };
+	auto handleCount = 1 + missCount + hitCount;
+	uint32_t handleSize = m_rtProperties.shaderGroupHandleSize;
+
+	// the sbt buffer needs to have starting groups to be aligned and handles in the group to be aligned
+	uint32_t handleSizeAligned = nvh::align_up(handleSize, m_rtProperties.shaderGroupHandleAlignment);
+
+	m_rgenRegion.stride = nvh::align_up(handleSizeAligned, m_rtProperties.shaderGroupBaseAlignment);
+	m_rgenRegion.size = m_rgenRegion.stride; // raygen size and stride have to be the same
+	m_missRegion.stride = handleSizeAligned;
+	m_missRegion.size = nvh::align_up(missCount * handleSizeAligned, m_rtProperties.shaderGroupBaseAlignment);
+	m_hitRegion.stride = handleSizeAligned;
+	m_hitRegion.size = nvh::align_up(hitCount * handleSizeAligned, m_rtProperties.shaderGroupBaseAlignment);
+
+	// get the shader group handles
+	uint32_t dataSize = handleCount * handleSize;
+	std::vector<uint8_t> handles(dataSize);
+	auto result = vkGetRayTracingShaderGroupHandlesKHR(m_device, m_rtPipeline, 0, handleCount, dataSize, handles.data());
+	assert(result == VK_SUCCESS);
+
+	// allocate buffer for storing the sbt
+	VkDeviceSize sbtSize = m_rgenRegion.size + m_missRegion.size + m_hitRegion.size;
+	m_rtSBTBuffer = m_alloc.createBuffer(
+		sbtSize,
+		VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_SHADER_BINDING_TABLE_BIT_KHR,
+		VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	m_debug.setObjectName(m_rtSBTBuffer.buffer, std::string("SBT"));
+
+	// find the sbt address of each group
+	VkBufferDeviceAddressInfo info{ VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO, nullptr, m_rtSBTBuffer.buffer };
+	VkDeviceAddress sbtAddress = vkGetBufferDeviceAddress(m_device, &info);
+	m_rgenRegion.deviceAddress = sbtAddress;
+	m_missRegion.deviceAddress = sbtAddress + m_rgenRegion.size;
+	m_hitRegion.deviceAddress = sbtAddress + m_rgenRegion.size + m_missRegion.size;
+
+	// helper to retrieve the handle data
+	auto getHandle = [&](int i) {return handles.data() + i * handleSize; };
+
+	auto* pSBTBuffer = reinterpret_cast<uint8_t*>(m_alloc.map(m_rtSBTBuffer));
+	uint8_t* pData{ nullptr };
+	uint32_t handleIdx{ 0 };
+
+	// raygen. Just copy handle
+	pData = pSBTBuffer;
+	memcpy(pData, getHandle(handleIdx++), handleSize);
+
+	// miss
+	pData = pSBTBuffer + m_rgenRegion.size;
+	for (uint32_t c = 0; c < missCount; c++) {
+		memcpy(pData, getHandle(handleIdx++), handleSize);
+		pData += m_missRegion.stride;
+	}
+
+	// hit
+	pData = pSBTBuffer + m_rgenRegion.size + m_missRegion.size;
+	for (uint32_t c = 0; c < hitCount; c++) {
+		memcpy(pData, getHandle(handleIdx++), handleSize);
+		pData += m_hitRegion.stride;
+	}
+
+	m_alloc.unmap(m_rtSBTBuffer);
+	m_alloc.finalizeAndReleaseStaging();
+}
+
+
