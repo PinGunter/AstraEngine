@@ -18,7 +18,11 @@
  */
 #pragma once
 
-/************************************************************************
+/** @DOC_START
+# class nvvkhl::ElementProfiler
+>  This class is an element of the application that is responsible for the profiling of the application. It is using the `nvvk::ProfilerVK` to profile the time parts of the computation done on the GPU.
+
+To use this class, you need to add it to the `nvvkhl::Application` using the `addElement` method.
 
 The profiler element, is there to help profiling the time parts of the 
 computation is done on the GPU. To use it, follow those simple steps
@@ -26,29 +30,29 @@ computation is done on the GPU. To use it, follow those simple steps
 In the main() program, create an instance of the profiler and add it to the
 nvvkhl::Application
 
-```
+```cpp
   std::shared_ptr<nvvkhl::ElementProfiler> profiler = std::make_shared<nvvkhl::ElementProfiler>();
   app->addElement(profiler);
 ```
 
 In the application where profiling needs to be done, add profiling sections
 
-```
+```cpp
 void mySample::onRender(VkCommandBuffer cmd)
 {
-    auto sec = m_profiler->timeRecurring(__FUNCTION__, cmd);
-    ...
-    // Subsection
-    {
-      auto sec = m_profiler->timeRecurring("Dispatch", cmd);
-      vkCmdDispatch(cmd, (size.width + (GROUP_SIZE - 1)) / GROUP_SIZE, (size.height + (GROUP_SIZE - 1)) / GROUP_SIZE, 1);
-    }
-...
+  auto sec = m_profiler->timeRecurring(__FUNCTION__, cmd);
+  ...
+  // Subsection
+  {
+    auto sec = m_profiler->timeRecurring("Dispatch", cmd);
+    vkCmdDispatch(cmd, (size.width + (GROUP_SIZE - 1)) / GROUP_SIZE, (size.height + (GROUP_SIZE - 1)) / GROUP_SIZE, 1);
+  }
+  ...
 ```
 
 This is it and the execution time on the GPU for each part will be showing in the Profiler window.
 
-************************************************************************/
+@DOC_END */
 
 #include <implot.h>
 #include <imgui_internal.h>
@@ -121,8 +125,10 @@ public:
       s_minElapsed = 0;
       m_node.child.clear();
       m_node.name    = "Frame";
-      m_node.cpuTime = m_data->cpuTime.getAveraged() / 1000.f;
-      addEntries(m_node.child, 0, m_data->numLastEntries, 0);
+      m_node.cpuTime = static_cast<float>(m_data->cpuTime.getAveraged() / 1000.);
+      m_single.child.clear();
+      m_single.name = "Single";
+      addEntries(m_node.child, 0, m_data->numLastSections, 0);
     }
 
     bool copyToClipboard = ImGui::SmallButton("Copy");
@@ -169,23 +175,31 @@ private:
 
   uint32_t addEntries(std::vector<MyEntryNode>& nodes, uint32_t startIndex, uint32_t endIndex, uint32_t currentLevel)
   {
-    for(uint32_t i = startIndex; i < endIndex; i++)
+    for(uint32_t curIndex = startIndex; curIndex < endIndex; curIndex++)
     {
-      Entry& entry = m_data->entries[i];
-      if(entry.level == LEVEL_SINGLESHOT)
-        continue;
+      Entry& entry = m_data->entries[curIndex];
       if(entry.level < currentLevel)
-        return i;
+        return curIndex;
 
-      uint32_t nextLevel = i + 1 < endIndex ? m_data->entries[i + 1].level : currentLevel;
+      MyEntryNode entryNode;
+      entryNode.name    = entry.name.empty() ? "N/A" : entry.name;
+      entryNode.gpuTime = static_cast<float>(entry.gpuTime.getAveraged() / 1000.);
+      entryNode.cpuTime = static_cast<float>(entry.cpuTime.getAveraged() / 1000.);
 
-      MyEntryNode childNode;
-      childNode.name    = entry.name.empty() ? "N/A" : entry.name;
-      childNode.gpuTime = entry.gpuTime.getAveraged() / 1000.f;
-      childNode.cpuTime = entry.cpuTime.getAveraged() / 1000.f;
+      if(entry.level == LEVEL_SINGLESHOT)
+      {
+        m_single.child.push_back(entryNode);
+        continue;
+      }
+
+      uint32_t nextLevel = curIndex + 1 < endIndex ? m_data->entries[curIndex + 1].level : currentLevel;
       if(nextLevel > currentLevel)
-        i = addEntries(childNode.child, i + 1, endIndex, nextLevel);
-      nodes.push_back(childNode);
+      {
+        curIndex = addEntries(entryNode.child, curIndex + 1, endIndex, nextLevel);
+      }
+      nodes.push_back(entryNode);
+      if(nextLevel < currentLevel)
+        return curIndex;
     }
     return endIndex;
   }
@@ -200,15 +214,18 @@ private:
     flags = is_folder ? flags : flags | ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_Bullet | ImGuiTreeNodeFlags_NoTreePushOnOpen;
     bool open = ImGui::TreeNodeEx(node.name.c_str(), flags);
     ImGui::TableNextColumn();
-    if(node.gpuTime < 0)
+    if(node.gpuTime <= 0)
       ImGui::TextDisabled("--");
     else
       ImGui::Text("%3.3f", node.gpuTime);
     ImGui::TableNextColumn();
-    ImGui::Text("%3.3f", node.cpuTime);
+    if(node.cpuTime <= 0)
+      ImGui::TextDisabled("--");
+    else
+      ImGui::Text("%3.3f", node.cpuTime);
     if(open && is_folder)
     {
-      for(int child_n = 0; child_n < node.child.size(); child_n++)
+      for(int child_n = 0; child_n < static_cast<int>(node.child.size()); child_n++)
         displayTableNode(node.child[child_n]);
       ImGui::TreePop();
     }
@@ -232,6 +249,12 @@ private:
       ImGui::TableHeadersRow();
 
       displayTableNode(m_node);
+
+      // Display only if an element
+      if(!m_single.child.empty())
+      {
+        displayTableNode(m_single);
+      }
 
       ImGui::EndTable();
     }
@@ -261,7 +284,7 @@ private:
         data1[i]   = m_node.child[i].gpuTime / m_node.cpuTime;
       }
 
-      ImPlot::PlotPieChart(labels1.data(), data1.data(), data1.size(), 0.5, 0.5, 0.4, "%.2f", angle0);
+      ImPlot::PlotPieChart(labels1.data(), data1.data(), static_cast<int>(data1.size()), 0.5, 0.5, 0.4, "%.2f", angle0);
 
       // Level 1
       if(s_showSubLevel)
@@ -280,7 +303,8 @@ private:
               data1[j]   = currentNode.child[j].gpuTime / m_node.cpuTime;
             }
 
-            ImPlot::PlotPieChart(labels1.data(), data1.data(), data1.size(), 0.5, 0.5, 0.1, "", a0, ImPlotPieChartFlags_None);
+            ImPlot::PlotPieChart(labels1.data(), data1.data(), static_cast<int>(data1.size()), 0.5, 0.5, 0.1, "", a0,
+                                 ImPlotPieChartFlags_None);
           }
 
           // Increment the position of the next sub-element
@@ -326,6 +350,7 @@ private:
   //---
   Application* m_app{nullptr};
   MyEntryNode  m_node;
+  MyEntryNode  m_single;
   bool         m_showWindow = true;
 };
 

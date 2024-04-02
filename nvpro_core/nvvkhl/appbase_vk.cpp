@@ -673,11 +673,12 @@ void nvvkhl::AppBaseVk::initGUI(uint32_t subpassID /*= 0*/)
   io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;      // Enable Docking
   //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;    // Enable Multi-Viewport / Platform Windows
 
-  //ImGuiH::setStyle();
-  //ImGuiH::setFonts();
+  ImGuiH::setStyle();
+  ImGuiH::setFonts();
 
   std::vector<VkDescriptorPoolSize> poolSize{{VK_DESCRIPTOR_TYPE_SAMPLER, 1}, {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1}};
   VkDescriptorPoolCreateInfo poolInfo{VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO};
+  poolInfo.flags         = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
   poolInfo.maxSets       = 1000;
   poolInfo.poolSizeCount = 2;
   poolInfo.pPoolSizes    = poolSize.data();
@@ -692,20 +693,24 @@ void nvvkhl::AppBaseVk::initGUI(uint32_t subpassID /*= 0*/)
   init_info.Queue                     = m_queue;
   init_info.PipelineCache             = VK_NULL_HANDLE;
   init_info.DescriptorPool            = m_imguiDescPool;
+  init_info.RenderPass                = m_renderPass;
   init_info.Subpass                   = subpassID;
   init_info.MinImageCount             = 2;
   init_info.ImageCount                = static_cast<int>(m_swapChain.getImageCount());
   init_info.MSAASamples               = VK_SAMPLE_COUNT_1_BIT;  // <--- need argument?
   init_info.CheckVkResultFn           = nullptr;
   init_info.Allocator                 = nullptr;
-  init_info.UseDynamicRendering       = m_useDynamicRendering;
 
-  ImGui_ImplVulkan_Init(&init_info, m_renderPass);
+  init_info.UseDynamicRendering                                 = m_useDynamicRendering;
+  init_info.PipelineRenderingCreateInfo.sType                   = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO_KHR;
+  init_info.PipelineRenderingCreateInfo.colorAttachmentCount    = 1;
+  init_info.PipelineRenderingCreateInfo.pColorAttachmentFormats = &m_colorFormat;
+  init_info.PipelineRenderingCreateInfo.depthAttachmentFormat   = m_depthFormat;
+
+  ImGui_ImplVulkan_Init(&init_info);
 
   // Upload Fonts
-  VkCommandBuffer cmdbuf = createTempCmdBuffer();
-  ImGui_ImplVulkan_CreateFontsTexture(cmdbuf);
-  submitTempCmdBuffer(cmdbuf);
+  ImGui_ImplVulkan_CreateFontsTexture();
 }
 
 //--------------------------------------------------------------------------------------------------

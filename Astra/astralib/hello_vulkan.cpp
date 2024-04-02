@@ -689,7 +689,7 @@ void HelloVulkan::createRtDescriptorSet()
 void HelloVulkan::updateRtDescriptorSet()
 {
 	VkDescriptorImageInfo imageInfo{ {}, m_offscreenColor.descriptor.imageView, VK_IMAGE_LAYOUT_GENERAL };
-	VkWriteDescriptorSet wds = m_descSetLayoutBind.makeWrite(m_rtDescSet, RtxBindings::eOutImage, &imageInfo);
+	VkWriteDescriptorSet wds = m_rtDescSetLayoutBind.makeWrite(m_rtDescSet, RtxBindings::eOutImage, &imageInfo);
 	vkUpdateDescriptorSets(m_device, 1, &wds, 0, nullptr);
 }
 

@@ -25,14 +25,14 @@
 #include <stdio.h>
 #include <string>
 #include <vector>
-#include <vulkan/vulkan.hpp>
+#include <vulkan/vulkan_core.h>
 
 namespace nvvk {
 
-/**
-\class nvvk::SwapChain
+/** @DOC_START
+# class nvvk::SwapChain
 
-\brief nvvk::SwapChain is a helper to handle swapchain setup and use
+>  nvvk::SwapChain is a helper to handle swapchain setup and use
 
 In Vulkan, we have to use `VkSwapchainKHR` to request a swap chain
 (front and back buffers) from the operating system and manually
@@ -65,7 +65,7 @@ Example in combination with nvvk::Context :
 * create its related surface
 * make sure the Queue is the one we need to render in this surface
 
-\code{.cpp}
+```cpp
 // could {.cpp}be arguments of a function/method :
 nvvk::Context ctx;
 NVPWindow     win;
@@ -80,22 +80,22 @@ result = vkCreateWin32SurfaceKHR(ctx.m_instance, &createInfo, nullptr, &m_surfac
 ...
 // make sure we assign the proper Queue to m_queueGCT, from what the surface tells us
 ctx.setGCTQueueWithPresent(m_surface);
-\endcode
+```
 
 The initialization can happen now :
 
-\code{.cpp}
+```cpp
 m_swapChain.init(ctx.m_device, ctx.m_physicalDevice, ctx.m_queueGCT, ctx.m_queueGCT.familyIndex,
                  m_surface, VK_FORMAT_B8G8R8A8_UNORM);
 ...
 // after init or update you also have to setup the image layouts at some point
 VkCommandBuffer cmd = ...
 m_swapChain.cmdUpdateBarriers(cmd);
-\endcode
+```
 
 During a resizing of a window, you can update the swapchain as well :
 
-\code{.cpp}
+```cpp
 bool WindowSurface::resize(int w, int h)
 {
 ...
@@ -103,12 +103,12 @@ bool WindowSurface::resize(int w, int h)
   // be cautious to also transition the image layouts
 ...
 }
-\endcode
+```
 
 
 A typical renderloop would look as follows:
 
-\code{.cpp}
+```cpp
   // handles vkAcquireNextImageKHR and setting the active image
   // w,h only needed if update(w,h) not called reliably.
   int w, h;
@@ -167,9 +167,9 @@ A typical renderloop would look as follows:
   // this will also setup the dependency for the appropriate written semaphore
   // and bump the semaphore cycle
   m_swapChain.present(m_queue);
-\endcode
+```
 
-*/
+@DOC_END */
 
 // What SwapChain::acquire produces: a swap chain image plus
 // semaphores protecting it.
@@ -196,6 +196,10 @@ private:
   {
     VkImage     image{};
     VkImageView imageView{};
+  };
+
+  struct SemaphoreEntry
+  {
     // be aware semaphore index may not match active image index
     VkSemaphore readSemaphore{};
     VkSemaphore writtenSemaphore{};
@@ -216,6 +220,7 @@ private:
   VkSwapchainKHR m_swapchain{};
 
   std::vector<Entry>                m_entries;
+  std::vector<SemaphoreEntry>       m_semaphores;
   std::vector<VkImageMemoryBarrier> m_barriers;
 
   // index for current image, returned by vkAcquireNextImageKHR
@@ -255,6 +260,8 @@ public:
 
   SwapChain() {}
 
+  static constexpr VkFormat s_defaultImageFormat = VK_FORMAT_B8G8R8A8_UNORM;
+
   static constexpr VkImageUsageFlags s_defaultImageUsage =
       VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
 
@@ -263,7 +270,7 @@ public:
             VkQueue           queue,
             uint32_t          queueFamilyIndex,
             VkSurfaceKHR      surface,
-            VkFormat          format     = VK_FORMAT_B8G8R8A8_UNORM,
+            VkFormat          format     = s_defaultImageFormat,
             VkImageUsageFlags imageUsage = s_defaultImageUsage)
   {
     init(device, physicalDevice, queue, queueFamilyIndex, surface, format, imageUsage);
@@ -275,7 +282,7 @@ public:
             VkQueue           queue,
             uint32_t          queueFamilyIndex,
             VkSurfaceKHR      surface,
-            VkFormat          format     = VK_FORMAT_B8G8R8A8_UNORM,
+            VkFormat          format     = s_defaultImageFormat,
             VkImageUsageFlags imageUsage = s_defaultImageUsage);
 
   // triggers queue/device wait idle
@@ -317,6 +324,9 @@ public:
 private:
   bool acquireCustom(VkSemaphore semaphore, bool* pRecreated = nullptr, SwapChainAcquireState* pOut = nullptr);
   bool acquireCustom(VkSemaphore semaphore, int width, int height, bool* pRecreated, SwapChainAcquireState* pOut = nullptr);
+
+  // add one to avoid accidentally missing proper fence wait prior acquire
+  uint32_t getSemaphoreCycleCount() const { return m_imageCount + 1; }
 
 public:
   // all present functions bump semaphore cycle

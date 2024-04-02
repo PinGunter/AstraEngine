@@ -28,13 +28,35 @@
 
 #include "imgui.h"
 
-/*******************************************************************************************************************
+/* @DOC_START
+# class nvvk::Application
 
-  The Application class is what is creating a GLFW window with Vulkan support and ImGui for UI and interaction.
-  
-  To use the application, fill the ApplicationCreateInfo with all the information, including the Vulkan
-  creation information (nvvk::ContextCreateInfo). 
+  The Application is basically a small modification of the ImGui example for Vulkan.
+  Because we support multiple viewports, duplicating the code would be not necessary 
+  and the code is very well explained. 
+
+  To use the application, 
+  * Fill the ApplicationCreateInfo with all the information, including the Vulkan creation information (nvvk::ContextCreateInfo).
+  * Attach elements to the application, such as rendering, camera, etc.
+  * Call run() to start the application.
+  *
+  * The application will create the window, the Vulkan context, and the ImGui context.
  
+  Worth notice
+  * ::init() : will create the GLFW window, call nvvk::context for the creation of the 
+               Vulkan context, initialize ImGui , create the surface and window (::setupVulkanWindow)  
+  * ::shutdown() : the oposite of init
+  * ::run() : while running, render the frame and present the frame. Check for resize, minimize window 
+                and other changes. In the loop, it will call some functions for each 'element' that is connected.
+                onUIRender, onUIMenu, onRender. See IApplication for details.
+  * The Application is a singleton, and the main loop is inside the run() function.
+  * The Application is the owner of the elements, and it will call the onRender, onUIRender, onUIMenu
+      for each element that is connected to it.
+  * The Application is the owner of the Vulkan context, and it will create the surface and window.
+  * The Application is the owner of the ImGui context, and it will create the dockspace and the main menu.
+  * The Application is the owner of the GLFW window, and it will create the window and handle the events.
+  
+
   The application itself does not render per se. It contains control buffers for the images in flight,
   it calls ImGui rendering for Vulkan, but that's it. Note that none of the samples render
   directly into the swapchain. Instead, they render into an image, and the image is displayed in the ImGui window
@@ -52,8 +74,9 @@
 
   Note: order of Elements can be important if one depends on the other. For example, the ElementCamera should
         be added before the rendering sample, such that its matrices are updated before pulled by the renderer.
+         
  
-*******************************************************************************************************************/
+@DOC_END */
 
 // Forward declarations
 struct GLFWwindow;
@@ -106,9 +129,12 @@ public:
   void setVsync(bool v);                         // Set V-Sync on or off
   void setViewportClearColor(ImVec4 col) { m_clearColor = col; }
 
-  // Sync for special cases
+  // Following three functions affect the preparationg of the current frame's submit info.
+  // Content is appended to vectors that are reset every frame
   void addWaitSemaphore(const VkSemaphoreSubmitInfoKHR& wait);
   void addSignalSemaphore(const VkSemaphoreSubmitInfoKHR& signal);
+  // these command buffers are enqueued before the command buffer that is provided `onRender(cmd)`
+  void prependCommandBuffer(const VkCommandBufferSubmitInfoKHR& cmd);
 
   VkCommandBuffer createTempCmdBuffer();
   void            submitAndWaitTempCmdBuffer(VkCommandBuffer cmd);
@@ -125,8 +151,11 @@ public:
   inline const nvvk::Context::Queue& getQueueGCT() { return m_context->m_queueGCT; }
   inline const nvvk::Context::Queue& getQueueC() { return m_context->m_queueC; }
   inline const nvvk::Context::Queue& getQueueT() { return m_context->m_queueT; }
+  inline const uint32_t              getFrameCycleIndex() const { return m_currentFrameIndex; }
+  inline const uint32_t              getFrameCycleSize() const { return uint32_t(m_resourceFreeQueue.size()); }
 
   void onFileDrop(const char* filename);
+  void screenShot(const std::string& filename, int quality = 100);  // Delay the screen shot to the end of the frame
 
 private:
   void init(ApplicationCreateInfo& info);
@@ -137,6 +166,9 @@ private:
   void createDock() const;
   void setPresentMode(VkPhysicalDevice physicalDevice, ImGui_ImplVulkanH_Window* wd);
   void createDescriptorPool();
+  void saveScreenShot(const std::string& filename, int quality);  // Immediately save the frame
+
+  void resetFreeQueue(uint32_t size);
 
   std::shared_ptr<nvvk::Context>            m_context;
   std::vector<std::shared_ptr<IAppElement>> m_elements;
@@ -160,8 +192,9 @@ private:
   VkExtent2D             m_windowSize{0, 0};                // Size of the window
   VkAllocationCallbacks* m_allocator{nullptr};
 
-  std::vector<VkSemaphoreSubmitInfoKHR> m_waitSemaphores;    // Possible extra frame wait semaphores
-  std::vector<VkSemaphoreSubmitInfoKHR> m_signalSemaphores;  // Possible extra frame signal semaphores
+  std::vector<VkSemaphoreSubmitInfoKHR>     m_waitSemaphores;    // Possible extra frame wait semaphores
+  std::vector<VkSemaphoreSubmitInfoKHR>     m_signalSemaphores;  // Possible extra frame signal semaphores
+  std::vector<VkCommandBufferSubmitInfoKHR> m_commandBuffers;    // Possible extra frame command buffers
 
   std::unique_ptr<ImGui_ImplVulkanH_Window> m_mainWindowData;
 
@@ -171,6 +204,10 @@ private:
 
   //--
   std::function<void(ImGuiID)> m_dockSetup;
+
+  bool        m_screenShotRequested = false;
+  std::string m_screenShotFilename  = "";
+  int         m_screenShotQuality   = 100;
 };
 
 template <typename T>

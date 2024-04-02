@@ -24,11 +24,14 @@
 #include "nvh/cameramanipulator.hpp"
 #include "nvvkhl/application.hpp"
 
-/*--------------------------------------------------------------------------------------------------
+/** @DOC_START
+# class nvvkhl::ElementCamera
 
-This is catching the interaction of the mouse and keyboard to modify the Singleton Camera of the scene.
+This class is an element of the application that is responsible for the camera manipulation. It is using the `nvh::CameraManipulator` to handle the camera movement and interaction.
 
---------------------------------------------------------------------------------------------------*/
+To use this class, you need to add it to the `nvvkhl::Application` using the `addElement` method.
+
+@DOC_END */
 
 
 namespace nvvkhl {
@@ -69,10 +72,11 @@ struct ElementCamera : public nvvkhl::IAppElement
     // the camera.
     if(isWindowHovered(viewportWindow, ImGuiFocusedFlags_RootWindow))
     {
-      CameraManip.setWindowSize(static_cast<int>(viewportWindow->Size.x), static_cast<int>(viewportWindow->Size.y));
       updateCamera();
     }
   }
+
+  void onResize(uint32_t width, uint32_t height) override { CameraManip.setWindowSize(width, height); }
 
   //--------------------------------------------------------------------------------------------------
   // Fit the camera to the Bounding box

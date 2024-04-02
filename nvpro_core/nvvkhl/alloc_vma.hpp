@@ -25,16 +25,28 @@
 #include "nvvk/memallocator_vma_vk.hpp"
 
 namespace nvvkhl {
-/*
-  This is initializing the resource allocation. Nvpro_core has a sophisticated allocator,
-  for creating buffers, images and acceleration structures. It can use different allocators, but this one
-  chooses VMA.
-  */
+/** @DOC_START
+# class nvvkhl::AllocVma
+
+>  This class is an element of the application that is responsible for the resource allocation. It is using the `VMA` library to allocate buffers, images and acceleration structures.
+
+This allocator uses VMA (Vulkan Memory Allocator) to allocate buffers, images and acceleration structures. It is using the `nvvk::ResourceAllocator` to manage the allocation and deallocation of the resources.
+  
+@DOC_END */
 
 class AllocVma : public nvvk::ResourceAllocator
 {
 public:
-  explicit AllocVma(const nvvk::Context* context) { init(context); }
+  explicit AllocVma(const nvvk::Context* context)
+  {
+    VmaAllocatorCreateInfo allocator_info = {};
+    allocator_info.physicalDevice         = context->m_physicalDevice;
+    allocator_info.device                 = context->m_device;
+    allocator_info.instance               = context->m_instance;
+    allocator_info.flags                  = VMA_ALLOCATOR_CREATE_BUFFER_DEVICE_ADDRESS_BIT;
+    init(allocator_info);
+  }
+  explicit AllocVma(const VmaAllocatorCreateInfo& allocatorInfo) { init(allocatorInfo); }
   ~AllocVma() override { deinit(); }
 
   // Use the following to trace
@@ -44,17 +56,11 @@ public:
   VmaAllocator vma() { return m_vmaAlloc; }
 
 private:
-  void init(const nvvk::Context* context)
+  void init(const VmaAllocatorCreateInfo& allocatorInfo)
   {
-    VmaAllocatorCreateInfo allocator_info = {};
-    allocator_info.physicalDevice         = context->m_physicalDevice;
-    allocator_info.device                 = context->m_device;
-    allocator_info.instance               = context->m_instance;
-    allocator_info.flags                  = VMA_ALLOCATOR_CREATE_BUFFER_DEVICE_ADDRESS_BIT;
-    vmaCreateAllocator(&allocator_info, &m_vmaAlloc);
-    m_vma = std::make_unique<nvvk::VMAMemoryAllocator>(context->m_device, context->m_physicalDevice, m_vmaAlloc);
-
-    nvvk::ResourceAllocator::init(context->m_device, context->m_physicalDevice, m_vma.get());
+    vmaCreateAllocator(&allocatorInfo, &m_vmaAlloc);
+    m_vma = std::make_unique<nvvk::VMAMemoryAllocator>(allocatorInfo.device, allocatorInfo.physicalDevice, m_vmaAlloc);
+    nvvk::ResourceAllocator::init(allocatorInfo.device, allocatorInfo.physicalDevice, m_vma.get());
   }
 
   void deinit()

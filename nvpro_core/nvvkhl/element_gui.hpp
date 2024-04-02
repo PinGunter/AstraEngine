@@ -36,9 +36,17 @@
 //
 
 namespace nvvkhl {
-//--------------------------------------------------------------------------------------------------
-// Simple default Quit menu
-//
+
+
+/** @DOC_START
+# class nvvkhl::ElementDefaultMenu
+
+>  This class is an element of the application that is responsible for the default menu of the application. It is using the `ImGui` library to create a menu with File/Exit and View/V-Sync.
+
+To use this class, you need to add it to the `nvvkhl::Application` using the `addElement` method.
+
+@DOC_END */
+
 class ElementDefaultMenu : public nvvkhl::IAppElement
 {
 public:
@@ -110,13 +118,24 @@ private:
   nvvkhl::Application* m_app{nullptr};
 };
 
+/** @DOC_START
+# class nvvkhl::ElementDefaultWindowTitle
 
-//--------------------------------------------------------------------------------------------------
-// Display simple information in the window title
-//
+>  This class is an element of the application that is responsible for the default window title of the application. It is using the `GLFW` library to set the window title with the application name, the size of the window and the frame rate.
+
+To use this class, you need to add it to the `nvvkhl::Application` using the `addElement` method.
+
+@DOC_END */
+
 class ElementDefaultWindowTitle : public nvvkhl::IAppElement
 {
 public:
+  ElementDefaultWindowTitle(const std::string& prefix = "", const std::string& suffix = "")
+      : m_prefix(prefix)
+      , m_suffix(suffix)
+  {
+  }
+
   void onAttach(nvvkhl::Application* app) override { m_app = app; }
 
   void onUIRender() override
@@ -125,21 +144,30 @@ public:
     m_dirtyTimer += ImGui::GetIO().DeltaTime;
     if(m_dirtyTimer > 1.0F)  // Refresh every seconds
     {
-      const auto&           size = m_app->getViewportSize();
-      std::array<char, 256> buf{};
-      if(snprintf(buf.data(), buf.size(), "%s %dx%d | %d FPS / %.3fms", PROJECT_NAME, static_cast<int>(size.width),
-                  static_cast<int>(size.height), static_cast<int>(ImGui::GetIO().Framerate), 1000.F / ImGui::GetIO().Framerate)
-         > 0)
+      const auto& size = m_app->getViewportSize();
+      std::string title;
+      if(!m_prefix.empty())
       {
-        glfwSetWindowTitle(m_app->getWindowHandle(), buf.data());
+        title += fmt::format("{} | ", m_prefix.c_str());
       }
+      title += fmt::format("{} | {}x{} | {:.0f} FPS / {:.3f}ms", PROJECT_NAME, size.width, size.height,
+                           ImGui::GetIO().Framerate, 1000.F / ImGui::GetIO().Framerate);
+      if(!m_suffix.empty())
+      {
+        title += fmt::format(" | {}", m_suffix.c_str());
+      }
+      glfwSetWindowTitle(m_app->getWindowHandle(), title.c_str());
       m_dirtyTimer = 0;
     }
   }
+  void setPrefix(const std::string& str) { m_prefix = str; }
+  void setSuffix(const std::string& str) { m_suffix = str; }
 
 private:
   nvvkhl::Application* m_app{nullptr};
   float                m_dirtyTimer{0.0F};
+  std::string          m_prefix;
+  std::string          m_suffix;
 };
 
 }  // namespace nvvkhl
