@@ -666,15 +666,15 @@ void nvvkhl::AppBaseVk::initGUI(uint32_t subpassID /*= 0*/)
 
   // UI
   ImGui::CreateContext();
-  ImGuiIO& io    = ImGui::GetIO();
-  io.IniFilename = nullptr;  // Avoiding the INI file
+  ImGuiIO& io = ImGui::GetIO();
+  //io.IniFilename = nullptr;  // Avoiding the INI file
   io.LogFilename = nullptr;
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
   io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;      // Enable Docking
   //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;    // Enable Multi-Viewport / Platform Windows
 
-  ImGuiH::setStyle();
-  ImGuiH::setFonts();
+  //ImGuiH::setStyle();
+  //ImGuiH::setFonts();
 
   std::vector<VkDescriptorPoolSize> poolSize{{VK_DESCRIPTOR_TYPE_SAMPLER, 1}, {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1}};
   VkDescriptorPoolCreateInfo poolInfo{VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO};
