@@ -11,6 +11,7 @@
 hitAttributeEXT vec2 attribs;
 
 layout(location = 0) rayPayloadInEXT hitPayload prd;
+layout(location = 1) rayPayloadEXT bool isShadowed;
 
 layout(buffer_reference, scalar) buffer Vertices {Vertex v[]; }; // Positions of an object
 layout(buffer_reference, scalar) buffer Indices {ivec3 i[]; }; // Triangle indices
@@ -66,6 +67,53 @@ void main()
 		L = normalize(pcRay.lightPosition);
 	}
 
-	prd.hitValue = vec3(dot(worldNrm, L));
+	// Material of the object
+	int matIdx = matIndices.i[gl_PrimitiveID];
+	WaveFrontMaterial mat = materials.m[matIdx];
+
+	// Diffuse
+	vec3 diffuse = computeDiffuse(mat, L, worldNrm);
+	
+	if (mat.textureId >= 0){
+		uint txtId = mat.textureId + objDesc.i[gl_InstanceCustomIndexEXT].txtOffset;
+		vec2 texCoord = 
+		        v0.texCoord * barycentrics.x + v1.texCoord * barycentrics.y + v2.texCoord * barycentrics.z;
+		diffuse *= texture(textureSamplers[nonuniformEXT(txtId)], texCoord).xyz;
+	}
+
+	vec3 specular = vec3(0);
+	float attenuation = 1;
+
+	// tracing shadow if the light is visible from the surface
+	if (dot(worldNrm, L) > 0){
+		float tMin = 0.001;
+		float tMax = lightDistance;
+		vec3 origin = gl_WorldRayOriginEXT + gl_WorldRayDirectionEXT * gl_HitTEXT;
+		vec3 rayDir = L;
+		uint flags = gl_RayFlagsTerminateOnFirstHitEXT | gl_RayFlagsOpaqueEXT | gl_RayFlagsSkipClosestHitShaderEXT;
+		isShadowed = true;
+		traceRayEXT(topLevelAS,
+					flags,
+					0xFF,
+					0,
+					0,
+					1,
+					origin,
+					tMin,
+					rayDir,
+					tMax,
+					1
+		);
+
+		if (isShadowed){
+			attenuation = 0.3f;
+		} else{
+			specular = computeSpecular(mat, gl_WorldRayDirectionEXT, L, worldNrm);
+		}
+	}
+
+
+//	vec3 color = (worldNrm + 1) / 2; // normal color
+	prd.hitValue = vec3(lightIntensity * attenuation * (diffuse + specular));
 
 }

@@ -586,6 +586,11 @@ void HelloVulkan::initRayTracing()
 	VkPhysicalDeviceProperties2 prop2{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2 };
 	prop2.pNext = &m_rtProperties;
 	vkGetPhysicalDeviceProperties2(m_physicalDevice, &prop2);
+
+	if (m_rtProperties.maxRayRecursionDepth <= 1) {
+		throw std::runtime_error("Device does not support ray recursion");
+	}
+
 	m_rtBuilder.setup(m_device, &m_alloc, m_graphicsQueueIndex);
 }
 
@@ -664,7 +669,7 @@ void HelloVulkan::createTopLevelAS()
 
 void HelloVulkan::createRtDescriptorSet()
 {
-	m_rtDescSetLayoutBind.addBinding(RtxBindings::eTlas, VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, 1, VK_SHADER_STAGE_RAYGEN_BIT_KHR);
+	m_rtDescSetLayoutBind.addBinding(RtxBindings::eTlas, VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, 1, VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR);
 	m_rtDescSetLayoutBind.addBinding(RtxBindings::eOutImage, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1, VK_SHADER_STAGE_RAYGEN_BIT_KHR);
 
 	m_rtDescPool = m_rtDescSetLayoutBind.createPool(m_device);
@@ -700,6 +705,7 @@ void HelloVulkan::createRtPipeline()
 	enum StageIndices {
 		eRaygen,
 		eMiss,
+		eMiss2,
 		eClosestHit,
 		eShaderGroupCount
 	};
@@ -718,6 +724,11 @@ void HelloVulkan::createRtPipeline()
 	stage.module = nvvk::createShaderModule(m_device, nvh::loadFile("spv/raytrace.rmiss.spv", true, defaultSearchPaths, true));
 	stage.stage = VK_SHADER_STAGE_MISS_BIT_KHR;
 	stages[eMiss] = stage;
+
+	// shadow miss
+	stage.module = nvvk::createShaderModule(m_device, nvh::loadFile("spv/raytraceShadow.rmiss.spv", true, defaultSearchPaths, true));
+	stage.stage = VK_SHADER_STAGE_MISS_BIT_KHR;
+	stages[eMiss2] = stage;
 
 	// chit
 	stage.module = nvvk::createShaderModule(m_device, nvh::loadFile("spv/raytrace.rchit.spv", true, defaultSearchPaths, true));
@@ -739,6 +750,11 @@ void HelloVulkan::createRtPipeline()
 	// miss
 	group.type = VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR;
 	group.generalShader = eMiss;
+	m_rtShaderGroups.push_back(group);
+
+	// shadow miss
+	group.type = VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR;
+	group.generalShader = eMiss2;
 	m_rtShaderGroups.push_back(group);
 
 	// closest hit shader
@@ -774,7 +790,7 @@ void HelloVulkan::createRtPipeline()
 	rayPipelineInfo.pGroups = m_rtShaderGroups.data();
 
 	// recursion depth
-	rayPipelineInfo.maxPipelineRayRecursionDepth = 1;
+	rayPipelineInfo.maxPipelineRayRecursionDepth = 2; // shadow
 	rayPipelineInfo.layout = m_rtPipelineLayout;
 
 	vkCreateRayTracingPipelinesKHR(m_device, {}, {}, 1, &rayPipelineInfo, nullptr, &m_rtPipeline);
@@ -786,7 +802,7 @@ void HelloVulkan::createRtPipeline()
 
 void HelloVulkan::createRtShaderBindingTable()
 {
-	uint32_t missCount{ 1 };
+	uint32_t missCount{ 2 };
 	uint32_t hitCount{ 1 };
 	auto handleCount = 1 + missCount + hitCount;
 	uint32_t handleSize = m_rtProperties.shaderGroupHandleSize;
