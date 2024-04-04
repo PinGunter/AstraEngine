@@ -5,6 +5,8 @@
 #extension GL_GOOGLE_include_directive : enable
 #extension GL_EXT_shader_explicit_arithmetic_types_int64 : require
 #extension GL_EXT_buffer_reference2 : require
+#extension GL_EXT_debug_printf : enable
+
 #include "raycommon.glsl"
 #include "wavefront.glsl"
 
@@ -20,6 +22,7 @@ layout(buffer_reference, scalar) buffer MatIndices {int i[]; }; // Material ID f
 layout(set = 0, binding = eTlas) uniform accelerationStructureEXT topLevelAS;
 layout(set = 1, binding = eObjDescs, scalar) buffer ObjDesc_ { ObjDesc i[]; } objDesc;
 layout(set = 1, binding = eTextures) uniform sampler2D textureSamplers[];
+layout(set = 1, binding = eGlobals) uniform _GlobalUniforms { GlobalUniforms uni; };
 
 layout(push_constant) uniform _PushConstantRay { PushConstantRay pcRay; };
 
@@ -111,9 +114,6 @@ void main()
 			specular = computeSpecular(mat, gl_WorldRayDirectionEXT, L, worldNrm);
 		}
 	}
-
-
-//	vec3 color = (worldNrm + 1) / 2; // normal color
-	prd.hitValue = vec3(lightIntensity * attenuation * (diffuse + specular));
+	prd.hitValue = vec3(lightIntensity * attenuation * (diffuse + specular) );
 
 }

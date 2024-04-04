@@ -318,7 +318,15 @@ bool Context::initInstance(const ContextCreateInfo& info)
   instanceCreateInfo.ppEnabledExtensionNames = usedInstanceExtensions.data();
   instanceCreateInfo.enabledLayerCount       = static_cast<uint32_t>(usedInstanceLayers.size());
   instanceCreateInfo.ppEnabledLayerNames     = usedInstanceLayers.data();
-  instanceCreateInfo.pNext                   = info.instanceCreateInfoExt;
+
+  VkValidationFeatureEnableEXT enabled[] = {VK_VALIDATION_FEATURE_ENABLE_DEBUG_PRINTF_EXT};
+  VkValidationFeaturesEXT      features{VK_STRUCTURE_TYPE_VALIDATION_FEATURES_EXT};
+  features.disabledValidationFeatureCount = 0;
+  features.enabledValidationFeatureCount  = 1;
+  features.pDisabledValidationFeatures    = nullptr;
+  features.pEnabledValidationFeatures     = enabled;
+
+  instanceCreateInfo.pNext = &features;
 
   NVVK_CHECK(vkCreateInstance(&instanceCreateInfo, nullptr, &m_instance));
 

@@ -56,7 +56,7 @@ static void onErrorCallback(int error, const char* description)
 // Extra UI
 void renderUI(HelloVulkan& helloVk)
 {
-	ImGuiH::CameraWidget();
+	//ImGuiH::CameraWidget();
 	if (ImGui::CollapsingHeader("Light"))
 	{
 		ImGui::RadioButton("Point", &helloVk.m_pcRaster.lightType, 0);
@@ -126,6 +126,7 @@ int main(int argc, char** argv)
 	contextInfo.addInstanceLayer("VK_LAYER_LUNARG_monitor", true);              // FPS in titlebar
 	contextInfo.addInstanceExtension(VK_EXT_DEBUG_UTILS_EXTENSION_NAME, true);  // Allow debug names
 	contextInfo.addDeviceExtension(VK_KHR_SWAPCHAIN_EXTENSION_NAME);            // Enabling ability to present rendering
+	contextInfo.addDeviceExtension(VK_KHR_SHADER_NON_SEMANTIC_INFO_EXTENSION_NAME); // enable shader printf;
 
 	// add vulkan raytracing extensions
 	VkPhysicalDeviceAccelerationStructureFeaturesKHR accelFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR };
@@ -166,6 +167,7 @@ int main(int argc, char** argv)
 	helloVk.loadModel(nvh::findFile("media/scenes/mono.obj", defaultSearchPaths, true), glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
 	//helloVk.loadModel(nvh::findFile("media/scenes/Medieval_Building.obj", defaultSearchPaths, true));
 	helloVk.loadModel(nvh::findFile("media/scenes/plane.obj", defaultSearchPaths, true));
+	//helloVk.loadModel(nvh::findFile("media/scenes/vaca.obj", defaultSearchPaths, true), glm::translate(glm::rotate(glm::mat4(1.0f), 3.14159f, glm::vec3(0.0f, 1.0f, 0.0f)), glm::vec3(0.0, 1.0f, 0.0f)));
 
 	helloVk.createOffscreenRender();
 	helloVk.createDescriptorSetLayout();
