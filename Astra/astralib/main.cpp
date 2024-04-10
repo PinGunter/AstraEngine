@@ -239,6 +239,11 @@ int main(int argc, char** argv)
 			//ImGui::DragFloat4("### Rotation: ", glm::value_ptr(instances[currentModel].rotation));
 			//ImGui::Text("Scale: "); ImGui::SameLine();
 			//ImGui::DragFloat3("### Scale: ", glm::value_ptr(instances[currentModel].scale));
+			ImGui::InputFloat4("### 1", glm::value_ptr(instances[currentModel].transform[0]));
+			ImGui::InputFloat4("### 2", glm::value_ptr(instances[currentModel].transform[1]));
+			ImGui::InputFloat4("### 3", glm::value_ptr(instances[currentModel].transform[2]));
+			ImGui::InputFloat4("### 4", glm::value_ptr(instances[currentModel].transform[3]));
+			if (ImGui::Button("REBUILD TLAS")) helloVk.updateTLAS(currentModel);
 			ImGui::Checkbox("Visible: ", &instances[currentModel].visible);
 			ImGui::Checkbox("ShowGuizmo: ", &showGuizmo);
 
@@ -253,6 +258,10 @@ int main(int argc, char** argv)
 			ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
 			glm::mat4      proj = glm::perspectiveRH_ZO(glm::radians(CameraManip.getFov()), io.DisplaySize.x / io.DisplaySize.y, 0.1f, 1000.0f);
 			if (showGuizmo) ImGuizmo::Manipulate(glm::value_ptr(CameraManip.getMatrix()), glm::value_ptr(proj), static_cast<ImGuizmo::OPERATION>(guizmo_type), ImGuizmo::LOCAL, glm::value_ptr(instances[currentModel].transform));
+
+			if (ImGuizmo::IsUsing()) {
+				helloVk.updateTLAS(currentModel);
+			}
 
 			ImGuiH::Panel::End();
 		}

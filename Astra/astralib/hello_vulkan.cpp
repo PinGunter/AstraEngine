@@ -655,13 +655,12 @@ void HelloVulkan::createBottomLevelAS()
 		allBlas.emplace_back(blas);
 	}
 
-	m_rtBuilder.buildBlas(allBlas, VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR | VK_BUILD_ACCELERATION_STRUCTURE_ALLOW_COMPACTION_BIT_KHR);
+	m_rtBuilder.buildBlas(allBlas, VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR);
 }
 
 void HelloVulkan::createTopLevelAS()
 {
-	std::vector<VkAccelerationStructureInstanceKHR> tlas;
-	tlas.reserve(m_instances.size());
+	m_tlas.reserve(m_instances.size());
 	for (const HelloVulkan::ObjInstance& inst : m_instances) {
 		VkAccelerationStructureInstanceKHR rayInst{};
 		rayInst.transform = nvvk::toTransformMatrixKHR(inst.transform);
@@ -671,9 +670,26 @@ void HelloVulkan::createTopLevelAS()
 		rayInst.mask = 0xFF; // only be hit if raymask & instance.mask != 0
 		rayInst.instanceShaderBindingTableRecordOffset = 0; // the same hit group for all objects
 
-		tlas.emplace_back(rayInst);
+		m_tlas.emplace_back(rayInst);
 	}
-	m_rtBuilder.buildTlas(tlas, VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR);
+	m_rtBuilder.buildTlas(m_tlas, VK_BUILD_ACCELERATION_STRUCTURE_ALLOW_UPDATE_BIT_KHR | VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR);
+}
+
+void HelloVulkan::updateTLAS(int instance_id)
+{
+	const auto& inst = m_instances[instance_id];
+	VkAccelerationStructureInstanceKHR rayInst{};
+	rayInst.transform = nvvk::toTransformMatrixKHR(inst.transform);
+	rayInst.instanceCustomIndex = inst.objIndex; //gl_InstanceCustomIndexEXT
+	rayInst.accelerationStructureReference = m_rtBuilder.getBlasDeviceAddress(inst.objIndex);
+	rayInst.flags = VK_GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_KHR;
+	rayInst.mask = 0xFF; // only be hit if raymask & instance.mask != 0
+	rayInst.instanceShaderBindingTableRecordOffset = 0; // the same hit group for all objects
+	m_tlas[instance_id] = rayInst;
+
+	m_rtBuilder.buildTlas(m_tlas, VK_BUILD_ACCELERATION_STRUCTURE_ALLOW_UPDATE_BIT_KHR | VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR, true);
+
+	std::cout << "Updating TLAS" << std::endl;
 }
 
 void HelloVulkan::createRtDescriptorSet()

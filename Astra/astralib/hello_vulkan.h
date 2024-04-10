@@ -134,6 +134,7 @@ public:
 	auto objectToVkGeometryKHR(const ObjModel& model);
 	void createBottomLevelAS();
 	void createTopLevelAS();
+	void updateTLAS(int instance_id);
 	void createRtDescriptorSet();
 	void updateRtDescriptorSet();
 	void createRtPipeline();
@@ -151,6 +152,7 @@ public:
 	VkPipelineLayout m_rtPipelineLayout;
 	VkPipeline m_rtPipeline;
 	PushConstantRay m_pcRay{};
+	std::vector<VkAccelerationStructureInstanceKHR> m_tlas;
 	nvvk::Buffer m_rtSBTBuffer;
 	VkStridedDeviceAddressRegionKHR m_rgenRegion{};
 	VkStridedDeviceAddressRegionKHR m_missRegion{};
