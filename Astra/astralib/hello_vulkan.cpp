@@ -36,6 +36,7 @@
 #include "nvvk/renderpasses_vk.hpp"
 #include "nvvk/shaders_vk.hpp"
 #include "nvvk/buffers_vk.hpp"
+#include "glm/gtc/quaternion.hpp"
 
 extern std::vector<std::string> defaultSearchPaths;
 
@@ -185,7 +186,7 @@ void HelloVulkan::createGraphicsPipeline()
 //--------------------------------------------------------------------------------------------------
 // Loading the OBJ file and setting up all buffers
 //
-void HelloVulkan::loadModel(const std::string& filename, glm::mat4 transform)
+void HelloVulkan::loadModel(const std::string& filename, const glm::mat4& transform)
 {
 	LOGI("Loading File:  %s \n", filename.c_str());
 	ObjLoader loader;
@@ -228,6 +229,7 @@ void HelloVulkan::loadModel(const std::string& filename, glm::mat4 transform)
 	ObjInstance instance;
 	instance.transform = transform;
 	instance.objIndex = static_cast<uint32_t>(m_objModel.size());
+	instance.name = filename;
 	m_instances.push_back(instance);
 
 	// Creating information for device access
@@ -412,17 +414,24 @@ void HelloVulkan::rasterize(const VkCommandBuffer& cmdBuf)
 
 	for (const HelloVulkan::ObjInstance& inst : m_instances)
 	{
-		auto& model = m_objModel[inst.objIndex];
-		m_pcRaster.objIndex = inst.objIndex;  // Telling which object is drawn
-		m_pcRaster.modelMatrix = inst.transform;
+		if (inst.visible) {
+			auto& model = m_objModel[inst.objIndex];
+			m_pcRaster.objIndex = inst.objIndex;  // Telling which object is drawn
+			m_pcRaster.modelMatrix = inst.transform;
 
-		vkCmdPushConstants(cmdBuf, m_pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0,
-			sizeof(PushConstantRaster), &m_pcRaster);
-		vkCmdBindVertexBuffers(cmdBuf, 0, 1, &model.vertexBuffer.buffer, &offset);
-		vkCmdBindIndexBuffer(cmdBuf, model.indexBuffer.buffer, 0, VK_INDEX_TYPE_UINT32);
-		vkCmdDrawIndexed(cmdBuf, model.nbIndices, 1, 0, 0, 0);
+			vkCmdPushConstants(cmdBuf, m_pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0,
+				sizeof(PushConstantRaster), &m_pcRaster);
+			vkCmdBindVertexBuffers(cmdBuf, 0, 1, &model.vertexBuffer.buffer, &offset);
+			vkCmdBindIndexBuffer(cmdBuf, model.indexBuffer.buffer, 0, VK_INDEX_TYPE_UINT32);
+			vkCmdDrawIndexed(cmdBuf, model.nbIndices, 1, 0, 0, 0);
+		}
 	}
 	m_debug.endLabel(cmdBuf);
+}
+
+std::vector<HelloVulkan::ObjInstance>& HelloVulkan::getInstances()
+{
+	return m_instances;
 }
 
 

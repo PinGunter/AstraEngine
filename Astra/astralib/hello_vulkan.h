@@ -26,6 +26,7 @@
 #include "nvvk/resourceallocator_vk.hpp"
 #include "shaders/host_device.h"
 #include "nvvk/raytraceKHR_vk.hpp"
+#include "glm/gtc/quaternion.hpp"
 
  //--------------------------------------------------------------------------------------------------
  // Simple rasterizer of OBJ objects
@@ -51,9 +52,12 @@ public:
 
 	struct ObjInstance
 	{
-		glm::mat4 transform;    // Matrix of the instance
+		glm::mat4 transform;
 		uint32_t  objIndex{ 0 };  // Model index reference
+		std::string name;
+		bool visible{ true };
 	};
+
 
 
 	// Information pushed at each draw call
@@ -68,7 +72,7 @@ public:
 	void setup(const VkInstance& instance, const VkDevice& device, const VkPhysicalDevice& physicalDevice, uint32_t queueFamily) override;
 	void createDescriptorSetLayout();
 	void createGraphicsPipeline();
-	void loadModel(const std::string& filename, glm::mat4 transform = glm::mat4(1));
+	void loadModel(const std::string& filename, const glm::mat4& transform = glm::mat4(1.0f));
 	void updateDescriptorSet();
 	void createUniformBuffer();
 	void createObjDescriptionBuffer();
@@ -77,6 +81,8 @@ public:
 	void onResize(int /*w*/, int /*h*/) override;
 	void destroyResources();
 	void rasterize(const VkCommandBuffer& cmdBuff);
+
+	std::vector<ObjInstance>& getInstances();
 
 
 	// Array of objects and instances in the scene

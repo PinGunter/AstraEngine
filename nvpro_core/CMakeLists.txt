@@ -133,6 +133,8 @@ if(USING_IMGUI)
       imgui/imgui_icon.h
       imgui/imgui_orient.cpp  
       imgui/imgui_orient.h
+      imgui/ImGuizmo.h
+      imgui/ImGuizmo.cpp
       ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp
       ${IMGUI_DIR}/backends/imgui_impl_glfw.h
       )

@@ -37,7 +37,10 @@
 #include "nvpsystem.hpp"
 #include "nvvk/commands_vk.hpp"
 #include "nvvk/context_vk.hpp"
-
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
+#include <imgui/ImGuizmo.h>
+#include <iostream>
 
 //////////////////////////////////////////////////////////////////////////
 #define UNUSED(x) (void)(x)
@@ -163,11 +166,20 @@ int main(int argc, char** argv)
 	helloVk.initGUI(0);  // Using sub-pass 0
 
 	// Creation of the example
-	//helloVk.loadModel(nvh::findFile("media/scenes/cube_multi.obj", defaultSearchPaths, true));
-	helloVk.loadModel(nvh::findFile("media/scenes/mono.obj", defaultSearchPaths, true), glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
-	//helloVk.loadModel(nvh::findFile("media/scenes/Medieval_Building.obj", defaultSearchPaths, true));
+	helloVk.loadModel(nvh::findFile("media/scenes/cube_multi.obj", defaultSearchPaths, true));
+	helloVk.loadModel(nvh::findFile("media/scenes/mono.obj", defaultSearchPaths, true));
+	helloVk.loadModel(nvh::findFile("media/scenes/Medieval_Building.obj", defaultSearchPaths, true));
 	helloVk.loadModel(nvh::findFile("media/scenes/plane.obj", defaultSearchPaths, true));
-	//helloVk.loadModel(nvh::findFile("media/scenes/vaca.obj", defaultSearchPaths, true), glm::translate(glm::rotate(glm::mat4(1.0f), 3.14159f, glm::vec3(0.0f, 1.0f, 0.0f)), glm::vec3(0.0, 1.0f, 0.0f)));
+	helloVk.loadModel(nvh::findFile("media/scenes/vaca.obj", defaultSearchPaths, true));
+
+	auto& instances = helloVk.getInstances();
+
+	std::vector<const char*> names;
+	for (auto& i : instances) {
+		names.push_back(i.name.c_str());
+	}
+
+	int currentModel = 0;
 
 	helloVk.createOffscreenRender();
 	helloVk.createDescriptorSetLayout();
@@ -193,6 +205,8 @@ int main(int argc, char** argv)
 	ImGui_ImplGlfw_InitForVulkan(window, true);
 
 	bool useRaytracer = true;
+	bool showGuizmo = false;
+	int guizmo_type = ImGuizmo::UNIVERSAL;
 
 	// Main loop
 	while (!glfwWindowShouldClose(window))
@@ -204,6 +218,8 @@ int main(int argc, char** argv)
 		// Start the Dear ImGui frame
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+		ImGuizmo::BeginFrame();
+
 
 		// Show UI window.
 		if (helloVk.showGui())
@@ -214,6 +230,30 @@ int main(int argc, char** argv)
 			renderUI(helloVk);
 			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 			ImGuiH::Control::Info("", "", "(F10) Toggle Pane", ImGuiH::Control::Flags::Disabled);
+
+			ImGui::Text("Models: ");
+			ImGui::ListBox("### Models: ", &currentModel, names.data(), instances.size());
+			//ImGui::Text("Position: "); ImGui::SameLine();
+			//ImGui::DragFloat3("### Position: ", glm::value_ptr(instances[currentModel].position));
+			//ImGui::Text("Rotation: "); ImGui::SameLine();
+			//ImGui::DragFloat4("### Rotation: ", glm::value_ptr(instances[currentModel].rotation));
+			//ImGui::Text("Scale: "); ImGui::SameLine();
+			//ImGui::DragFloat3("### Scale: ", glm::value_ptr(instances[currentModel].scale));
+			ImGui::Checkbox("Visible: ", &instances[currentModel].visible);
+			ImGui::Checkbox("ShowGuizmo: ", &showGuizmo);
+
+
+			ImGui::Text("Guizmo Type:");
+			ImGui::RadioButton("Universal", &guizmo_type, (int)ImGuizmo::UNIVERSAL);
+			ImGui::RadioButton("Translate", &guizmo_type, (int)ImGuizmo::TRANSLATE);
+			ImGui::RadioButton("Rotate", &guizmo_type, (int)ImGuizmo::ROTATE);
+			ImGui::RadioButton("Scale", &guizmo_type, (int)ImGuizmo::SCALE);
+
+			ImGuiIO& io = ImGui::GetIO();
+			ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
+			glm::mat4      proj = glm::perspectiveRH_ZO(glm::radians(CameraManip.getFov()), io.DisplaySize.x / io.DisplaySize.y, 0.1f, 1000.0f);
+			if (showGuizmo) ImGuizmo::Manipulate(glm::value_ptr(CameraManip.getMatrix()), glm::value_ptr(proj), static_cast<ImGuizmo::OPERATION>(guizmo_type), ImGuizmo::LOCAL, glm::value_ptr(instances[currentModel].transform));
+
 			ImGuiH::Panel::End();
 		}
 
