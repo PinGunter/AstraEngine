@@ -244,7 +244,7 @@ int main(int argc, char** argv)
 			ImGui::InputFloat4("### 3", glm::value_ptr(instances[currentModel].transform[2]));
 			ImGui::InputFloat4("### 4", glm::value_ptr(instances[currentModel].transform[3]));
 			if (ImGui::Button("REBUILD TLAS")) helloVk.updateTLAS(currentModel);
-			ImGui::Checkbox("Visible: ", &instances[currentModel].visible);
+			if (ImGui::Checkbox("Visible: ", &instances[currentModel].visible)) helloVk.updateTLAS(currentModel);
 			ImGui::Checkbox("ShowGuizmo: ", &showGuizmo);
 
 

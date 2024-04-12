@@ -683,7 +683,7 @@ void HelloVulkan::updateTLAS(int instance_id)
 	rayInst.instanceCustomIndex = inst.objIndex; //gl_InstanceCustomIndexEXT
 	rayInst.accelerationStructureReference = m_rtBuilder.getBlasDeviceAddress(inst.objIndex);
 	rayInst.flags = VK_GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_KHR;
-	rayInst.mask = 0xFF; // only be hit if raymask & instance.mask != 0
+	rayInst.mask = inst.visible ? 0xFF : 0x00; // only be hit if raymask & instance.mask != 0
 	rayInst.instanceShaderBindingTableRecordOffset = 0; // the same hit group for all objects
 	m_tlas[instance_id] = rayInst;
 
