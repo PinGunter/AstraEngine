@@ -23,10 +23,11 @@ _add_project_definitions(${PROJNAME})
 #--------------------------------------------------------------------------------------------------
 # Source files for this project
 #
-file(GLOB SOURCE_FILES *.cpp *.hpp *.inl *.h *.c)
+file(GLOB SOURCE_FILES src/*.cpp include/*.h include/*.hpp)
 file(GLOB EXTRA_COMMON ${ASTRA_DIR}/common/*.*)
 list(APPEND COMMON_SOURCE_FILES ${EXTRA_COMMON})
-include_directories(${ASTRA_DIR}/common)
+include_directories(include/)
+include_directories(${ASTRA_DIR}/common include)
 
 
 #--------------------------------------------------------------------------------------------------
@@ -45,16 +46,6 @@ target_sources(${PROJNAME} PUBLIC ${SOURCE_FILES} ${HEADER_FILES})
 target_sources(${PROJNAME} PUBLIC ${COMMON_SOURCE_FILES})
 target_sources(${PROJNAME} PUBLIC ${PACKAGE_SOURCE_FILES})
 target_sources(${PROJNAME} PUBLIC ${GLSL_SOURCES} ${GLSL_HEADERS})
-
-
-#--------------------------------------------------------------------------------------------------
-# Sub-folders in Visual Studio
-#
-source_group("Common"       FILES ${COMMON_SOURCE_FILES} ${PACKAGE_SOURCE_FILES})
-source_group("Sources"      FILES ${SOURCE_FILES})
-source_group("Headers"      FILES ${HEADER_FILES})
-source_group("Shader Sources"  FILES ${GLSL_SOURCES})
-source_group("Shader Headers"  FILES ${GLSL_HEADERS})
 
 
 #--------------------------------------------------------------------------------------------------

@@ -200,7 +200,7 @@ void HelloVulkan::loadModel(const std::string& filename, const glm::mat4& transf
 		m.specular = glm::pow(m.specular, glm::vec3(2.2f));
 	}
 
-	ObjModel model;
+	Astra::Mesh model;
 	model.nbIndices = static_cast<uint32_t>(loader.m_indices.size());
 	model.nbVertices = static_cast<uint32_t>(loader.m_vertices.size());
 
@@ -226,10 +226,7 @@ void HelloVulkan::loadModel(const std::string& filename, const glm::mat4& transf
 	m_debug.setObjectName(model.matIndexBuffer.buffer, (std::string("matIdx_" + objNb)));
 
 	// Keeping transformation matrix of the instance
-	ObjInstance instance;
-	instance.transform = transform;
-	instance.objIndex = static_cast<uint32_t>(m_objModel.size());
-	instance.name = filename;
+	Astra::MeshInstance instance(static_cast<uint32_t>(m_objModel.size()), transform, filename.substr(filename.size() - 10, filename.size()));
 	m_instances.push_back(instance);
 
 	// Creating information for device access
@@ -412,12 +409,12 @@ void HelloVulkan::rasterize(const VkCommandBuffer& cmdBuf)
 	vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipelineLayout, 0, 1, &m_descSet, 0, nullptr);
 
 
-	for (const HelloVulkan::ObjInstance& inst : m_instances)
+	for (const Astra::MeshInstance& inst : m_instances)
 	{
-		if (inst.visible) {
-			auto& model = m_objModel[inst.objIndex];
-			m_pcRaster.objIndex = inst.objIndex;  // Telling which object is drawn
-			m_pcRaster.modelMatrix = inst.transform;
+		if (inst.getVisible()) {
+			auto& model = m_objModel[inst.getMeshIndex()];
+			m_pcRaster.objIndex = inst.getMeshIndex();  // Telling which object is drawn
+			m_pcRaster.modelMatrix = inst.getTransform();
 
 			vkCmdPushConstants(cmdBuf, m_pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0,
 				sizeof(PushConstantRaster), &m_pcRaster);
@@ -429,7 +426,7 @@ void HelloVulkan::rasterize(const VkCommandBuffer& cmdBuf)
 	m_debug.endLabel(cmdBuf);
 }
 
-std::vector<HelloVulkan::ObjInstance>& HelloVulkan::getInstances()
+std::vector<Astra::MeshInstance>& HelloVulkan::getInstances()
 {
 	return m_instances;
 }
@@ -603,7 +600,7 @@ void HelloVulkan::initRayTracing()
 	m_rtBuilder.setup(m_device, &m_alloc, m_graphicsQueueIndex);
 }
 
-auto HelloVulkan::objectToVkGeometryKHR(const ObjModel& model)
+auto HelloVulkan::objectToVkGeometryKHR(const Astra::Mesh& model)
 {
 	// BLAS builder requires raw device addresses.
 	VkDeviceAddress vertexAddress = nvvk::getBufferDeviceAddress(m_device, model.vertexBuffer.buffer);
@@ -661,11 +658,11 @@ void HelloVulkan::createBottomLevelAS()
 void HelloVulkan::createTopLevelAS()
 {
 	m_tlas.reserve(m_instances.size());
-	for (const HelloVulkan::ObjInstance& inst : m_instances) {
+	for (const Astra::MeshInstance& inst : m_instances) {
 		VkAccelerationStructureInstanceKHR rayInst{};
-		rayInst.transform = nvvk::toTransformMatrixKHR(inst.transform);
-		rayInst.instanceCustomIndex = inst.objIndex; //gl_InstanceCustomIndexEXT
-		rayInst.accelerationStructureReference = m_rtBuilder.getBlasDeviceAddress(inst.objIndex);
+		rayInst.transform = nvvk::toTransformMatrixKHR(inst.getTransform());
+		rayInst.instanceCustomIndex = inst.getMeshIndex(); //gl_InstanceCustomIndexEXT
+		rayInst.accelerationStructureReference = m_rtBuilder.getBlasDeviceAddress(inst.getMeshIndex());
 		rayInst.flags = VK_GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_KHR;
 		rayInst.mask = 0xFF; // only be hit if raymask & instance.mask != 0
 		rayInst.instanceShaderBindingTableRecordOffset = 0; // the same hit group for all objects
@@ -679,11 +676,11 @@ void HelloVulkan::updateTLAS(int instance_id)
 {
 	const auto& inst = m_instances[instance_id];
 	VkAccelerationStructureInstanceKHR rayInst{};
-	rayInst.transform = nvvk::toTransformMatrixKHR(inst.transform);
-	rayInst.instanceCustomIndex = inst.objIndex; //gl_InstanceCustomIndexEXT
-	rayInst.accelerationStructureReference = m_rtBuilder.getBlasDeviceAddress(inst.objIndex);
+	rayInst.transform = nvvk::toTransformMatrixKHR(inst.getTransform());
+	rayInst.instanceCustomIndex = inst.getMeshIndex(); //gl_InstanceCustomIndexEXT
+	rayInst.accelerationStructureReference = m_rtBuilder.getBlasDeviceAddress(inst.getMeshIndex());
 	rayInst.flags = VK_GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_KHR;
-	rayInst.mask = inst.visible ? 0xFF : 0x00; // only be hit if raymask & instance.mask != 0
+	rayInst.mask = inst.getVisible() ? 0xFF : 0x00; // only be hit if raymask & instance.mask != 0
 	rayInst.instanceShaderBindingTableRecordOffset = 0; // the same hit group for all objects
 	m_tlas[instance_id] = rayInst;
 

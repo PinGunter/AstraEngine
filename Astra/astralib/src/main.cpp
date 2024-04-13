@@ -176,7 +176,7 @@ int main(int argc, char** argv)
 
 	std::vector<const char*> names;
 	for (auto& i : instances) {
-		names.push_back(i.name.c_str());
+		names.push_back(i.getName().c_str());
 	}
 
 	int currentModel = 0;
@@ -207,7 +207,8 @@ int main(int argc, char** argv)
 	bool useRaytracer = true;
 	bool showGuizmo = false;
 	int guizmo_type = ImGuizmo::UNIVERSAL;
-
+	bool text_edit = false;
+	std::string text_edit_str;
 	// Main loop
 	while (!glfwWindowShouldClose(window))
 	{
@@ -232,19 +233,10 @@ int main(int argc, char** argv)
 			ImGuiH::Control::Info("", "", "(F10) Toggle Pane", ImGuiH::Control::Flags::Disabled);
 
 			ImGui::Text("Models: ");
-			ImGui::ListBox("### Models: ", &currentModel, names.data(), instances.size());
-			//ImGui::Text("Position: "); ImGui::SameLine();
-			//ImGui::DragFloat3("### Position: ", glm::value_ptr(instances[currentModel].position));
-			//ImGui::Text("Rotation: "); ImGui::SameLine();
-			//ImGui::DragFloat4("### Rotation: ", glm::value_ptr(instances[currentModel].rotation));
-			//ImGui::Text("Scale: "); ImGui::SameLine();
-			//ImGui::DragFloat3("### Scale: ", glm::value_ptr(instances[currentModel].scale));
-			ImGui::InputFloat4("### 1", glm::value_ptr(instances[currentModel].transform[0]));
-			ImGui::InputFloat4("### 2", glm::value_ptr(instances[currentModel].transform[1]));
-			ImGui::InputFloat4("### 3", glm::value_ptr(instances[currentModel].transform[2]));
-			ImGui::InputFloat4("### 4", glm::value_ptr(instances[currentModel].transform[3]));
+			ImGui::ListBox("###Models", &currentModel, names.data(), names.size());
+
 			if (ImGui::Button("REBUILD TLAS")) helloVk.updateTLAS(currentModel);
-			if (ImGui::Checkbox("Visible: ", &instances[currentModel].visible)) helloVk.updateTLAS(currentModel);
+			if (ImGui::Checkbox("Visible: ", &instances[currentModel].getVisible())) helloVk.updateTLAS(currentModel);
 			ImGui::Checkbox("ShowGuizmo: ", &showGuizmo);
 
 
@@ -257,7 +249,7 @@ int main(int argc, char** argv)
 			ImGuiIO& io = ImGui::GetIO();
 			ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
 			glm::mat4      proj = glm::perspectiveRH_ZO(glm::radians(CameraManip.getFov()), io.DisplaySize.x / io.DisplaySize.y, 0.1f, 1000.0f);
-			if (showGuizmo) ImGuizmo::Manipulate(glm::value_ptr(CameraManip.getMatrix()), glm::value_ptr(proj), static_cast<ImGuizmo::OPERATION>(guizmo_type), ImGuizmo::LOCAL, glm::value_ptr(instances[currentModel].transform));
+			if (showGuizmo) ImGuizmo::Manipulate(glm::value_ptr(CameraManip.getMatrix()), glm::value_ptr(proj), static_cast<ImGuizmo::OPERATION>(guizmo_type), ImGuizmo::LOCAL, glm::value_ptr(instances[currentModel].getTransform()));
 
 			if (ImGuizmo::IsUsing()) {
 				helloVk.updateTLAS(currentModel);

@@ -27,7 +27,7 @@
 #include "shaders/host_device.h"
 #include "nvvk/raytraceKHR_vk.hpp"
 #include "glm/gtc/quaternion.hpp"
-
+#include <Mesh.h>
  //--------------------------------------------------------------------------------------------------
  // Simple rasterizer of OBJ objects
  // - Each OBJ loaded are stored in an `ObjModel` and referenced by a `ObjInstance`
@@ -38,27 +38,6 @@
 class HelloVulkan : public nvvkhl::AppBaseVk
 {
 public:
-
-	// The OBJ model
-	struct ObjModel
-	{
-		uint32_t     nbIndices{ 0 };
-		uint32_t     nbVertices{ 0 };
-		nvvk::Buffer vertexBuffer;    // Device buffer of all 'Vertex'
-		nvvk::Buffer indexBuffer;     // Device buffer of the indices forming triangles
-		nvvk::Buffer matColorBuffer;  // Device buffer of array of 'Wavefront material'
-		nvvk::Buffer matIndexBuffer;  // Device buffer of array of 'Wavefront material'
-	};
-
-	struct ObjInstance
-	{
-		glm::mat4 transform;
-		uint32_t  objIndex{ 0 };  // Model index reference
-		std::string name;
-		bool visible{ true };
-	};
-
-
 
 	// Information pushed at each draw call
 	PushConstantRaster m_pcRaster{
@@ -82,13 +61,13 @@ public:
 	void destroyResources();
 	void rasterize(const VkCommandBuffer& cmdBuff);
 
-	std::vector<ObjInstance>& getInstances();
+	std::vector<Astra::MeshInstance>& getInstances();
 
 
 	// Array of objects and instances in the scene
-	std::vector<ObjModel>    m_objModel;   // Model on host
+	std::vector<Astra::Mesh>    m_objModel;   // Model on host
 	std::vector<ObjDesc>     m_objDesc;    // Model description for device access
-	std::vector<ObjInstance> m_instances;  // Scene model instances
+	std::vector<Astra::MeshInstance> m_instances;  // Scene model instances
 
 
 	// Graphic pipeline
@@ -131,7 +110,7 @@ public:
 
 	// # RayTracing
 	void initRayTracing();
-	auto objectToVkGeometryKHR(const ObjModel& model);
+	auto objectToVkGeometryKHR(const Astra::Mesh& model);
 	void createBottomLevelAS();
 	void createTopLevelAS();
 	void updateTLAS(int instance_id);
