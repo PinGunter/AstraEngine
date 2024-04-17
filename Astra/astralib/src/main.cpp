@@ -226,11 +226,26 @@ int main(int argc, char** argv)
 		if (helloVk.showGui())
 		{
 			ImGuiH::Panel::Begin();
-			ImGui::ColorEdit3("Clear color", reinterpret_cast<float*>(&clearColor));
-			ImGui::Checkbox("Use Raytracer", &useRaytracer);
-			renderUI(helloVk);
-			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-			ImGuiH::Control::Info("", "", "(F10) Toggle Pane", ImGuiH::Control::Flags::Disabled);
+
+
+			if (ImGui::BeginTabBar("Principal")) {
+				if (ImGui::BeginTabItem("Rendering")) {
+					ImGui::ColorEdit3("Clear color", reinterpret_cast<float*>(&clearColor));
+					ImGui::Checkbox("Use Raytracer", &useRaytracer);
+					renderUI(helloVk);
+					ImGui::EndTabItem();
+				}
+				if (ImGui::BeginTabItem("Performance")) {
+					ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+					ImGui::EndTabItem();
+				}
+
+
+				ImGui::EndTabBar();
+
+			}
+
+			ImGuiH::Panel::End();
 
 			ImGui::Text("Models: ");
 			ImGui::ListBox("###Models", &currentModel, names.data(), names.size());
@@ -255,7 +270,8 @@ int main(int argc, char** argv)
 				helloVk.updateTLAS(currentModel);
 			}
 
-			ImGuiH::Panel::End();
+
+			ImGui::ShowDemoWindow();
 		}
 
 		// Start rendering the scene

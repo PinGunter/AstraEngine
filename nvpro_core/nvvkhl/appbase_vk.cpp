@@ -550,8 +550,8 @@ void nvvkhl::AppBaseVk::onKeyboard(int key, int /*scancode*/, int action, int mo
 
   if(pressed && key == GLFW_KEY_F11)
     m_show_gui = !m_show_gui;
-  else if(pressed && key == GLFW_KEY_ESCAPE)
-    glfwSetWindowShouldClose(m_window, 1);
+  //else if(pressed && key == GLFW_KEY_ESCAPE)
+  //glfwSetWindowShouldClose(m_window, 1);
 }
 
 //--------------------------------------------------------------------------------------------------

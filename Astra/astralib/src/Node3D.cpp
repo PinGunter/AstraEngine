@@ -4,11 +4,11 @@
 
 using namespace Astra;
 
-uint32_t Node3D::n_nodes = 0;
+uint32_t Node3D::_n_nodes = 0;
 
 Node3D::Node3D(const glm::mat4& transform_mat, const std::string& name) : _transform(transform_mat), _name(name) {
 	if (name == "") {
-		_name = std::string("Node3D - ") + std::to_string(Node3D::n_nodes++);
+		_name = std::string("Node3D - ") + std::to_string(Node3D::_n_nodes++);
 	}
 }
 

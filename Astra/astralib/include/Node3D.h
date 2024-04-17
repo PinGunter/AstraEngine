@@ -11,14 +11,13 @@ namespace Astra {
 	*/
 	class Node3D {
 	protected:
-		static uint32_t n_nodes;
+		static uint32_t _n_nodes;
 		glm::mat4 _transform;
 		std::vector<Node3D*> _children;
 		std::string _name;
 
 	public:
-
-		Node3D(const glm::mat4& transform, const std::string& name = "");
+		Node3D(const glm::mat4& transform = glm::mat4(1.0f), const std::string& name = "");
 
 		// TRANSFORM OPERATIONS
 
@@ -47,6 +46,6 @@ namespace Astra {
 		*/
 
 		// TODO: probably needs pipeline or render reference
-		virtual void update() {};
+		virtual void update() = 0;
 	};
 }
