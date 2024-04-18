@@ -31,8 +31,6 @@
 #include "imgui/imgui_helper.h"
 
 #include "hello_vulkan.h"
-#include "imgui/imgui_camera_widget.h"
-#include "nvh/cameramanipulator.hpp"
 #include "nvh/fileoperations.hpp"
 #include "nvpsystem.hpp"
 #include "nvvk/commands_vk.hpp"
@@ -94,10 +92,11 @@ int main(int argc, char** argv)
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 	GLFWwindow* window = glfwCreateWindow(SAMPLE_WIDTH, SAMPLE_HEIGHT, PROJECT_NAME, nullptr, nullptr);
 
-
+	Astra::Camera cam;
+	Astra::CameraController* camera = new Astra::OrbitCameraController(cam);
 	// Setup camera
-	CameraManip.setWindowSize(SAMPLE_WIDTH, SAMPLE_HEIGHT);
-	CameraManip.setLookat(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	camera->setWindowSize(SAMPLE_WIDTH, SAMPLE_HEIGHT);
+	camera->setLookAt(glm::vec3(5.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 
 	// Setup Vulkan
 	if (!glfwVulkanSupported())
@@ -151,6 +150,7 @@ int main(int argc, char** argv)
 
 	// Create example
 	HelloVulkan helloVk;
+	helloVk.setCamera(camera);
 
 	// Window need to be opened to get the surface on which to draw
 	const VkSurfaceKHR surface = helloVk.getVkSurface(vkctx.m_instance, window);
@@ -263,8 +263,9 @@ int main(int argc, char** argv)
 
 			ImGuiIO& io = ImGui::GetIO();
 			ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
-			glm::mat4      proj = glm::perspectiveRH_ZO(glm::radians(CameraManip.getFov()), io.DisplaySize.x / io.DisplaySize.y, 0.1f, 1000.0f);
-			if (showGuizmo) ImGuizmo::Manipulate(glm::value_ptr(CameraManip.getMatrix()), glm::value_ptr(proj), static_cast<ImGuizmo::OPERATION>(guizmo_type), ImGuizmo::LOCAL, glm::value_ptr(instances[currentModel].getTransform()));
+			glm::mat4      proj = camera->getProjectionMatrix();
+			proj[1][1] *= -1;
+			if (showGuizmo) ImGuizmo::Manipulate(glm::value_ptr(camera->getViewMatrix()), glm::value_ptr(proj), static_cast<ImGuizmo::OPERATION>(guizmo_type), ImGuizmo::LOCAL, glm::value_ptr(instances[currentModel].getTransform()));
 
 			if (ImGuizmo::IsUsing()) {
 				helloVk.updateTLAS(currentModel);
@@ -347,5 +348,6 @@ int main(int argc, char** argv)
 	glfwDestroyWindow(window);
 	glfwTerminate();
 
+	delete camera;
 	return 0;
 }

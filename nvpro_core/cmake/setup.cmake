@@ -73,6 +73,7 @@ add_definitions(-DRESOURCE_DIRECTORY="${RESOURCE_DIRECTORY}/")
 
 include_directories(${BASE_DIRECTORY}/nvpro_core)
 include_directories(${BASE_DIRECTORY}/nvpro_core/nvp)
+include_directories(${BASE_DIRECTORY}/Astra/astralib/include)
 
 # Specify the list of directories to search for cmake modules.
 list(APPEND CMAKE_MODULE_PATH ${BASE_DIRECTORY}/nvpro_core/cmake ${BASE_DIRECTORY}/nvpro_core/cmake/find)

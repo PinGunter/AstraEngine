@@ -23,8 +23,9 @@
 #include <imgui.h>
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_vulkan.h>
-#include "imgui/imgui_camera_widget.h"
+#include <iostream>
 #include "imgui/imgui_helper.h"
+#include <glm/gtc/constants.hpp>
 
 
 //--------------------------------------------------------------------------------------------------
@@ -63,8 +64,6 @@ void nvvkhl::AppBaseVk::setup(const VkInstance& instance, const VkDevice& device
 
   VkPipelineCacheCreateInfo pipelineCacheInfo{VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO};
   vkCreatePipelineCache(m_device, &pipelineCacheInfo, nullptr, &m_pipelineCache);
-
-  ImGuiH::SetCameraJsonFile(getProjectName());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -199,7 +198,8 @@ void nvvkhl::AppBaseVk::createSwapchain(const VkSurfaceKHR& surface,
 #endif  // !NDEBUG
 
   // Setup camera
-  CameraManip.setWindowSize(m_size.width, m_size.height);
+  //CameraManip.setWindowSize(m_size.width, m_size.height);
+  camera->setWindowSize(m_size.width, m_size.height);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -519,7 +519,7 @@ void nvvkhl::AppBaseVk::onFramebufferSize(int w, int h)
   if(m_size.width != w || m_size.height != h)
     LOGW("Requested size (%d, %d) is different from created size (%u, %u) ", w, h, m_size.width, m_size.height);
 
-  CameraManip.setWindowSize(m_size.width, m_size.height);
+  camera->setWindowSize(m_size.width, m_size.height);
   // Invoking Sample callback
   onResize(m_size.width, m_size.height);  // <-- to implement on derived class
   // Recreating other resources
@@ -536,8 +536,8 @@ void nvvkhl::AppBaseVk::onMouseMotion(int x, int y)
   if(ImGui::GetCurrentContext() != nullptr && ImGui::GetIO().WantCaptureMouse)
     return;
 
-  if(m_inputs.lmb || m_inputs.rmb || m_inputs.mmb)
-    CameraManip.mouseMove(x, y, m_inputs);
+  //if(m_inputs.lmb || m_inputs.rmb || m_inputs.mmb)
+  //CameraManip.mouseMove(x, y, m_inputs);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -591,7 +591,8 @@ void nvvkhl::AppBaseVk::onMouseButton(int button, int action, int mods)
 
   double x, y;
   glfwGetCursorPos(m_window, &x, &y);
-  CameraManip.setMousePosition(static_cast<int>(x), static_cast<int>(y));
+  //CameraManip.setMousePosition(static_cast<int>(x), static_cast<int>(y));
+  //camera->mouseMovement(x, y);
 }
 
 
@@ -604,8 +605,8 @@ void nvvkhl::AppBaseVk::onMouseWheel(int delta)
   if(ImGui::GetCurrentContext() != nullptr && ImGui::GetIO().WantCaptureMouse)
     return;
 
-  if(delta != 0)
-    CameraManip.wheel(delta > 0 ? 1 : -1, m_inputs);
+  /*if(delta != 0)
+    CameraManip.wheel(delta > 0 ? 1 : -1, m_inputs);*/
 }
 
 
@@ -617,19 +618,19 @@ void nvvkhl::AppBaseVk::updateCamera()
   // measure one frame at a time
   float factor = ImGui::GetIO().DeltaTime * 1000 * m_sceneRadius;
 
-  m_inputs.lmb   = ImGui::IsMouseDown(ImGuiMouseButton_Left);
+  /* m_inputs.lmb   = ImGui::IsMouseDown(ImGuiMouseButton_Left);
   m_inputs.rmb   = ImGui::IsMouseDown(ImGuiMouseButton_Right);
   m_inputs.mmb   = ImGui::IsMouseDown(ImGuiMouseButton_Middle);
   m_inputs.ctrl  = ImGui::IsKeyDown(ImGuiKey_LeftCtrl) || ImGui::IsKeyDown(ImGuiKey_RightCtrl);
   m_inputs.shift = ImGui::IsKeyDown(ImGuiKey_LeftShift) || ImGui::IsKeyDown(ImGuiKey_RightShift);
-  m_inputs.alt   = ImGui::IsKeyDown(ImGuiKey_LeftAlt) || ImGui::IsKeyDown(ImGuiKey_RightAlt);
+  m_inputs.alt   = ImGui::IsKeyDown(ImGuiKey_LeftAlt) || ImGui::IsKeyDown(ImGuiKey_RightAlt);*/
 
   // Allow camera movement only when not editing
-  if(ImGui::GetCurrentContext() != nullptr && ImGui::GetIO().WantCaptureKeyboard)
-    return;
-
+  //if(ImGui::GetCurrentContext() != nullptr && ImGui::GetIO().WantCaptureKeyboard)
+  //return;
+  camera->mouseMovement(0.1 * ImGui::GetIO().DeltaTime, 0);
   // For all pressed keys - apply the action
-  CameraManip.keyMotion(0, 0, nvh::CameraManipulator::NoAction);
+  /* CameraManip.keyMotion(0, 0, nvh::CameraManipulator::NoAction);
 
   if(!(ImGui::IsKeyDown(ImGuiKey_ModAlt) || ImGui::IsKeyDown(ImGuiKey_ModCtrl) || ImGui::IsKeyDown(ImGuiKey_ModShift)))
   {
@@ -650,10 +651,10 @@ void nvvkhl::AppBaseVk::updateCamera()
 
     if(ImGui::IsKeyDown(ImGuiKey_DownArrow))
       CameraManip.keyMotion(0, -factor, nvh::CameraManipulator::Pan);
-  }
+  }*/
 
   // This makes the camera to transition smoothly to the new position
-  CameraManip.updateAnim();
+  //CameraManip.updateAnim();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -718,7 +719,7 @@ void nvvkhl::AppBaseVk::initGUI(uint32_t subpassID /*= 0*/)
 //
 void nvvkhl::AppBaseVk::fitCamera(const glm::vec3& boxMin, const glm::vec3& boxMax, bool instantFit /*= true*/)
 {
-  CameraManip.fit(boxMin, boxMax, instantFit, false, m_size.width / static_cast<float>(m_size.height));
+  //CameraManip.fit(boxMin, boxMax, instantFit, false, m_size.width / static_cast<float>(m_size.height));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -815,12 +816,12 @@ uint32_t nvvkhl::AppBaseVk::getMemoryType(uint32_t typeBits, const VkMemoryPrope
 // Showing help
 void nvvkhl::AppBaseVk::uiDisplayHelp()
 {
-  if(m_showHelp)
+  /*if(m_showHelp)
   {
     ImGui::BeginChild("Help", ImVec2(370, 120), true);
     ImGui::Text("%s", CameraManip.getHelp().c_str());
     ImGui::EndChild();
-  }
+  }*/
 }
 
 VkCommandBuffer nvvkhl::AppBaseVk::createTempCmdBuffer()

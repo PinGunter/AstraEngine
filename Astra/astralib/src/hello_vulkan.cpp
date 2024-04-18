@@ -27,7 +27,6 @@
 
 #include "hello_vulkan.h"
 #include "nvh/alignment.hpp"
-#include "nvh/cameramanipulator.hpp"
 #include "nvh/fileoperations.hpp"
 #include "nvvk/commands_vk.hpp"
 #include "nvvk/descriptorsets_vk.hpp"
@@ -61,9 +60,8 @@ void HelloVulkan::updateUniformBuffer(const VkCommandBuffer& cmdBuf)
 	// Prepare new UBO contents on host.
 	const float    aspectRatio = m_size.width / static_cast<float>(m_size.height);
 	GlobalUniforms hostUBO = {};
-	const auto& view = CameraManip.getMatrix();
-	glm::mat4      proj = glm::perspectiveRH_ZO(glm::radians(CameraManip.getFov()), aspectRatio, 0.1f, 1000.0f);
-	proj[1][1] *= -1;  // Inverting Y for Vulkan (not needed with perspectiveVK).
+	const auto& view = camera->getViewMatrix();
+	glm::mat4      proj = camera->getProjectionMatrix();
 
 	hostUBO.viewProj = proj * view;
 	hostUBO.viewInverse = glm::inverse(view);
