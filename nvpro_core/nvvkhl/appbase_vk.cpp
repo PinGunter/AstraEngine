@@ -626,9 +626,10 @@ void nvvkhl::AppBaseVk::updateCamera()
   m_inputs.alt   = ImGui::IsKeyDown(ImGuiKey_LeftAlt) || ImGui::IsKeyDown(ImGuiKey_RightAlt);*/
 
   // Allow camera movement only when not editing
-  //if(ImGui::GetCurrentContext() != nullptr && ImGui::GetIO().WantCaptureKeyboard)
-  //return;
-  camera->mouseMovement(0.1 * ImGui::GetIO().DeltaTime, 0);
+  if(ImGui::GetCurrentContext() != nullptr && ImGui::GetIO().WantCaptureKeyboard)
+    return;
+
+  camera->mouseMovement(ImGui::GetIO().MouseDelta.x, 0);
   // For all pressed keys - apply the action
   /* CameraManip.keyMotion(0, 0, nvh::CameraManipulator::NoAction);
 

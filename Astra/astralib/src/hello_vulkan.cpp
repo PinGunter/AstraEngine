@@ -57,8 +57,6 @@ void HelloVulkan::setup(const VkInstance& instance, const VkDevice& device, cons
 //
 void HelloVulkan::updateUniformBuffer(const VkCommandBuffer& cmdBuf)
 {
-	// Prepare new UBO contents on host.
-	const float    aspectRatio = m_size.width / static_cast<float>(m_size.height);
 	GlobalUniforms hostUBO = {};
 	const auto& view = camera->getViewMatrix();
 	glm::mat4      proj = camera->getProjectionMatrix();
@@ -683,8 +681,6 @@ void HelloVulkan::updateTLAS(int instance_id)
 	m_tlas[instance_id] = rayInst;
 
 	m_rtBuilder.buildTlas(m_tlas, VK_BUILD_ACCELERATION_STRUCTURE_ALLOW_UPDATE_BIT_KHR | VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR, true);
-
-	std::cout << "Updating TLAS" << std::endl;
 }
 
 void HelloVulkan::createRtDescriptorSet()

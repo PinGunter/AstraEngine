@@ -20,7 +20,7 @@ namespace Astra {
 		glm::mat4 viewMatrix{ 1.0f };
 	};
 
-	class CameraController {
+	class CameraController : public Node3D {
 	protected:
 		Camera& _camera;
 		float _sens = 0.001f;
@@ -28,13 +28,15 @@ namespace Astra {
 	public:
 		CameraController(Camera& cam);
 		virtual void mouseMovement(float x, float y) = 0;
-		void update(/* renderpipeline */);
+		void updateCamera();
 		void setSens(float s) { _sens = s; }
 		float getSens() const { return _sens; }
 		void setWindowSize(uint32_t w, uint32_t h) { _width = w, _height = h; }
 		glm::mat4 getViewMatrix() const;
 		glm::mat4 getProjectionMatrix() const;
 		void setLookAt(const glm::vec3& eye, const glm::vec3& center, const glm::vec3& up);
+
+		void update(/* renderpipeline */) override;
 	};
 
 	class FPSCameraController : public CameraController {

@@ -254,6 +254,12 @@ int main(int argc, char** argv)
 			if (ImGui::Checkbox("Visible: ", &instances[currentModel].getVisible())) helloVk.updateTLAS(currentModel);
 			ImGui::Checkbox("ShowGuizmo: ", &showGuizmo);
 
+			for (int i = 0; i < 4; i++) {
+				for (int j = 0; j < 4; j++) {
+					ImGui::Text(std::to_string(instances[currentModel].getTransform()[j][i]).c_str()); ImGui::SameLine();
+				}
+				ImGui::Spacing();
+			}
 
 			ImGui::Text("Guizmo Type:");
 			ImGui::RadioButton("Universal", &guizmo_type, (int)ImGuizmo::UNIVERSAL);
@@ -270,6 +276,7 @@ int main(int argc, char** argv)
 			if (ImGuizmo::IsUsing()) {
 				helloVk.updateTLAS(currentModel);
 			}
+
 
 
 			ImGui::ShowDemoWindow();
