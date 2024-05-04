@@ -66,6 +66,7 @@ Astra::OrbitCameraController::OrbitCameraController(Camera& cam) : CameraControl
 void Astra::OrbitCameraController::orbit(float x, float y)
 {
 	// rotating around Y axis
+	_transform = glm::mat4(1.0f);
 	rotate(glm::vec3(0, 1, 0), x * 0.01);
 
 	//// rotation around X axis (needs to be clamped)
@@ -73,7 +74,7 @@ void Astra::OrbitCameraController::orbit(float x, float y)
 	//glm::extractEulerAngleXYZ(_transform, rotation[0], rotation[1], rotation[2]);
 
 	// establishing new position from rotation
-	auto newpos = _transform * glm::vec4(5.0f, 5.0f, 5.0f, 0.0f);
+	auto newpos = _transform * glm::vec4(_camera.eye, 0.0f);
 	_transform[3] = newpos;
 	updateCamera();
 
