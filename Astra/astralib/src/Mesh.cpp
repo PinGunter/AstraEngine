@@ -9,6 +9,11 @@ void Astra::MeshInstance::setVisible(bool v)
 	this->_visible = v;
 }
 
+void Astra::MeshInstance::setBLAS(const vk::AccelerationStructureKHR & blas)
+{
+	_blas = blas;
+}
+
 bool Astra::MeshInstance::getVisible() const
 {
 	return _visible;
@@ -17,6 +22,11 @@ bool Astra::MeshInstance::getVisible() const
 bool& Astra::MeshInstance::getVisible()
 {
 	return _visible;
+}
+
+vk::AccelerationStructureKHR Astra::MeshInstance::getBLAS() const
+{
+	return _blas;
 }
 
 uint32_t Astra::MeshInstance::getMeshIndex() const

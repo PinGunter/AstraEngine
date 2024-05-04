@@ -11,13 +11,16 @@ namespace Astra {
 	*/
 	class Node3D {
 	protected:
-		static uint32_t _n_nodes;
+		static uint32_t NodeCount;
 		glm::mat4 _transform;
 		std::vector<Node3D*> _children;
 		std::string _name;
+		uint32_t _id;
 
 	public:
 		Node3D(const glm::mat4& transform = glm::mat4(1.0f), const std::string& name = "");
+
+		bool operator==(const Node3D& other);
 
 		// TRANSFORM OPERATIONS
 
@@ -36,6 +39,8 @@ namespace Astra {
 
 		std::string& getName();
 		std::string getName() const;
+
+		uint32_t getID() const;
 
 		// SETTERS
 		void setName(const std::string& n) { _name = n; }
