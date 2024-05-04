@@ -167,12 +167,12 @@ void HelloVulkan::createGraphicsPipeline()
 	gpb.depthStencilState.depthTestEnable = true;
 	gpb.addShader(nvh::loadFile("spv/vert_shader.vert.spv", true, paths, true), VK_SHADER_STAGE_VERTEX_BIT);
 	gpb.addShader(nvh::loadFile("spv/frag_shader.frag.spv", true, paths, true), VK_SHADER_STAGE_FRAGMENT_BIT);
-	gpb.addBindingDescription({ 0, sizeof(VertexObj) });
+	gpb.addBindingDescription({ 0, sizeof(Vertex) });
 	gpb.addAttributeDescriptions({
-		{0, 0, VK_FORMAT_R32G32B32_SFLOAT, static_cast<uint32_t>(offsetof(VertexObj, pos))},
-		{1, 0, VK_FORMAT_R32G32B32_SFLOAT, static_cast<uint32_t>(offsetof(VertexObj, nrm))},
-		{2, 0, VK_FORMAT_R32G32B32_SFLOAT, static_cast<uint32_t>(offsetof(VertexObj, color))},
-		{3, 0, VK_FORMAT_R32G32_SFLOAT, static_cast<uint32_t>(offsetof(VertexObj, texCoord))},
+		{0, 0, VK_FORMAT_R32G32B32_SFLOAT, static_cast<uint32_t>(offsetof(Vertex, pos))},
+		{1, 0, VK_FORMAT_R32G32B32_SFLOAT, static_cast<uint32_t>(offsetof(Vertex, nrm))},
+		{2, 0, VK_FORMAT_R32G32B32_SFLOAT, static_cast<uint32_t>(offsetof(Vertex, color))},
+		{3, 0, VK_FORMAT_R32G32_SFLOAT, static_cast<uint32_t>(offsetof(Vertex, texCoord))},
 		});
 
 	m_graphicsPipeline = gpb.createPipeline();
@@ -196,7 +196,15 @@ void HelloVulkan::loadModel(const std::string& filename, const glm::mat4& transf
 		m.specular = glm::pow(m.specular, glm::vec3(2.2f));
 	}
 
-	Astra::Mesh model;
+	// TODO when having correct toVulkanMesh
+	//Astra::Mesh mesh;
+	//mesh.indices = loader.m_indices;
+	//mesh.vertices = loader.m_vertices;
+	//mesh.materials = loader.m_materials;
+	//mesh.materialIndices = loader.m_matIndx;
+	//mesh.textures = loader.m_textures;
+
+	Astra::VulkanMesh model;
 	model.nbIndices = static_cast<uint32_t>(loader.m_indices.size());
 	model.nbVertices = static_cast<uint32_t>(loader.m_vertices.size());
 
@@ -215,11 +223,6 @@ void HelloVulkan::loadModel(const std::string& filename, const glm::mat4& transf
 	cmdBufGet.submitAndWait(cmdBuf);
 	m_alloc.finalizeAndReleaseStaging();
 
-	std::string objNb = std::to_string(m_objModel.size());
-	m_debug.setObjectName(model.vertexBuffer.buffer, (std::string("vertex_" + objNb)));
-	m_debug.setObjectName(model.indexBuffer.buffer, (std::string("index_" + objNb)));
-	m_debug.setObjectName(model.matColorBuffer.buffer, (std::string("mat_" + objNb)));
-	m_debug.setObjectName(model.matIndexBuffer.buffer, (std::string("matIdx_" + objNb)));
 
 	// Keeping transformation matrix of the instance
 	Astra::MeshInstance instance(static_cast<uint32_t>(m_objModel.size()), transform, filename.substr(filename.size() - 10, filename.size()));
@@ -596,7 +599,7 @@ void HelloVulkan::initRayTracing()
 	m_rtBuilder.setup(m_device, &m_alloc, m_graphicsQueueIndex);
 }
 
-auto HelloVulkan::objectToVkGeometryKHR(const Astra::Mesh& model)
+auto HelloVulkan::objectToVkGeometryKHR(const Astra::VulkanMesh& model)
 {
 	// BLAS builder requires raw device addresses.
 	VkDeviceAddress vertexAddress = nvvk::getBufferDeviceAddress(m_device, model.vertexBuffer.buffer);
@@ -608,7 +611,7 @@ auto HelloVulkan::objectToVkGeometryKHR(const Astra::Mesh& model)
 	VkAccelerationStructureGeometryTrianglesDataKHR triangles{ VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR };
 	triangles.vertexFormat = VK_FORMAT_R32G32B32_SFLOAT;  // vec3 vertex position data.
 	triangles.vertexData.deviceAddress = vertexAddress;
-	triangles.vertexStride = sizeof(VertexObj);
+	triangles.vertexStride = sizeof(Vertex);
 	// Describe index data (32-bit unsigned int)
 	triangles.indexType = VK_INDEX_TYPE_UINT32;
 	triangles.indexData.deviceAddress = indexAddress;

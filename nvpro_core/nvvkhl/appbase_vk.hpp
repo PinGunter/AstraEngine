@@ -372,7 +372,6 @@ protected:
 
 
   Astra::CameraController* camera;
-  float                    last_x, last_y;
 };
 
 

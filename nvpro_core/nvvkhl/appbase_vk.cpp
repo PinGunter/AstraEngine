@@ -629,7 +629,24 @@ void nvvkhl::AppBaseVk::updateCamera()
   if(ImGui::GetCurrentContext() != nullptr && ImGui::GetIO().WantCaptureKeyboard)
     return;
 
-  camera->mouseMovement(ImGui::GetIO().MouseDelta.x, 0);
+  if(ImGui::IsMouseDown(ImGuiMouseButton_Right))
+  {
+    if(ImGui::IsKeyDown(ImGuiKey_LeftCtrl))
+    {
+      ((Astra::OrbitCameraController*)camera)->zoom(ImGui::GetIO().MouseDelta.y);
+    }
+    else
+    {
+      ((Astra::OrbitCameraController*)camera)->orbit(ImGui::GetIO().MouseDelta.x, ImGui::GetIO().MouseDelta.y);
+    }
+  }
+
+  if(ImGui::IsMouseDown(ImGuiMouseButton_Middle))
+    ((Astra::OrbitCameraController*)camera)->pan(ImGui::GetIO().MouseDelta.x, ImGui::GetIO().MouseDelta.y);
+
+  ((Astra::OrbitCameraController*)camera)->zoom(ImGui::GetIO().MouseWheel * 10);
+
+
   // For all pressed keys - apply the action
   /* CameraManip.keyMotion(0, 0, nvh::CameraManipulator::NoAction);
 

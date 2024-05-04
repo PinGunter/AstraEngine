@@ -65,7 +65,7 @@ public:
 
 
 	// Array of objects and instances in the scene
-	std::vector<Astra::Mesh>    m_objModel;   // Model on host
+	std::vector<Astra::VulkanMesh>    m_objModel;   // Model on host
 	std::vector<ObjDesc>     m_objDesc;    // Model description for device access
 	std::vector<Astra::MeshInstance> m_instances;  // Scene model instances
 
@@ -110,7 +110,7 @@ public:
 
 	// # RayTracing
 	void initRayTracing();
-	auto objectToVkGeometryKHR(const Astra::Mesh& model);
+	auto objectToVkGeometryKHR(const Astra::VulkanMesh& model);
 	void createBottomLevelAS();
 	void createTopLevelAS();
 	void updateTLAS(int instance_id);

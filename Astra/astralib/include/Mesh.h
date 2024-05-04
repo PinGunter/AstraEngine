@@ -2,13 +2,31 @@
 #include <Node3D.h>
 #include <string>
 #include "nvvk/resourceallocator_vk.hpp"
-
+#include <host_device.h>
+#include <vector>
+#include <nvvk/commands_vk.hpp>
 namespace Astra {
+
+	/**
+		Represents a mesh in host memory, easy to manipulate and create
+		Has method to change to vulkan mesh, in gpu memory
+	*/
+	struct Mesh {
+		std::vector<uint32_t> indices;
+		std::vector<Vertex> vertices;
+		std::vector<WaveFrontMaterial> materials;
+		std::vector<int32_t> materialIndices;
+		std::vector<std::string> textures;
+
+		// TODO should be in future device/app class
+		/*VulkanMesh toVulkanMesh() {
+		}*/
+	};
 	/**
 	* Struct that stores the neccesary information for vulkan for a mesh
 	* It has to be created within an App since it needs connection to the vulkan device
 	*/
-	struct Mesh {
+	struct VulkanMesh {
 		uint32_t     nbIndices{ 0 };
 		uint32_t     nbVertices{ 0 };
 		nvvk::Buffer vertexBuffer;    // Device buffer of all 'Vertex'
@@ -23,7 +41,7 @@ namespace Astra {
 	class MeshInstance : public Node3D {
 	protected:
 		bool _visible{ true };
-		uint32_t _mesh; // index reference to mesh in the app
+		uint32_t _mesh; // index reference to mesh in the app, to a **VULKAN MESH**
 	public:
 		/**
 		* Constructor, takes mesh reference, name and transform for the instance

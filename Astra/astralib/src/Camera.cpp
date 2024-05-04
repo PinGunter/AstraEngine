@@ -1,5 +1,5 @@
 #include <Camera.h>
-#include <glm/gtx/rotate_vector.hpp>
+#include <glm/gtx/euler_angles.hpp>
 #include <iostream>
 
 Astra::CameraController::CameraController(Camera& cam) : _camera(cam)
@@ -63,11 +63,37 @@ Astra::OrbitCameraController::OrbitCameraController(Camera& cam) : CameraControl
 {
 }
 
-void Astra::OrbitCameraController::mouseMovement(float x, float y)
+void Astra::OrbitCameraController::orbit(float x, float y)
 {
+	// rotating around Y axis
 	rotate(glm::vec3(0, 1, 0), x * 0.01);
+
+	//// rotation around X axis (needs to be clamped)
+	//float rotation[3];
+	//glm::extractEulerAngleXYZ(_transform, rotation[0], rotation[1], rotation[2]);
+
+	// establishing new position from rotation
 	auto newpos = _transform * glm::vec4(5.0f, 5.0f, 5.0f, 0.0f);
 	_transform[3] = newpos;
+	updateCamera();
+
+}
+
+void Astra::OrbitCameraController::zoom(float increment)
+{
+	_camera._fov = glm::clamp(_camera._fov + increment * 0.1f, 10.0f, 170.0f);
+}
+
+void Astra::OrbitCameraController::pan(float x, float y)
+{
+	if (x) {
+		glm::vec3 direction = glm::normalize(_camera.centre - _camera.eye);
+		_camera.centre += (glm::normalize(glm::cross(direction, _camera.up)) * x * 0.01f);
+	}
+
+	if (y) {
+		_camera.centre += (_camera.up * y * 0.01f);
+	}
 	updateCamera();
 
 }

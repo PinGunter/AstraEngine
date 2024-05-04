@@ -26,7 +26,7 @@ _add_project_definitions(${PROJNAME})
 file(GLOB SOURCE_FILES src/*.cpp include/*.h include/*.hpp)
 file(GLOB EXTRA_COMMON ${ASTRA_DIR}/common/*.*)
 list(APPEND COMMON_SOURCE_FILES ${EXTRA_COMMON})
-include_directories(include/)
+include_directories(include/ shaders/)
 include_directories(${ASTRA_DIR}/common include)
 
 

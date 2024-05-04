@@ -27,7 +27,6 @@ namespace Astra {
 		uint32_t _width, _height;
 	public:
 		CameraController(Camera& cam);
-		virtual void mouseMovement(float x, float y) = 0;
 		void updateCamera();
 		void setSens(float s) { _sens = s; }
 		float getSens() const { return _sens; }
@@ -42,13 +41,15 @@ namespace Astra {
 	class FPSCameraController : public CameraController {
 	public:
 		FPSCameraController(Camera& cam);
-		void mouseMovement(float x, float y) override;
+		void mouseMovement(float x, float y);
 		void move(float qty);
 	};
 
 	class OrbitCameraController : public CameraController {
 	public:
 		OrbitCameraController(Camera& cam);
-		void mouseMovement(float x, float y) override;
+		void orbit(float x, float y);
+		void zoom(float increment);
+		void pan(float x, float y);
 	};
 }

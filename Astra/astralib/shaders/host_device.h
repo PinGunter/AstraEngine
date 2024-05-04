@@ -91,7 +91,7 @@ struct PushConstantRay
 	int   lightType;
 };
 
-struct Vertex  // See ObjLoader, copy of VertexObj, could be compressed for device
+struct Vertex
 {
 	vec3 pos;
 	vec3 nrm;
@@ -99,7 +99,7 @@ struct Vertex  // See ObjLoader, copy of VertexObj, could be compressed for devi
 	vec2 texCoord;
 };
 
-struct WaveFrontMaterial  // See ObjLoader, copy of MaterialObj, could be compressed for device
+struct WaveFrontMaterial
 {
 	vec3  ambient;
 	vec3  diffuse;
