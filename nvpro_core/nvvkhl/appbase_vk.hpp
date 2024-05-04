@@ -313,7 +313,7 @@ public:
   VkCommandPool                       getCommandPool() { return m_cmdPool; }
   VkRenderPass                        getRenderPass() { return m_renderPass; }
   VkExtent2D                          getSize() { return m_size; }
-  VkPipelineCache                     getPipelineCache() { return m_pipelineCache; }
+  //VkPipelineCache                     getPipelineCache() { return m_pipelineCache; }
   VkSurfaceKHR                        getSurface() { return m_surface; }
   const std::vector<VkFramebuffer>&   getFramebuffers() { return m_framebuffers; }
   const std::vector<VkCommandBuffer>& getCommandBuffers() { return m_commandBuffers; }
@@ -352,7 +352,7 @@ protected:
   VkImageView                  m_depthView{VK_NULL_HANDLE};      // Depth/Stencil
   VkRenderPass                 m_renderPass{VK_NULL_HANDLE};     // Base render pass
   VkExtent2D                   m_size{0, 0};                     // Size of the window
-  VkPipelineCache              m_pipelineCache{VK_NULL_HANDLE};  // Cache for pipeline/shaders
+  //VkPipelineCache              m_pipelineCache{VK_NULL_HANDLE};  // Cache for pipeline/shaders
   bool                         m_vsync{false};                   // Swapchain with vsync
   bool                         m_useNvlink{false};               // NVLINK usage
   GLFWwindow*                  m_window{nullptr};                // GLFW Window

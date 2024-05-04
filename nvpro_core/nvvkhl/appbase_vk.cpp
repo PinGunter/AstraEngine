@@ -62,8 +62,9 @@ void nvvkhl::AppBaseVk::setup(const VkInstance& instance, const VkDevice& device
   poolCreateInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
   vkCreateCommandPool(m_device, &poolCreateInfo, nullptr, &m_cmdPool);
 
-  VkPipelineCacheCreateInfo pipelineCacheInfo{VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO};
-  vkCreatePipelineCache(m_device, &pipelineCacheInfo, nullptr, &m_pipelineCache);
+  // TODO maybe important?
+  //VkPipelineCacheCreateInfo pipelineCacheInfo{VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO};
+  //vkCreatePipelineCache(m_device, &pipelineCacheInfo, nullptr, &m_pipelineCache);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -89,7 +90,7 @@ void nvvkhl::AppBaseVk::destroy()
   vkDestroyImageView(m_device, m_depthView, nullptr);
   vkDestroyImage(m_device, m_depthImage, nullptr);
   vkFreeMemory(m_device, m_depthMemory, nullptr);
-  vkDestroyPipelineCache(m_device, m_pipelineCache, nullptr);
+  //vkDestroyPipelineCache(m_device, m_pipelineCache, nullptr);
 
   for(uint32_t i = 0; i < m_swapChain.getImageCount(); i++)
   {

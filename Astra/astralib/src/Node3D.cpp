@@ -19,6 +19,24 @@ bool Astra::Node3D::operator==(const Node3D& other)
 	return _id == other._id;
 }
 
+void Astra::Node3D::addChild(Node3D* child)
+{
+	_children.push_back(child);
+}
+
+void Astra::Node3D::removeChild(const Node3D& child)
+{
+	auto eraser = _children.begin();
+	bool found = false;
+	for (auto it = _children.begin(); it != _children.end() && !found; ++it) {
+		if (*(*it) == child) {
+			eraser = it;
+			found = true;
+		}
+	}
+	if (found)	_children.erase(eraser);
+}
+
 void Node3D::rotate(const glm::vec3& axis, const float& angle) {
 	_transform = glm::rotate(_transform, angle, axis);
 }

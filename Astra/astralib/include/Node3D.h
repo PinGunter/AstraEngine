@@ -22,6 +22,9 @@ namespace Astra {
 
 		bool operator==(const Node3D& other);
 
+		void addChild(Node3D* child);
+		void removeChild(const Node3D& child);
+
 		// TRANSFORM OPERATIONS
 
 		void rotate(const glm::vec3& axis, const float& angle);
