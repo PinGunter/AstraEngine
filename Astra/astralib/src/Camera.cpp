@@ -150,71 +150,18 @@ Astra::OrbitCameraController::OrbitCameraController(Camera& cam) : CameraControl
 
 void Astra::OrbitCameraController::orbit(float dx, float dy)
 {
-	//y *= -1;
-	//float current_rotation[3];
-	//glm::extractEulerAngleXYZ(_transform, current_rotation[0], current_rotation[1], current_rotation[2]);
-	//std::cout << "Rotation: " << current_rotation[0] << " - " << current_rotation[1] << " - " << current_rotation[2] << std::endl;
-	//
-	//_transform = glm::mat4(1.0f);
-
-	//// rotating around Y axis
-	//rotate(glm::vec3(0, 1, 0), x * 0.01);
-
-	////// rotation around X axis (needs to be clamped)
-	///*float verticalRotation = rotationX;
-	//float giro = verticalRotation;
-	//verticalRotation = verticalRotation + y * 0.01f;
-	//verticalRotation = glm::clamp(verticalRotation, minXRotation, maxXRotation);
-	//giro = verticalRotation - giro;
-	//rotationX += giro;*/
-	//rotate(glm::vec3(1, 0, 0), y * 0.01);
-	////if (y != 0) {
-	////	std::cout << "Current Rotation: " << current_rotation[0] << std::endl;
-	////	std::cout << "Rotation to apply: " << giro << std::endl;
-	////	std::cout << "Y input: " << y << std::endl;
-	////}
-
-	//// establishing new position from rotation
-	//auto newpos = _transform * glm::vec4(_camera.eye - _camera.centre, 1.0f);
-	//_transform[3] = newpos;
-	//updateCamera();
-
-
-	//glm::mat4 TR = glm::transpose(glm::translate(glm::mat4(1.0f), _camera._centre));
-	//glm::mat4 TRI = glm::transpose(glm::translate(glm::mat4(1.0f), -_camera._centre));
-	//glm::mat4 R;
-	//glm::mat4 T;
-
-
-	//R = glm::rotate(glm::mat4(1.0f), glm::radians(y*0.5f), glm::normalize(glm::cross(_camera._up, _camera._centre - _camera._eye)));
-	//T = TR * R;
-	//T = T * TRI;
-	//_transform = T * _transform;
-
-	//R = glm::transpose((glm::rotate(glm::mat4(1.0f), glm::radians(x * 0.5f), glm::vec3(0.0, 1.0, 0.0))));
-	//T = TR * R;
-	//T = T * TRI;
-	//_transform = T * _transform;
-
-	//
-	//updateCamera();
 
 	if (dx == 0 && dy == 0)
 		return;
 
-	// Full width will do a full turn
-	dx *= _sens;// * glm::two_pi<float>();
-	dy *= _sens;// *glm::two_pi<float>();
-
-	// Get the camera
-	glm::vec3 origin (_camera._centre);
-	glm::vec3 position(_camera._eye);
+	dx *= _sens;
+	dy *= _sens;
 
 	// Get the length of sight
-	glm::vec3 centerToEye(position - origin);
+	glm::vec3 centerToEye(_camera._eye - _camera._centre);
 	float     radius = glm::length(centerToEye);
 	centerToEye = glm::normalize(centerToEye);
-	glm::vec3 axe_z = centerToEye;
+	glm::vec3 direction = centerToEye;
 
 	// Find the rotation around the UP axis (Y)
 	glm::mat4 rot_y = glm::rotate(glm::mat4(1), -dx, _camera._up);
@@ -223,7 +170,7 @@ void Astra::OrbitCameraController::orbit(float dx, float dy)
 	centerToEye = rot_y * glm::vec4(centerToEye, 0);
 
 	// Find the rotation around the X vector: cross between eye-center and up (X)
-	glm::vec3 axe_x = glm::normalize(glm::cross(_camera._up, axe_z));
+	glm::vec3 axe_x = glm::normalize(glm::cross(_camera._up, direction));
 	glm::mat4 rot_x = glm::rotate(glm::mat4(1), -dy, axe_x);
 
 	// Apply the (X) rotation to the eye-center vector
@@ -236,7 +183,7 @@ void Astra::OrbitCameraController::orbit(float dx, float dy)
 	centerToEye *= radius;
 
 	// Finding the new position
-	glm::vec3 newPosition = centerToEye + origin;
+	glm::vec3 newPosition = centerToEye + _camera._centre;
 	
 	_camera._eye = newPosition; 
 
@@ -252,15 +199,11 @@ void Astra::OrbitCameraController::zoom(float increment)
 
 void Astra::OrbitCameraController::pan(float dx, float dy)
 {
+	glm::vec3 direction = glm::normalize(_camera._eye - _camera._centre);
+	glm::vec3 horizontal = glm::normalize(glm::cross(_camera._up, direction));
+	glm::vec3 vertical = glm::normalize(glm::cross(direction, horizontal));
 
-	glm::vec3 z(_camera._eye - _camera._centre);
-	z = glm::normalize(z);
-	glm::vec3 x = glm::cross(_camera._up, z);
-	glm::vec3 y = glm::cross(z, x);
-	x = glm::normalize(x);
-	y = glm::normalize(y);
-
-	glm::vec3 panVector = (-dx * _sens * x + dy * y * _sens);
+	glm::vec3 panVector = (_sens * ( - dx * horizontal + dy * vertical));
 	_camera._eye += panVector;
 	_camera._centre += panVector;
 
