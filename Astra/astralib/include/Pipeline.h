@@ -18,10 +18,10 @@ namespace Astra {
 	private:
 		VkPipelineLayout _layout;
 		VkPipeline _pipeline;
-		std::vector<PushConstantCreateInfo> pushConsts;
-		std::vector<DescriptorSets> descSets;
+		PushConstantCreateInfo _pushConsts;
+		std::vector<DescriptorSets> _descSets;
 
-		void createLayout(const std::vector<PushConstantCreateInfo>& pushConstants, const std::vector<DescriptorSets>& descriptorSets);
+		void createLayout(const PushConstantCreateInfo& pushConstants, const std::vector<DescriptorSets>& descriptorSets);
 		virtual void createPipeline() = 0; // raytracing/raster pipelines will define their creation
 	public:
 		virtual bool doesRayTracing() = 0;
