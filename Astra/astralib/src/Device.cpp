@@ -7,8 +7,8 @@ namespace Astra {
 	// if the struct has any non-empty array we assume that it is and advanced
 	// user and will provide every extensions or instance layer needed
 
-	Device::Device(DeviceCreateInfo createInfo, GLFWwindow * window) {
-		
+	Device::Device(DeviceCreateInfo createInfo, GLFWwindow* window) {
+
 		// fill createInfo with default values if empty
 		if (createInfo.instanceLayers.empty()) {
 			if (createInfo.debug) {
@@ -66,13 +66,13 @@ namespace Astra {
 
 		// getting the surface
 		_window = window;
-		
+
 		VkSurfaceKHR surface{};
 		if (glfwCreateWindowSurface(_instance, _window, nullptr, &surface) != VK_SUCCESS) {
 			throw std::runtime_error("Error creating window surface");
 		}
 		_surface = surface;
-		
+
 		// will throw exception if not supported
 		VkBool32 supported;
 		vkGetPhysicalDeviceSurfaceSupportKHR(_physicalDevice, _graphicsQueueIndex, _surface, &supported);
@@ -80,7 +80,7 @@ namespace Astra {
 			throw std::runtime_error("Error, device does not support presenting");
 		}
 
-		VkCommandPoolCreateInfo poolCreateInfo{VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO};
+		VkCommandPoolCreateInfo poolCreateInfo{ VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO };
 		poolCreateInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 		vkCreateCommandPool(_device, &poolCreateInfo, nullptr, &_cmdPool);
 	}

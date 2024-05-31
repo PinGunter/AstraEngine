@@ -29,6 +29,10 @@ namespace Astra {
 		VkCommandPool _cmdPool;
 
 	public:
-		Device(DeviceCreateInfo createInfo, GLFWwindow * window);
+		Device(DeviceCreateInfo createInfo, GLFWwindow* window);
+
+		VkCommandBuffer createCmdBuf();
+
+		VkShaderModule createShaderModule(const std::string& file);
 	};
 }
