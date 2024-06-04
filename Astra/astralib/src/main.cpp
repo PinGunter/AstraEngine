@@ -197,8 +197,8 @@ int main(int argc, char** argv)
 	helloVk.createBottomLevelAS();
 	helloVk.createTopLevelAS();
 	helloVk.createRtDescriptorSet();
-	//helloVk.createRtPipeline();
-	//helloVk.createRtShaderBindingTable();
+	helloVk.createRtPipeline();
+	helloVk.createRtShaderBindingTable();
 
 	helloVk.createPostDescriptor();
 	helloVk.createPostPipeline();

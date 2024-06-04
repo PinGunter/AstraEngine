@@ -10,7 +10,7 @@ namespace Astra {
 
 	public:
 		inline virtual bool doesRayTracing() = 0;
-		void bind(const VkCommandBuffer& cmdBuf, const std::vector<VkDescriptorSet> & descsets);
+		virtual void bind(const VkCommandBuffer& cmdBuf, const std::vector<VkDescriptorSet> & descsets);
 		void pushConstants(const VkCommandBuffer& cmdBuf, uint32_t shaderStages, uint32_t size, void* data);
 		void destroy(VkDevice vkdev);
 		VkPipeline getPipeline();
@@ -33,7 +33,7 @@ namespace Astra {
 		
 
 	public:
-		// the rt pipeline doesnt need the renderpass
+		void bind(const VkCommandBuffer& cmdBuf, const std::vector<VkDescriptorSet>& descsets) override;
 		void createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsetsLayouts);
 		inline bool doesRayTracing() override {
 			return true;

@@ -299,15 +299,3 @@ Loading File:  C:/Users/pingu/AstraEngine/bin_x64/Debug/../../Astra/astralib/../
 Loading File:  C:/Users/pingu/AstraEngine/bin_x64/Debug/../../Astra/astralib/../media/scenes/Medieval_Building.obj 
 Loading File:  C:/Users/pingu/AstraEngine/bin_x64/Debug/../../Astra/astralib/../media/scenes/plane.obj 
 Loading File:  C:/Users/pingu/AstraEngine/bin_x64/Debug/../../Astra/astralib/../media/scenes/vaca.obj 
-ERROR: VUID-vkDestroyPipelineLayout-pipelineLayout-parameter 
- --> Validation Error: [ VUID-vkDestroyPipelineLayout-pipelineLayout-parameter ] Object 0: handle = 0x1db5b6c5ee0, type = VK_OBJECT_TYPE_INSTANCE; | MessageID = 0x3456cf9c | vkDestroyPipelineLayout(): pipelineLayout Invalid VkPipelineLayout Object 0xcccccccccccccccc. The Vulkan spec states: If pipelineLayout is not VK_NULL_HANDLE, pipelineLayout must be a valid VkPipelineLayout handle (https://vulkan.lunarg.com/doc/view/1.3.280.0/windows/1.3-extensions/vkspec.html#VUID-vkDestroyPipelineLayout-pipelineLayout-parameter)
-ERROR: UNASSIGNED-Threading-Info 
- --> Validation Error: [ UNASSIGNED-Threading-Info ] Object 0: handle = 0xcccccccccccccccc, type = VK_OBJECT_TYPE_PIPELINE_LAYOUT; | MessageID = 0x5d6b67e2 | vkDestroyPipelineLayout():  Couldn't find VkPipelineLayout Object 0xcccccccccccccccc. This should not happen and may indicate a bug in the application.
-ERROR: UNASSIGNED-Threading-Info 
- --> Validation Error: [ UNASSIGNED-Threading-Info ] Object 0: handle = 0xcccccccccccccccc, type = VK_OBJECT_TYPE_PIPELINE_LAYOUT; | MessageID = 0x5d6b67e2 | vkDestroyPipelineLayout():  Couldn't find VkPipelineLayout Object 0xcccccccccccccccc. This should not happen and may indicate a bug in the application.
-ERROR: VUID-vkDestroyPipeline-pipeline-parameter 
- --> Validation Error: [ VUID-vkDestroyPipeline-pipeline-parameter ] Object 0: handle = 0x1db5b6c5ee0, type = VK_OBJECT_TYPE_INSTANCE; | MessageID = 0xaeb3d1a6 | vkDestroyPipeline(): pipeline Invalid VkPipeline Object 0xcccccccccccccccc. The Vulkan spec states: If pipeline is not VK_NULL_HANDLE, pipeline must be a valid VkPipeline handle (https://vulkan.lunarg.com/doc/view/1.3.280.0/windows/1.3-extensions/vkspec.html#VUID-vkDestroyPipeline-pipeline-parameter)
-ERROR: UNASSIGNED-Threading-Info 
- --> Validation Error: [ UNASSIGNED-Threading-Info ] Object 0: handle = 0xcccccccccccccccc, type = VK_OBJECT_TYPE_PIPELINE; | MessageID = 0x5d6b67e2 | vkDestroyPipeline():  Couldn't find VkPipeline Object 0xcccccccccccccccc. This should not happen and may indicate a bug in the application.
-ERROR: UNASSIGNED-Threading-Info 
- --> Validation Error: [ UNASSIGNED-Threading-Info ] Object 0: handle = 0xcccccccccccccccc, type = VK_OBJECT_TYPE_PIPELINE; | MessageID = 0x5d6b67e2 | vkDestroyPipeline():  Couldn't find VkPipeline Object 0xcccccccccccccccc. This should not happen and may indicate a bug in the application.

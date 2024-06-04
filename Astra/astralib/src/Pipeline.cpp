@@ -59,7 +59,7 @@ void Astra::RayTracingPipeline::createPipeline(VkDevice vkdev, const std::vector
 	stage.pName = "main";
 
 	// raygen
-	stage.module = nvvk::createShaderModule(vkdev, nvh::loadFile("spv/raytrace.rmiss.spv", true, defaultSearchPaths, true));
+	stage.module = nvvk::createShaderModule(vkdev, nvh::loadFile("spv/raytrace.rgen.spv", true, defaultSearchPaths, true));
 	stage.stage = VK_SHADER_STAGE_RAYGEN_BIT_KHR;
 	stages[eRaygen] = stage;
 
@@ -144,6 +144,14 @@ void Astra::RayTracingPipeline::createPipeline(VkDevice vkdev, const std::vector
 	for (auto& s : stages) {
 		vkDestroyShaderModule(vkdev, s.module, nullptr);
 	}
+}
+
+void Astra::RayTracingPipeline::bind(const VkCommandBuffer& cmdBuf, const std::vector<VkDescriptorSet>& descsets)
+{
+	vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR, _pipeline);
+	vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR, _layout, 0,
+		static_cast<uint32_t>(descsets.size()), descsets.data(),
+		0, nullptr);
 }
 
 void Astra::OffscreenRaster::createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsetsLayouts, VkRenderPass rp)
