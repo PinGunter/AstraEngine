@@ -224,4 +224,90 @@ VK_EXT_scalar_block_layout (v. 1)
 VK_EXT_separate_stencil_usage (v. 1)
 VK_EXT_shader_atomic_float (v. 1)
 VK_EXT_shader_demote_to_helper_invocation (v. 1)
-VK_EXT_shader_image_atom
+VK_EXT_shader_image_atomic_int64 (v. 1)
+VK_EXT_shader_module_identifier (v. 1)
+VK_EXT_shader_object (v. 1)
+VK_EXT_shader_subgroup_ballot (v. 1)
+VK_EXT_shader_subgroup_vote (v. 1)
+VK_EXT_shader_viewport_index_layer (v. 1)
+VK_EXT_subgroup_size_control (v. 2)
+VK_EXT_swapchain_maintenance1 (v. 1)
+VK_EXT_texel_buffer_alignment (v. 1)
+VK_EXT_tooling_info (v. 1)
+VK_EXT_transform_feedback (v. 1)
+VK_EXT_vertex_attribute_divisor (v. 3)
+VK_EXT_vertex_input_dynamic_state (v. 2)
+VK_EXT_ycbcr_2plane_444_formats (v. 1)
+VK_EXT_ycbcr_image_arrays (v. 1)
+VK_NV_acquire_winrt_display (v. 1)
+VK_NV_clip_space_w_scaling (v. 1)
+VK_NV_compute_shader_derivatives (v. 1)
+VK_NV_cooperative_matrix (v. 1)
+VK_NV_copy_memory_indirect (v. 1)
+VK_NV_corner_sampled_image (v. 2)
+VK_NV_coverage_reduction_mode (v. 1)
+VK_NV_cuda_kernel_launch (v. 2)
+VK_NV_dedicated_allocation (v. 1)
+VK_NV_dedicated_allocation_image_aliasing (v. 1)
+VK_NV_descriptor_pool_overallocation (v. 1)
+VK_NV_device_diagnostic_checkpoints (v. 2)
+VK_NV_device_diagnostics_config (v. 2)
+VK_NV_device_generated_commands (v. 3)
+VK_NV_device_generated_commands_compute (v. 2)
+VK_NV_external_memory (v. 1)
+VK_NV_external_memory_win32 (v. 1)
+VK_NV_fill_rectangle (v. 1)
+VK_NV_fragment_coverage_to_color (v. 1)
+VK_NV_fragment_shader_barycentric (v. 1)
+VK_NV_fragment_shading_rate_enums (v. 1)
+VK_NV_framebuffer_mixed_samples (v. 1)
+VK_NV_geometry_shader_passthrough (v. 1)
+VK_NV_inherited_viewport_scissor (v. 1)
+VK_NV_linear_color_attachment (v. 1)
+VK_NV_low_latency (v. 1)
+VK_NV_low_latency2 (v. 2)
+VK_NV_memory_decompression (v. 1)
+VK_NV_mesh_shader (v. 1)
+VK_NV_optical_flow (v. 1)
+VK_NV_ray_tracing (v. 3)
+VK_NV_ray_tracing_invocation_reorder (v. 1)
+VK_NV_ray_tracing_motion_blur (v. 1)
+VK_NV_representative_fragment_test (v. 2)
+VK_NV_sample_mask_override_coverage (v. 1)
+VK_NV_scissor_exclusive (v. 2)
+VK_NV_shader_image_footprint (v. 2)
+VK_NV_shader_sm_builtins (v. 1)
+VK_NV_shader_subgroup_partitioned (v. 1)
+VK_NV_shading_rate_image (v. 3)
+VK_NV_viewport_array2 (v. 1)
+VK_NV_viewport_swizzle (v. 1)
+VK_NV_win32_keyed_mutex (v. 2)
+VK_NVX_binary_import (v. 1)
+VK_NVX_image_view_handle (v. 2)
+VK_NVX_multiview_per_view_attributes (v. 1)
+VK_AMD_buffer_marker (v. 1)
+________________________
+Used Device Extensions :
+VK_KHR_swapchain
+VK_KHR_shader_non_semantic_info
+VK_KHR_acceleration_structure
+VK_KHR_ray_tracing_pipeline
+VK_KHR_deferred_host_operations
+
+Loading File:  C:/Users/pingu/AstraEngine/bin_x64/Debug/../../Astra/astralib/../media/scenes/cube_multi.obj 
+Loading File:  C:/Users/pingu/AstraEngine/bin_x64/Debug/../../Astra/astralib/../media/scenes/mono.obj 
+Loading File:  C:/Users/pingu/AstraEngine/bin_x64/Debug/../../Astra/astralib/../media/scenes/Medieval_Building.obj 
+Loading File:  C:/Users/pingu/AstraEngine/bin_x64/Debug/../../Astra/astralib/../media/scenes/plane.obj 
+Loading File:  C:/Users/pingu/AstraEngine/bin_x64/Debug/../../Astra/astralib/../media/scenes/vaca.obj 
+ERROR: VUID-vkDestroyPipelineLayout-pipelineLayout-parameter 
+ --> Validation Error: [ VUID-vkDestroyPipelineLayout-pipelineLayout-parameter ] Object 0: handle = 0x1db5b6c5ee0, type = VK_OBJECT_TYPE_INSTANCE; | MessageID = 0x3456cf9c | vkDestroyPipelineLayout(): pipelineLayout Invalid VkPipelineLayout Object 0xcccccccccccccccc. The Vulkan spec states: If pipelineLayout is not VK_NULL_HANDLE, pipelineLayout must be a valid VkPipelineLayout handle (https://vulkan.lunarg.com/doc/view/1.3.280.0/windows/1.3-extensions/vkspec.html#VUID-vkDestroyPipelineLayout-pipelineLayout-parameter)
+ERROR: UNASSIGNED-Threading-Info 
+ --> Validation Error: [ UNASSIGNED-Threading-Info ] Object 0: handle = 0xcccccccccccccccc, type = VK_OBJECT_TYPE_PIPELINE_LAYOUT; | MessageID = 0x5d6b67e2 | vkDestroyPipelineLayout():  Couldn't find VkPipelineLayout Object 0xcccccccccccccccc. This should not happen and may indicate a bug in the application.
+ERROR: UNASSIGNED-Threading-Info 
+ --> Validation Error: [ UNASSIGNED-Threading-Info ] Object 0: handle = 0xcccccccccccccccc, type = VK_OBJECT_TYPE_PIPELINE_LAYOUT; | MessageID = 0x5d6b67e2 | vkDestroyPipelineLayout():  Couldn't find VkPipelineLayout Object 0xcccccccccccccccc. This should not happen and may indicate a bug in the application.
+ERROR: VUID-vkDestroyPipeline-pipeline-parameter 
+ --> Validation Error: [ VUID-vkDestroyPipeline-pipeline-parameter ] Object 0: handle = 0x1db5b6c5ee0, type = VK_OBJECT_TYPE_INSTANCE; | MessageID = 0xaeb3d1a6 | vkDestroyPipeline(): pipeline Invalid VkPipeline Object 0xcccccccccccccccc. The Vulkan spec states: If pipeline is not VK_NULL_HANDLE, pipeline must be a valid VkPipeline handle (https://vulkan.lunarg.com/doc/view/1.3.280.0/windows/1.3-extensions/vkspec.html#VUID-vkDestroyPipeline-pipeline-parameter)
+ERROR: UNASSIGNED-Threading-Info 
+ --> Validation Error: [ UNASSIGNED-Threading-Info ] Object 0: handle = 0xcccccccccccccccc, type = VK_OBJECT_TYPE_PIPELINE; | MessageID = 0x5d6b67e2 | vkDestroyPipeline():  Couldn't find VkPipeline Object 0xcccccccccccccccc. This should not happen and may indicate a bug in the application.
+ERROR: UNASSIGNED-Threading-Info 
+ --> Validation Error: [ UNASSIGNED-Threading-Info ] Object 0: handle = 0xcccccccccccccccc, type = VK_OBJECT_TYPE_PIPELINE; | MessageID = 0x5d6b67e2 | vkDestroyPipeline():  Couldn't find VkPipeline Object 0xcccccccccccccccc. This should not happen and may indicate a bug in the application.

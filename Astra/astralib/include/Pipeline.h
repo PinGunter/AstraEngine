@@ -9,7 +9,6 @@ namespace Astra {
 		VkPipeline _pipeline;
 
 	public:
-		virtual void createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout> & descsetsLayouts) = 0; // raytracing/raster pipelines will define their creation
 		inline virtual bool doesRayTracing() = 0;
 		void bind(const VkCommandBuffer& cmdBuf, const std::vector<VkDescriptorSet> & descsets);
 		void pushConstants(const VkCommandBuffer& cmdBuf, uint32_t shaderStages, uint32_t size, void* data);
@@ -21,8 +20,7 @@ namespace Astra {
 	class RasterPipeline : public Pipeline {
 	private:
 	public:
-		void createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsetsLayouts) override {};
-		void createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsetsLayouts, VkRenderPass rp);
+		virtual void createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsetsLayouts, VkRenderPass rp) = 0;
 		inline bool doesRayTracing() override {
 			return false;
 		};
@@ -35,9 +33,20 @@ namespace Astra {
 		
 
 	public:
-		void createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsetsLayouts) override;
+		// the rt pipeline doesnt need the renderpass
+		void createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsetsLayouts);
 		inline bool doesRayTracing() override {
 			return true;
 		};
+	};
+
+	class OffscreenRaster : public RasterPipeline {
+	public:
+		void createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsetsLayouts, VkRenderPass rp) override;
+	};
+
+	class PostPipeline : public RasterPipeline {
+	public:
+		void createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsetsLayouts, VkRenderPass rp) override;
 	};
 }

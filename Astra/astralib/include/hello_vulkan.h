@@ -72,7 +72,7 @@ public:
 
 
 	// Graphic pipeline
-	Astra::RasterPipeline _graphicsPipeline;
+	Astra::OffscreenRaster _graphicsPipeline;
 	//VkPipelineLayout            m_pipelineLayout;
 	//VkPipeline                  m_graphicsPipeline;
 	nvvk::DescriptorSetBindings m_descSetLayoutBind;
@@ -101,8 +101,9 @@ public:
 	VkDescriptorPool            m_postDescPool{ VK_NULL_HANDLE };
 	VkDescriptorSetLayout       m_postDescSetLayout{ VK_NULL_HANDLE };
 	VkDescriptorSet             m_postDescSet{ VK_NULL_HANDLE };
-	VkPipeline                  m_postPipeline{ VK_NULL_HANDLE };
-	VkPipelineLayout            m_postPipelineLayout{ VK_NULL_HANDLE };
+	Astra::PostPipeline _postPipeline;
+	//VkPipeline                  m_postPipeline{ VK_NULL_HANDLE };
+	//VkPipelineLayout            m_postPipelineLayout{ VK_NULL_HANDLE };
 	VkRenderPass                m_offscreenRenderPass{ VK_NULL_HANDLE };
 	VkFramebuffer               m_offscreenFramebuffer{ VK_NULL_HANDLE };
 	nvvk::Texture               m_offscreenColor;

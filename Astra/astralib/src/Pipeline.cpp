@@ -36,42 +36,6 @@ VkPipelineLayout Astra::Pipeline::getLayout()
 	return _layout;
 }
 
-void Astra::RasterPipeline::createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsets, VkRenderPass rp)
-{
-	std::vector<std::string> defaultSearchPaths = {
-		NVPSystem::exePath() + PROJECT_RELDIRECTORY,
-		NVPSystem::exePath() + PROJECT_RELDIRECTORY "..",
-		std::string(PROJECT_NAME),
-	};
-
-	VkPushConstantRange pushConstantRanges = { VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(PushConstantRaster) };
-
-	// Creating the Pipeline Layout
-	VkPipelineLayoutCreateInfo createInfo{ VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO };
-	createInfo.setLayoutCount = 1;
-	createInfo.pSetLayouts = descsets.data();
-	createInfo.pushConstantRangeCount = 1;
-	createInfo.pPushConstantRanges = &pushConstantRanges;
-	vkCreatePipelineLayout(vkdev, &createInfo, nullptr, &_layout);
-
-
-	// Creating the Pipeline
-	std::vector<std::string>                paths = defaultSearchPaths;
-	nvvk::GraphicsPipelineGeneratorCombined gpb(vkdev, _layout, rp);
-	gpb.depthStencilState.depthTestEnable = true;
-	gpb.addShader(nvh::loadFile("spv/vert_shader.vert.spv", true, paths, true), VK_SHADER_STAGE_VERTEX_BIT);
-	gpb.addShader(nvh::loadFile("spv/frag_shader.frag.spv", true, paths, true), VK_SHADER_STAGE_FRAGMENT_BIT);
-	gpb.addBindingDescription({ 0, sizeof(Vertex) });
-	gpb.addAttributeDescriptions({
-		{0, 0, VK_FORMAT_R32G32B32_SFLOAT, static_cast<uint32_t>(offsetof(Vertex, pos))},
-		{1, 0, VK_FORMAT_R32G32B32_SFLOAT, static_cast<uint32_t>(offsetof(Vertex, nrm))},
-		{2, 0, VK_FORMAT_R32G32B32_SFLOAT, static_cast<uint32_t>(offsetof(Vertex, color))},
-		{3, 0, VK_FORMAT_R32G32_SFLOAT, static_cast<uint32_t>(offsetof(Vertex, texCoord))},
-		});
-
-	_pipeline = gpb.createPipeline();
-}
-
 void Astra::RayTracingPipeline::createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsets)
 {
 
@@ -180,4 +144,68 @@ void Astra::RayTracingPipeline::createPipeline(VkDevice vkdev, const std::vector
 	for (auto& s : stages) {
 		vkDestroyShaderModule(vkdev, s.module, nullptr);
 	}
+}
+
+void Astra::OffscreenRaster::createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsetsLayouts, VkRenderPass rp)
+{
+	std::vector<std::string> defaultSearchPaths = {
+		NVPSystem::exePath() + PROJECT_RELDIRECTORY,
+		NVPSystem::exePath() + PROJECT_RELDIRECTORY "..",
+		std::string(PROJECT_NAME),
+	};
+
+	VkPushConstantRange pushConstantRanges = { VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(PushConstantRaster) };
+
+	// Creating the Pipeline Layout
+	VkPipelineLayoutCreateInfo createInfo{ VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO };
+	createInfo.setLayoutCount = 1;
+	createInfo.pSetLayouts = descsetsLayouts.data();
+	createInfo.pushConstantRangeCount = 1;
+	createInfo.pPushConstantRanges = &pushConstantRanges;
+	vkCreatePipelineLayout(vkdev, &createInfo, nullptr, &_layout);
+
+
+	// Creating the Pipeline
+	std::vector<std::string>                paths = defaultSearchPaths;
+	nvvk::GraphicsPipelineGeneratorCombined gpb(vkdev, _layout, rp);
+	gpb.depthStencilState.depthTestEnable = true;
+	gpb.addShader(nvh::loadFile("spv/vert_shader.vert.spv", true, paths, true), VK_SHADER_STAGE_VERTEX_BIT);
+	gpb.addShader(nvh::loadFile("spv/frag_shader.frag.spv", true, paths, true), VK_SHADER_STAGE_FRAGMENT_BIT);
+	gpb.addBindingDescription({ 0, sizeof(Vertex) });
+	gpb.addAttributeDescriptions({
+		{0, 0, VK_FORMAT_R32G32B32_SFLOAT, static_cast<uint32_t>(offsetof(Vertex, pos))},
+		{1, 0, VK_FORMAT_R32G32B32_SFLOAT, static_cast<uint32_t>(offsetof(Vertex, nrm))},
+		{2, 0, VK_FORMAT_R32G32B32_SFLOAT, static_cast<uint32_t>(offsetof(Vertex, color))},
+		{3, 0, VK_FORMAT_R32G32_SFLOAT, static_cast<uint32_t>(offsetof(Vertex, texCoord))},
+		});
+
+	_pipeline = gpb.createPipeline();
+}
+
+void Astra::PostPipeline::createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsetsLayouts, VkRenderPass rp)
+{
+	std::vector<std::string> defaultSearchPaths = {
+		NVPSystem::exePath() + PROJECT_RELDIRECTORY,
+		NVPSystem::exePath() + PROJECT_RELDIRECTORY "..",
+		std::string(PROJECT_NAME),
+	};
+
+	// Push constants in the fragment shader
+	VkPushConstantRange pushConstantRanges = { VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(float) };
+
+	// Creating the pipeline layout
+	VkPipelineLayoutCreateInfo createInfo{ VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO };
+	createInfo.setLayoutCount = 1;
+	createInfo.pSetLayouts = descsetsLayouts.data();
+	createInfo.pushConstantRangeCount = 1;
+	createInfo.pPushConstantRanges = &pushConstantRanges;
+	vkCreatePipelineLayout(vkdev, &createInfo, nullptr, &_layout);
+
+
+	// Pipeline: completely generic, no vertices
+	nvvk::GraphicsPipelineGeneratorCombined pipelineGenerator(vkdev, _layout, rp);
+	pipelineGenerator.addShader(nvh::loadFile("spv/passthrough.vert.spv", true, defaultSearchPaths, true), VK_SHADER_STAGE_VERTEX_BIT);
+	pipelineGenerator.addShader(nvh::loadFile("spv/post.frag.spv", true, defaultSearchPaths, true), VK_SHADER_STAGE_FRAGMENT_BIT);
+	pipelineGenerator.rasterizationState.cullMode = VK_CULL_MODE_NONE;
+	_pipeline = pipelineGenerator.createPipeline();
 }

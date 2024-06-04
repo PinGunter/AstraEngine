@@ -375,8 +375,9 @@ void HelloVulkan::destroyResources()
 	//#Post
 	m_alloc.destroy(m_offscreenColor);
 	m_alloc.destroy(m_offscreenDepth);
-	vkDestroyPipeline(m_device, m_postPipeline, nullptr);
-	vkDestroyPipelineLayout(m_device, m_postPipelineLayout, nullptr);
+	_postPipeline.destroy(m_device);
+	//vkDestroyPipeline(m_device, m_postPipeline, nullptr);
+	//vkDestroyPipelineLayout(m_device, m_postPipelineLayout, nullptr);
 	vkDestroyDescriptorPool(m_device, m_postDescPool, nullptr);
 	vkDestroyDescriptorSetLayout(m_device, m_postDescSetLayout, nullptr);
 	vkDestroyRenderPass(m_device, m_offscreenRenderPass, nullptr);
@@ -530,25 +531,26 @@ void HelloVulkan::createOffscreenRender()
 //
 void HelloVulkan::createPostPipeline()
 {
-	// Push constants in the fragment shader
-	VkPushConstantRange pushConstantRanges = { VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(float) };
+	//// Push constants in the fragment shader
+	//VkPushConstantRange pushConstantRanges = { VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(float) };
 
-	// Creating the pipeline layout
-	VkPipelineLayoutCreateInfo createInfo{ VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO };
-	createInfo.setLayoutCount = 1;
-	createInfo.pSetLayouts = &m_postDescSetLayout;
-	createInfo.pushConstantRangeCount = 1;
-	createInfo.pPushConstantRanges = &pushConstantRanges;
-	vkCreatePipelineLayout(m_device, &createInfo, nullptr, &m_postPipelineLayout);
+	//// Creating the pipeline layout
+	//VkPipelineLayoutCreateInfo createInfo{ VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO };
+	//createInfo.setLayoutCount = 1;
+	//createInfo.pSetLayouts = &m_postDescSetLayout;
+	//createInfo.pushConstantRangeCount = 1;
+	//createInfo.pPushConstantRanges = &pushConstantRanges;
+	//vkCreatePipelineLayout(m_device, &createInfo, nullptr, &m_postPipelineLayout);
 
 
-	// Pipeline: completely generic, no vertices
-	nvvk::GraphicsPipelineGeneratorCombined pipelineGenerator(m_device, m_postPipelineLayout, m_renderPass);
-	pipelineGenerator.addShader(nvh::loadFile("spv/passthrough.vert.spv", true, defaultSearchPaths, true), VK_SHADER_STAGE_VERTEX_BIT);
-	pipelineGenerator.addShader(nvh::loadFile("spv/post.frag.spv", true, defaultSearchPaths, true), VK_SHADER_STAGE_FRAGMENT_BIT);
-	pipelineGenerator.rasterizationState.cullMode = VK_CULL_MODE_NONE;
-	m_postPipeline = pipelineGenerator.createPipeline();
-	m_debug.setObjectName(m_postPipeline, "post");
+	//// Pipeline: completely generic, no vertices
+	//nvvk::GraphicsPipelineGeneratorCombined pipelineGenerator(m_device, m_postPipelineLayout, m_renderPass);
+	//pipelineGenerator.addShader(nvh::loadFile("spv/passthrough.vert.spv", true, defaultSearchPaths, true), VK_SHADER_STAGE_VERTEX_BIT);
+	//pipelineGenerator.addShader(nvh::loadFile("spv/post.frag.spv", true, defaultSearchPaths, true), VK_SHADER_STAGE_FRAGMENT_BIT);
+	//pipelineGenerator.rasterizationState.cullMode = VK_CULL_MODE_NONE;
+	//m_postPipeline = pipelineGenerator.createPipeline();
+	//m_debug.setObjectName(m_postPipeline, "post");
+	_postPipeline.createPipeline(m_device, { m_postDescSetLayout }, m_renderPass);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -583,9 +585,11 @@ void HelloVulkan::drawPost(VkCommandBuffer cmdBuf)
 	setViewport(cmdBuf);
 
 	auto aspectRatio = static_cast<float>(m_size.width) / static_cast<float>(m_size.height);
-	vkCmdPushConstants(cmdBuf, m_postPipelineLayout, VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(float), &aspectRatio);
-	vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, m_postPipeline);
-	vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, m_postPipelineLayout, 0, 1, &m_postDescSet, 0, nullptr);
+	//vkCmdPushConstants(cmdBuf, m_postPipelineLayout, VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(float), &aspectRatio);
+	//vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, m_postPipeline);
+	//vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, m_postPipelineLayout, 0, 1, &m_postDescSet, 0, nullptr);
+	_postPipeline.pushConstants(cmdBuf, VK_SHADER_STAGE_FRAGMENT_BIT, sizeof(float), &aspectRatio);
+	_postPipeline.bind(cmdBuf, { m_postDescSet });
 	vkCmdDraw(cmdBuf, 3, 1, 0, 0);
 
 
