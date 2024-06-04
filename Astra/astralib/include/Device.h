@@ -3,6 +3,9 @@
 #include <GLFW/glfw3.h>
 #include <vector>
 #include <string>
+#include <Singleton.h>
+#include <nvvk/resourceallocator_vk.hpp>
+#include <nvvk/debug_util_vk.hpp>
 
 namespace Astra {
 
@@ -17,10 +20,10 @@ namespace Astra {
 		uint32_t vkVersionMinor{ 3 };
 	};
 
-	class Device {
+	class Device{
 	private:
 		VkInstance _instance;
-		VkDevice _device;
+		VkDevice _vkdevice;
 		VkSurfaceKHR _surface;
 		GLFWwindow* _window;
 		VkPhysicalDevice _physicalDevice;
@@ -28,11 +31,36 @@ namespace Astra {
 		uint32_t _graphicsQueueIndex;
 		VkCommandPool _cmdPool;
 
+		nvvk::ResourceAllocatorDma _alloc; 
+		nvvk::DebugUtil            _debug;
+
+		Device() {}
+		~Device() {
+			// quizas encargarse de eliminar recursos
+			// o en app quizas
+		}
 	public:
-		Device(DeviceCreateInfo createInfo, GLFWwindow* window);
+
+		static Device& getInstance() {
+			static Device instance;
+			return instance;
+		}
+
+		Device(const Device&) = delete;
+		Device& operator=(const Device&) = delete;
+
+		VkInstance getVkInstance() const;
+		VkDevice getVkDevice() const;
+		VkSurfaceKHR getSurface() const;
+		VkPhysicalDevice getPhysicalDevice() const;
+		VkQueue getQueue() const;
+		uint32_t getGraphicsQueueIndex() const;
+		VkCommandPool getCommandPool() const;
+
+		void initDevice(DeviceCreateInfo createInfo, GLFWwindow* window);
 
 		VkCommandBuffer createCmdBuf();
 
-		VkShaderModule createShaderModule(const std::string& file);
+		VkShaderModule createShaderModule(const std::vector<char>& file);
 	};
 }

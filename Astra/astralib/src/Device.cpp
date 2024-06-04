@@ -7,7 +7,7 @@ namespace Astra {
 	// if the struct has any non-empty array we assume that it is and advanced
 	// user and will provide every extensions or instance layer needed
 
-	Device::Device(DeviceCreateInfo createInfo, GLFWwindow* window) {
+	void Device::initDevice(DeviceCreateInfo createInfo, GLFWwindow* window) {
 
 		// fill createInfo with default values if empty
 		if (createInfo.instanceLayers.empty()) {
@@ -50,19 +50,25 @@ namespace Astra {
 		}
 
 		nvvk::Context vkctx{};
-		vkctx.initInstance(contextInfo);
+		if (!vkctx.initInstance(contextInfo)) {
+			throw std::runtime_error("Error creating instance!");
+		}
+
 		auto compatibleDevices = vkctx.getCompatibleDevices(contextInfo);
 		if (compatibleDevices.empty()) {
 			throw std::runtime_error("No valid GPU was found");
 		}
-		vkctx.initDevice(compatibleDevices[0], contextInfo);
+
+		if (!vkctx.initDevice(compatibleDevices[0], contextInfo)) {
+			throw std::runtime_error("Error initiating device!");
+		}
 
 		// filling the data
 		_instance = vkctx.m_instance;
-		_device = vkctx.m_device;
+		_vkdevice = vkctx.m_device;
 		_physicalDevice = vkctx.m_physicalDevice;
 		_graphicsQueueIndex = vkctx.m_queueGCT.familyIndex;
-		vkGetDeviceQueue(_device, _graphicsQueueIndex, 0, &_queue);
+		vkGetDeviceQueue(_vkdevice, _graphicsQueueIndex, 0, &_queue);
 
 		// getting the surface
 		_window = window;
@@ -82,6 +88,60 @@ namespace Astra {
 
 		VkCommandPoolCreateInfo poolCreateInfo{ VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO };
 		poolCreateInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-		vkCreateCommandPool(_device, &poolCreateInfo, nullptr, &_cmdPool);
+		vkCreateCommandPool(_vkdevice, &poolCreateInfo, nullptr, &_cmdPool);
+
+		_alloc.init(_instance, _vkdevice, _physicalDevice);
+		_debug.setup(_vkdevice);
 	}
+
+	VkShaderModule Device::createShaderModule(const std::vector<char>& code)
+	{
+		VkShaderModuleCreateInfo createInfo = {};
+		createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+		createInfo.flags = {};
+		createInfo.codeSize = code.size();
+		createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
+
+		VkShaderModule shaderModule = VK_NULL_HANDLE;
+		if (vkCreateShaderModule(_vkdevice, &createInfo, nullptr, &shaderModule) != VK_SUCCESS)
+		{
+			throw std::runtime_error("Error creating shader module");
+		}
+
+		return shaderModule;
+	}
+	
+	VkInstance Device::getVkInstance() const
+	{
+		return _instance;
+	}
+	
+	VkDevice Device::getVkDevice() const
+	{
+		return _vkdevice;
+	}
+	VkSurfaceKHR Device::getSurface() const
+	{
+		return _surface;
+	}
+	
+	VkPhysicalDevice Device::getPhysicalDevice() const
+	{
+		return _physicalDevice;
+	}
+
+	VkQueue Device::getQueue() const
+	{
+		return _queue;
+	}
+
+	uint32_t Device::getGraphicsQueueIndex() const 
+	{
+		return _graphicsQueueIndex;
+	}
+	VkCommandPool Device::getCommandPool() const
+	{
+		return _cmdPool;
+	}
+
 }

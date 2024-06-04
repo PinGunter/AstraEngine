@@ -28,6 +28,7 @@
 #include "nvvk/raytraceKHR_vk.hpp"
 #include "glm/gtc/quaternion.hpp"
 #include <Mesh.h>
+#include <Pipeline.h>
  //--------------------------------------------------------------------------------------------------
  // Simple rasterizer of OBJ objects
  // - Each OBJ loaded are stored in an `ObjModel` and referenced by a `ObjInstance`
@@ -71,8 +72,9 @@ public:
 
 
 	// Graphic pipeline
-	VkPipelineLayout            m_pipelineLayout;
-	VkPipeline                  m_graphicsPipeline;
+	Astra::RasterPipeline _graphicsPipeline;
+	//VkPipelineLayout            m_pipelineLayout;
+	//VkPipeline                  m_graphicsPipeline;
 	nvvk::DescriptorSetBindings m_descSetLayoutBind;
 	VkDescriptorPool            m_descPool;
 	VkDescriptorSetLayout       m_descSetLayout;
@@ -128,8 +130,8 @@ public:
 	VkDescriptorSetLayout m_rtDescSetLayout;
 	VkDescriptorSet m_rtDescSet;
 	std::vector<VkRayTracingShaderGroupCreateInfoKHR> m_rtShaderGroups;
-	VkPipelineLayout m_rtPipelineLayout;
-	VkPipeline m_rtPipeline;
+	//VkPipelineLayout m_rtPipelineLayout;
+	//VkPipeline m_rtPipeline;
 	PushConstantRay m_pcRay{};
 	std::vector<VkAccelerationStructureInstanceKHR> m_tlas;
 	nvvk::Buffer m_rtSBTBuffer;
@@ -137,4 +139,6 @@ public:
 	VkStridedDeviceAddressRegionKHR m_missRegion{};
 	VkStridedDeviceAddressRegionKHR m_hitRegion{};
 	VkStridedDeviceAddressRegionKHR m_callRegion{};
+
+	Astra::RayTracingPipeline rtPipeline;
 };

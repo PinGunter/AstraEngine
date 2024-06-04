@@ -39,6 +39,10 @@
 #include <glm/gtx/matrix_decompose.hpp>
 #include <imgui/ImGuizmo.h>
 #include <iostream>
+#include <Device.h>
+#include <Utils.h>
+
+#include "nvvk/shaders_vk.hpp"
 
 //////////////////////////////////////////////////////////////////////////
 #define UNUSED(x) (void)(x)
@@ -91,6 +95,7 @@ int main(int argc, char** argv)
 	}
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 	GLFWwindow* window = glfwCreateWindow(SAMPLE_WIDTH, SAMPLE_HEIGHT, PROJECT_NAME, nullptr, nullptr);
+
 
 	Astra::Camera cam;
 	Astra::CameraController* camera = new Astra::OrbitCameraController(cam);
@@ -192,8 +197,8 @@ int main(int argc, char** argv)
 	helloVk.createBottomLevelAS();
 	helloVk.createTopLevelAS();
 	helloVk.createRtDescriptorSet();
-	helloVk.createRtPipeline();
-	helloVk.createRtShaderBindingTable();
+	//helloVk.createRtPipeline();
+	//helloVk.createRtShaderBindingTable();
 
 	helloVk.createPostDescriptor();
 	helloVk.createPostPipeline();
@@ -204,7 +209,7 @@ int main(int argc, char** argv)
 	helloVk.setupGlfwCallbacks(window);
 	ImGui_ImplGlfw_InitForVulkan(window, true);
 
-	bool useRaytracer = true;
+	bool useRaytracer = false;
 	bool showGuizmo = false;
 	int guizmo_type = ImGuizmo::UNIVERSAL;
 	bool text_edit = false;
