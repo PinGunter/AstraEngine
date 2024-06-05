@@ -55,7 +55,7 @@ namespace Astra {
 		void setFov(float f);
 
 
-		void update(/* renderpipeline */) override;
+		void update(VkCommandBuffer cmdBuff) override;
 	};
 
 	class FPSCameraController : public CameraController {

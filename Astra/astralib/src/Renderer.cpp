@@ -2,5 +2,8 @@
 
 void Astra::Renderer::render(const Scene& scene, Pipeline* pipeline)
 {
+	// create cmdBuffer
+	//pipeline->bind()
+
 
 }

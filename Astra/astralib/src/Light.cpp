@@ -17,13 +17,18 @@ void Astra::Light::setIntensity(float i) {
 	_intensity = i;	
 }
 
+Astra::LightType Astra::Light::getType() const
+{
+	return _type;
+}
+
 Astra::PointLight::PointLight(const glm::vec3& color, float intensity)
 {
 	_color = color;
 	_intensity = intensity;
 }
 
-void Astra::PointLight::update()
+void Astra::PointLight::update(VkCommandBuffer cmdBuff)
 {
 	// pass
 }
@@ -35,7 +40,7 @@ Astra::DirectionalLight::DirectionalLight(const glm::vec3& color, float intensit
 	_direction = direction;
 }
 
-void Astra::DirectionalLight::update()
+void Astra::DirectionalLight::update(VkCommandBuffer cmdBuff)
 {
 	// pass
 }

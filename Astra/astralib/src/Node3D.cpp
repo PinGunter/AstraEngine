@@ -1,6 +1,7 @@
 #include <Node3D.h>
 #include <random>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
 
 using namespace Astra;
 
@@ -47,6 +48,45 @@ void Node3D::scale(const glm::vec3& scaling) {
 
 void Node3D::translate(const glm::vec3& position) {
 	_transform = glm::translate(_transform, position);
+}
+
+glm::vec3 Astra::Node3D::getPosition()
+{
+	glm::vec3 scale;
+	glm::quat rotation;
+	glm::vec3 translation;
+	glm::vec3 skew;
+	glm::vec4 perspective;
+
+	glm::decompose(_transform, scale, rotation, translation, skew, perspective);
+
+	return translation;
+}
+
+glm::vec3 Astra::Node3D::getRotation()
+{
+	glm::vec3 scale;
+	glm::quat rotation;
+	glm::vec3 translation;
+	glm::vec3 skew;
+	glm::vec4 perspective;
+
+	glm::decompose(_transform, scale, rotation, translation, skew, perspective);
+
+	return glm::eulerAngles(rotation);
+}
+
+glm::vec3 Astra::Node3D::getScale()
+{
+	glm::vec3 scale;
+	glm::quat rotation;
+	glm::vec3 translation;
+	glm::vec3 skew;
+	glm::vec4 perspective;
+
+	glm::decompose(_transform, scale, rotation, translation, skew, perspective);
+
+	return scale;
 }
 
 std::string& Astra::Node3D::getName()

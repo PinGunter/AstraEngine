@@ -5,7 +5,7 @@
 #include <host_device.h>
 #include <vector>
 #include <nvvk/commands_vk.hpp>
-#include <vulkan/vulkan.hpp>
+#include <vulkan/vulkan.h>
 namespace Astra {
 
 	/**
@@ -43,7 +43,7 @@ namespace Astra {
 	protected:
 		bool _visible{ true };
 		uint32_t _mesh; // index reference to mesh in the app, to a **VULKAN MESH**
-		vk::AccelerationStructureKHR _blas;
+		VkAccelerationStructureKHR _blas;
 	public:
 		/**
 		* Constructor, takes mesh reference, name and transform for the instance
@@ -57,18 +57,18 @@ namespace Astra {
 
 		// SETTERS
 		void setVisible(bool v);
-		void setBLAS(const vk::AccelerationStructureKHR & blas);
+		void setBLAS(const VkAccelerationStructureKHR & blas);
 
 		// GETTERS
 		bool getVisible() const;
 
 		bool& getVisible();
 
-		vk::AccelerationStructureKHR getBLAS() const;
+		VkAccelerationStructureKHR getBLAS() const;
 
 		uint32_t getMeshIndex() const;
 
-		void update() override;
+		void update(VkCommandBuffer cmdBuff) override;
 
 	};
 }

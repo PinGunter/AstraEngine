@@ -2,6 +2,7 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include <string>
+#include <vulkan/vulkan.h>
 
 namespace Astra {
 
@@ -34,6 +35,10 @@ namespace Astra {
 		void translate(const glm::vec3& position);
 
 		// GETTERS
+		glm::vec3 getPosition();
+		glm::vec3 getRotation();
+		glm::vec3 getScale();
+
 		glm::mat4& getTransform() { return _transform; }
 
 		const glm::mat4& getTransform() const { return _transform; }
@@ -54,6 +59,6 @@ namespace Astra {
 		*/
 
 		// TODO: probably needs pipeline or render reference
-		virtual void update() = 0;
+		virtual void update(VkCommandBuffer cmdBuff) = 0;
 	};
 }

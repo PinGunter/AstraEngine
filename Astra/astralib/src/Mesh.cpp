@@ -9,7 +9,7 @@ void Astra::MeshInstance::setVisible(bool v)
 	this->_visible = v;
 }
 
-void Astra::MeshInstance::setBLAS(const vk::AccelerationStructureKHR & blas)
+void Astra::MeshInstance::setBLAS(const VkAccelerationStructureKHR & blas)
 {
 	_blas = blas;
 }
@@ -24,7 +24,7 @@ bool& Astra::MeshInstance::getVisible()
 	return _visible;
 }
 
-vk::AccelerationStructureKHR Astra::MeshInstance::getBLAS() const
+VkAccelerationStructureKHR Astra::MeshInstance::getBLAS() const
 {
 	return _blas;
 }
@@ -34,7 +34,7 @@ uint32_t Astra::MeshInstance::getMeshIndex() const
 	return _mesh;
 }
 
-void Astra::MeshInstance::update()
+void Astra::MeshInstance::update(VkCommandBuffer cmdBuff)
 {
 	// called for every frame
 }

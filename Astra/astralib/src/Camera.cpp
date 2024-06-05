@@ -123,7 +123,7 @@ void Astra::CameraController::setFov(float f)
 	_camera._fov = f;
 }
 
-void Astra::CameraController::update(/*render pipeline*/)
+void Astra::CameraController::update(VkCommandBuffer cmdBuff)
 {
 	// in the future a render pipeline will be passed so that we can update the render pipeline's camera info
 	updateCamera();
