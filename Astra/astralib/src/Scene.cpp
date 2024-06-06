@@ -52,6 +52,11 @@ VkAccelerationStructureKHR Astra::Scene::getTLAS() const
 	return _tlas;
 }
 
+std::vector<Astra::Node3D*>& Astra::Scene::getNodes()
+{
+	return _nodes;
+}
+
 glm::mat4& Astra::Scene::getTransform()
 {
 	return _transform;

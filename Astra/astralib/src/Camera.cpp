@@ -2,6 +2,7 @@
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/gtx/euler_angles.hpp>
 #include <iostream>
+#include <host_device.h>
 
 Astra::CameraController::CameraController(Camera& cam) : _camera(cam)
 {
@@ -25,12 +26,12 @@ void Astra::CameraController::updateCamera(bool from_transform)
 	_camera.viewMatrix = glm::lookAt(_camera._eye, _camera._centre, _camera._up);
 }
 
-glm::mat4 Astra::CameraController::getViewMatrix() const
+const glm::mat4 & Astra::CameraController::getViewMatrix() const
 {
 	return _camera.viewMatrix;
 }
 
-glm::mat4 Astra::CameraController::getProjectionMatrix() const
+const glm::mat4& Astra::CameraController::getProjectionMatrix() const
 {
 	assert(_height != 0.0 && _width != 0.0);
 	float aspectRatio = _width / static_cast<float>(_height);
@@ -125,8 +126,16 @@ void Astra::CameraController::setFov(float f)
 
 void Astra::CameraController::update(VkCommandBuffer cmdBuff)
 {
-	// in the future a render pipeline will be passed so that we can update the render pipeline's camera info
+	// update camera params
 	updateCamera();
+
+	GlobalUniforms hostUBO = {};
+	hostUBO.viewProj = getProjectionMatrix() * getViewMatrix();
+	hostUBO.viewInverse = glm::inverse(getViewMatrix());
+	hostUBO.projInverse = glm::inverse(getProjectionMatrix());
+
+	// UBO on device
+	VkBuffer deviceUBO = 
 }
 
 

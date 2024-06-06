@@ -23,6 +23,7 @@ namespace Astra {
 		Light* getLight() const;
 		CameraController* getCamera() const;
 		VkAccelerationStructureKHR getTLAS() const;
+		std::vector<Node3D*>& getNodes();
 		
 		glm::mat4& getTransform();
 	};

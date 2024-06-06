@@ -56,10 +56,13 @@ namespace Astra {
 		VkQueue getQueue() const;
 		uint32_t getGraphicsQueueIndex() const;
 		VkCommandPool getCommandPool() const;
+		GLFWwindow* getWindow();
 
-		void initDevice(DeviceCreateInfo createInfo, GLFWwindow* window);
+		void initDevice(DeviceCreateInfo createInfo);
 
 		VkCommandBuffer createCmdBuf();
+		VkCommandBuffer createTmpCmdBuf();
+		void submitTmbCmdBuf(VkCommandBuffer cmdBuff);
 
 		VkShaderModule createShaderModule(const std::vector<char>& file);
 	};

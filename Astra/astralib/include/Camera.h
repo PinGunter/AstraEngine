@@ -32,8 +32,8 @@ namespace Astra {
 		void setSens(float s) { _sens = s; }
 		float getSens() const { return _sens; }
 		void setWindowSize(uint32_t w, uint32_t h) { _width = w, _height = h; }
-		glm::mat4 getViewMatrix() const;
-		glm::mat4 getProjectionMatrix() const;
+		const glm::mat4& getViewMatrix() const;
+		const glm::mat4& getProjectionMatrix() const;
 		void setLookAt(const glm::vec3& eye, const glm::vec3& center, const glm::vec3& up);
 
 		float getNear() const;
