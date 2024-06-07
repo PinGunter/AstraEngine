@@ -20,6 +20,11 @@ void Astra::Scene::destroy() {
 	for (auto& t : _textures) {
 		alloc.destroy(t);
 	}
+
+	for (auto& m : _instances) {
+		m.destroy();
+	}
+
 }
 
 void Astra::Scene::addModel(const HostModel& model)
@@ -61,11 +66,6 @@ void Astra::Scene::setCamera(CameraController* c)
 	_camera = c;
 }
 
-void Astra::Scene::setTLAS(VkAccelerationStructureKHR tlas)
-{
-	_tlas = tlas;
-}
-
 Astra::Light* Astra::Scene::getLight() const
 {
 	return _light;
@@ -76,10 +76,6 @@ Astra::CameraController* Astra::Scene::getCamera() const
 	return _camera;
 }
 
-VkAccelerationStructureKHR Astra::Scene::getTLAS() const
-{
-	return _tlas;
-}
 
 const std::vector<Astra::MeshInstance>& Astra::Scene::getInstances() const
 {
@@ -124,4 +120,63 @@ void Astra::Scene::updatePushConstantRaster(PushConstantRaster& pc)
 void Astra::Scene::updatePushConstant(PushConstantRay& pc)
 {
 	// TODO, futurure
+}
+
+// rt scene
+
+void Astra::SceneRT::createBottomLevelAS()
+{
+	std::vector<nvvk::RaytracingBuilderKHR::BlasInput> allBlas;
+	allBlas.reserve(_objModels.size());
+
+	for (const auto& obj : _objModels) {
+		auto blas = Astra::Device::getInstance().objectToVkGeometry(obj);
+
+		allBlas.emplace_back(blas);
+	}
+
+	_rtBuilder.buildBlas(allBlas, VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR);
+}
+
+void Astra::SceneRT::createTopLevelAS()
+{
+	_asInstances.reserve(_instances.size());
+	for (const Astra::MeshInstance& inst : _instances) {
+		VkAccelerationStructureInstanceKHR rayInst{};
+		rayInst.transform = nvvk::toTransformMatrixKHR(inst.getTransform());
+		rayInst.instanceCustomIndex = inst.getMeshIndex(); //gl_InstanceCustomIndexEXT
+		rayInst.accelerationStructureReference = _rtBuilder.getBlasDeviceAddress(inst.getMeshIndex());
+		rayInst.flags = VK_GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_KHR;
+		rayInst.mask = 0xFF; // only be hit if raymask & instance.mask != 0
+		rayInst.instanceShaderBindingTableRecordOffset = 0; // the same hit group for all objects
+
+		_asInstances.emplace_back(rayInst);
+	}
+	_rtBuilder.buildTlas(_asInstances, VK_BUILD_ACCELERATION_STRUCTURE_ALLOW_UPDATE_BIT_KHR | VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR);
+}
+
+void Astra::SceneRT::updateTopLevelAS(int instance_id)
+{
+	const auto& inst = _instances[instance_id];
+	VkAccelerationStructureInstanceKHR rayInst{};
+	rayInst.transform = nvvk::toTransformMatrixKHR(inst.getTransform());
+	rayInst.instanceCustomIndex = inst.getMeshIndex(); //gl_InstanceCustomIndexEXT
+	rayInst.accelerationStructureReference = _rtBuilder.getBlasDeviceAddress(inst.getMeshIndex());
+	rayInst.flags = VK_GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_KHR;
+	rayInst.mask = inst.getVisible() ? 0xFF : 0x00; // only be hit if raymask & instance.mask != 0
+	rayInst.instanceShaderBindingTableRecordOffset = 0; // the same hit group for all objects
+	_asInstances[instance_id] = rayInst;
+
+	_rtBuilder.buildTlas(_asInstances, VK_BUILD_ACCELERATION_STRUCTURE_ALLOW_UPDATE_BIT_KHR | VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR, true);
+}
+
+VkAccelerationStructureKHR Astra::SceneRT::getTLAS() const
+{
+	return _rtBuilder.getAccelerationStructure();
+}
+
+void Astra::SceneRT::destroy()
+{
+	Scene::destroy();
+	_rtBuilder.destroy();
 }

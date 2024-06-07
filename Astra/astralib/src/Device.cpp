@@ -6,6 +6,7 @@
 #include <nvh/fileoperations.hpp>
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
+#include <nvvk/buffers_vk.hpp>
 
 constexpr auto SAMPLE_WIDTH = 1280;
 constexpr auto SAMPLE_HEIGHT = 720;
@@ -238,6 +239,47 @@ namespace Astra {
 		throw std::runtime_error("Unable to find memory type");
 	}
 
+	nvvk::RaytracingBuilderKHR::BlasInput Device::objectToVkGeometry(const Astra::HostModel& model)
+	{
+		// BLAS builder requires raw device addresses.
+		VkDeviceAddress vertexAddress = nvvk::getBufferDeviceAddress(_vkdevice, model.vertexBuffer.buffer);
+		VkDeviceAddress indexAddress = nvvk::getBufferDeviceAddress(_vkdevice, model.indexBuffer.buffer);
+
+		uint32_t maxPrimitiveCount = model.nbIndices / 3;
+
+		// Describe buffer as array of VertexObj.
+		VkAccelerationStructureGeometryTrianglesDataKHR triangles{ VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR };
+		triangles.vertexFormat = VK_FORMAT_R32G32B32_SFLOAT;  // vec3 vertex position data.
+		triangles.vertexData.deviceAddress = vertexAddress;
+		triangles.vertexStride = sizeof(Vertex);
+		// Describe index data (32-bit unsigned int)
+		triangles.indexType = VK_INDEX_TYPE_UINT32;
+		triangles.indexData.deviceAddress = indexAddress;
+		// Indicate identity transform by setting transformData to null device pointer.
+		//triangles.transformData = {};
+		triangles.maxVertex = model.nbVertices - 1;
+
+		// Identify the above data as containing opaque triangles.
+		VkAccelerationStructureGeometryKHR asGeom{ VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR };
+		asGeom.geometryType = VK_GEOMETRY_TYPE_TRIANGLES_KHR;
+		asGeom.flags = VK_GEOMETRY_OPAQUE_BIT_KHR;
+		asGeom.geometry.triangles = triangles;
+
+		// The entire array will be used to build the BLAS.
+		VkAccelerationStructureBuildRangeInfoKHR offset;
+		offset.firstVertex = 0;
+		offset.primitiveCount = maxPrimitiveCount;
+		offset.primitiveOffset = 0;
+		offset.transformOffset = 0;
+
+		// Our blas is made from only one geometry, but could be made of many geometries
+		nvvk::RaytracingBuilderKHR::BlasInput input;
+		input.asGeometry.emplace_back(asGeom);
+		input.asBuildOffsetInfo.emplace_back(offset);
+
+		return input;
+	}
+
 	void Device::createTextureImages(const VkCommandBuffer& cmdBuf, const std::vector<std::string>& new_textures, std::vector<nvvk::Texture>& textures)
 	{
 		VkSamplerCreateInfo samplerCreateInfo{ VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO };
@@ -313,5 +355,6 @@ namespace Astra {
 			}
 		}
 	}
+
 
 }

@@ -47,6 +47,8 @@ void Astra::Renderer::renderRaster(const VkCommandBuffer & cmdBuf, const Scene& 
 
 	// meshes
 
+	// scene.draw(renderingContext);
+	// TODO Rendering Context with all draw data needed
 	for (auto & inst : scene.getInstances()) {
 		// skip invisibles
 		if (inst.getVisible()) {
@@ -552,6 +554,10 @@ glm::vec4 Astra::Renderer::getClearColor() const
 void Astra::Renderer::setClearColor(const glm::vec4& color)
 {
 	_clearColor = color;
+}
+const nvvk::Texture& Astra::Renderer::getOffscreenColor() const
+{
+	return _offscreenColor;
 }
 //
 //void Astra::Renderer::initGUIRendering(Gui& gui)

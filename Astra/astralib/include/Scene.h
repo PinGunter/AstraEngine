@@ -4,7 +4,7 @@
 #include <Camera.h>
 #include <vulkan/vulkan.h>
 #include <nvvk/resourceallocator_vk.hpp>
-#include <App.h>
+#include <nvvk/raytraceKHR_vk.hpp>
 
 namespace Astra {
 	class Scene {
@@ -19,22 +19,19 @@ namespace Astra {
 
 		Light* _light; // multiple lights in the future
 		CameraController* _camera;
-		VkAccelerationStructureKHR _tlas;
 		glm::mat4 _transform;
 	public:
 		Scene();
-		void destroy();
-		void addModel(const HostModel& model);
-		void addInstance(const MeshInstance & instance);
-		void addObjDesc(const ObjDesc& objdesc);
-		void removeNode(const MeshInstance& n);
-		void addLight(Light* l);
-		void setCamera(CameraController* c);
-		void setTLAS(VkAccelerationStructureKHR tlas);
+		virtual void destroy();
+		virtual void addModel(const HostModel& model);
+		virtual void addInstance(const MeshInstance & instance);
+		virtual void addObjDesc(const ObjDesc& objdesc);
+		virtual void removeNode(const MeshInstance& n);
+		virtual void addLight(Light* l);
+		virtual void setCamera(CameraController* c);
 
 		Light* getLight() const;
 		CameraController* getCamera() const;
-		VkAccelerationStructureKHR getTLAS() const;
 
 		const std::vector<MeshInstance>& getInstances() const;
 		const std::vector<HostModel>& getModels() const;
@@ -46,7 +43,21 @@ namespace Astra {
 		const glm::mat4& getTransformRef() const;
 
 
-		void updatePushConstantRaster(PushConstantRaster& pc);
-		void updatePushConstant(PushConstantRay& pc);
+		virtual void updatePushConstantRaster(PushConstantRaster& pc);
+		virtual void updatePushConstant(PushConstantRay& pc);
+	};
+
+	class SceneRT : public Scene {
+	protected:
+		nvvk::RaytracingBuilderKHR _rtBuilder;
+		std::vector<VkAccelerationStructureInstanceKHR> _asInstances;
+
+		void createBottomLevelAS();
+		void createTopLevelAS();
+		void updateTopLevelAS(int instance_id);
+	public:
+		VkAccelerationStructureKHR getTLAS() const;
+		void destroy() override;
+
 	};
 }

@@ -6,12 +6,12 @@
 #include <GLFW/glfw3.h>
 
 namespace Astra {
+	class App;
 	// the default renderer uses an offscreen renderpass to a texture
 	// then renders that texture as a fullscreen triangle
 	// this allows us to mix raytracing and rasterization
 	// main use case is raytracing the scene and then rasterizing the ui
 	class Renderer {
-		friend class App;
 	protected:
 		// offscreen
 		VkRenderPass _offscreenRenderPass;
@@ -47,17 +47,13 @@ namespace Astra {
 		void renderRaster(const VkCommandBuffer& cmdBuf, const Scene& scene, RasterPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets);
 		void renderRaytrace(const VkCommandBuffer& cmdBuf, const Scene& scene, RayTracingPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets);
 
-		void createPostDescriptorSet();
-		void updatePostDescriptorSet();
+
 		void setViewport(const VkCommandBuffer& cmdBuf);
 		void createSwapchain(const VkSurfaceKHR& surface, uint32_t width, uint32_t height, VkFormat colorFormat, VkFormat depthFormat);
-		void createOffscreenRender();
 		void createRenderPass();
-		void createFrameBuffers();
-		void createDepthBuffer();
+
 		void resize(int w, int h);
 		void prepareFrame();
-		void requestSwapchainImage(int w, int h);
 		void endFrame();
 		void updateUBO(const VkCommandBuffer& cmdBuf, const GlobalUniforms& hostUbo);
 
@@ -70,8 +66,15 @@ namespace Astra {
 		glm::vec4 getClearColor() const;
 		void setClearColor(const glm::vec4& color);
 
+		const nvvk::Texture & getOffscreenColor() const;
 		//void initGUIRendering(Astra::Gui& gui);
 		
+		void requestSwapchainImage(int w, int h);
+		void createOffscreenRender();
+		void createPostDescriptorSet();
+		void updatePostDescriptorSet();
+		void createFrameBuffers();
+		void createDepthBuffer();
 
 	};
 }

@@ -45,7 +45,6 @@ namespace Astra {
 	protected:
 		bool _visible{ true };
 		uint32_t _mesh; // index reference to mesh in the app, to a **VULKAN MESH**
-		VkAccelerationStructureKHR _blas;
 	public:
 		/**
 		* Constructor, takes mesh reference, name and transform for the instance
@@ -56,18 +55,16 @@ namespace Astra {
 		*/
 		MeshInstance(uint32_t index, const glm::mat4& transform = glm::mat4(1.0f), const std::string& name = "");
 
-
 		// SETTERS
-		void setBLAS(const VkAccelerationStructureKHR & blas);
 		void setVisible(bool v);
 
 		// GETTERS
-		VkAccelerationStructureKHR getBLAS() const;
 		bool getVisible() const;
 		bool& getVisibleRef();
 		uint32_t getMeshIndex() const;
 
 		void update() override;
+		void destroy() override;
 		void updatePushConstantRaster(PushConstantRaster& pc) const override;
 		void updatePushConstantRT(PushConstantRay& pc) const override;
 	};

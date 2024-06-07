@@ -6,6 +6,7 @@
 #include <nvvk/resourceallocator_vk.hpp>
 #include <nvvk/debug_util_vk.hpp>
 #include <nvvk/raytraceKHR_vk.hpp>
+#include <Mesh.h>
 
 namespace Astra {
 
@@ -74,6 +75,8 @@ namespace Astra {
 
 		VkShaderModule createShaderModule(const std::vector<char>& file);
 		void createTextureImages(const VkCommandBuffer& cmdBuf, const std::vector<std::string>& new_textures, std::vector<nvvk::Texture>& textures);
+		nvvk::RaytracingBuilderKHR::BlasInput objectToVkGeometry(const Astra::HostModel& model);
+		
 
 		uint32_t getMemoryType(uint32_t typeBits, const VkMemoryPropertyFlags& properties) const;
 	};

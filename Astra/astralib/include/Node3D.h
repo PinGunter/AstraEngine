@@ -5,6 +5,17 @@
 #include <vulkan/vulkan.h>
 #include <host_device.h>
 
+/*
+	vector<ObjDesc*> plano;
+
+	añadirNodo()
+		for nodo en escena{
+			plano.add(nodo); // transfomraion
+			nodo.children.transform = nodo.transform * nodo.children.tranform;
+		}
+	
+	*/
+
 namespace Astra {
 
 	/**
@@ -21,6 +32,7 @@ namespace Astra {
 
 	public:
 		Node3D(const glm::mat4& transform = glm::mat4(1.0f), const std::string& name = "");
+		virtual void destroy() {}
 
 		bool operator==(const Node3D& other);
 

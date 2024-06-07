@@ -1,12 +1,8 @@
 #include <Mesh.h>
+#include <Device.h>
 
 Astra::MeshInstance::MeshInstance(uint32_t mesh_index, const glm::mat4& transform, const std::string& name) : Node3D(transform, name), _mesh(mesh_index)
 {
-}
-
-void Astra::MeshInstance::setBLAS(const VkAccelerationStructureKHR & blas)
-{
-	_blas = blas;
 }
 
 void Astra::MeshInstance::setVisible(bool v)
@@ -14,10 +10,6 @@ void Astra::MeshInstance::setVisible(bool v)
 	_visible = v;
 }
 
-VkAccelerationStructureKHR Astra::MeshInstance::getBLAS() const
-{
-	return _blas;
-}
 
 bool Astra::MeshInstance::getVisible() const
 {
@@ -37,6 +29,10 @@ uint32_t Astra::MeshInstance::getMeshIndex() const
 void Astra::MeshInstance::update()
 {
 	// called for every frame
+}
+
+void Astra::MeshInstance::destroy()
+{
 }
 
 void Astra::MeshInstance::updatePushConstantRaster(PushConstantRaster& pc) const 

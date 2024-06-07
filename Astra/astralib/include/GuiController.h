@@ -3,7 +3,7 @@
 #include <Renderer.h>
 
 namespace Astra {
-	class Gui {
+	class GuiController {
 		friend class Renderer;
 	protected:
 		VkDescriptorPool _imguiDescPool;
