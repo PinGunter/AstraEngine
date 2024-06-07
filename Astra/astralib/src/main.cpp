@@ -142,7 +142,8 @@ int main(int argc, char** argv)
 	contextInfo.addDeviceExtension(VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME, false, &rtPipelineFeatures); // raytracing pipeline
 	contextInfo.addDeviceExtension(VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME); // required by raytracing pipeline
 
-
+	//Astra::DeviceCreateInfo dci{};
+	//Astra::Device::getInstance().initDevice(dci);
 
 	// Creating Vulkan base application
 	nvvk::Context vkctx{};
@@ -181,7 +182,7 @@ int main(int argc, char** argv)
 
 	std::vector<const char*> names;
 	for (auto& i : instances) {
-		names.push_back(i.getName().c_str());
+		names.push_back(i.getNameRef().c_str());
 	}
 
 	int currentModel = 0;
@@ -256,12 +257,12 @@ int main(int argc, char** argv)
 			ImGui::ListBox("###Models", &currentModel, names.data(), names.size());
 
 			if (ImGui::Button("REBUILD TLAS")) helloVk.updateTLAS(currentModel);
-			if (ImGui::Checkbox("Visible: ", &instances[currentModel].getVisible())) helloVk.updateTLAS(currentModel);
+			if (ImGui::Checkbox("Visible: ", &instances[currentModel].getVisibleRef())) helloVk.updateTLAS(currentModel);
 			ImGui::Checkbox("ShowGuizmo: ", &showGuizmo);
 
 			for (int i = 0; i < 4; i++) {
 				for (int j = 0; j < 4; j++) {
-					ImGui::Text(std::to_string(instances[currentModel].getTransform()[j][i]).c_str()); ImGui::SameLine();
+					ImGui::Text(std::to_string(instances[currentModel].getTransformRef()[j][i]).c_str()); ImGui::SameLine();
 				}
 				ImGui::Spacing();
 			}
@@ -276,7 +277,7 @@ int main(int argc, char** argv)
 			ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
 			glm::mat4      proj = camera->getProjectionMatrix();
 			proj[1][1] *= -1;
-			if (showGuizmo) ImGuizmo::Manipulate(glm::value_ptr(camera->getViewMatrix()), glm::value_ptr(proj), static_cast<ImGuizmo::OPERATION>(guizmo_type), ImGuizmo::LOCAL, glm::value_ptr(instances[currentModel].getTransform()));
+			if (showGuizmo) ImGuizmo::Manipulate(glm::value_ptr(camera->getViewMatrix()), glm::value_ptr(proj), static_cast<ImGuizmo::OPERATION>(guizmo_type), ImGuizmo::LOCAL, glm::value_ptr(instances[currentModel].getTransformRef()));
 
 			if (ImGuizmo::IsUsing()) {
 				helloVk.updateTLAS(currentModel);

@@ -147,7 +147,7 @@ public:
   virtual void onFileDrop(const char* filename);
 
   //--------------------------------------------------------------------------------------------------
-  // Initialization of the GUI
+  // Initialization of the Gui
   // - Need to be call after the device creation
   //
   void initGUI(uint32_t subpassID = 0);

@@ -200,7 +200,7 @@ void nvvkhl::AppBaseVk::createSwapchain(const VkSurfaceKHR& surface,
 
   // Setup camera
   //CameraManip.setWindowSize(m_size.width, m_size.height);
-  camera->setWindowSize(m_size.width, m_size.height);
+  //camera->setWindowSize(m_size.width, m_size.height);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -677,7 +677,7 @@ void nvvkhl::AppBaseVk::updateCamera()
 }
 
 //--------------------------------------------------------------------------------------------------
-// Initialization of the GUI
+// Initialization of the Gui
 // - Need to be call after the device creation
 //
 void nvvkhl::AppBaseVk::initGUI(uint32_t subpassID /*= 0*/)

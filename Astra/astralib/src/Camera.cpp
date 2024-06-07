@@ -2,7 +2,6 @@
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/gtx/euler_angles.hpp>
 #include <iostream>
-#include <host_device.h>
 
 Astra::CameraController::CameraController(Camera& cam) : _camera(cam)
 {
@@ -31,7 +30,7 @@ const glm::mat4 & Astra::CameraController::getViewMatrix() const
 	return _camera.viewMatrix;
 }
 
-const glm::mat4& Astra::CameraController::getProjectionMatrix() const
+glm::mat4 Astra::CameraController::getProjectionMatrix() const
 {
 	assert(_height != 0.0 && _width != 0.0);
 	float aspectRatio = _width / static_cast<float>(_height);
@@ -64,47 +63,47 @@ float Astra::CameraController::getFov() const
 	return _camera._fov;
 }
 
-glm::vec3 Astra::CameraController::getEye() const
+const glm::vec3& Astra::CameraController::getEye() const
 {
 	return _camera._eye;
 }
 
-glm::vec3 Astra::CameraController::getUp() const
+const glm::vec3& Astra::CameraController::getUp() const
 {
 	return _camera._up;
 }
 
-glm::vec3 Astra::CameraController::getCentre() const
+const glm::vec3& Astra::CameraController::getCentre() const
 {
 	return _camera._centre;
 }
 
-float& Astra::CameraController::getNear()
+float& Astra::CameraController::getNearRef()
 {
 	return _camera._near;
 }
 
-float& Astra::CameraController::fetFar()
+float& Astra::CameraController::fetFarRef()
 {
 	return _camera._far;
 }
 
-float& Astra::CameraController::getFov()
+float& Astra::CameraController::getFovRef()
 {
 	return _camera._fov;
 }
 
-glm::vec3& Astra::CameraController::getEye()
+glm::vec3& Astra::CameraController::getEyeRef()
 {
 	return _camera._eye;
 }
 
-glm::vec3& Astra::CameraController::getUp()
+glm::vec3& Astra::CameraController::getUpRef()
 {
 	return _camera._up;
 }
 
-glm::vec3& Astra::CameraController::getCentre()
+glm::vec3& Astra::CameraController::getCentreRef()
 {
 	return _camera._centre;
 }
@@ -124,18 +123,31 @@ void Astra::CameraController::setFov(float f)
 	_camera._fov = f;
 }
 
-void Astra::CameraController::update(VkCommandBuffer cmdBuff)
+void Astra::CameraController::update()
 {
-	// update camera params
+	// update camera params 
 	updateCamera();
+}
 
+GlobalUniforms Astra::CameraController::getUpdatedGlobals()
+{
+	updateCamera();
 	GlobalUniforms hostUBO = {};
 	hostUBO.viewProj = getProjectionMatrix() * getViewMatrix();
 	hostUBO.viewInverse = glm::inverse(getViewMatrix());
 	hostUBO.projInverse = glm::inverse(getProjectionMatrix());
 
-	// UBO on device
-	VkBuffer deviceUBO = 
+	return hostUBO;
+}
+
+void Astra::CameraController::updatePushConstantRaster(PushConstantRaster& pc) const
+{
+	// pass
+}
+
+void Astra::CameraController::updatePushConstantRT(PushConstantRay& pc) const
+{
+	// pass
 }
 
 

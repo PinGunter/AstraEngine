@@ -22,15 +22,31 @@ Astra::LightType Astra::Light::getType() const
 	return _type;
 }
 
+void Astra::Light::updatePushConstantRaster(PushConstantRaster& pc) const
+{
+	pc.lightColor = _color;
+	pc.lightIntensity = _intensity;
+	pc.lightPosition = getPosition();
+	pc.lightType = static_cast<int>(_type);
+}
+
+void Astra::Light::updatePushConstantRT(PushConstantRay& pc) const
+{
+	pc.lightColor = _color;
+	pc.lightIntensity = _intensity;
+	pc.lightPosition = getPosition();
+	pc.lightType = static_cast<int>(_type);
+}
+
+void Astra::Light::update()
+{
+	// pass
+}
+
 Astra::PointLight::PointLight(const glm::vec3& color, float intensity)
 {
 	_color = color;
 	_intensity = intensity;
-}
-
-void Astra::PointLight::update(VkCommandBuffer cmdBuff)
-{
-	// pass
 }
 
 Astra::DirectionalLight::DirectionalLight(const glm::vec3& color, float intensity, const glm::vec3& direction)
@@ -38,9 +54,4 @@ Astra::DirectionalLight::DirectionalLight(const glm::vec3& color, float intensit
 	_color = color;
 	_intensity = intensity;
 	_direction = direction;
-}
-
-void Astra::DirectionalLight::update(VkCommandBuffer cmdBuff)
-{
-	// pass
 }

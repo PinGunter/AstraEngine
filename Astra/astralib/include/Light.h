@@ -1,5 +1,6 @@
 #pragma once
 #include <Node3D.h>
+#include <host_device.h>
 
 namespace Astra {
 	enum LightType {POINT = 0, DIRECTIONAL = 1};
@@ -15,12 +16,14 @@ namespace Astra {
 		void setIntensity(float i);
 		LightType getType() const;
 
+		void updatePushConstantRaster(PushConstantRaster& pc) const override;
+		void updatePushConstantRT(PushConstantRay& pc) const override;
+		void update() override;
 	};
 
 	class PointLight : public Light {
 	public:
 		PointLight(const glm::vec3& color, float intensity);
-		void update(VkCommandBuffer cmdBuff) override;
 	};
 
 	class DirectionalLight : public Light {
@@ -28,6 +31,5 @@ namespace Astra {
 		glm::vec3 _direction;
 	public:
 		DirectionalLight(const glm::vec3& color, float intensity, const glm::vec3& direction);
-		void update(VkCommandBuffer cmdBuff) override;
 	};
 }

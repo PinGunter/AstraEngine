@@ -1,6 +1,11 @@
 #include <Device.h>
 #include <nvvk/context_vk.hpp>
 #include <stdexcept>
+#include <nvvk/images_vk.hpp>
+#include <nvpsystem.hpp>
+#include <nvh/fileoperations.hpp>
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
 
 constexpr auto SAMPLE_WIDTH = 1280;
 constexpr auto SAMPLE_HEIGHT = 720;
@@ -97,25 +102,51 @@ namespace Astra {
 		poolCreateInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 		vkCreateCommandPool(_vkdevice, &poolCreateInfo, nullptr, &_cmdPool);
 
+		if (createInfo.useRT) {
+			VkPhysicalDeviceProperties2 prop2{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2 };
+			prop2.pNext = &_rtProperties;
+			vkGetPhysicalDeviceProperties2(_physicalDevice, &prop2);
+			_rtBuilder.setup(_vkdevice, &_alloc, _graphicsQueueIndex);
+		}
+		
+		// if no error was thrown it means that it supports RT
+		_raytracingEnabled = createInfo.useRT;
+
 		_alloc.init(_instance, _vkdevice, _physicalDevice);
 		_debug.setup(_vkdevice);
 	}
 
-	VkShaderModule Device::createShaderModule(const std::vector<char>& code)
+	VkInstance Device::getVkInstance() const
 	{
-		VkShaderModuleCreateInfo createInfo = {};
-		createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-		createInfo.flags = {};
-		createInfo.codeSize = code.size();
-		createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
+		return _instance;
+	}
 
-		VkShaderModule shaderModule = VK_NULL_HANDLE;
-		if (vkCreateShaderModule(_vkdevice, &createInfo, nullptr, &shaderModule) != VK_SUCCESS)
-		{
-			throw std::runtime_error("Error creating shader module");
-		}
+	VkDevice Device::getVkDevice() const
+	{
+		return _vkdevice;
+	}
+	VkSurfaceKHR Device::getSurface() const
+	{
+		return _surface;
+	}
 
-		return shaderModule;
+	VkPhysicalDevice Device::getPhysicalDevice() const
+	{
+		return _physicalDevice;
+	}
+
+	VkQueue Device::getQueue() const
+	{
+		return _queue;
+	}
+
+	uint32_t Device::getGraphicsQueueIndex() const
+	{
+		return _graphicsQueueIndex;
+	}
+	VkCommandPool Device::getCommandPool() const
+	{
+		return _cmdPool;
 	}
 
 	GLFWwindow* Device::getWindow()
@@ -142,7 +173,13 @@ namespace Astra {
 		return cmdBuffer;
 	}
 
-	void Device::submitTmbCmdBuf(VkCommandBuffer cmdBuff)
+	
+	bool Device::getRtEnabled() const
+	{
+		return _raytracingEnabled;
+	}
+
+	void Device::submitTmpCmdBuf(VkCommandBuffer cmdBuff)
 	{
 		// end
 		vkEndCommandBuffer(cmdBuff);
@@ -157,37 +194,124 @@ namespace Astra {
 		vkFreeCommandBuffers(_vkdevice, _cmdPool, 1, &cmdBuff);
 	}
 	
-	VkInstance Device::getVkInstance() const
+
+	VkShaderModule Device::createShaderModule(const std::vector<char>& code)
 	{
-		return _instance;
-	}
-	
-	VkDevice Device::getVkDevice() const
-	{
-		return _vkdevice;
-	}
-	VkSurfaceKHR Device::getSurface() const
-	{
-		return _surface;
-	}
-	
-	VkPhysicalDevice Device::getPhysicalDevice() const
-	{
-		return _physicalDevice;
+		VkShaderModuleCreateInfo createInfo = {};
+		createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+		createInfo.flags = {};
+		createInfo.codeSize = code.size();
+		createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
+
+		VkShaderModule shaderModule = VK_NULL_HANDLE;
+		if (vkCreateShaderModule(_vkdevice, &createInfo, nullptr, &shaderModule) != VK_SUCCESS)
+		{
+			throw std::runtime_error("Error creating shader module");
+		}
+
+		return shaderModule;
 	}
 
-	VkQueue Device::getQueue() const
+	void Device::destroy()
 	{
-		return _queue;
+		_rtBuilder.destroy();
 	}
 
-	uint32_t Device::getGraphicsQueueIndex() const 
-	{
-		return _graphicsQueueIndex;
+	nvvk::ResourceAllocatorDma& Device::getResAlloc() {
+		return _alloc;
 	}
-	VkCommandPool Device::getCommandPool() const
+
+	VkPhysicalDeviceRayTracingPipelinePropertiesKHR Device::getRTProperties() {
+		return _rtProperties;
+	}
+
+	uint32_t Device::getMemoryType(uint32_t typeBits, const VkMemoryPropertyFlags& properties) const
 	{
-		return _cmdPool;
+		VkPhysicalDeviceMemoryProperties memoryProperties;
+		vkGetPhysicalDeviceMemoryProperties(_physicalDevice, &memoryProperties);
+
+		for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; i++)
+		{
+			if (((typeBits & (1 << i)) > 0) && (memoryProperties.memoryTypes[i].propertyFlags & properties) == properties)
+				return i;
+		}
+		throw std::runtime_error("Unable to find memory type");
+	}
+
+	void Device::createTextureImages(const VkCommandBuffer& cmdBuf, const std::vector<std::string>& new_textures, std::vector<nvvk::Texture>& textures)
+	{
+		VkSamplerCreateInfo samplerCreateInfo{ VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO };
+		samplerCreateInfo.minFilter = VK_FILTER_LINEAR;
+		samplerCreateInfo.magFilter = VK_FILTER_LINEAR;
+		samplerCreateInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+		samplerCreateInfo.maxLod = FLT_MAX;
+
+		VkFormat format = VK_FORMAT_R8G8B8A8_SRGB;
+
+		// If no textures are present, create a dummy one to accommodate the pipeline layout
+		if (new_textures.empty() && textures.empty())
+		{
+			nvvk::Texture texture;
+
+			std::array<uint8_t, 4> color{ 255u, 255u, 255u, 255u };
+			VkDeviceSize           bufferSize = sizeof(color);
+			auto                   imgSize = VkExtent2D{ 1, 1 };
+			auto                   imageCreateInfo = nvvk::makeImage2DCreateInfo(imgSize, format);
+
+			// Creating the dummy texture
+			nvvk::Image           image = Astra::Device::getInstance().getResAlloc().createImage(cmdBuf, bufferSize, color.data(), imageCreateInfo);
+			VkImageViewCreateInfo ivInfo = nvvk::makeImageViewCreateInfo(image.image, imageCreateInfo);
+			texture = Astra::Device::getInstance().getResAlloc().createTexture(image, ivInfo, samplerCreateInfo);
+
+			// The image format must be in VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			nvvk::cmdBarrierImageLayout(cmdBuf, texture.image, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+			textures.push_back(texture);
+		}
+		else
+		{
+			// Uploading all images
+			for (const auto& texture : new_textures)
+			{
+				std::vector<std::string> defaultSearchPaths = {
+					NVPSystem::exePath() + PROJECT_RELDIRECTORY,
+					NVPSystem::exePath() + PROJECT_RELDIRECTORY "..",
+					std::string(PROJECT_NAME),
+				};
+
+				std::stringstream o;
+				int               texWidth, texHeight, texChannels;
+				o << "media/textures/" << texture;
+				std::string txtFile = nvh::findFile(o.str(), defaultSearchPaths, true);
+
+				stbi_uc* stbi_pixels = stbi_load(txtFile.c_str(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+
+				std::array<stbi_uc, 4> color{ 255u, 0u, 255u, 255u };
+
+				stbi_uc* pixels = stbi_pixels;
+				// Handle failure
+				if (!stbi_pixels)
+				{
+					texWidth = texHeight = 1;
+					texChannels = 4;
+					pixels = reinterpret_cast<stbi_uc*>(color.data());
+				}
+
+				VkDeviceSize bufferSize = static_cast<uint64_t>(texWidth) * texHeight * sizeof(uint8_t) * 4;
+				auto         imgSize = VkExtent2D{ (uint32_t)texWidth, (uint32_t)texHeight };
+				auto         imageCreateInfo = nvvk::makeImage2DCreateInfo(imgSize, format, VK_IMAGE_USAGE_SAMPLED_BIT, true);
+
+				{
+					nvvk::Image image = Astra::Device::getInstance().getResAlloc().createImage(cmdBuf, bufferSize, pixels, imageCreateInfo);
+					nvvk::cmdGenerateMipmaps(cmdBuf, image.image, format, imgSize, imageCreateInfo.mipLevels);
+					VkImageViewCreateInfo ivInfo = nvvk::makeImageViewCreateInfo(image.image, imageCreateInfo);
+					nvvk::Texture         texture = Astra::Device::getInstance().getResAlloc().createTexture(image, ivInfo, samplerCreateInfo);
+
+					textures.push_back(texture);
+				}
+
+				stbi_image_free(stbi_pixels);
+			}
+		}
 	}
 
 }

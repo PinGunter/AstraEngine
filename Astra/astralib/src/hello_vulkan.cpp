@@ -21,7 +21,7 @@
 #include <sstream>
 
 
-#define STB_IMAGE_IMPLEMENTATION
+//#define STB_IMAGE_IMPLEMENTATION
 #include "obj_loader.h"
 #include "stb_image.h"
 
@@ -206,7 +206,7 @@ void HelloVulkan::loadModel(const std::string& filename, const glm::mat4& transf
 	//mesh.materialIndices = loader.m_matIndx;
 	//mesh.textures = loader.m_textures;
 
-	Astra::VulkanMesh model;
+	Astra::HostModel model;
 	model.nbIndices = static_cast<uint32_t>(loader.m_indices.size());
 	model.nbVertices = static_cast<uint32_t>(loader.m_vertices.size());
 
@@ -350,7 +350,6 @@ void HelloVulkan::createTextureImages(const VkCommandBuffer& cmdBuf, const std::
 //
 void HelloVulkan::destroyResources()
 {
-	_graphicsPipeline.destroy(m_device);
 	//vkDestroyPipeline(m_device, m_graphicsPipeline, nullptr);
 	//vkDestroyPipelineLayout(m_device, m_pipelineLayout, nullptr);
 	vkDestroyDescriptorPool(m_device, m_descPool, nullptr);
@@ -375,7 +374,6 @@ void HelloVulkan::destroyResources()
 	//#Post
 	m_alloc.destroy(m_offscreenColor);
 	m_alloc.destroy(m_offscreenDepth);
-	_postPipeline.destroy(m_device);
 	//vkDestroyPipeline(m_device, m_postPipeline, nullptr);
 	//vkDestroyPipelineLayout(m_device, m_postPipelineLayout, nullptr);
 	vkDestroyDescriptorPool(m_device, m_postDescPool, nullptr);
@@ -389,7 +387,6 @@ void HelloVulkan::destroyResources()
 	vkDestroyDescriptorSetLayout(m_device, m_rtDescSetLayout, nullptr);
 	//vkDestroyPipeline(m_device, m_rtPipeline, nullptr);
 	//vkDestroyPipelineLayout(m_device, m_rtPipelineLayout, nullptr);
-	rtPipeline.destroy(m_device);
 	m_alloc.destroy(m_rtSBTBuffer);
 
 
@@ -610,7 +607,7 @@ void HelloVulkan::initRayTracing()
 	m_rtBuilder.setup(m_device, &m_alloc, m_graphicsQueueIndex);
 }
 
-auto HelloVulkan::objectToVkGeometryKHR(const Astra::VulkanMesh& model)
+auto HelloVulkan::objectToVkGeometryKHR(const Astra::HostModel& model)
 {
 	// BLAS builder requires raw device addresses.
 	VkDeviceAddress vertexAddress = nvvk::getBufferDeviceAddress(m_device, model.vertexBuffer.buffer);
@@ -907,6 +904,7 @@ void HelloVulkan::raytrace(const VkCommandBuffer& cmdBuf, const glm::vec4& clear
 	m_pcRay.lightPosition = m_pcRaster.lightPosition;
 	m_pcRay.lightIntensity = m_pcRaster.lightIntensity;
 	m_pcRay.lightType = m_pcRaster.lightType;
+	m_pcRay.lightColor = m_pcRaster.lightColor;
 
 	std::vector<VkDescriptorSet> descSets{ m_rtDescSet, m_descSet };
 	//vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR, m_rtPipeline);

@@ -1,6 +1,8 @@
 #pragma once
 #include <Node3D.h>
 #include <glm/gtc/constants.hpp>
+#include <nvvk/resourceallocator_vk.hpp>
+#include <host_device.h>
 
 namespace Astra {
 	enum MouseClick {
@@ -33,29 +35,32 @@ namespace Astra {
 		float getSens() const { return _sens; }
 		void setWindowSize(uint32_t w, uint32_t h) { _width = w, _height = h; }
 		const glm::mat4& getViewMatrix() const;
-		const glm::mat4& getProjectionMatrix() const;
+		glm::mat4 getProjectionMatrix() const;
 		void setLookAt(const glm::vec3& eye, const glm::vec3& center, const glm::vec3& up);
 
 		float getNear() const;
 		float fetFar() const;
 		float getFov() const;
-		glm::vec3 getEye() const;
-		glm::vec3 getUp() const;
-		glm::vec3 getCentre() const;
+		const glm::vec3&  getEye() const;
+		const glm::vec3& getUp() const;
+		const glm::vec3& getCentre() const;
 
-		float& getNear();
-		float& fetFar();
-		float& getFov();
-		glm::vec3& getEye();
-		glm::vec3& getUp();
-		glm::vec3& getCentre();
+		float& getNearRef();
+		float& fetFarRef();
+		float& getFovRef();
+		glm::vec3& getEyeRef();
+		glm::vec3& getUpRef();
+		glm::vec3& getCentreRef();
 
 		void setNear(float n);
 		void setFar(float f);
 		void setFov(float f);
 
 
-		void update(VkCommandBuffer cmdBuff) override;
+		void update() override;
+		GlobalUniforms getUpdatedGlobals();
+		void updatePushConstantRaster(PushConstantRaster& pc) const override;
+		void updatePushConstantRT(PushConstantRay& pc) const override;
 	};
 
 	class FPSCameraController : public CameraController {

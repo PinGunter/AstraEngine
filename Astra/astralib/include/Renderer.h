@@ -6,10 +6,29 @@
 #include <GLFW/glfw3.h>
 
 namespace Astra {
+	// the default renderer uses an offscreen renderpass to a texture
+	// then renders that texture as a fullscreen triangle
+	// this allows us to mix raytracing and rasterization
+	// main use case is raytracing the scene and then rasterizing the ui
 	class Renderer {
+		friend class App;
 	protected:
+		// offscreen
+		VkRenderPass _offscreenRenderPass;
+		VkFramebuffer _offscreenFb;
+		nvvk::Texture _offscreenColor;
+		nvvk::Texture _offscreenDepth;
+		VkFormat _offscreenColorFormat{ VK_FORMAT_R32G32B32A32_SFLOAT };
+		VkFormat _offscreenDepthFormat{ VK_FORMAT_X8_D24_UNORM_PACK32 };
+
+		// post
 		PostPipeline _postPipeline;
 		VkRenderPass _postRenderPass;
+		nvvk::DescriptorSetBindings _postDescSetLayoutBind;
+		VkDescriptorPool _postDescPool{ VK_NULL_HANDLE };
+		VkDescriptorSetLayout _postDescSetLayout{ VK_NULL_HANDLE };
+		VkDescriptorSet _postDescSet{ VK_NULL_HANDLE };
+
 		nvvk::SwapChain _swapchain;
 		std::vector<VkFramebuffer> _framebuffers;
 		std::vector<VkCommandBuffer> _commandBuffers;
@@ -21,18 +40,38 @@ namespace Astra {
 		VkFormat _colorFormat{ VK_FORMAT_B8G8R8A8_UNORM };
 		VkFormat _depthFormat{ VK_FORMAT_UNDEFINED };
 
-		std::vector<Pipeline* > _pipelines; // in this case will use 0 for rt, 1 for raster
+		App* _app;
+		glm::vec4 _clearColor;
 
-		void renderPost(); // mandatory step! after drawing
-		void renderRaster(const Scene& scene, RasterPipeline* pipeline);
-		void renderRaytrace(const Scene& scene, RayTracingPipeline* pipeline);
+		void renderPost(const VkCommandBuffer& cmdBuf); // mandatory step! after drawing
+		void renderRaster(const VkCommandBuffer& cmdBuf, const Scene& scene, RasterPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets);
+		void renderRaytrace(const VkCommandBuffer& cmdBuf, const Scene& scene, RayTracingPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets);
 
+		void createPostDescriptorSet();
+		void updatePostDescriptorSet();
+		void setViewport(const VkCommandBuffer& cmdBuf);
 		void createSwapchain(const VkSurfaceKHR& surface, uint32_t width, uint32_t height, VkFormat colorFormat, VkFormat depthFormat);
+		void createOffscreenRender();
+		void createRenderPass();
+		void createFrameBuffers();
+		void createDepthBuffer();
 		void resize(int w, int h);
 		void prepareFrame();
+		void requestSwapchainImage(int w, int h);
 		void endFrame();
+		void updateUBO(const VkCommandBuffer& cmdBuf, const GlobalUniforms& hostUbo);
+
 	public:
 		void init(App* app);
-		void render(const Scene & scene, Pipeline* pipeline);
+		void destroy();
+		void render(const Scene & scene, Pipeline* pipeline, const std::vector<VkDescriptorSet>& descSets);
+
+		glm::vec4& getClearColorRef();
+		glm::vec4 getClearColor() const;
+		void setClearColor(const glm::vec4& color);
+
+		//void initGUIRendering(Astra::Gui& gui);
+		
+
 	};
 }

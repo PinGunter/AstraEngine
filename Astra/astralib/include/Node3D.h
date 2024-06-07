@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <vulkan/vulkan.h>
+#include <host_device.h>
 
 namespace Astra {
 
@@ -35,17 +36,17 @@ namespace Astra {
 		void translate(const glm::vec3& position);
 
 		// GETTERS
-		glm::vec3 getPosition();
-		glm::vec3 getRotation();
-		glm::vec3 getScale();
+		glm::vec3 getPosition() const;
+		glm::vec3 getRotation() const;
+		glm::vec3 getScale() const;
 
-		glm::mat4& getTransform() { return _transform; }
+		glm::mat4& getTransformRef() { return _transform; }
 
 		const glm::mat4& getTransform() const { return _transform; }
 
 		std::vector<Node3D*>& getChildren() { return _children; }
 
-		std::string& getName();
+		std::string& getNameRef();
 		std::string getName() const;
 
 		uint32_t getID() const;
@@ -57,8 +58,10 @@ namespace Astra {
 		* will be called every frame in Astra::App
 		*
 		*/
+		virtual void update() = 0;
 
-		// TODO: probably needs pipeline or render reference
-		virtual void update(VkCommandBuffer cmdBuff) = 0;
+		virtual void updatePushConstantRaster(PushConstantRaster& pc) const = 0;
+		virtual void updatePushConstantRT(PushConstantRay& pc)const = 0;
+
 	};
 }

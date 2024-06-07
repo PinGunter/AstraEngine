@@ -1,5 +1,6 @@
 #include <Utils.h>
 #include <fstream>
+#include <iostream>
 
 std::vector<char> Astra::readFile(const std::string& filename)
 {
@@ -14,4 +15,15 @@ std::vector<char> Astra::readFile(const std::string& filename)
 	file.read(buffer.data(), fileSize);
 	file.close();
 	return buffer;
+}
+
+void Astra::Log(const std::string& s, LOG_LEVELS level)
+{
+	if (level == LOG_LEVELS::INFO) {
+		std::cout << "[INFO] ";
+	}
+	else if (level == LOG_LEVELS::WARNING) {
+		std::cout << "[WARNING] ";
+	}
+	std::cout << s << std::endl;
 }

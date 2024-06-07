@@ -165,7 +165,7 @@ float getDPIScale()
 }
 
 //--------------------------------------------------------------------------------------------------
-// Setting a dark style for the GUI
+// Setting a dark style for the Gui
 // The colors were coded in sRGB color space, set the useLinearColor
 // flag to convert to linear color space.
 void setStyle(bool useLinearColor)

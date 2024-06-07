@@ -10,7 +10,7 @@ uint32_t Node3D::NodeCount = 0;
 Node3D::Node3D(const glm::mat4& transform_mat, const std::string& name) : _transform(transform_mat), _name(name) {
 	_id = NodeCount++;
 
-	if (name == "") {
+	if (name.empty()) {
 		_name = std::string("Node3D - ") + std::to_string(Node3D::NodeCount);
 	}
 }
@@ -50,7 +50,7 @@ void Node3D::translate(const glm::vec3& position) {
 	_transform = glm::translate(_transform, position);
 }
 
-glm::vec3 Astra::Node3D::getPosition()
+glm::vec3 Astra::Node3D::getPosition() const
 {
 	glm::vec3 scale;
 	glm::quat rotation;
@@ -63,7 +63,7 @@ glm::vec3 Astra::Node3D::getPosition()
 	return translation;
 }
 
-glm::vec3 Astra::Node3D::getRotation()
+glm::vec3 Astra::Node3D::getRotation() const
 {
 	glm::vec3 scale;
 	glm::quat rotation;
@@ -76,7 +76,7 @@ glm::vec3 Astra::Node3D::getRotation()
 	return glm::eulerAngles(rotation);
 }
 
-glm::vec3 Astra::Node3D::getScale()
+glm::vec3 Astra::Node3D::getScale() const
 {
 	glm::vec3 scale;
 	glm::quat rotation;
@@ -89,7 +89,7 @@ glm::vec3 Astra::Node3D::getScale()
 	return scale;
 }
 
-std::string& Astra::Node3D::getName()
+std::string& Astra::Node3D::getNameRef()
 {
 	return _name;
 }

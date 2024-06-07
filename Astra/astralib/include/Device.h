@@ -3,9 +3,9 @@
 #include <GLFW/glfw3.h>
 #include <vector>
 #include <string>
-#include <Singleton.h>
 #include <nvvk/resourceallocator_vk.hpp>
 #include <nvvk/debug_util_vk.hpp>
+#include <nvvk/raytraceKHR_vk.hpp>
 
 namespace Astra {
 
@@ -30,9 +30,12 @@ namespace Astra {
 		VkQueue _queue;
 		uint32_t _graphicsQueueIndex;
 		VkCommandPool _cmdPool;
+		VkPhysicalDeviceRayTracingPipelinePropertiesKHR _rtProperties{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_PROPERTIES_KHR };
+		bool _raytracingEnabled;
 
 		nvvk::ResourceAllocatorDma _alloc; 
 		nvvk::DebugUtil            _debug;
+		nvvk::RaytracingBuilderKHR _rtBuilder;
 
 		Device() {}
 		~Device() {
@@ -49,6 +52,9 @@ namespace Astra {
 		Device(const Device&) = delete;
 		Device& operator=(const Device&) = delete;
 
+		void initDevice(DeviceCreateInfo createInfo);
+		void destroy();
+
 		VkInstance getVkInstance() const;
 		VkDevice getVkDevice() const;
 		VkSurfaceKHR getSurface() const;
@@ -57,13 +63,18 @@ namespace Astra {
 		uint32_t getGraphicsQueueIndex() const;
 		VkCommandPool getCommandPool() const;
 		GLFWwindow* getWindow();
+		VkPhysicalDeviceRayTracingPipelinePropertiesKHR getRTProperties();
+		nvvk::ResourceAllocatorDma& getResAlloc();
+		bool getRtEnabled() const;
 
-		void initDevice(DeviceCreateInfo createInfo);
 
 		VkCommandBuffer createCmdBuf();
 		VkCommandBuffer createTmpCmdBuf();
-		void submitTmbCmdBuf(VkCommandBuffer cmdBuff);
+		void submitTmpCmdBuf(VkCommandBuffer cmdBuff);
 
 		VkShaderModule createShaderModule(const std::vector<char>& file);
+		void createTextureImages(const VkCommandBuffer& cmdBuf, const std::vector<std::string>& new_textures, std::vector<nvvk::Texture>& textures);
+
+		uint32_t getMemoryType(uint32_t typeBits, const VkMemoryPropertyFlags& properties) const;
 	};
 }

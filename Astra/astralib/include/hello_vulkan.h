@@ -46,7 +46,8 @@ public:
 		{10.f, 15.f, 8.f},                                 // light position
 		0,                                                 // instance Id
 		100.f,                                             // light intensity
-		0                                                  // light type
+		0,                                                  // light type
+		{1.0f, 1.0f, 1.0f}									// light color
 	};
 
 	void setup(const VkInstance& instance, const VkDevice& device, const VkPhysicalDevice& physicalDevice, uint32_t queueFamily) override;
@@ -66,7 +67,7 @@ public:
 
 
 	// Array of objects and instances in the scene
-	std::vector<Astra::VulkanMesh>    m_objModel;   // Model on host
+	std::vector<Astra::HostModel>    m_objModel;   // Model on host
 	std::vector<ObjDesc>     m_objDesc;    // Model description for device access
 	std::vector<Astra::MeshInstance> m_instances;  // Scene model instances
 
@@ -113,7 +114,7 @@ public:
 
 	// # RayTracing
 	void initRayTracing();
-	auto objectToVkGeometryKHR(const Astra::VulkanMesh& model);
+	auto objectToVkGeometryKHR(const Astra::HostModel& model);
 	void createBottomLevelAS();
 	void createTopLevelAS();
 	void updateTLAS(int instance_id);

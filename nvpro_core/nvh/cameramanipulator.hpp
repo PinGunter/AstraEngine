@@ -57,7 +57,7 @@ namespace nvh {
   // Retrieve/set camera information
   CameraManip.getLookat(eye, center, up);
   CameraManip.setLookat(eye, center, glm::vec3(m_upVector == 0, m_upVector == 1, m_upVector == 2));
-  CameraManip.getFov();
+  CameraManip.getFovRef();
   CameraManip.setSpeed(navSpeed);
   CameraManip.setMode(navMode == 0 ? nvh::CameraManipulator::Examine : nvh::CameraManipulator::Fly);
   // On mouse down, keep mouse coordinates

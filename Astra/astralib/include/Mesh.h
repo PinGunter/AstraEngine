@@ -12,7 +12,7 @@ namespace Astra {
 		Represents a mesh in host memory, easy to manipulate and create
 		Has method to change to vulkan mesh, in gpu memory
 	*/
-	struct Mesh {
+	struct Model {
 		std::vector<uint32_t> indices;
 		std::vector<Vertex> vertices;
 		std::vector<WaveFrontMaterial> materials;
@@ -20,20 +20,22 @@ namespace Astra {
 		std::vector<std::string> textures;
 
 		// TODO should be in future device/app class
-		/*VulkanMesh toVulkanMesh() {
+		/*HostModel toVulkanMesh() {
 		}*/
 	};
 	/**
 	* Struct that stores the neccesary information for vulkan for a mesh
 	* It has to be created within an App since it needs connection to the vulkan device
 	*/
-	struct VulkanMesh {
+	struct HostModel {
 		uint32_t     nbIndices{ 0 };
 		uint32_t     nbVertices{ 0 };
 		nvvk::Buffer vertexBuffer;    // Device buffer of all 'Vertex'
 		nvvk::Buffer indexBuffer;     // Device buffer of the indices forming triangles
 		nvvk::Buffer matColorBuffer;  // Device buffer of array of 'Wavefront material'
 		nvvk::Buffer matIndexBuffer;  // Device buffer of array of 'Wavefront material'
+
+		void draw(const VkCommandBuffer& cmdBuf, VkDeviceSize offset) const;
 	};
 
 	/**
@@ -56,19 +58,17 @@ namespace Astra {
 
 
 		// SETTERS
-		void setVisible(bool v);
 		void setBLAS(const VkAccelerationStructureKHR & blas);
+		void setVisible(bool v);
 
 		// GETTERS
-		bool getVisible() const;
-
-		bool& getVisible();
-
 		VkAccelerationStructureKHR getBLAS() const;
-
+		bool getVisible() const;
+		bool& getVisibleRef();
 		uint32_t getMeshIndex() const;
 
-		void update(VkCommandBuffer cmdBuff) override;
-
+		void update() override;
+		void updatePushConstantRaster(PushConstantRaster& pc) const override;
+		void updatePushConstantRT(PushConstantRay& pc) const override;
 	};
 }

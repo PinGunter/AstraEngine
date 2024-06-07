@@ -9,16 +9,16 @@ namespace Astra {
 		VkPipeline _pipeline;
 
 	public:
+		~Pipeline();
 		inline virtual bool doesRayTracing() = 0;
 		virtual void bind(const VkCommandBuffer& cmdBuf, const std::vector<VkDescriptorSet> & descsets);
 		void pushConstants(const VkCommandBuffer& cmdBuf, uint32_t shaderStages, uint32_t size, void* data);
-		void destroy(VkDevice vkdev);
 		VkPipeline getPipeline();
 		VkPipelineLayout getLayout();
 	};
 
 	class RasterPipeline : public Pipeline {
-	private:
+	protected:
 	public:
 		virtual void createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsetsLayouts, VkRenderPass rp) = 0;
 		inline bool doesRayTracing() override {
@@ -27,10 +27,17 @@ namespace Astra {
 	};
 
 	class RayTracingPipeline : public Pipeline {
-	private:
+	protected:
+		VkStridedDeviceAddressRegionKHR _rgenRegion{};
+		VkStridedDeviceAddressRegionKHR _missRegion{};
+		VkStridedDeviceAddressRegionKHR _hitRegion{};
+		VkStridedDeviceAddressRegionKHR _callRegion{};
+		nvvk::Buffer _rtSBTBuffer;
+
+
 		nvvk::DescriptorSetBindings _rtDescSetLayoutBind;
 		std::vector<VkRayTracingShaderGroupCreateInfoKHR> _rtShaderGroups;
-		
+		void createSBT();
 
 	public:
 		void bind(const VkCommandBuffer& cmdBuf, const std::vector<VkDescriptorSet>& descsets) override;
@@ -38,6 +45,7 @@ namespace Astra {
 		inline bool doesRayTracing() override {
 			return true;
 		};
+		std::array<VkStridedDeviceAddressRegionKHR, 4> getSBTRegions();
 	};
 
 	class OffscreenRaster : public RasterPipeline {

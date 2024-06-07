@@ -6,6 +6,14 @@
 #include <nvh/fileoperations.hpp>
 #include <nvpsystem.hpp>
 #include <host_device.h>
+#include <nvh/alignment.hpp>
+
+Astra::Pipeline::~Pipeline()
+{
+	const auto& device = Astra::Device::getInstance().getVkDevice();
+	vkDestroyPipelineLayout(device, _layout, nullptr);
+	vkDestroyPipeline(device, _pipeline, nullptr);
+}
 
 void Astra::Pipeline::bind(const VkCommandBuffer& cmdBuf, const std::vector<VkDescriptorSet>& descsets)
 {
@@ -20,12 +28,6 @@ void Astra::Pipeline::pushConstants(const VkCommandBuffer& cmdBuf, uint32_t shad
 	vkCmdPushConstants(cmdBuf, _layout, shaderStages, 0, size, data);
 }
 
-void Astra::Pipeline::destroy(VkDevice vkdev)
-{
-	vkDestroyPipelineLayout(vkdev, _layout, nullptr);
-	vkDestroyPipeline(vkdev, _pipeline, nullptr);
-}
-
 VkPipeline Astra::Pipeline::getPipeline()
 {
 	return _pipeline;
@@ -38,6 +40,13 @@ VkPipelineLayout Astra::Pipeline::getLayout()
 
 void Astra::RayTracingPipeline::createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsets)
 {
+	/*if (!Astra::Device::getInstance().getRtEnabled()) {
+		throw std::runtime_error("Can't create raytracing pipeline without enabling raytracing!");
+	}
+
+	if (Astra::Device::getInstance().getRTProperties().maxRayRecursionDepth <= 1) {
+		throw std::runtime_error("Device does not support ray recursion");
+	}*/
 
 	std::vector<std::string> defaultSearchPaths = {
 		NVPSystem::exePath() + PROJECT_RELDIRECTORY,
@@ -144,6 +153,83 @@ void Astra::RayTracingPipeline::createPipeline(VkDevice vkdev, const std::vector
 	for (auto& s : stages) {
 		vkDestroyShaderModule(vkdev, s.module, nullptr);
 	}
+	
+	// we now create the Shader Binding Table (SBT)
+	//createSBT();
+}
+
+std::array<VkStridedDeviceAddressRegionKHR, 4> Astra::RayTracingPipeline::getSBTRegions()
+{
+	return { _rgenRegion, _missRegion, _hitRegion, _callRegion };
+}
+
+void Astra::RayTracingPipeline::createSBT()
+{
+	auto rtProperties = Astra::Device::getInstance().getRTProperties();
+	auto& alloc = Astra::Device::getInstance().getResAlloc();
+
+	uint32_t missCount{ 2 };
+	uint32_t hitCount{ 1 };
+	auto handleCount = 1 + missCount + hitCount;
+	uint32_t handleSize = rtProperties.shaderGroupHandleSize;
+
+	// the sbt buffer needs to have starting groups to be aligned and handles in the group to be aligned
+	uint32_t handleSizeAligned = nvh::align_up(handleSize, rtProperties.shaderGroupHandleAlignment);
+
+	_rgenRegion.stride = nvh::align_up(handleSizeAligned, rtProperties.shaderGroupBaseAlignment);
+	_rgenRegion.size = _rgenRegion.stride; // raygen size and stride have to be the same
+	_missRegion.stride = handleSizeAligned;
+	_missRegion.size = nvh::align_up(missCount * handleSizeAligned, rtProperties.shaderGroupBaseAlignment);
+	_hitRegion.stride = handleSizeAligned;
+	_hitRegion.size = nvh::align_up(hitCount * handleSizeAligned, rtProperties.shaderGroupBaseAlignment);
+
+	// get the shader group handles
+	uint32_t dataSize = handleCount * handleSize;
+	std::vector<uint8_t> handles(dataSize);
+	auto result = vkGetRayTracingShaderGroupHandlesKHR(Astra::Device::getInstance().getVkDevice(), _pipeline, 0, handleCount, dataSize, handles.data());
+	assert(result == VK_SUCCESS);
+
+	// allocate buffer for storing the sbt
+	VkDeviceSize sbtSize = _rgenRegion.size + _missRegion.size + _hitRegion.size;
+	_rtSBTBuffer = alloc.createBuffer(
+		sbtSize,
+		VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_SHADER_BINDING_TABLE_BIT_KHR,
+		VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+	// find the sbt address of each group
+	VkBufferDeviceAddressInfo info{ VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO, nullptr, _rtSBTBuffer.buffer };
+	VkDeviceAddress sbtAddress = vkGetBufferDeviceAddress(Astra::Device::getInstance().getVkDevice(), &info);
+	_rgenRegion.deviceAddress = sbtAddress;
+	_missRegion.deviceAddress = sbtAddress + _rgenRegion.size;
+	_hitRegion.deviceAddress = sbtAddress + _rgenRegion.size + _missRegion.size;
+
+	// helper to retrieve the handle data
+	auto getHandle = [&](int i) {return handles.data() + i * handleSize; };
+
+	auto* pSBTBuffer = reinterpret_cast<uint8_t*>(alloc.map(_rtSBTBuffer));
+	uint8_t* pData{ nullptr };
+	uint32_t handleIdx{ 0 };
+
+	// raygen. Just copy handle
+	pData = pSBTBuffer;
+	memcpy(pData, getHandle(handleIdx++), handleSize);
+
+	// miss
+	pData = pSBTBuffer + _rgenRegion.size;
+	for (uint32_t c = 0; c < missCount; c++) {
+		memcpy(pData, getHandle(handleIdx++), handleSize);
+		pData += _missRegion.stride;
+	}
+
+	// hit
+	pData = pSBTBuffer + _rgenRegion.size + _missRegion.size;
+	for (uint32_t c = 0; c < hitCount; c++) {
+		memcpy(pData, getHandle(handleIdx++), handleSize);
+		pData += _hitRegion.stride;
+	}
+
+	alloc.unmap(_rtSBTBuffer);
+	alloc.finalizeAndReleaseStaging();
 }
 
 void Astra::RayTracingPipeline::bind(const VkCommandBuffer& cmdBuf, const std::vector<VkDescriptorSet>& descsets)
