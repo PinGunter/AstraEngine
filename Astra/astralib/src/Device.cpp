@@ -17,6 +17,14 @@ namespace Astra {
 	// user and will provide every extensions or instance layer needed
 
 	void Device::initDevice(DeviceCreateInfo createInfo) {
+		// create glfw window
+		if (!glfwInit()) {
+			throw std::runtime_error("Error initializing glfw");
+		}
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+		_window = glfwCreateWindow(SAMPLE_WIDTH, SAMPLE_HEIGHT, "Astra App", nullptr, nullptr);
+
+		
 		// fill createInfo with default values if empty
 		if (createInfo.instanceLayers.empty()) {
 			if (createInfo.debug) {
@@ -44,12 +52,6 @@ namespace Astra {
 			createInfo.deviceExtensions.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
 			//createInfo.deviceExtensions.push_back(VK_KHR_SHADER_NON_SEMANTIC_INFO_EXTENSION_NAME); // enable shader printf
 		}
-		// create glfw window
-		if (!glfwInit()) {
-			throw std::runtime_error("Error initializing glfw");
-		}
-		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-		_window = glfwCreateWindow(SAMPLE_WIDTH, SAMPLE_HEIGHT, "Astra App", nullptr, nullptr);
 
 		nvvk::ContextCreateInfo contextInfo;
 		contextInfo.setVersion(createInfo.vkVersionMajor, createInfo.vkVersionMinor);
@@ -237,6 +239,13 @@ namespace Astra {
 				return i;
 		}
 		throw std::runtime_error("Unable to find memory type");
+	}
+
+	std::array<int, 2> Device::getWindowSize() const
+	{
+		int w, h;
+		glfwGetFramebufferSize(_window, &w, &h);
+		return { w, h };
 	}
 
 	nvvk::RaytracingBuilderKHR::BlasInput Device::objectToVkGeometry(const Astra::HostModel& model)

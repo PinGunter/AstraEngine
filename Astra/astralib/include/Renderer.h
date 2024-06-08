@@ -43,30 +43,35 @@ namespace Astra {
 		App* _app;
 		glm::vec4 _clearColor;
 
-		void renderPost(const VkCommandBuffer& cmdBuf); // mandatory step! after drawing
-		void renderRaster(const VkCommandBuffer& cmdBuf, const Scene& scene, RasterPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets);
-		void renderRaytrace(const VkCommandBuffer& cmdBuf, const Scene& scene, RayTracingPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets);
+		void renderRaster(const VkCommandBuffer& cmdBuf, Scene* scene, RasterPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets);
+		void renderRaytrace(const VkCommandBuffer& cmdBuf, Scene* scene, RayTracingPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets);
 
 
 		void setViewport(const VkCommandBuffer& cmdBuf);
-		void createSwapchain(const VkSurfaceKHR& surface, uint32_t width, uint32_t height, VkFormat colorFormat, VkFormat depthFormat);
-		void createRenderPass();
+		
 
 		void resize(int w, int h);
 		void prepareFrame();
-		void endFrame();
 		void updateUBO(const VkCommandBuffer& cmdBuf, const GlobalUniforms& hostUbo);
 
 	public:
-		void init(App* app);
+		void init();
+		void linkApp(App * app);
 		void destroy();
-		void render(const Scene & scene, Pipeline* pipeline, const std::vector<VkDescriptorSet>& descSets);
+		void render(const VkCommandBuffer& cmdBuf, Scene* scene, Pipeline* pipeline, const std::vector<VkDescriptorSet>& descSets);
+		VkCommandBuffer beginFrame();
+		void endFrame();
+		void beginPost();
+		void endPost(const VkCommandBuffer& cmdBuf);
+		void renderPost(const VkCommandBuffer& cmdBuf); // mandatory step! after drawing
+
 
 		glm::vec4& getClearColorRef();
 		glm::vec4 getClearColor() const;
 		void setClearColor(const glm::vec4& color);
 
 		const nvvk::Texture & getOffscreenColor() const;
+		VkRenderPass getOffscreenRenderPass() const;
 		//void initGUIRendering(Astra::Gui& gui);
 		
 		void requestSwapchainImage(int w, int h);
@@ -75,6 +80,8 @@ namespace Astra {
 		void updatePostDescriptorSet();
 		void createFrameBuffers();
 		void createDepthBuffer();
-
+		void createSwapchain(const VkSurfaceKHR& surface, uint32_t width, uint32_t height, VkFormat colorFormat = VK_FORMAT_B8G8R8A8_UNORM, VkFormat depthFormat = VK_FORMAT_UNDEFINED);
+		void createRenderPass();
+		void createPostPipeline();
 	};
 }

@@ -20,10 +20,13 @@ std::vector<char> Astra::readFile(const std::string& filename)
 void Astra::Log(const std::string& s, LOG_LEVELS level)
 {
 	if (level == LOG_LEVELS::INFO) {
-		std::cout << "[INFO] ";
+		std::cerr << "[INFO] ";
 	}
 	else if (level == LOG_LEVELS::WARNING) {
-		std::cout << "[WARNING] ";
+		std::cerr << "[WARNING] ";
 	}
-	std::cout << s << std::endl;
+	else if (level == LOG_LEVELS::ERR) {
+		std::cerr << "[ERROR] ";
+	}
+	std::cerr << s << std::endl;
 }

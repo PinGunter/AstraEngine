@@ -4,7 +4,7 @@
 
 namespace Astra {
 
-	enum LOG_LEVELS{INFO, WARNING};
+	enum LOG_LEVELS{INFO, WARNING, ERR};
 
 	std::vector<char> readFile(const std::string& filename);
 

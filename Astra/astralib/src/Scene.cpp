@@ -5,6 +5,21 @@
 
 Astra::Scene::Scene() : _transform(1.0f) {}
 
+Astra::Scene& Astra::Scene::operator=(const Scene& s)
+{
+	_objModels = s._objModels;
+	_instances = s._instances;
+	_objDesc = s._objDesc;
+	_textures = s._textures;
+	_objDescBuffer = s._objDescBuffer;
+
+	_light = s._light;
+	_camera = s._camera;
+	_transform = s._transform;
+
+	return *this;
+}
+
 void Astra::Scene::destroy() {
 	auto& alloc = Astra::Device::getInstance().getResAlloc();
 

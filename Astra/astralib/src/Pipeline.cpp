@@ -40,13 +40,13 @@ VkPipelineLayout Astra::Pipeline::getLayout()
 
 void Astra::RayTracingPipeline::createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsets)
 {
-	/*if (!Astra::Device::getInstance().getRtEnabled()) {
+	if (!Astra::Device::getInstance().getRtEnabled()) {
 		throw std::runtime_error("Can't create raytracing pipeline without enabling raytracing!");
 	}
 
 	if (Astra::Device::getInstance().getRTProperties().maxRayRecursionDepth <= 1) {
 		throw std::runtime_error("Device does not support ray recursion");
-	}*/
+	}
 
 	std::vector<std::string> defaultSearchPaths = {
 		NVPSystem::exePath() + PROJECT_RELDIRECTORY,
@@ -155,7 +155,7 @@ void Astra::RayTracingPipeline::createPipeline(VkDevice vkdev, const std::vector
 	}
 	
 	// we now create the Shader Binding Table (SBT)
-	//createSBT();
+	createSBT();
 }
 
 std::array<VkStridedDeviceAddressRegionKHR, 4> Astra::RayTracingPipeline::getSBTRegions()

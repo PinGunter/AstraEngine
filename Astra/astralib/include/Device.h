@@ -79,5 +79,6 @@ namespace Astra {
 		
 
 		uint32_t getMemoryType(uint32_t typeBits, const VkMemoryPropertyFlags& properties) const;
+		std::array<int, 2> getWindowSize() const;
 	};
 }

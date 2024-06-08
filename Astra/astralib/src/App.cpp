@@ -55,21 +55,34 @@ void Astra::App::createObjDescBuffer()
 
 	auto cmdBuf = cmdGen.createCommandBuffer();
 	for (auto s : _scenes) {
-		s->getObjDescBuff() = Astra::Device::getInstance().getResAlloc().createBuffer(cmdBuf, s->getObjDesc(), VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+		if (!s->getObjDesc().empty())
+			s->getObjDescBuff() = Astra::Device::getInstance().getResAlloc().createBuffer(cmdBuf, s->getObjDesc(), VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
 	}
 	cmdGen.submitAndWait(cmdBuf);
 	Astra::Device::getInstance().getResAlloc().finalizeAndReleaseStaging();
 }
 
 
-void Astra::App::init()
+
+void Astra::App::init(const std::vector<Scene*>& scenes, Renderer* renderer, GuiController* gui)
 {
+	_scenes = scenes;
+	_renderer = renderer;
+	_renderer->linkApp(this);
+	_gui = gui;
+}
+
+void Astra::App::addScene(Scene* s)
+{
+	_scenes.push_back(s);
 }
 
 void Astra::App::destroy()
 {
 	const auto& device = Astra::Device::getInstance().getVkDevice();
 	auto& alloc = Astra::Device::getInstance().getResAlloc();
+	
+	vkDeviceWaitIdle(device);
 
 	_renderer->destroy();
 	for (auto s : _scenes)
@@ -229,6 +242,86 @@ void Astra::App::cb_fileDrop(GLFWwindow* window, int count, const char** paths)
 }
 
 
+void Astra::DefaultApp::init(const std::vector<Scene*>& scenes, Renderer* renderer, GuiController* gui)
+{
+	Astra::App::init(scenes, renderer, gui);
+
+	// search paths for finding files
+	std::vector<std::string> defaultSearchPaths = {
+		NVPSystem::exePath() + PROJECT_RELDIRECTORY,
+		NVPSystem::exePath() + PROJECT_RELDIRECTORY "..",
+		std::string(PROJECT_NAME),
+	};
+
+	auto size = Astra::Device::getInstance().getWindowSize();
+	_renderer->createSwapchain(Astra::Device::getInstance().getSurface(), size[0], size[1]);
+	_renderer->createDepthBuffer();
+	_renderer->createRenderPass();
+	_renderer->createFrameBuffers();
+
+	// gui init
+
+	// loading models
+	loadModel(nvh::findFile("media/scenes/mono.obj", defaultSearchPaths, true));
+
+	_renderer->createOffscreenRender();
+	createDescriptorSetLayout();
+	((OffscreenRaster*)_rasterPipeline)->createPipeline(Astra::Device::getInstance().getVkDevice(), { _descSetLayout }, _renderer->getOffscreenRenderPass());
+
+	createUBO();
+	createObjDescBuffer();
+	updateDescriptorSet();
+
+	for (Astra::Scene* s : _scenes) {
+		if (s->isRt()) {
+			((Astra::SceneRT*)s)->createBottomLevelAS();
+			((Astra::SceneRT*)s)->createTopLevelAS();
+		}
+	}
+
+	createRtDescriptorSet();
+	((RayTracingPipeline*)_rtPipeline)->createPipeline(Astra::Device::getInstance().getVkDevice(), { _rtDescSetLayout, _descSetLayout });
+
+	_renderer->createPostDescriptorSet();
+	_renderer->createPostPipeline();
+	_renderer->updatePostDescriptorSet();
+}
+
+void Astra::DefaultApp::run()
+{
+	while (!glfwWindowShouldClose(_window)) {
+		glfwPollEvents();
+		if (isMinimized()) {
+			continue;
+		}
+
+		// imgui new frame, imguizmo begin frame
+	
+		auto cmdBuf = _renderer->beginFrame();
+
+		updateUBO(cmdBuf);
+
+		// offscren render
+		if (_useRT) {
+			_renderer->render(cmdBuf, _scenes[_currentScene], _rtPipeline, { _rtDescSet, _descSet});
+		}
+		else {
+			_renderer->render(cmdBuf, _scenes[_currentScene], _rasterPipeline, { _descSet });
+		}
+
+		// post render: ui and texture
+		_renderer->beginPost();
+		_renderer->renderPost(cmdBuf);
+		// imgui::render()
+		// imgui::renderdrawdata
+		_renderer->endPost(cmdBuf);
+
+		_renderer->endFrame();
+		// render ui
+	}
+	destroy();
+}
+
 void Astra::DefaultApp::createDescriptorSetLayout()
 {
 	auto nbTxt = static_cast<uint32_t>(_scenes[0]->getTextures().size());
@@ -347,4 +440,9 @@ void Astra::DefaultApp::onMouseButton(int button, int action, int mods)
 
 void Astra::DefaultApp::onMouseWheel(int x, int y)
 {
+}
+
+bool& Astra::DefaultApp::getUseRTref()
+{
+	return _useRT;
 }

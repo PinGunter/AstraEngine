@@ -12,7 +12,7 @@ namespace Astra {
 	class App {	
 		friend class Renderer;
 	protected:
-		const std::vector<Scene*> _scenes;
+		std::vector<Scene*> _scenes;
 		int _currentScene{ 0 };
 		GuiController* _gui;
 		Renderer* _renderer;
@@ -26,7 +26,7 @@ namespace Astra {
 		virtual void updateDescriptorSet() {};
 		virtual void createObjDescBuffer();
 
-		virtual void onResize(int w, int h);
+		virtual void onResize(int w, int h) {};
 		virtual void onMouseMotion(int x, int y) {};
 		virtual void onKeyboard(int key, int scancode, int action, int mods) {};
 		virtual void onKeyboardChar(unsigned char key) {};
@@ -44,7 +44,8 @@ namespace Astra {
 
 
 	public:
-		void init();
+		virtual void init(const std::vector<Scene*>& scenes, Renderer * renderer, GuiController * gui = nullptr);
+		virtual void addScene(Scene* s);
 		virtual void run() {};
 
 		void destroy();
@@ -52,7 +53,7 @@ namespace Astra {
 
 		void setupCallbacks(GLFWwindow * window);
 		bool isMinimized() const;
-		void loadModel(const std::string& filename, const glm::mat4& transform);
+		void loadModel(const std::string& filename, const glm::mat4& transform = glm::mat4(1.0f));
 		int& getCurrentSceneIndexRef();
 		int getCurrenSceneIndex() const;
 		void setCurrentSceneIndex(int i);
@@ -65,18 +66,23 @@ namespace Astra {
 		VkDescriptorPool _descPool;
 		VkDescriptorSetLayout _descSetLayout;
 		VkDescriptorSet _descSet;
-		OffscreenRaster _rasterPipeline;
+		Pipeline* _rasterPipeline;
 		
 		// rt
 		nvvk::DescriptorSetBindings _rtDescSetLayoutBind;
 		VkDescriptorPool _rtDescPool;
 		VkDescriptorSetLayout _rtDescSetLayout;
 		VkDescriptorSet _rtDescSet;
-		RayTracingPipeline _rtPipeline;
+		Pipeline* _rtPipeline;
 		std::vector<nvvk::AccelKHR> _blas;
 		std::vector<VkAccelerationStructureInstanceKHR> m_tlas;
 
+		bool _useRT{ true };
+
 	public:
+		void init (const std::vector<Scene*>& scenes, Renderer* renderer, GuiController* gui = nullptr) override;
+		void run() override;
+
 		void createDescriptorSetLayout() override;
 		void updateDescriptorSet() override;
 		void createRtDescriptorSet();
@@ -86,5 +92,7 @@ namespace Astra {
 		void onMouseMotion(int x, int y) override;
 		void onMouseButton(int button, int action, int mods) override;
 		void onMouseWheel(int x, int y) override;
+
+		bool& getUseRTref();
 	};
 }

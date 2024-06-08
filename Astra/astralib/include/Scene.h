@@ -22,6 +22,9 @@ namespace Astra {
 		glm::mat4 _transform;
 	public:
 		Scene();
+
+		Scene& operator=(const Scene& s);
+
 		virtual void destroy();
 		virtual void addModel(const HostModel& model);
 		virtual void addInstance(const MeshInstance & instance);
@@ -45,6 +48,10 @@ namespace Astra {
 
 		virtual void updatePushConstantRaster(PushConstantRaster& pc);
 		virtual void updatePushConstant(PushConstantRay& pc);
+
+		virtual bool isRt() const {
+			return false;
+		};
 	};
 
 	class SceneRT : public Scene {
@@ -52,12 +59,14 @@ namespace Astra {
 		nvvk::RaytracingBuilderKHR _rtBuilder;
 		std::vector<VkAccelerationStructureInstanceKHR> _asInstances;
 
+	public:
 		void createBottomLevelAS();
 		void createTopLevelAS();
 		void updateTopLevelAS(int instance_id);
-	public:
 		VkAccelerationStructureKHR getTLAS() const;
 		void destroy() override;
-
+		bool isRt() const override {
+			return true;
+		};
 	};
 }

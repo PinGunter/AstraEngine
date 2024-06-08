@@ -14,7 +14,7 @@ void Astra::Renderer::renderPost(const VkCommandBuffer& cmdBuf)
 	vkCmdDraw(cmdBuf, 3, 1, 0, 0);
 }
 
-void Astra::Renderer::renderRaster(const VkCommandBuffer & cmdBuf, const Scene& scene, RasterPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets)
+void Astra::Renderer::renderRaster(const VkCommandBuffer & cmdBuf, Scene* scene, RasterPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets)
 {
 	// clear
 	std::array<VkClearValue, 2> clearValues{};
@@ -43,19 +43,19 @@ void Astra::Renderer::renderRaster(const VkCommandBuffer & cmdBuf, const Scene& 
 	PushConstantRaster pushConstant;
 
 	// lights
-	scene.getLight()->updatePushConstantRaster(pushConstant);
+	scene->getLight()->updatePushConstantRaster(pushConstant);
 
 	// meshes
 
 	// scene.draw(renderingContext);
 	// TODO Rendering Context with all draw data needed
-	for (auto & inst : scene.getInstances()) {
+	for (auto & inst : scene->getInstances()) {
 		// skip invisibles
 		if (inst.getVisible()) {
 			// get model (with buffers) and update transform matrix
-			auto& model = scene.getModels()[inst.getMeshIndex()];
+			auto& model = scene->getModels()[inst.getMeshIndex()];
 			inst.updatePushConstantRaster(pushConstant);
-			pushConstant.modelMatrix = scene.getTransformRef() * pushConstant.modelMatrix;
+			pushConstant.modelMatrix = scene->getTransformRef() * pushConstant.modelMatrix;
 
 			// send pc to gpu
 			pipeline->pushConstants(cmdBuf, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
@@ -70,7 +70,7 @@ void Astra::Renderer::renderRaster(const VkCommandBuffer & cmdBuf, const Scene& 
 	vkCmdEndRenderPass(cmdBuf);
 }
 
-void Astra::Renderer::renderRaytrace(const VkCommandBuffer& cmdBuf, const Scene& scene, RayTracingPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets)
+void Astra::Renderer::renderRaytrace(const VkCommandBuffer& cmdBuf, Scene* scene, RayTracingPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets)
 {
 	// push constant info
 	PushConstantRay pushConstant;
@@ -89,7 +89,7 @@ void Astra::Renderer::renderRaytrace(const VkCommandBuffer& cmdBuf, const Scene&
 	pushConstant.lightIntensity = scene.getLight()->getIntensity();
 	pushConstant.lightPosition = scene.getLight()->getPosition();
 	pushConstant.lightType = scene.getLight()->getType();*/
-	scene.getLight()->updatePushConstantRT(pushConstant);
+	scene->getLight()->updatePushConstantRT(pushConstant);
 
 	// TODO si da tiempo habria que pensar una forma de generalizar uniforms
 	// probablemente con UBOs para que no haya problemas de tamaño
@@ -298,6 +298,11 @@ void Astra::Renderer::createRenderPass()
 
 }
 
+void Astra::Renderer::createPostPipeline()
+{
+	_postPipeline.createPipeline(Astra::Device::getInstance().getVkDevice(), {_postDescSetLayout}, _postRenderPass);
+}
+
 void Astra::Renderer::createFrameBuffers()
 {
 	// Recreate the frame buffers
@@ -418,6 +423,19 @@ void Astra::Renderer::prepareFrame()
 	vkWaitForFences(Astra::Device::getInstance().getVkDevice(), 1, &_fences[imageIndex], VK_TRUE, UINT64_MAX);
 }
 
+VkCommandBuffer Astra::Renderer::beginFrame()
+{
+	prepareFrame();
+	uint32_t currentFrame = _swapchain.getActiveImageIndex();
+	const auto& cmdBuf = _commandBuffers[currentFrame];
+
+	// begin command buffer
+	VkCommandBufferBeginInfo beginInfo{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
+	beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+	vkBeginCommandBuffer(cmdBuf, &beginInfo);
+	return cmdBuf;
+}
+
 void Astra::Renderer::requestSwapchainImage(int w, int h)
 {
 	_size = _swapchain.update(w, h);
@@ -469,6 +487,30 @@ void Astra::Renderer::endFrame()
 	_swapchain.present(Astra::Device::getInstance().getQueue());
 }
 
+void Astra::Renderer::beginPost()
+{
+	std::array<VkClearValue, 2> clearValues{};
+	clearValues[0].color = { {_clearColor[0], _clearColor[1], _clearColor[2], _clearColor[3]} };
+	clearValues[1].depthStencil = { 1.0f, 0 };
+
+	uint32_t currentFrame = _swapchain.getActiveImageIndex();
+	const auto& cmdBuf = _commandBuffers[currentFrame];
+
+	VkRenderPassBeginInfo postRenderPassBeginInfo{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO };
+	postRenderPassBeginInfo.clearValueCount = 2;
+	postRenderPassBeginInfo.pClearValues = clearValues.data();
+	postRenderPassBeginInfo.renderPass = _postRenderPass;
+	postRenderPassBeginInfo.framebuffer = _framebuffers[currentFrame];
+	postRenderPassBeginInfo.renderArea = { {0, 0}, _size };
+
+	vkCmdBeginRenderPass(cmdBuf, &postRenderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
+}
+
+void Astra::Renderer::endPost(const VkCommandBuffer & cmdBuf)
+{
+	vkCmdEndRenderPass(cmdBuf);
+}
+
 void Astra::Renderer::updateUBO(const VkCommandBuffer& cmdBuf, const GlobalUniforms& hostUbo)
 {
 	VkBuffer deviceUBO = _app->getCameraUBO().buffer;
@@ -498,11 +540,15 @@ void Astra::Renderer::updateUBO(const VkCommandBuffer& cmdBuf, const GlobalUnifo
 		VK_DEPENDENCY_DEVICE_GROUP_BIT, 0, nullptr, 1, &afterBarrier, 0, nullptr);
 }
 	
-void Astra::Renderer::init(App* app)
+void Astra::Renderer::init()
+{
+	_offscreenDepthFormat = nvvk::findDepthFormat(Astra::Device::getInstance().getPhysicalDevice());
+	_clearColor = glm::vec4(1.0f);
+}
+
+void Astra::Renderer::linkApp(App* app)
 {
 	_app = app;
-	_offscreenDepthFormat = nvvk::findDepthFormat(Astra::Device::getInstance().getPhysicalDevice());
-
 }
 
 void Astra::Renderer::destroy()
@@ -519,26 +565,14 @@ void Astra::Renderer::destroy()
 
 }
 
-void Astra::Renderer::render(const Scene& scene, Pipeline* pipeline, const std::vector<VkDescriptorSet> & descSets)
+void Astra::Renderer::render(const VkCommandBuffer & cmdBuf, Scene* scene, Pipeline* pipeline, const std::vector<VkDescriptorSet> & descSets)
 {
-	prepareFrame();
-	uint32_t currentFrame = _swapchain.getActiveImageIndex();
-	const auto& cmdBuf = _commandBuffers[currentFrame];
-
-	// begin command buffer
-	VkCommandBufferBeginInfo beginInfo{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
-	beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-	vkBeginCommandBuffer(cmdBuf, &beginInfo);
-
 	if (pipeline->doesRayTracing()) {
 		renderRaytrace(cmdBuf, scene, (RayTracingPipeline*)pipeline, descSets);
 	}
 	else {
 		renderRaster(cmdBuf, scene, (RasterPipeline*)pipeline, descSets);
 	}
-	
-	renderPost(cmdBuf);
-	endFrame();
 }
 
 glm::vec4& Astra::Renderer::getClearColorRef()
@@ -558,6 +592,10 @@ void Astra::Renderer::setClearColor(const glm::vec4& color)
 const nvvk::Texture& Astra::Renderer::getOffscreenColor() const
 {
 	return _offscreenColor;
+}
+VkRenderPass Astra::Renderer::getOffscreenRenderPass() const
+{
+	return _offscreenRenderPass;
 }
 //
 //void Astra::Renderer::initGUIRendering(Gui& gui)
