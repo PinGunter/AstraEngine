@@ -10,7 +10,7 @@
 
 Astra::Pipeline::~Pipeline()
 {
-	const auto& device = Astra::Device::getInstance().getVkDevice();
+	const auto& device = AstraDevice.getVkDevice();
 	vkDestroyPipelineLayout(device, _layout, nullptr);
 	vkDestroyPipeline(device, _pipeline, nullptr);
 }
@@ -40,7 +40,7 @@ VkPipelineLayout Astra::Pipeline::getLayout()
 
 void Astra::RayTracingPipeline::createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsets, nvvk::ResourceAllocatorDma& alloc, const VkPhysicalDeviceRayTracingPipelinePropertiesKHR& rtProperties)
 {
-	if (!Astra::Device::getInstance().getRtEnabled()) {
+	if (!AstraDevice.getRtEnabled()) {
 		throw std::runtime_error("Can't create raytracing pipeline without enabling raytracing!");
 	}
 
@@ -183,7 +183,7 @@ void Astra::RayTracingPipeline::createSBT(nvvk::ResourceAllocatorDma & alloc, co
 	// get the shader group handles
 	uint32_t dataSize = handleCount * handleSize;
 	std::vector<uint8_t> handles(dataSize);
-	auto result = vkGetRayTracingShaderGroupHandlesKHR(Astra::Device::getInstance().getVkDevice(), _pipeline, 0, handleCount, dataSize, handles.data());
+	auto result = vkGetRayTracingShaderGroupHandlesKHR(AstraDevice.getVkDevice(), _pipeline, 0, handleCount, dataSize, handles.data());
 	assert(result == VK_SUCCESS);
 
 	// allocate buffer for storing the sbt
@@ -195,7 +195,7 @@ void Astra::RayTracingPipeline::createSBT(nvvk::ResourceAllocatorDma & alloc, co
 
 	// find the sbt address of each group
 	VkBufferDeviceAddressInfo info{ VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO, nullptr, _rtSBTBuffer.buffer };
-	VkDeviceAddress sbtAddress = vkGetBufferDeviceAddress(Astra::Device::getInstance().getVkDevice(), &info);
+	VkDeviceAddress sbtAddress = vkGetBufferDeviceAddress(AstraDevice.getVkDevice(), &info);
 	_rgenRegion.deviceAddress = sbtAddress;
 	_missRegion.deviceAddress = sbtAddress + _rgenRegion.size;
 	_hitRegion.deviceAddress = sbtAddress + _rgenRegion.size + _missRegion.size;

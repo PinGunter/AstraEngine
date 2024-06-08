@@ -6,8 +6,7 @@
 int main(int argc, char** argv) {
 	// Device Initialization
 	Astra::DeviceCreateInfo createInfo{};
-	Astra::Device::getInstance().initDevice(createInfo);
-	const auto& device = Astra::Device::getInstance();
+    AstraDevice.initDevice(createInfo);
 
 	// App creation
 	Astra::DefaultApp app;
@@ -20,14 +19,14 @@ int main(int argc, char** argv) {
 	Astra::Camera cam;
 	Astra::CameraController* camera = new Astra::OrbitCameraController(cam);
 	// Setup camera
-	auto windowSize = device.getWindowSize();
+	auto windowSize = AstraDevice.getWindowSize();
 	camera->setWindowSize(windowSize[0], windowSize[1]);
 	camera->setLookAt(glm::vec3(5.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 
 	scene->setCamera(camera);
 
 	app.init({ scene }, renderer);
-	app.setupCallbacks(Astra::Device::getInstance().getWindow());
+	app.setupCallbacks(AstraDevice.getWindow());
 
 	try {
 		app.run();

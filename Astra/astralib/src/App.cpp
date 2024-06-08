@@ -51,7 +51,7 @@ void Astra::App::createUBO()
 
 void Astra::App::createObjDescBuffer()
 {
-	nvvk::CommandPool cmdGen(Astra::Device::getInstance().getVkDevice(), Astra::Device::getInstance().getGraphicsQueueIndex());
+	nvvk::CommandPool cmdGen(AstraDevice.getVkDevice(), Astra::Device::getInstance().getGraphicsQueueIndex());
 
 	auto cmdBuf = cmdGen.createCommandBuffer();
 	for (auto s : _scenes) {
@@ -66,7 +66,7 @@ void Astra::App::createObjDescBuffer()
 
 void Astra::App::init(const std::vector<Scene*>& scenes, Renderer* renderer, GuiController* gui)
 {
-	_alloc.init(Astra::Device::getInstance().getVkDevice(), Astra::Device::getInstance().getPhysicalDevice());
+	_alloc.init(AstraDevice.getVkDevice(), Astra::Device::getInstance().getPhysicalDevice());
 	for (auto s : scenes) {
 		s->init(&_alloc);
 	}			
@@ -114,7 +114,7 @@ void Astra::App::setupCallbacks(GLFWwindow* window)
 bool Astra::App::isMinimized() const
 {
 	int w, h;
-	glfwGetWindowSize(Astra::Device::getInstance().getWindow(), &w, &h);
+	glfwGetWindowSize(AstraDevice.getWindow(), &w, &h);
 	
 	return w == 0 || h == 0;
 }
@@ -147,7 +147,7 @@ void Astra::App::loadModel(const std::string& filename, const glm::mat4& transfo
 	_scenes[_currentScene]->addModel(model);
 
 	// Create the buffers on Device and copy vertices, indices and materials
-	nvvk::CommandPool  cmdBufGet(Astra::Device::getInstance().getVkDevice(), Astra::Device::getInstance().getGraphicsQueueIndex());
+	nvvk::CommandPool  cmdBufGet(AstraDevice.getVkDevice(), Astra::Device::getInstance().getGraphicsQueueIndex());
 	VkCommandBuffer    cmdBuf = cmdBufGet.createCommandBuffer();
 	VkBufferUsageFlags flag = VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT;
 	VkBufferUsageFlags rayTracingFlags = flag | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
@@ -158,17 +158,17 @@ void Astra::App::loadModel(const std::string& filename, const glm::mat4& transfo
 	
 	// Creates all textures found and find the offset for this model
 	auto txtOffset = static_cast<uint32_t>(_scenes[_currentScene]->getTextures().size());
-	Astra::Device::getInstance().createTextureImages(cmdBuf, loader.m_textures, _scenes[_currentScene]->getTextures(), _alloc);
+    AstraDevice.createTextureImages(cmdBuf, loader.m_textures, _scenes[_currentScene]->getTextures(), _alloc);
 	cmdBufGet.submitAndWait(cmdBuf);
 	_alloc.finalizeAndReleaseStaging();
 
 	// Creating information for device access
 	ObjDesc desc;
 	desc.txtOffset = txtOffset;
-	desc.vertexAddress = nvvk::getBufferDeviceAddress(Astra::Device::getInstance().getVkDevice(), model.vertexBuffer.buffer);
-	desc.indexAddress = nvvk::getBufferDeviceAddress(Astra::Device::getInstance().getVkDevice(), model.indexBuffer.buffer);
-	desc.materialAddress = nvvk::getBufferDeviceAddress(Astra::Device::getInstance().getVkDevice(), model.matColorBuffer.buffer);
-	desc.materialIndexAddress = nvvk::getBufferDeviceAddress(Astra::Device::getInstance().getVkDevice(), model.matIndexBuffer.buffer);
+	desc.vertexAddress = nvvk::getBufferDeviceAddress(AstraDevice.getVkDevice(), model.vertexBuffer.buffer);
+	desc.indexAddress = nvvk::getBufferDeviceAddress(AstraDevice.getVkDevice(), model.indexBuffer.buffer);
+	desc.materialAddress = nvvk::getBufferDeviceAddress(AstraDevice.getVkDevice(), model.matColorBuffer.buffer);
+	desc.materialIndexAddress = nvvk::getBufferDeviceAddress(AstraDevice.getVkDevice(), model.matIndexBuffer.buffer);
 	
 	
 	// Keeping the obj host model and device description
@@ -258,8 +258,8 @@ void Astra::DefaultApp::init(const std::vector<Scene*>& scenes, Renderer* render
 		std::string(PROJECT_NAME),
 	};
 
-	auto size = Astra::Device::getInstance().getWindowSize();
-	_renderer->createSwapchain(Astra::Device::getInstance().getSurface(), size[0], size[1]);
+	auto size = AstraDevice.getWindowSize();
+	_renderer->createSwapchain(AstraDevice.getSurface(), size[0], size[1]);
 	_renderer->createDepthBuffer();
 	_renderer->createRenderPass();
 	_renderer->createFrameBuffers();
@@ -271,7 +271,7 @@ void Astra::DefaultApp::init(const std::vector<Scene*>& scenes, Renderer* render
 
 	_renderer->createOffscreenRender(_alloc);
 	createDescriptorSetLayout();
-	((OffscreenRaster*)_rasterPipeline)->createPipeline(Astra::Device::getInstance().getVkDevice(), { _descSetLayout }, _renderer->getOffscreenRenderPass());
+	((OffscreenRaster*)_rasterPipeline)->createPipeline(AstraDevice.getVkDevice(), { _descSetLayout }, _renderer->getOffscreenRenderPass());
 
 	createUBO();
 	createObjDescBuffer();
@@ -285,7 +285,7 @@ void Astra::DefaultApp::init(const std::vector<Scene*>& scenes, Renderer* render
 	}
 
 	createRtDescriptorSet();
-	((RayTracingPipeline*)_rtPipeline)->createPipeline(Astra::Device::getInstance().getVkDevice(), { _rtDescSetLayout, _descSetLayout }, _alloc, _rtProperties);
+	((RayTracingPipeline*)_rtPipeline)->createPipeline(AstraDevice.getVkDevice(), { _rtDescSetLayout, _descSetLayout }, _alloc, _rtProperties);
 
 	_renderer->createPostDescriptorSet();
 	_renderer->createPostPipeline();
@@ -342,9 +342,9 @@ void Astra::DefaultApp::createDescriptorSetLayout()
 		VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR);
 
 
-	_descSetLayout = _descSetLayoutBind.createLayout(Astra::Device::getInstance().getVkDevice());
-	_descPool = _descSetLayoutBind.createPool(Astra::Device::getInstance().getVkDevice(), 1);
-	_descSet = nvvk::allocateDescriptorSet(Astra::Device::getInstance().getVkDevice(), _descPool, _descSetLayout);
+	_descSetLayout = _descSetLayoutBind.createLayout(AstraDevice.getVkDevice());
+	_descPool = _descSetLayoutBind.createPool(AstraDevice.getVkDevice(), 1);
+	_descSet = nvvk::allocateDescriptorSet(AstraDevice.getVkDevice(), _descPool, _descSetLayout);
 }
 
 // Default App
@@ -369,12 +369,12 @@ void Astra::DefaultApp::updateDescriptorSet()
 	writes.emplace_back(_descSetLayoutBind.makeWriteArray(_descSet, SceneBindings::eTextures, diit.data()));
 
 	// Writing the information
-	vkUpdateDescriptorSets(Astra::Device::getInstance().getVkDevice(), static_cast<uint32_t>(writes.size()), writes.data(), 0, nullptr);
+	vkUpdateDescriptorSets(AstraDevice.getVkDevice(), static_cast<uint32_t>(writes.size()), writes.data(), 0, nullptr);
 }
 
 void Astra::DefaultApp::createRtDescriptorSet()
 {
-	const auto& device = Astra::Device::getInstance().getVkDevice();
+	const auto& device = AstraDevice.getVkDevice();
 	_rtDescSetLayoutBind.addBinding(RtxBindings::eTlas, VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, 1, VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR);
 	_rtDescSetLayoutBind.addBinding(RtxBindings::eOutImage, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1, VK_SHADER_STAGE_RAYGEN_BIT_KHR);
 
@@ -403,7 +403,7 @@ void Astra::DefaultApp::udpateRtDescriptorSet()
 {
 	VkDescriptorImageInfo imageInfo{ {}, _renderer->getOffscreenColor().descriptor.imageView, VK_IMAGE_LAYOUT_GENERAL };
 	VkWriteDescriptorSet wds = _rtDescSetLayoutBind.makeWrite(_rtDescSet, RtxBindings::eOutImage, &imageInfo);
-	vkUpdateDescriptorSets(Astra::Device::getInstance().getVkDevice(), 1, &wds, 0, nullptr);
+	vkUpdateDescriptorSets(AstraDevice.getVkDevice(), 1, &wds, 0, nullptr);
 }
 
 
@@ -418,8 +418,8 @@ void Astra::DefaultApp::onResize(int w, int h)
 	}
 
 	// wait until finishing tasks
-	vkDeviceWaitIdle(Astra::Device::getInstance().getVkDevice());
-	vkQueueWaitIdle(Astra::Device::getInstance().getQueue());
+	vkDeviceWaitIdle(AstraDevice.getVkDevice());
+	vkQueueWaitIdle(AstraDevice.getQueue());
 
 	// request swapchain image
 	_renderer->requestSwapchainImage(w, h);

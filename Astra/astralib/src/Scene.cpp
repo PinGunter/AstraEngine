@@ -140,7 +140,7 @@ void Astra::Scene::updatePushConstant(PushConstantRay& pc)
 
 void Astra::SceneRT::init(nvvk::ResourceAllocator* alloc)
 {
-	_rtBuilder.setup(Astra::Device::getInstance().getVkDevice(), alloc, Astra::Device::getInstance().getGraphicsQueueIndex());
+	_rtBuilder.setup(AstraDevice.getVkDevice(), alloc, Astra::Device::getInstance().getGraphicsQueueIndex());
 }
 
 void Astra::SceneRT::createBottomLevelAS()
@@ -149,7 +149,7 @@ void Astra::SceneRT::createBottomLevelAS()
 	allBlas.reserve(_objModels.size());
 
 	for (const auto& obj : _objModels) {
-		auto blas = Astra::Device::getInstance().objectToVkGeometry(obj);
+		auto blas = AstraDevice.objectToVkGeometry(obj);
 
 		allBlas.emplace_back(blas);
 	}

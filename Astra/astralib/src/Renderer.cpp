@@ -92,7 +92,7 @@ void Astra::Renderer::renderRaytrace(const VkCommandBuffer& cmdBuf, Scene* scene
 	scene->getLight()->updatePushConstantRT(pushConstant);
 
 	// TODO si da tiempo habria que pensar una forma de generalizar uniforms
-	// probablemente con UBOs para que no haya problemas de tamaño
+	// probablemente con UBOs para que no haya problemas de tamaï¿½o
 
 	pipeline->bind(cmdBuf, descSets);
 	pipeline->pushConstants(cmdBuf, VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_MISS_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR,
@@ -104,15 +104,15 @@ void Astra::Renderer::renderRaytrace(const VkCommandBuffer& cmdBuf, Scene* scene
 void Astra::Renderer::createPostDescriptorSet()
 {
 	_postDescSetLayoutBind.addBinding(0, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_FRAGMENT_BIT);
-	_postDescSetLayout = _postDescSetLayoutBind.createLayout(Astra::Device::getInstance().getVkDevice());
-	_postDescPool = _postDescSetLayoutBind.createPool(Astra::Device::getInstance().getVkDevice());
-	_postDescSet = nvvk::allocateDescriptorSet(Astra::Device::getInstance().getVkDevice(), _postDescPool, _postDescSetLayout);
+	_postDescSetLayout = _postDescSetLayoutBind.createLayout(AstraDevice.getVkDevice());
+	_postDescPool = _postDescSetLayoutBind.createPool(AstraDevice.getVkDevice());
+	_postDescSet = nvvk::allocateDescriptorSet(AstraDevice.getVkDevice(), _postDescPool, _postDescSetLayout);
 }
 
 void Astra::Renderer::updatePostDescriptorSet()
 {
 	VkWriteDescriptorSet writeDescriptorSets = _postDescSetLayoutBind.makeWrite(_postDescSet, 0, &_offscreenColor.descriptor);
-	vkUpdateDescriptorSets(Astra::Device::getInstance().getVkDevice(), 1, &writeDescriptorSets, 0, nullptr);
+	vkUpdateDescriptorSets(AstraDevice.getVkDevice(), 1, &writeDescriptorSets, 0, nullptr);
 }
 
 
@@ -129,11 +129,11 @@ void Astra::Renderer::createSwapchain(const VkSurfaceKHR& surface, uint32_t widt
 	_size = VkExtent2D{ width, height };
 	_colorFormat = colorFormat;
 	_depthFormat = depthFormat;
-	const auto& device = Astra::Device::getInstance().getVkDevice();
-	const auto& physicalDevice = Astra::Device::getInstance().getPhysicalDevice();
-	const auto& queue = Astra::Device::getInstance().getQueue();
-	const auto& graphicsQueueIndex = Astra::Device::getInstance().getGraphicsQueueIndex();
-	const auto& commandPool = Astra::Device::getInstance().getCommandPool();
+	const auto& device = AstraDevice.getVkDevice();
+	const auto& physicalDevice = AstraDevice.getPhysicalDevice();
+	const auto& queue = AstraDevice.getQueue();
+	const auto& graphicsQueueIndex = AstraDevice.getGraphicsQueueIndex();
+	const auto& commandPool = AstraDevice.getCommandPool();
 
 	// Find the most suitable depth format
 	if (_depthFormat == VK_FORMAT_UNDEFINED)
@@ -173,9 +173,9 @@ void Astra::Renderer::createSwapchain(const VkSurfaceKHR& surface, uint32_t widt
 	_commandBuffers.resize(_swapchain.getImageCount());
 	vkAllocateCommandBuffers(device, &allocateInfo, _commandBuffers.data());
 
-	auto cmdBuffer = Astra::Device::getInstance().createTmpCmdBuf();
+	auto cmdBuffer = AstraDevice.createTmpCmdBuf();
 	_swapchain.cmdUpdateBarriers(cmdBuffer);
-	Astra::Device::getInstance().submitTmpCmdBuf(cmdBuffer);
+    AstraDevice.submitTmpCmdBuf(cmdBuffer);
 }
 
 void Astra::Renderer::createOffscreenRender(nvvk::ResourceAllocatorDma& alloc)
@@ -215,7 +215,7 @@ void Astra::Renderer::createOffscreenRender(nvvk::ResourceAllocatorDma& alloc)
 
 	// Setting the image layout for both color and depth
 	{
-		nvvk::CommandPool genCmdBuf(device, Astra::Device::getInstance().getGraphicsQueueIndex());
+		nvvk::CommandPool genCmdBuf(device, AstraDevice.getGraphicsQueueIndex());
 		auto              cmdBuf = genCmdBuf.createCommandBuffer();
 		nvvk::cmdBarrierImageLayout(cmdBuf, _offscreenColor.image, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_GENERAL);
 		nvvk::cmdBarrierImageLayout(cmdBuf, _offscreenDepth.image, VK_IMAGE_LAYOUT_UNDEFINED,
@@ -249,7 +249,7 @@ void Astra::Renderer::createOffscreenRender(nvvk::ResourceAllocatorDma& alloc)
 void Astra::Renderer::createRenderPass()
 {
 	if (_postRenderPass)
-		vkDestroyRenderPass(Astra::Device::getInstance().getVkDevice(), _postRenderPass, nullptr);
+		vkDestroyRenderPass(AstraDevice.getVkDevice(), _postRenderPass, nullptr);
 
 	std::array<VkAttachmentDescription, 2> attachments{};
 	// Color attachment
@@ -293,20 +293,20 @@ void Astra::Renderer::createRenderPass()
 	renderPassInfo.dependencyCount = static_cast<uint32_t>(subpassDependencies.size());
 	renderPassInfo.pDependencies = subpassDependencies.data();
 
-	vkCreateRenderPass(Astra::Device::getInstance().getVkDevice(), &renderPassInfo, nullptr, &_postRenderPass);
+	vkCreateRenderPass(AstraDevice.getVkDevice(), &renderPassInfo, nullptr, &_postRenderPass);
 
 }
 
 void Astra::Renderer::createPostPipeline()
 {
-	_postPipeline.createPipeline(Astra::Device::getInstance().getVkDevice(), {_postDescSetLayout}, _postRenderPass);
+	_postPipeline.createPipeline(AstraDevice.getVkDevice(), {_postDescSetLayout}, _postRenderPass);
 }
 
 void Astra::Renderer::createFrameBuffers()
 {
 	// Recreate the frame buffers
 	for (auto framebuffer : _framebuffers)
-		vkDestroyFramebuffer(Astra::Device::getInstance().getVkDevice(), framebuffer, nullptr);
+		vkDestroyFramebuffer(AstraDevice.getVkDevice(), framebuffer, nullptr);
 
 	// Array of attachment (color, depth)
 	std::array<VkImageView, 2> attachments{};
@@ -326,14 +326,14 @@ void Astra::Renderer::createFrameBuffers()
 	{
 		attachments[0] = _swapchain.getImageView(i);
 		attachments[1] = _depthView;
-		vkCreateFramebuffer(Astra::Device::getInstance().getVkDevice(), &framebufferCreateInfo, nullptr, &_framebuffers[i]);
+		vkCreateFramebuffer(AstraDevice.getVkDevice(), &framebufferCreateInfo, nullptr, &_framebuffers[i]);
 	}
 
 }
 
 void Astra::Renderer::createDepthBuffer()
 {
-	const auto& device = Astra::Device::getInstance().getVkDevice();
+	const auto& device = AstraDevice.getVkDevice();
 	if (_depthView)
 		vkDestroyImageView(device, _depthView, nullptr);
 
@@ -361,13 +361,13 @@ void Astra::Renderer::createDepthBuffer()
 	vkGetImageMemoryRequirements(device, _depthImage, &memReqs);
 	VkMemoryAllocateInfo memAllocInfo{ VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO };
 	memAllocInfo.allocationSize = memReqs.size;
-	memAllocInfo.memoryTypeIndex = Astra::Device::getInstance().getMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+	memAllocInfo.memoryTypeIndex = AstraDevice.getMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 	vkAllocateMemory(device, &memAllocInfo, nullptr, &_depthMemory);
 
 	// Bind image and memory
 	vkBindImageMemory(device, _depthImage, _depthMemory, 0);
 
-	auto cmdBuffer = Astra::Device::getInstance().createTmpCmdBuf();
+	auto cmdBuffer = AstraDevice.createTmpCmdBuf();
 
 	// Put barrier on top, Put barrier inside setup command buffer
 	VkImageSubresourceRange subresourceRange{};
@@ -385,7 +385,7 @@ void Astra::Renderer::createDepthBuffer()
 	const VkPipelineStageFlags destStageMask = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
 
 	vkCmdPipelineBarrier(cmdBuffer, srcStageMask, destStageMask, VK_FALSE, 0, nullptr, 0, nullptr, 1, &imageMemoryBarrier);
-	Astra::Device::getInstance().submitTmpCmdBuf(cmdBuffer);
+    AstraDevice.submitTmpCmdBuf(cmdBuffer);
 
 
 	// Setting up the view
@@ -405,7 +405,7 @@ void Astra::Renderer::resize(int w, int h)
 void Astra::Renderer::prepareFrame()
 {
 	int w, h;
-	glfwGetFramebufferSize(Astra::Device::getInstance().getWindow(), &w, &h);
+	glfwGetFramebufferSize(AstraDevice.getWindow(), &w, &h);
 
 	if (w != (int)_size.width || h != (int)_size.height) {
 		// trigger app resize callback
@@ -419,7 +419,7 @@ void Astra::Renderer::prepareFrame()
 
 	// use fence to wait for cmdbuff execution
 	uint32_t imageIndex = _swapchain.getActiveImageIndex();
-	vkWaitForFences(Astra::Device::getInstance().getVkDevice(), 1, &_fences[imageIndex], VK_TRUE, UINT64_MAX);
+	vkWaitForFences(AstraDevice.getVkDevice(), 1, &_fences[imageIndex], VK_TRUE, UINT64_MAX);
 }
 
 VkCommandBuffer Astra::Renderer::beginFrame()
@@ -438,9 +438,9 @@ VkCommandBuffer Astra::Renderer::beginFrame()
 void Astra::Renderer::requestSwapchainImage(int w, int h)
 {
 	_size = _swapchain.update(w, h);
-	auto cmdBuffer = Astra::Device::getInstance().createTmpCmdBuf();
+	auto cmdBuffer = AstraDevice.createTmpCmdBuf();
 	_swapchain.cmdUpdateBarriers(cmdBuffer);
-	Astra::Device::getInstance().submitTmpCmdBuf(cmdBuffer);
+    AstraDevice.submitTmpCmdBuf(cmdBuffer);
 
 	if (_size.height != h || _size.width != w) {
 		Astra::Log("Swapchain image size different from requested one", WARNING);
@@ -450,7 +450,7 @@ void Astra::Renderer::requestSwapchainImage(int w, int h)
 void Astra::Renderer::endFrame()
 {
 	uint32_t imageIndex = _swapchain.getActiveImageIndex();
-	vkResetFences(Astra::Device::getInstance().getVkDevice(), 1, &_fences[imageIndex]);
+	vkResetFences(AstraDevice.getVkDevice(), 1, &_fences[imageIndex]);
 
 	const uint32_t                deviceMask = 0b0000'0001;
 	const std::array<uint32_t, 2> deviceIndex = { 0, 1 };
@@ -480,10 +480,10 @@ void Astra::Renderer::endFrame()
 	submitInfo.pNext = &deviceGroupSubmitInfo;
 
 	// Submit to the graphics queue passing a wait fence
-	vkQueueSubmit(Astra::Device::getInstance().getQueue(), 1, &submitInfo, _fences[imageIndex]);
+	vkQueueSubmit(AstraDevice.getQueue(), 1, &submitInfo, _fences[imageIndex]);
 
 	// Presenting frame
-	_swapchain.present(Astra::Device::getInstance().getQueue());
+	_swapchain.present(AstraDevice.getQueue());
 }
 
 void Astra::Renderer::beginPost()
@@ -541,7 +541,7 @@ void Astra::Renderer::updateUBO(const VkCommandBuffer& cmdBuf, const GlobalUnifo
 	
 void Astra::Renderer::init()
 {
-	_offscreenDepthFormat = nvvk::findDepthFormat(Astra::Device::getInstance().getPhysicalDevice());
+	_offscreenDepthFormat = nvvk::findDepthFormat(AstraDevice.getPhysicalDevice());
 	_clearColor = glm::vec4(1.0f);
 }
 
@@ -552,7 +552,7 @@ void Astra::Renderer::linkApp(App* app)
 
 void Astra::Renderer::destroy(nvvk::ResourceAllocator * alloc)
 {
-	const auto& device = Astra::Device::getInstance().getVkDevice();
+	const auto& device = AstraDevice.getVkDevice();
 	alloc->destroy(_offscreenColor);
 	alloc->destroy(_offscreenDepth);
 	vkDestroyDescriptorPool(device, _postDescPool, nullptr);
@@ -597,7 +597,7 @@ VkRenderPass Astra::Renderer::getOffscreenRenderPass() const
 //
 //void Astra::Renderer::initGUIRendering(Gui& gui)
 //{
-//	const auto& device = Astra::Device::getInstance().getVkDevice();
+//	const auto& device = AstraDevice.getVkDevice();
 //	const auto& physicalDevice = Astra::Device::getInstance().getPhysicalDevice();
 //	const auto& instance = Astra::Device::getInstance().getVkInstance();
 //	const auto& queueFamily = Astra::Device::getInstance().getGraphicsQueueIndex();
