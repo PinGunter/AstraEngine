@@ -18,6 +18,7 @@ namespace Astra {
 		Renderer* _renderer;
 		GLFWwindow* _window;
 
+		nvvk::ResourceAllocatorDma _alloc;
 		nvvk::Buffer _globalsBuffer; // UBO for camera 
 
 		virtual void createUBO();
@@ -76,6 +77,8 @@ namespace Astra {
 		Pipeline* _rtPipeline;
 		std::vector<nvvk::AccelKHR> _blas;
 		std::vector<VkAccelerationStructureInstanceKHR> m_tlas;
+		VkPhysicalDeviceRayTracingPipelinePropertiesKHR _rtProperties{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_PROPERTIES_KHR };
+
 
 		bool _useRT{ true };
 

@@ -25,7 +25,8 @@ namespace Astra {
 
 		Scene& operator=(const Scene& s);
 
-		virtual void destroy();
+		virtual void init(nvvk::ResourceAllocator* alloc) {};
+		virtual void destroy(nvvk::ResourceAllocator* alloc);
 		virtual void addModel(const HostModel& model);
 		virtual void addInstance(const MeshInstance & instance);
 		virtual void addObjDesc(const ObjDesc& objdesc);
@@ -59,12 +60,14 @@ namespace Astra {
 		nvvk::RaytracingBuilderKHR _rtBuilder;
 		std::vector<VkAccelerationStructureInstanceKHR> _asInstances;
 
+
 	public:
+		void init(nvvk::ResourceAllocator* alloc) override;
 		void createBottomLevelAS();
 		void createTopLevelAS();
 		void updateTopLevelAS(int instance_id);
 		VkAccelerationStructureKHR getTLAS() const;
-		void destroy() override;
+		void destroy(nvvk::ResourceAllocator * alloc) override;
 		bool isRt() const override {
 			return true;
 		};

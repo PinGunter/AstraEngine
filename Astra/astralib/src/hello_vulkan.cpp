@@ -825,7 +825,7 @@ void HelloVulkan::createRtPipeline()
 	//for (auto& s : stages) {
 	//	vkDestroyShaderModule(m_device, s.module, nullptr);
 	//}
-	rtPipeline.createPipeline(m_device, { m_rtDescSetLayout, m_descSetLayout });
+	rtPipeline.createPipeline(m_device, { m_rtDescSetLayout, m_descSetLayout }, m_alloc, m_rtProperties);
 }
 
 void HelloVulkan::createRtShaderBindingTable()

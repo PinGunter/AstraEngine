@@ -38,13 +38,13 @@ VkPipelineLayout Astra::Pipeline::getLayout()
 	return _layout;
 }
 
-void Astra::RayTracingPipeline::createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsets)
+void Astra::RayTracingPipeline::createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsets, nvvk::ResourceAllocatorDma& alloc, const VkPhysicalDeviceRayTracingPipelinePropertiesKHR& rtProperties)
 {
 	if (!Astra::Device::getInstance().getRtEnabled()) {
 		throw std::runtime_error("Can't create raytracing pipeline without enabling raytracing!");
 	}
 
-	if (Astra::Device::getInstance().getRTProperties().maxRayRecursionDepth <= 1) {
+	if (rtProperties.maxRayRecursionDepth <= 1) {
 		throw std::runtime_error("Device does not support ray recursion");
 	}
 
@@ -155,7 +155,7 @@ void Astra::RayTracingPipeline::createPipeline(VkDevice vkdev, const std::vector
 	}
 	
 	// we now create the Shader Binding Table (SBT)
-	createSBT();
+	createSBT(alloc, rtProperties);
 }
 
 std::array<VkStridedDeviceAddressRegionKHR, 4> Astra::RayTracingPipeline::getSBTRegions()
@@ -163,11 +163,8 @@ std::array<VkStridedDeviceAddressRegionKHR, 4> Astra::RayTracingPipeline::getSBT
 	return { _rgenRegion, _missRegion, _hitRegion, _callRegion };
 }
 
-void Astra::RayTracingPipeline::createSBT()
+void Astra::RayTracingPipeline::createSBT(nvvk::ResourceAllocatorDma & alloc, const VkPhysicalDeviceRayTracingPipelinePropertiesKHR& rtProperties)
 {
-	auto rtProperties = Astra::Device::getInstance().getRTProperties();
-	auto& alloc = Astra::Device::getInstance().getResAlloc();
-
 	uint32_t missCount{ 2 };
 	uint32_t hitCount{ 1 };
 	auto handleCount = 1 + missCount + hitCount;

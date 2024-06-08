@@ -31,12 +31,9 @@ namespace Astra {
 		VkQueue _queue;
 		uint32_t _graphicsQueueIndex;
 		VkCommandPool _cmdPool;
-		VkPhysicalDeviceRayTracingPipelinePropertiesKHR _rtProperties{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_PROPERTIES_KHR };
 		bool _raytracingEnabled;
 
-		nvvk::ResourceAllocatorDma _alloc; 
 		nvvk::DebugUtil            _debug;
-		nvvk::RaytracingBuilderKHR _rtBuilder;
 
 		Device() {}
 		~Device() {
@@ -64,8 +61,6 @@ namespace Astra {
 		uint32_t getGraphicsQueueIndex() const;
 		VkCommandPool getCommandPool() const;
 		GLFWwindow* getWindow();
-		VkPhysicalDeviceRayTracingPipelinePropertiesKHR getRTProperties();
-		nvvk::ResourceAllocatorDma& getResAlloc();
 		bool getRtEnabled() const;
 
 
@@ -74,11 +69,12 @@ namespace Astra {
 		void submitTmpCmdBuf(VkCommandBuffer cmdBuff);
 
 		VkShaderModule createShaderModule(const std::vector<char>& file);
-		void createTextureImages(const VkCommandBuffer& cmdBuf, const std::vector<std::string>& new_textures, std::vector<nvvk::Texture>& textures);
+		void Device::createTextureImages(const VkCommandBuffer& cmdBuf, const std::vector<std::string>& new_textures, std::vector<nvvk::Texture>& textures, nvvk::ResourceAllocatorDma& alloc);		
 		nvvk::RaytracingBuilderKHR::BlasInput objectToVkGeometry(const Astra::HostModel& model);
-		
 
 		uint32_t getMemoryType(uint32_t typeBits, const VkMemoryPropertyFlags& properties) const;
 		std::array<int, 2> getWindowSize() const;
 	};
+
+#define AstraDevice Astra::Device::getInstance()
 }

@@ -20,20 +20,19 @@ Astra::Scene& Astra::Scene::operator=(const Scene& s)
 	return *this;
 }
 
-void Astra::Scene::destroy() {
-	auto& alloc = Astra::Device::getInstance().getResAlloc();
+void Astra::Scene::destroy(nvvk::ResourceAllocator* alloc) {
 
-	alloc.destroy(_objDescBuffer);
+	alloc->destroy(_objDescBuffer);
 
 	for (auto& m : _objModels) {
-		alloc.destroy(m.vertexBuffer);
-		alloc.destroy(m.indexBuffer);
-		alloc.destroy(m.matColorBuffer);
-		alloc.destroy(m.matIndexBuffer);
+		alloc->destroy(m.vertexBuffer);
+		alloc->destroy(m.indexBuffer);
+		alloc->destroy(m.matColorBuffer);
+		alloc->destroy(m.matIndexBuffer);
 	}
 
 	for (auto& t : _textures) {
-		alloc.destroy(t);
+		alloc->destroy(t);
 	}
 
 	for (auto& m : _instances) {
@@ -139,6 +138,11 @@ void Astra::Scene::updatePushConstant(PushConstantRay& pc)
 
 // rt scene
 
+void Astra::SceneRT::init(nvvk::ResourceAllocator* alloc)
+{
+	_rtBuilder.setup(Astra::Device::getInstance().getVkDevice(), alloc, Astra::Device::getInstance().getGraphicsQueueIndex());
+}
+
 void Astra::SceneRT::createBottomLevelAS()
 {
 	std::vector<nvvk::RaytracingBuilderKHR::BlasInput> allBlas;
@@ -190,8 +194,8 @@ VkAccelerationStructureKHR Astra::SceneRT::getTLAS() const
 	return _rtBuilder.getAccelerationStructure();
 }
 
-void Astra::SceneRT::destroy()
+void Astra::SceneRT::destroy(nvvk::ResourceAllocator * alloc)
 {
-	Scene::destroy();
+	Scene::destroy(alloc);
 	_rtBuilder.destroy();
 }

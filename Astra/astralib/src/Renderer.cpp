@@ -178,10 +178,9 @@ void Astra::Renderer::createSwapchain(const VkSurfaceKHR& surface, uint32_t widt
 	Astra::Device::getInstance().submitTmpCmdBuf(cmdBuffer);
 }
 
-void Astra::Renderer::createOffscreenRender()
+void Astra::Renderer::createOffscreenRender(nvvk::ResourceAllocatorDma& alloc)
 {
-	auto& alloc = Astra::Device::getInstance().getResAlloc();
-	const auto& device = Astra::Device::getInstance().getVkDevice();
+	const auto& device = AstraDevice.getVkDevice();
 	alloc.destroy(_offscreenColor);
 	alloc.destroy(_offscreenDepth);
 
@@ -551,18 +550,16 @@ void Astra::Renderer::linkApp(App* app)
 	_app = app;
 }
 
-void Astra::Renderer::destroy()
+void Astra::Renderer::destroy(nvvk::ResourceAllocator * alloc)
 {
-	auto& alloc = Astra::Device::getInstance().getResAlloc();
 	const auto& device = Astra::Device::getInstance().getVkDevice();
-	alloc.destroy(_offscreenColor);
-	alloc.destroy(_offscreenDepth);
+	alloc->destroy(_offscreenColor);
+	alloc->destroy(_offscreenDepth);
 	vkDestroyDescriptorPool(device, _postDescPool, nullptr);
 	vkDestroyDescriptorSetLayout(device, _postDescSetLayout, nullptr);
 	vkDestroyRenderPass(device, _offscreenRenderPass, nullptr);
 	vkDestroyRenderPass(device, _postRenderPass, nullptr);
 	vkDestroyFramebuffer(device, _offscreenFb, nullptr);
-
 }
 
 void Astra::Renderer::render(const VkCommandBuffer & cmdBuf, Scene* scene, Pipeline* pipeline, const std::vector<VkDescriptorSet> & descSets)

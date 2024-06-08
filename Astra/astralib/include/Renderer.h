@@ -57,7 +57,7 @@ namespace Astra {
 	public:
 		void init();
 		void linkApp(App * app);
-		void destroy();
+		void destroy(nvvk::ResourceAllocator* alloc);
 		void render(const VkCommandBuffer& cmdBuf, Scene* scene, Pipeline* pipeline, const std::vector<VkDescriptorSet>& descSets);
 		VkCommandBuffer beginFrame();
 		void endFrame();
@@ -75,7 +75,7 @@ namespace Astra {
 		//void initGUIRendering(Astra::Gui& gui);
 		
 		void requestSwapchainImage(int w, int h);
-		void createOffscreenRender();
+		void createOffscreenRender(nvvk::ResourceAllocatorDma& alloc);
 		void createPostDescriptorSet();
 		void updatePostDescriptorSet();
 		void createFrameBuffers();

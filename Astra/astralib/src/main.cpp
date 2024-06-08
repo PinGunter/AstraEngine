@@ -5,7 +5,7 @@
 
 int main(int argc, char** argv) {
 	// Device Initialization
-	Astra::DeviceCreateInfo createInfo;
+	Astra::DeviceCreateInfo createInfo{};
 	Astra::Device::getInstance().initDevice(createInfo);
 	const auto& device = Astra::Device::getInstance();
 

@@ -105,17 +105,9 @@ namespace Astra {
 		poolCreateInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 		vkCreateCommandPool(_vkdevice, &poolCreateInfo, nullptr, &_cmdPool);
 
-		if (createInfo.useRT) {
-			VkPhysicalDeviceProperties2 prop2{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2 };
-			prop2.pNext = &_rtProperties;
-			vkGetPhysicalDeviceProperties2(_physicalDevice, &prop2);
-			_rtBuilder.setup(_vkdevice, &_alloc, _graphicsQueueIndex);
-		}
-		
 		// if no error was thrown it means that it supports RT
 		_raytracingEnabled = createInfo.useRT;
 
-		_alloc.init(_instance, _vkdevice, _physicalDevice);
 		_debug.setup(_vkdevice);
 	}
 
@@ -217,15 +209,6 @@ namespace Astra {
 
 	void Device::destroy()
 	{
-		_rtBuilder.destroy();
-	}
-
-	nvvk::ResourceAllocatorDma& Device::getResAlloc() {
-		return _alloc;
-	}
-
-	VkPhysicalDeviceRayTracingPipelinePropertiesKHR Device::getRTProperties() {
-		return _rtProperties;
 	}
 
 	uint32_t Device::getMemoryType(uint32_t typeBits, const VkMemoryPropertyFlags& properties) const
@@ -289,7 +272,7 @@ namespace Astra {
 		return input;
 	}
 
-	void Device::createTextureImages(const VkCommandBuffer& cmdBuf, const std::vector<std::string>& new_textures, std::vector<nvvk::Texture>& textures)
+	void Device::createTextureImages(const VkCommandBuffer& cmdBuf, const std::vector<std::string>& new_textures, std::vector<nvvk::Texture>& textures, nvvk::ResourceAllocatorDma & alloc)
 	{
 		VkSamplerCreateInfo samplerCreateInfo{ VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO };
 		samplerCreateInfo.minFilter = VK_FILTER_LINEAR;
@@ -310,9 +293,9 @@ namespace Astra {
 			auto                   imageCreateInfo = nvvk::makeImage2DCreateInfo(imgSize, format);
 
 			// Creating the dummy texture
-			nvvk::Image           image = Astra::Device::getInstance().getResAlloc().createImage(cmdBuf, bufferSize, color.data(), imageCreateInfo);
+			nvvk::Image           image = alloc.createImage(cmdBuf, bufferSize, color.data(), imageCreateInfo);
 			VkImageViewCreateInfo ivInfo = nvvk::makeImageViewCreateInfo(image.image, imageCreateInfo);
-			texture = Astra::Device::getInstance().getResAlloc().createTexture(image, ivInfo, samplerCreateInfo);
+			texture = alloc.createTexture(image, ivInfo, samplerCreateInfo);
 
 			// The image format must be in VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			nvvk::cmdBarrierImageLayout(cmdBuf, texture.image, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
@@ -352,10 +335,10 @@ namespace Astra {
 				auto         imageCreateInfo = nvvk::makeImage2DCreateInfo(imgSize, format, VK_IMAGE_USAGE_SAMPLED_BIT, true);
 
 				{
-					nvvk::Image image = Astra::Device::getInstance().getResAlloc().createImage(cmdBuf, bufferSize, pixels, imageCreateInfo);
+					nvvk::Image image = alloc.createImage(cmdBuf, bufferSize, pixels, imageCreateInfo);
 					nvvk::cmdGenerateMipmaps(cmdBuf, image.image, format, imgSize, imageCreateInfo.mipLevels);
 					VkImageViewCreateInfo ivInfo = nvvk::makeImageViewCreateInfo(image.image, imageCreateInfo);
-					nvvk::Texture         texture = Astra::Device::getInstance().getResAlloc().createTexture(image, ivInfo, samplerCreateInfo);
+					nvvk::Texture         texture = alloc.createTexture(image, ivInfo, samplerCreateInfo);
 
 					textures.push_back(texture);
 				}

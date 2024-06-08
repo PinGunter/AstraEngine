@@ -37,11 +37,11 @@ namespace Astra {
 
 		nvvk::DescriptorSetBindings _rtDescSetLayoutBind;
 		std::vector<VkRayTracingShaderGroupCreateInfoKHR> _rtShaderGroups;
-		void createSBT();
+		void createSBT(nvvk::ResourceAllocatorDma& alloc, const VkPhysicalDeviceRayTracingPipelinePropertiesKHR& rtProperties);
 
 	public:
 		void bind(const VkCommandBuffer& cmdBuf, const std::vector<VkDescriptorSet>& descsets) override;
-		void createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsetsLayouts);
+		void createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsetsLayouts, nvvk::ResourceAllocatorDma& alloc, const VkPhysicalDeviceRayTracingPipelinePropertiesKHR& rtProperties);
 		inline bool doesRayTracing() override {
 			return true;
 		};
