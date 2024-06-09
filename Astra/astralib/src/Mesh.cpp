@@ -26,16 +26,16 @@ uint32_t Astra::MeshInstance::getMeshIndex() const
 	return _mesh;
 }
 
-void Astra::MeshInstance::update()
+bool Astra::MeshInstance::update()
 {
-	// called for every frame
+	return false;
 }
 
 void Astra::MeshInstance::destroy()
 {
 }
 
-void Astra::MeshInstance::updatePushConstantRaster(PushConstantRaster& pc) const 
+void Astra::MeshInstance::updatePushConstantRaster(PushConstantRaster& pc) const
 {
 	pc.modelMatrix = _transform;
 	pc.objIndex = _mesh;

@@ -124,10 +124,11 @@ void Astra::CameraController::setFov(float f)
 	_camera._fov = f;
 }
 
-void Astra::CameraController::update()
+bool Astra::CameraController::update()
 {
 	// update camera params 
 	updateCamera();
+	return true;
 }
 
 GlobalUniforms Astra::CameraController::getUpdatedGlobals()

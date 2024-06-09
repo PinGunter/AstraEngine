@@ -12,9 +12,11 @@ int main(int argc, char** argv) {
 	Astra::DefaultApp app;
 	Astra::SceneRT* scene = new Astra::SceneRT();
 	Astra::Renderer* renderer = new Astra::Renderer();
+	Astra::GuiController* gui = new Astra::BasiGui();
 
 	// Renderer creation
 	renderer->init();
+
 	// Scene creation
 	Astra::Camera cam;
 	Astra::CameraController* camera = new Astra::OrbitCameraController(cam);
@@ -28,8 +30,7 @@ int main(int argc, char** argv) {
 	scene->setCamera(camera);
 	scene->addLight(pointLight);
 
-	app.init({ scene }, renderer);
-	app.setupCallbacks(AstraDevice.getWindow());
+	app.init({ scene }, renderer, gui);
 
 	try {
 		app.run();
@@ -43,5 +44,6 @@ int main(int argc, char** argv) {
 	delete renderer;
 	delete scene;
 	delete pointLight;
+	delete gui;
 }
 

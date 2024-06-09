@@ -50,7 +50,7 @@ namespace Astra {
 		void setFov(float f);
 
 
-		void update() override;
+		bool update() override;
 		GlobalUniforms getUpdatedGlobals();
 		void updatePushConstantRaster(PushConstantRaster& pc) const override;
 		void updatePushConstantRT(PushConstantRay& pc) const override;

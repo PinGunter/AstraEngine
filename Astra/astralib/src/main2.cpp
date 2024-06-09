@@ -234,58 +234,59 @@ int main2(int argc, char** argv)
 			ImGuiH::Panel::Begin();
 
 
-			if (ImGui::BeginTabBar("Principal")) {
-				if (ImGui::BeginTabItem("Rendering")) {
-					ImGui::ColorEdit3("Clear color", reinterpret_cast<float*>(&clearColor));
-					ImGui::Checkbox("Use Raytracer", &useRaytracer);
-					renderUI(helloVk);
-					ImGui::EndTabItem();
-				}
-				if (ImGui::BeginTabItem("Performance")) {
-					ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-					ImGui::EndTabItem();
-				}
+			//if (ImGui::BeginTabBar("Principal")) {
+			//	if (ImGui::BeginTabItem("Rendering")) {
+			//		ImGui::ColorEdit3("Clear color", reinterpret_cast<float*>(&clearColor));
+			//		ImGui::Checkbox("Use Raytracer", &useRaytracer);
+			//		renderUI(helloVk);
+			//		ImGui::EndTabItem();
+			//	}
+			//	if (ImGui::BeginTabItem("Performance")) {
+			//		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+			//		ImGui::EndTabItem();
+			//	}
 
 
-				ImGui::EndTabBar();
+			//	ImGui::EndTabBar();
 
-			}
+			//}
+
+			////ImGuiH::Panel::End();
+
+			//ImGui::Text("Models: ");
+			//ImGui::ListBox("###Models", &currentModel, names.data(), names.size());
+
+			//if (ImGui::Button("REBUILD TLAS")) helloVk.updateTLAS(currentModel);
+			//if (ImGui::Checkbox("Visible: ", &instances[currentModel].getVisibleRef())) helloVk.updateTLAS(currentModel);
+			//ImGui::Checkbox("ShowGuizmo: ", &showGuizmo);
+
+			//for (int i = 0; i < 4; i++) {
+			//	for (int j = 0; j < 4; j++) {
+			//		ImGui::Text(std::to_string(instances[currentModel].getTransformRef()[j][i]).c_str()); ImGui::SameLine();
+			//	}
+			//	ImGui::Spacing();
+			//}
+
+			//ImGui::Text("Guizmo Type:");
+			//ImGui::RadioButton("Universal", &guizmo_type, (int)ImGuizmo::UNIVERSAL);
+			//ImGui::RadioButton("Translate", &guizmo_type, (int)ImGuizmo::TRANSLATE);
+			//ImGui::RadioButton("Rotate", &guizmo_type, (int)ImGuizmo::ROTATE);
+			//ImGui::RadioButton("Scale", &guizmo_type, (int)ImGuizmo::SCALE);
+
+			//ImGuiIO& io = ImGui::GetIO();
+			//ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
+			//glm::mat4      proj = camera->getProjectionMatrix();
+			//proj[1][1] *= -1;
+			//if (showGuizmo) ImGuizmo::Manipulate(glm::value_ptr(camera->getViewMatrix()), glm::value_ptr(proj), static_cast<ImGuizmo::OPERATION>(guizmo_type), ImGuizmo::LOCAL, glm::value_ptr(instances[currentModel].getTransformRef()));
+
+			//if (ImGuizmo::IsUsing()) {
+			//	helloVk.updateTLAS(currentModel);
+			//}
+
 
 			ImGuiH::Panel::End();
 
-			ImGui::Text("Models: ");
-			ImGui::ListBox("###Models", &currentModel, names.data(), names.size());
-
-			if (ImGui::Button("REBUILD TLAS")) helloVk.updateTLAS(currentModel);
-			if (ImGui::Checkbox("Visible: ", &instances[currentModel].getVisibleRef())) helloVk.updateTLAS(currentModel);
-			ImGui::Checkbox("ShowGuizmo: ", &showGuizmo);
-
-			for (int i = 0; i < 4; i++) {
-				for (int j = 0; j < 4; j++) {
-					ImGui::Text(std::to_string(instances[currentModel].getTransformRef()[j][i]).c_str()); ImGui::SameLine();
-				}
-				ImGui::Spacing();
-			}
-
-			ImGui::Text("Guizmo Type:");
-			ImGui::RadioButton("Universal", &guizmo_type, (int)ImGuizmo::UNIVERSAL);
-			ImGui::RadioButton("Translate", &guizmo_type, (int)ImGuizmo::TRANSLATE);
-			ImGui::RadioButton("Rotate", &guizmo_type, (int)ImGuizmo::ROTATE);
-			ImGui::RadioButton("Scale", &guizmo_type, (int)ImGuizmo::SCALE);
-
-			ImGuiIO& io = ImGui::GetIO();
-			ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
-			glm::mat4      proj = camera->getProjectionMatrix();
-			proj[1][1] *= -1;
-			if (showGuizmo) ImGuizmo::Manipulate(glm::value_ptr(camera->getViewMatrix()), glm::value_ptr(proj), static_cast<ImGuizmo::OPERATION>(guizmo_type), ImGuizmo::LOCAL, glm::value_ptr(instances[currentModel].getTransformRef()));
-
-			if (ImGuizmo::IsUsing()) {
-				helloVk.updateTLAS(currentModel);
-			}
-
-
-
-			ImGui::ShowDemoWindow();
+			//ImGui::ShowDemoWindow();
 		}
 
 		// Start rendering the scene

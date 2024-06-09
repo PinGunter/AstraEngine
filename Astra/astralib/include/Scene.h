@@ -17,7 +17,7 @@ namespace Astra {
 		nvvk::Buffer _objDescBuffer;  // Device buffer of the OBJ descriptions
 
 
-		Light* _light; // multiple lights in the future
+		std::vector< Light*> _lights; // multiple lights in the future
 		CameraController* _camera;
 		glm::mat4 _transform;
 	public:
@@ -28,18 +28,19 @@ namespace Astra {
 		virtual void init(nvvk::ResourceAllocator* alloc) {};
 		virtual void destroy(nvvk::ResourceAllocator* alloc);
 		virtual void addModel(const HostModel& model);
-		virtual void addInstance(const MeshInstance & instance);
+		virtual void addInstance(const MeshInstance& instance);
 		virtual void addObjDesc(const ObjDesc& objdesc);
 		virtual void removeNode(const MeshInstance& n);
 		virtual void addLight(Light* l);
 		virtual void setCamera(CameraController* c);
+		virtual void update();
 
-		Light* getLight() const;
+		const std::vector<Light*>& getLights() const;
 		CameraController* getCamera() const;
 
-		const std::vector<MeshInstance>& getInstances() const;
-		const std::vector<HostModel>& getModels() const;
-		const std::vector<ObjDesc>& getObjDesc() const;
+		std::vector<MeshInstance>& getInstances();
+		std::vector<HostModel>& getModels();
+		std::vector<ObjDesc>& getObjDesc();
 		std::vector<nvvk::Texture>& getTextures();
 		nvvk::Buffer& getObjDescBuff();
 
@@ -63,11 +64,12 @@ namespace Astra {
 
 	public:
 		void init(nvvk::ResourceAllocator* alloc) override;
+		void update() override;
 		void createBottomLevelAS();
 		void createTopLevelAS();
 		void updateTopLevelAS(int instance_id);
 		VkAccelerationStructureKHR getTLAS() const;
-		void destroy(nvvk::ResourceAllocator * alloc) override;
+		void destroy(nvvk::ResourceAllocator* alloc) override;
 		bool isRt() const override {
 			return true;
 		};

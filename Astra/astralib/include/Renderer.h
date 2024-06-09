@@ -24,6 +24,8 @@ namespace Astra {
 		// post
 		PostPipeline _postPipeline;
 		VkRenderPass _postRenderPass;
+		VkFormat _colorFormat{ VK_FORMAT_B8G8R8A8_UNORM };
+		VkFormat _depthFormat{ VK_FORMAT_UNDEFINED };
 		nvvk::DescriptorSetBindings _postDescSetLayoutBind;
 		VkDescriptorPool _postDescPool{ VK_NULL_HANDLE };
 		VkDescriptorSetLayout _postDescSetLayout{ VK_NULL_HANDLE };
@@ -37,8 +39,6 @@ namespace Astra {
 		VkDeviceMemory _depthMemory;
 		VkImageView _depthView;
 		VkExtent2D _size{ 0,0 };
-		VkFormat _colorFormat{ VK_FORMAT_B8G8R8A8_UNORM };
-		VkFormat _depthFormat{ VK_FORMAT_UNDEFINED };
 
 		App* _app;
 		glm::vec4 _clearColor;
@@ -83,5 +83,6 @@ namespace Astra {
 		void createSwapchain(const VkSurfaceKHR& surface, uint32_t width, uint32_t height, VkFormat colorFormat = VK_FORMAT_B8G8R8A8_UNORM, VkFormat depthFormat = VK_FORMAT_UNDEFINED);
 		void createRenderPass();
 		void createPostPipeline();
+		void getGuiControllerInfo(VkRenderPass& renderpass, int& imageCount, VkFormat& colorFormat, VkFormat& depthFormat);
 	};
 }

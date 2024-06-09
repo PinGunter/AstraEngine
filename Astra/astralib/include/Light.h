@@ -18,7 +18,7 @@ namespace Astra {
 
 		void updatePushConstantRaster(PushConstantRaster& pc) const override;
 		void updatePushConstantRT(PushConstantRay& pc) const override;
-		void update() override;
+		bool update() override;
 	};
 
 	class PointLight : public Light {

@@ -38,9 +38,10 @@ void Astra::Light::updatePushConstantRT(PushConstantRay& pc) const
 	pc.lightType = static_cast<int>(_type);
 }
 
-void Astra::Light::update()
+bool Astra::Light::update()
 {
 	// pass
+	return false;
 }
 
 Astra::PointLight::PointLight(const glm::vec3& color, float intensity)

@@ -75,11 +75,17 @@ void Astra::App::init(const std::vector<Scene*>& scenes, Renderer* renderer, Gui
 	_renderer = renderer;
 	_renderer->linkApp(this);
 	_gui = gui;
+	setupCallbacks(AstraDevice.getWindow());
 }
 
 void Astra::App::addScene(Scene* s)
 {
 	_scenes.push_back(s);
+}
+
+void Astra::App::run()
+{
+	_scenes[_currentScene]->update();
 }
 
 void Astra::App::destroy()
@@ -91,6 +97,8 @@ void Astra::App::destroy()
 	_renderer->destroy(&_alloc);
 	for (auto s : _scenes)
 		s->destroy(&_alloc);
+
+	_gui->destroy();
 
 	_alloc.destroy(_globalsBuffer);
 }
@@ -201,6 +209,16 @@ void Astra::App::setCurrentSceneIndex(int i)
 	}
 }
 
+Astra::Scene* Astra::App::getCurrentScene()
+{
+	return _scenes[_currentScene];
+}
+
+Astra::Renderer* Astra::App::getRenderer()
+{
+	return _renderer;
+}
+
 void Astra::App::cb_resize(GLFWwindow* window, int w, int h)
 {
 	auto app = static_cast<Astra::App*> (glfwGetWindowUserPointer(window));
@@ -265,10 +283,11 @@ void Astra::DefaultApp::init(const std::vector<Scene*>& scenes, Renderer* render
 	_renderer->createFrameBuffers();
 
 	// gui init
-
+	_gui = gui;
+	_gui->init(AstraDevice.getWindow(), _renderer);
 	// loading models
 	loadModel(nvh::findFile("media/scenes/mono2.obj", defaultSearchPaths, true));
-	loadModel(nvh::findFile("media/scenes/plane.obj", defaultSearchPaths, true), glm::translate(glm::mat4(1.0f), glm::vec3(0, -1, 0)));
+	loadModel(nvh::findFile("media/scenes/plane2.obj", defaultSearchPaths, true), glm::translate(glm::mat4(1.0f), glm::vec3(0, -1, 0)));
 
 	_renderer->createOffscreenRender(_alloc);
 	createDescriptorSetLayout();
@@ -298,6 +317,9 @@ void Astra::DefaultApp::init(const std::vector<Scene*>& scenes, Renderer* render
 void Astra::DefaultApp::run()
 {
 	while (!glfwWindowShouldClose(_window)) {
+
+		App::run(); // update the scene
+
 		glfwPollEvents();
 		if (isMinimized()) {
 			continue;
@@ -306,6 +328,7 @@ void Astra::DefaultApp::run()
 		// imgui new frame, imguizmo begin frame
 
 		auto cmdBuf = _renderer->beginFrame();
+		_gui->startFrame();
 
 		updateUBO(cmdBuf);
 
@@ -320,8 +343,8 @@ void Astra::DefaultApp::run()
 		// post render: ui and texture
 		_renderer->beginPost();
 		_renderer->renderPost(cmdBuf);
-		// imgui::render()
-		// imgui::renderdrawdata
+		_gui->draw(this);
+		_gui->endFrame(cmdBuf);
 		_renderer->endPost(cmdBuf);
 
 		_renderer->endFrame(cmdBuf);
@@ -332,6 +355,7 @@ void Astra::DefaultApp::run()
 
 void Astra::DefaultApp::destroy()
 {
+	App::destroy();
 	_rasterPipeline->destroy();
 	_rtPipeline->destroy();
 	delete _rasterPipeline;

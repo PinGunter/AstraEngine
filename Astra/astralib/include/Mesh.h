@@ -63,7 +63,7 @@ namespace Astra {
 		bool& getVisibleRef();
 		uint32_t getMeshIndex() const;
 
-		void update() override;
+		bool update() override;
 		void destroy() override;
 		void updatePushConstantRaster(PushConstantRaster& pc) const override;
 		void updatePushConstantRT(PushConstantRay& pc) const override;

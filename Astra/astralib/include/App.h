@@ -47,7 +47,7 @@ namespace Astra {
 	public:
 		virtual void init(const std::vector<Scene*>& scenes, Renderer* renderer, GuiController* gui = nullptr);
 		virtual void addScene(Scene* s);
-		virtual void run() {};
+		virtual void run();
 
 		virtual void destroy();
 		nvvk::Buffer& getCameraUBO();
@@ -58,6 +58,9 @@ namespace Astra {
 		int& getCurrentSceneIndexRef();
 		int getCurrenSceneIndex() const;
 		void setCurrentSceneIndex(int i);
+
+		Scene* getCurrentScene();
+		Renderer* getRenderer();
 	};
 
 	class DefaultApp : public App {

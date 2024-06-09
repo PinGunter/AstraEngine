@@ -43,8 +43,8 @@ void Astra::Renderer::renderRaster(const VkCommandBuffer& cmdBuf, Scene* scene, 
 	PushConstantRaster pushConstant;
 
 	// lights
-	if (scene->getLight())
-		scene->getLight()->updatePushConstantRaster(pushConstant);
+	for (auto light : scene->getLights())
+		light->updatePushConstantRaster(pushConstant);
 
 	// meshes
 
@@ -90,8 +90,8 @@ void Astra::Renderer::renderRaytrace(const VkCommandBuffer& cmdBuf, Scene* scene
 	pushConstant.lightIntensity = scene.getLight()->getIntensity();
 	pushConstant.lightPosition = scene.getLight()->getPosition();
 	pushConstant.lightType = scene.getLight()->getType();*/
-	if (scene->getLight())
-		scene->getLight()->updatePushConstantRT(pushConstant);
+	for (auto light : scene->getLights())
+		light->updatePushConstantRT(pushConstant);
 
 	// TODO si da tiempo habria que pensar una forma de generalizar uniforms
 	// probablemente con UBOs para que no haya problemas de tama�o
@@ -302,6 +302,14 @@ void Astra::Renderer::createRenderPass()
 void Astra::Renderer::createPostPipeline()
 {
 	_postPipeline.createPipeline(AstraDevice.getVkDevice(), { _postDescSetLayout }, _postRenderPass);
+}
+
+void Astra::Renderer::getGuiControllerInfo(VkRenderPass& renderpass, int& imageCount, VkFormat& colorFormat, VkFormat& depthFormat)
+{
+	renderpass = _postRenderPass;
+	imageCount = _swapchain.getImageCount();
+	colorFormat = _colorFormat;
+	depthFormat = _depthFormat;
 }
 
 void Astra::Renderer::createFrameBuffers()
@@ -597,61 +605,3 @@ VkRenderPass Astra::Renderer::getOffscreenRenderPass() const
 {
 	return _offscreenRenderPass;
 }
-//
-//void Astra::Renderer::initGUIRendering(Gui& gui)
-//{
-//	const auto& device = AstraDevice.getVkDevice();
-//	const auto& physicalDevice = Astra::Device::getInstance().getPhysicalDevice();
-//	const auto& instance = Astra::Device::getInstance().getVkInstance();
-//	const auto& queueFamily = Astra::Device::getInstance().getGraphicsQueueIndex();
-//	const auto& queue = Astra::Device::getInstance().getQueue();
-//	ImGui::CreateContext();
-//	ImGuiIO& io = ImGui::GetIO();
-//	//io.IniFilename = nullptr;  // Avoiding the INI file
-//	io.LogFilename = nullptr;
-//	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-//	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;      // Enable Docking
-//	//io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;    // Enable Multi-Viewport / Platform Windows
-//
-//	//ImGuiH::setStyle();
-//	//ImGuiH::setFonts();
-//
-//	std::vector<VkDescriptorPoolSize> poolSize{ {VK_DESCRIPTOR_TYPE_SAMPLER, 1}, {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1} };
-//	VkDescriptorPoolCreateInfo poolInfo{ VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO };
-//	poolInfo.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
-//	poolInfo.maxSets = 1000;
-//	poolInfo.poolSizeCount = 2;
-//	poolInfo.pPoolSizes = poolSize.data();
-//	vkCreateDescriptorPool(device, &poolInfo, nullptr, &gui._imguiDescPool);
-//
-//	// Setup Platform/Renderer back ends
-//	ImGui_ImplVulkan_InitInfo init_info = {};
-//	init_info.Instance = instance;
-//	init_info.PhysicalDevice = physicalDevice;
-//	init_info.Device = device;
-//	init_info.QueueFamily = queueFamily;
-//	init_info.Queue = queue;
-//	init_info.PipelineCache = VK_NULL_HANDLE;
-//	init_info.DescriptorPool = gui._imguiDescPool;
-//	init_info.RenderPass = _postRenderPass;
-//	init_info.Subpass = 0;
-//	init_info.MinImageCount = 2;
-//	init_info.ImageCount = static_cast<int>(_swapchain.getImageCount());
-//	init_info.MSAASamples = VK_SAMPLE_COUNT_1_BIT; 
-//	init_info.CheckVkResultFn = nullptr;
-//	init_info.Allocator = nullptr;
-//
-//	init_info.UseDynamicRendering = false;
-//	init_info.PipelineRenderingCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO_KHR;
-//	init_info.PipelineRenderingCreateInfo.colorAttachmentCount = 1;
-//	init_info.PipelineRenderingCreateInfo.pColorAttachmentFormats = &_colorFormat;
-//	init_info.PipelineRenderingCreateInfo.depthAttachmentFormat = _depthFormat;
-//
-//	ImGui_ImplVulkan_Init(&init_info);
-//
-//	// Upload Fonts
-//	ImGui_ImplVulkan_CreateFontsTexture();
-//
-//	ImGui_ImplGlfw_InitForVulkan(Astra::Device::getInstance().getWindow(), true);
-//
-//}

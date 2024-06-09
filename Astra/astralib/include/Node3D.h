@@ -13,7 +13,7 @@
 			plano.add(nodo); // transfomraion
 			nodo.children.transform = nodo.transform * nodo.children.tranform;
 		}
-	
+
 	*/
 
 namespace Astra {
@@ -68,9 +68,10 @@ namespace Astra {
 
 		/**
 		* will be called every frame in Astra::App
+		* returns true if an update was done
 		*
 		*/
-		virtual void update() = 0;
+		virtual bool update() { return false; };
 
 		virtual void updatePushConstantRaster(PushConstantRaster& pc) const = 0;
 		virtual void updatePushConstantRT(PushConstantRay& pc)const = 0;

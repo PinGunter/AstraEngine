@@ -2,6 +2,7 @@
 #include <host_device.h>
 #include <Device.h>
 #include <nvvk/buffers_vk.hpp>
+#include <Utils.h>
 
 Astra::Scene::Scene() : _transform(1.0f) {}
 
@@ -13,7 +14,7 @@ Astra::Scene& Astra::Scene::operator=(const Scene& s)
 	_textures = s._textures;
 	_objDescBuffer = s._objDescBuffer;
 
-	_light = s._light;
+	_lights = s._lights;
 	_camera = s._camera;
 	_transform = s._transform;
 
@@ -72,7 +73,7 @@ void Astra::Scene::removeNode(const MeshInstance& n)
 void Astra::Scene::addLight(Light* l)
 {
 	// since currently we only have 1
-	_light = l;
+	_lights.push_back(l);
 }
 
 void Astra::Scene::setCamera(CameraController* c)
@@ -80,9 +81,20 @@ void Astra::Scene::setCamera(CameraController* c)
 	_camera = c;
 }
 
-Astra::Light* Astra::Scene::getLight() const
+void Astra::Scene::update()
 {
-	return _light;
+	for (auto l : _lights) {
+		l->update();
+	}
+	_camera->update();
+	for (auto& i : _instances) {
+		i.update();
+	}
+}
+
+const std::vector<Astra::Light*>& Astra::Scene::getLights() const
+{
+	return _lights;
 }
 
 Astra::CameraController* Astra::Scene::getCamera() const
@@ -91,17 +103,17 @@ Astra::CameraController* Astra::Scene::getCamera() const
 }
 
 
-const std::vector<Astra::MeshInstance>& Astra::Scene::getInstances() const
+std::vector<Astra::MeshInstance>& Astra::Scene::getInstances()
 {
 	return _instances;
 }
 
-const std::vector<Astra::HostModel>& Astra::Scene::getModels() const
+std::vector<Astra::HostModel>& Astra::Scene::getModels()
 {
 	return _objModels;
 }
 
-const std::vector<ObjDesc>& Astra::Scene::getObjDesc() const
+std::vector<ObjDesc>& Astra::Scene::getObjDesc()
 {
 	return _objDesc;
 }
@@ -143,6 +155,25 @@ void Astra::SceneRT::init(nvvk::ResourceAllocator* alloc)
 	_rtBuilder.setup(AstraDevice.getVkDevice(), alloc, Astra::Device::getInstance().getGraphicsQueueIndex());
 }
 
+void Astra::SceneRT::update()
+{
+	for (auto l : _lights) {
+		l->update();
+	}
+	_camera->update();
+	std::vector<int> asupdates;
+	for (int i = 0; i < _instances.size(); i++) {
+		if (_instances[i].update()) {
+			asupdates.push_back(i);
+		}
+	}
+
+	for (int i : asupdates) {
+		updateTopLevelAS(i);
+	}
+
+}
+
 void Astra::SceneRT::createBottomLevelAS()
 {
 	std::vector<nvvk::RaytracingBuilderKHR::BlasInput> allBlas;
@@ -176,6 +207,7 @@ void Astra::SceneRT::createTopLevelAS()
 
 void Astra::SceneRT::updateTopLevelAS(int instance_id)
 {
+	Astra::Log("Update AS", INFO);
 	const auto& inst = _instances[instance_id];
 	VkAccelerationStructureInstanceKHR rayInst{};
 	rayInst.transform = nvvk::toTransformMatrixKHR(inst.getTransform());
