@@ -8,9 +8,10 @@
 #include <host_device.h>
 #include <nvh/alignment.hpp>
 
-Astra::Pipeline::~Pipeline()
+void Astra::Pipeline::destroy()
 {
 	const auto& device = AstraDevice.getVkDevice();
+	vkDeviceWaitIdle(device);
 	vkDestroyPipelineLayout(device, _layout, nullptr);
 	vkDestroyPipeline(device, _pipeline, nullptr);
 }
@@ -146,14 +147,14 @@ void Astra::RayTracingPipeline::createPipeline(VkDevice vkdev, const std::vector
 	rayPipelineInfo.maxPipelineRayRecursionDepth = 2; // shadow
 	rayPipelineInfo.layout = _layout;
 
-	if ((vkCreateRayTracingPipelinesKHR(vkdev, {}, {}, 1, &rayPipelineInfo, nullptr, &_pipeline) != VK_SUCCESS) ){
+	if ((vkCreateRayTracingPipelinesKHR(vkdev, {}, {}, 1, &rayPipelineInfo, nullptr, &_pipeline) != VK_SUCCESS)) {
 		throw std::runtime_error("Error creating pipelines");
 	}
 
 	for (auto& s : stages) {
 		vkDestroyShaderModule(vkdev, s.module, nullptr);
 	}
-	
+
 	// we now create the Shader Binding Table (SBT)
 	createSBT(alloc, rtProperties);
 }
@@ -163,7 +164,7 @@ std::array<VkStridedDeviceAddressRegionKHR, 4> Astra::RayTracingPipeline::getSBT
 	return { _rgenRegion, _missRegion, _hitRegion, _callRegion };
 }
 
-void Astra::RayTracingPipeline::createSBT(nvvk::ResourceAllocatorDma & alloc, const VkPhysicalDeviceRayTracingPipelinePropertiesKHR& rtProperties)
+void Astra::RayTracingPipeline::createSBT(nvvk::ResourceAllocatorDma& alloc, const VkPhysicalDeviceRayTracingPipelinePropertiesKHR& rtProperties)
 {
 	uint32_t missCount{ 2 };
 	uint32_t hitCount{ 1 };

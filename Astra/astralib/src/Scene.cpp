@@ -194,7 +194,7 @@ VkAccelerationStructureKHR Astra::SceneRT::getTLAS() const
 	return _rtBuilder.getAccelerationStructure();
 }
 
-void Astra::SceneRT::destroy(nvvk::ResourceAllocator * alloc)
+void Astra::SceneRT::destroy(nvvk::ResourceAllocator* alloc)
 {
 	Scene::destroy(alloc);
 	_rtBuilder.destroy();

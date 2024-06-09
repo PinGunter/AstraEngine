@@ -14,7 +14,7 @@ void Astra::Renderer::renderPost(const VkCommandBuffer& cmdBuf)
 	vkCmdDraw(cmdBuf, 3, 1, 0, 0);
 }
 
-void Astra::Renderer::renderRaster(const VkCommandBuffer & cmdBuf, Scene* scene, RasterPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets)
+void Astra::Renderer::renderRaster(const VkCommandBuffer& cmdBuf, Scene* scene, RasterPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets)
 {
 	// clear
 	std::array<VkClearValue, 2> clearValues{};
@@ -36,20 +36,21 @@ void Astra::Renderer::renderRaster(const VkCommandBuffer & cmdBuf, Scene* scene,
 	setViewport(cmdBuf);
 
 	// bind pipeline
-		
+
 	pipeline->bind(cmdBuf, descSets);
 
 	// render scene
 	PushConstantRaster pushConstant;
 
 	// lights
-	scene->getLight()->updatePushConstantRaster(pushConstant);
+	if (scene->getLight())
+		scene->getLight()->updatePushConstantRaster(pushConstant);
 
 	// meshes
 
 	// scene.draw(renderingContext);
 	// TODO Rendering Context with all draw data needed
-	for (auto & inst : scene->getInstances()) {
+	for (auto& inst : scene->getInstances()) {
 		// skip invisibles
 		if (inst.getVisible()) {
 			// get model (with buffers) and update transform matrix
@@ -76,7 +77,7 @@ void Astra::Renderer::renderRaytrace(const VkCommandBuffer& cmdBuf, Scene* scene
 	PushConstantRay pushConstant;
 	pushConstant.clearColor = _clearColor;
 	// lights
-	
+
 	// TODO este tipo de cosas me gustaria que fuera mas generico
 	// que yo haga un "light->update()" o algo y que se encargara la luz 
 	// de manejar sus datos. Asi tambien podria hacer scene.update() y no
@@ -89,7 +90,8 @@ void Astra::Renderer::renderRaytrace(const VkCommandBuffer& cmdBuf, Scene* scene
 	pushConstant.lightIntensity = scene.getLight()->getIntensity();
 	pushConstant.lightPosition = scene.getLight()->getPosition();
 	pushConstant.lightType = scene.getLight()->getType();*/
-	scene->getLight()->updatePushConstantRT(pushConstant);
+	if (scene->getLight())
+		scene->getLight()->updatePushConstantRT(pushConstant);
 
 	// TODO si da tiempo habria que pensar una forma de generalizar uniforms
 	// probablemente con UBOs para que no haya problemas de tama�o
@@ -175,7 +177,7 @@ void Astra::Renderer::createSwapchain(const VkSurfaceKHR& surface, uint32_t widt
 
 	auto cmdBuffer = AstraDevice.createTmpCmdBuf();
 	_swapchain.cmdUpdateBarriers(cmdBuffer);
-    AstraDevice.submitTmpCmdBuf(cmdBuffer);
+	AstraDevice.submitTmpCmdBuf(cmdBuffer);
 }
 
 void Astra::Renderer::createOffscreenRender(nvvk::ResourceAllocatorDma& alloc)
@@ -299,7 +301,7 @@ void Astra::Renderer::createRenderPass()
 
 void Astra::Renderer::createPostPipeline()
 {
-	_postPipeline.createPipeline(AstraDevice.getVkDevice(), {_postDescSetLayout}, _postRenderPass);
+	_postPipeline.createPipeline(AstraDevice.getVkDevice(), { _postDescSetLayout }, _postRenderPass);
 }
 
 void Astra::Renderer::createFrameBuffers()
@@ -385,7 +387,7 @@ void Astra::Renderer::createDepthBuffer()
 	const VkPipelineStageFlags destStageMask = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
 
 	vkCmdPipelineBarrier(cmdBuffer, srcStageMask, destStageMask, VK_FALSE, 0, nullptr, 0, nullptr, 1, &imageMemoryBarrier);
-    AstraDevice.submitTmpCmdBuf(cmdBuffer);
+	AstraDevice.submitTmpCmdBuf(cmdBuffer);
 
 
 	// Setting up the view
@@ -440,15 +442,16 @@ void Astra::Renderer::requestSwapchainImage(int w, int h)
 	_size = _swapchain.update(w, h);
 	auto cmdBuffer = AstraDevice.createTmpCmdBuf();
 	_swapchain.cmdUpdateBarriers(cmdBuffer);
-    AstraDevice.submitTmpCmdBuf(cmdBuffer);
+	AstraDevice.submitTmpCmdBuf(cmdBuffer);
 
 	if (_size.height != h || _size.width != w) {
 		Astra::Log("Swapchain image size different from requested one", WARNING);
 	}
 }
 
-void Astra::Renderer::endFrame()
+void Astra::Renderer::endFrame(const VkCommandBuffer& cmdBuf)
 {
+	vkEndCommandBuffer(cmdBuf);
 	uint32_t imageIndex = _swapchain.getActiveImageIndex();
 	vkResetFences(AstraDevice.getVkDevice(), 1, &_fences[imageIndex]);
 
@@ -459,7 +462,7 @@ void Astra::Renderer::endFrame()
 	deviceGroupSubmitInfo.waitSemaphoreCount = 1;
 	deviceGroupSubmitInfo.commandBufferCount = 1;
 	deviceGroupSubmitInfo.pCommandBufferDeviceMasks = &deviceMask;
-	deviceGroupSubmitInfo.signalSemaphoreCount =  1;
+	deviceGroupSubmitInfo.signalSemaphoreCount = 1;
 	deviceGroupSubmitInfo.pSignalSemaphoreDeviceIndices = deviceIndex.data();
 	deviceGroupSubmitInfo.pWaitSemaphoreDeviceIndices = deviceIndex.data();
 
@@ -505,7 +508,7 @@ void Astra::Renderer::beginPost()
 	vkCmdBeginRenderPass(cmdBuf, &postRenderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
 }
 
-void Astra::Renderer::endPost(const VkCommandBuffer & cmdBuf)
+void Astra::Renderer::endPost(const VkCommandBuffer& cmdBuf)
 {
 	vkCmdEndRenderPass(cmdBuf);
 }
@@ -538,11 +541,11 @@ void Astra::Renderer::updateUBO(const VkCommandBuffer& cmdBuf, const GlobalUnifo
 	vkCmdPipelineBarrier(cmdBuf, VK_PIPELINE_STAGE_TRANSFER_BIT, uboStages,
 		VK_DEPENDENCY_DEVICE_GROUP_BIT, 0, nullptr, 1, &afterBarrier, 0, nullptr);
 }
-	
+
 void Astra::Renderer::init()
 {
 	_offscreenDepthFormat = nvvk::findDepthFormat(AstraDevice.getPhysicalDevice());
-	_clearColor = glm::vec4(1.0f);
+	_clearColor = glm::vec4(0.0f);
 }
 
 void Astra::Renderer::linkApp(App* app)
@@ -550,7 +553,7 @@ void Astra::Renderer::linkApp(App* app)
 	_app = app;
 }
 
-void Astra::Renderer::destroy(nvvk::ResourceAllocator * alloc)
+void Astra::Renderer::destroy(nvvk::ResourceAllocator* alloc)
 {
 	const auto& device = AstraDevice.getVkDevice();
 	alloc->destroy(_offscreenColor);
@@ -562,7 +565,7 @@ void Astra::Renderer::destroy(nvvk::ResourceAllocator * alloc)
 	vkDestroyFramebuffer(device, _offscreenFb, nullptr);
 }
 
-void Astra::Renderer::render(const VkCommandBuffer & cmdBuf, Scene* scene, Pipeline* pipeline, const std::vector<VkDescriptorSet> & descSets)
+void Astra::Renderer::render(const VkCommandBuffer& cmdBuf, Scene* scene, Pipeline* pipeline, const std::vector<VkDescriptorSet>& descSets)
 {
 	if (pipeline->doesRayTracing()) {
 		renderRaytrace(cmdBuf, scene, (RayTracingPipeline*)pipeline, descSets);

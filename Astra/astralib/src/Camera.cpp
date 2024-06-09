@@ -2,6 +2,7 @@
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/gtx/euler_angles.hpp>
 #include <iostream>
+#include <Globals.h>
 
 Astra::CameraController::CameraController(Camera& cam) : _camera(cam)
 {
@@ -25,7 +26,7 @@ void Astra::CameraController::updateCamera(bool from_transform)
 	_camera.viewMatrix = glm::lookAt(_camera._eye, _camera._centre, _camera._up);
 }
 
-const glm::mat4 & Astra::CameraController::getViewMatrix() const
+const glm::mat4& Astra::CameraController::getViewMatrix() const
 {
 	return _camera.viewMatrix;
 }
@@ -150,6 +151,10 @@ void Astra::CameraController::updatePushConstantRT(PushConstantRay& pc) const
 	// pass
 }
 
+void Astra::CameraController::handleMouseInput(bool buttons[3], int movement[2], float wheel, int mods)
+{
+}
+
 
 Astra::FPSCameraController::FPSCameraController(Camera& cam) : CameraController(cam)
 {
@@ -167,6 +172,23 @@ void Astra::FPSCameraController::move(float qty)
 
 Astra::OrbitCameraController::OrbitCameraController(Camera& cam) : CameraController(cam)
 {
+}
+
+void Astra::OrbitCameraController::handleMouseInput(bool buttons[3], int movement[2], float wheel, int mods)
+{
+	if (buttons[MouseButtons::RIGHT]) { // right click
+		if (mods & InputMods::CONTROL) {
+			zoom(movement[1]);
+		}
+		else {
+			orbit(movement[0], movement[1]);
+		}
+	}
+	else if (buttons[MouseButtons::MIDDLE]) { // middle click
+		pan(movement[0], movement[1]);
+	}
+
+	zoom(wheel);
 }
 
 void Astra::OrbitCameraController::orbit(float dx, float dy)
@@ -205,11 +227,11 @@ void Astra::OrbitCameraController::orbit(float dx, float dy)
 
 	// Finding the new position
 	glm::vec3 newPosition = centerToEye + _camera._centre;
-	
-	_camera._eye = newPosition; 
+
+	_camera._eye = newPosition;
 
 	updateCamera(false);
-	
+
 
 }
 
@@ -224,7 +246,7 @@ void Astra::OrbitCameraController::pan(float dx, float dy)
 	glm::vec3 horizontal = glm::normalize(glm::cross(_camera._up, direction));
 	glm::vec3 vertical = glm::normalize(glm::cross(direction, horizontal));
 
-	glm::vec3 panVector = (_sens * ( - dx * horizontal + dy * vertical));
+	glm::vec3 panVector = (_sens * (-dx * horizontal + dy * vertical));
 	_camera._eye += panVector;
 	_camera._centre += panVector;
 

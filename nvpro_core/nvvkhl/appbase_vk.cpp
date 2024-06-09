@@ -634,18 +634,18 @@ void nvvkhl::AppBaseVk::updateCamera()
   {
     if(ImGui::IsKeyDown(ImGuiKey_LeftCtrl))
     {
-      ((Astra::OrbitCameraController*)camera)->zoom(ImGui::GetIO().MouseDelta.y);
+      //((Astra::OrbitCameraController*)camera)->zoom(ImGui::GetIO().MouseDelta.y);
     }
     else
     {
-      ((Astra::OrbitCameraController*)camera)->orbit(ImGui::GetIO().MouseDelta.x, ImGui::GetIO().MouseDelta.y);
+      //((Astra::OrbitCameraController*)camera)->orbit(ImGui::GetIO().MouseDelta.x, ImGui::GetIO().MouseDelta.y);
     }
   }
 
-  if(ImGui::IsMouseDown(ImGuiMouseButton_Middle))
-    ((Astra::OrbitCameraController*)camera)->pan(ImGui::GetIO().MouseDelta.x, ImGui::GetIO().MouseDelta.y);
+  //if(ImGui::IsMouseDown(ImGuiMouseButton_Middle))
+  //((Astra::OrbitCameraController*)camera)->pan(ImGui::GetIO().MouseDelta.x, ImGui::GetIO().MouseDelta.y);
 
-  ((Astra::OrbitCameraController*)camera)->zoom(ImGui::GetIO().MouseWheel * 10);
+  //((Astra::OrbitCameraController*)camera)->zoom(ImGui::GetIO().MouseWheel * 10);
 
 
   // For all pressed keys - apply the action

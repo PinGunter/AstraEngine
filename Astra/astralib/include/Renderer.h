@@ -48,7 +48,7 @@ namespace Astra {
 
 
 		void setViewport(const VkCommandBuffer& cmdBuf);
-		
+
 
 		void resize(int w, int h);
 		void prepareFrame();
@@ -56,11 +56,11 @@ namespace Astra {
 
 	public:
 		void init();
-		void linkApp(App * app);
+		void linkApp(App* app);
 		void destroy(nvvk::ResourceAllocator* alloc);
 		void render(const VkCommandBuffer& cmdBuf, Scene* scene, Pipeline* pipeline, const std::vector<VkDescriptorSet>& descSets);
 		VkCommandBuffer beginFrame();
-		void endFrame();
+		void endFrame(const VkCommandBuffer& cmdBuf);
 		void beginPost();
 		void endPost(const VkCommandBuffer& cmdBuf);
 		void renderPost(const VkCommandBuffer& cmdBuf); // mandatory step! after drawing
@@ -70,10 +70,10 @@ namespace Astra {
 		glm::vec4 getClearColor() const;
 		void setClearColor(const glm::vec4& color);
 
-		const nvvk::Texture & getOffscreenColor() const;
+		const nvvk::Texture& getOffscreenColor() const;
 		VkRenderPass getOffscreenRenderPass() const;
 		//void initGUIRendering(Astra::Gui& gui);
-		
+
 		void requestSwapchainImage(int w, int h);
 		void createOffscreenRender(nvvk::ResourceAllocatorDma& alloc);
 		void createPostDescriptorSet();

@@ -5,13 +5,6 @@
 #include <host_device.h>
 
 namespace Astra {
-	enum MouseClick {
-		NOCLICK,
-		LEFT,
-		MIDDLE,
-		RIGHT
-	};
-
 	struct Camera {
 		float _near{ 0.1f };
 		float _far{ 1000.0f };
@@ -41,7 +34,7 @@ namespace Astra {
 		float getNear() const;
 		float fetFar() const;
 		float getFov() const;
-		const glm::vec3&  getEye() const;
+		const glm::vec3& getEye() const;
 		const glm::vec3& getUp() const;
 		const glm::vec3& getCentre() const;
 
@@ -61,6 +54,8 @@ namespace Astra {
 		GlobalUniforms getUpdatedGlobals();
 		void updatePushConstantRaster(PushConstantRaster& pc) const override;
 		void updatePushConstantRT(PushConstantRay& pc) const override;
+
+		virtual void handleMouseInput(bool buttons[3], int movement[2], float wheel, int mods);
 	};
 
 	class FPSCameraController : public CameraController {
@@ -71,13 +66,14 @@ namespace Astra {
 	};
 
 	class OrbitCameraController : public CameraController {
-	private:
+	protected:
 		float maxXRotation = glm::pi<float>() * 0.4f;
 		float minXRotation = -glm::pi<float>() * 0.4f;
-	public:
-		OrbitCameraController(Camera& cam);
 		void orbit(float x, float y);
 		void zoom(float increment);
 		void pan(float x, float y);
+	public:
+		OrbitCameraController(Camera& cam);
+		void handleMouseInput(bool buttons[3], int movement[2], float wheel, int mods) override;
 	};
 }

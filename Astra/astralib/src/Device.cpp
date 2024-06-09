@@ -17,6 +17,8 @@ namespace Astra {
 	// user and will provide every extensions or instance layer needed
 
 	void Device::initDevice(DeviceCreateInfo createInfo) {
+		bool emptyRT = false; // checks if the users wants raytracing and used empty device extensions. So that we can add them
+
 		// create glfw window
 		if (!glfwInit()) {
 			throw std::runtime_error("Error initializing glfw");
@@ -24,7 +26,7 @@ namespace Astra {
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 		_window = glfwCreateWindow(SAMPLE_WIDTH, SAMPLE_HEIGHT, "Astra App", nullptr, nullptr);
 
-		
+
 		// fill createInfo with default values if empty
 		if (createInfo.instanceLayers.empty()) {
 			if (createInfo.debug) {
@@ -50,8 +52,12 @@ namespace Astra {
 
 		if (createInfo.deviceExtensions.empty()) {
 			createInfo.deviceExtensions.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
-			//createInfo.deviceExtensions.push_back(VK_KHR_SHADER_NON_SEMANTIC_INFO_EXTENSION_NAME); // enable shader printf
+			createInfo.deviceExtensions.push_back(VK_KHR_SHADER_NON_SEMANTIC_INFO_EXTENSION_NAME); // enable shader printf
+
+			emptyRT = createInfo.useRT;
 		}
+
+
 
 		nvvk::ContextCreateInfo contextInfo;
 		contextInfo.setVersion(createInfo.vkVersionMajor, createInfo.vkVersionMinor);
@@ -65,25 +71,32 @@ namespace Astra {
 			contextInfo.addDeviceExtension(ext.data(), true);
 		}
 
-		nvvk::Context vkctx{};
-		if (!vkctx.initInstance(contextInfo)) {
+		if (emptyRT) {
+			VkPhysicalDeviceAccelerationStructureFeaturesKHR accelFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR };
+			contextInfo.addDeviceExtension(VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME, false, &accelFeatures); // to build acceleration structures
+			VkPhysicalDeviceRayTracingPipelineFeaturesKHR rtPipelineFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR };
+			contextInfo.addDeviceExtension(VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME, false, &rtPipelineFeatures); // raytracing pipeline
+			contextInfo.addDeviceExtension(VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME); // required by raytracing pipeline
+		}
+
+		if (!_vkcontext.initInstance(contextInfo)) {
 			throw std::runtime_error("Error creating instance!");
 		}
 
-		auto compatibleDevices = vkctx.getCompatibleDevices(contextInfo);
+		auto compatibleDevices = _vkcontext.getCompatibleDevices(contextInfo);
 		if (compatibleDevices.empty()) {
 			throw std::runtime_error("No valid GPU was found");
 		}
 
-		if (!vkctx.initDevice(compatibleDevices[0], contextInfo)) {
+		if (!_vkcontext.initDevice(compatibleDevices[0], contextInfo)) {
 			throw std::runtime_error("Error initiating device!");
 		}
 
 		// filling the data
-		_instance = vkctx.m_instance;
-		_vkdevice = vkctx.m_device;
-		_physicalDevice = vkctx.m_physicalDevice;
-		_graphicsQueueIndex = vkctx.m_queueGCT.familyIndex;
+		_instance = _vkcontext.m_instance;
+		_vkdevice = _vkcontext.m_device;
+		_physicalDevice = _vkcontext.m_physicalDevice;
+		_graphicsQueueIndex = _vkcontext.m_queueGCT.familyIndex;
 		vkGetDeviceQueue(_vkdevice, _graphicsQueueIndex, 0, &_queue);
 
 		// getting the surface
@@ -156,11 +169,11 @@ namespace Astra {
 		allocateInfo.commandBufferCount = 1;
 		allocateInfo.commandPool = _cmdPool;
 		allocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-		
+
 		// create
 		VkCommandBuffer cmdBuffer;
 		vkAllocateCommandBuffers(_vkdevice, &allocateInfo, &cmdBuffer);
-		
+
 		// start
 		VkCommandBufferBeginInfo beginInfo{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
 		beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
@@ -168,7 +181,7 @@ namespace Astra {
 		return cmdBuffer;
 	}
 
-	
+
 	bool Device::getRtEnabled() const
 	{
 		return _raytracingEnabled;
@@ -188,7 +201,7 @@ namespace Astra {
 		// free
 		vkFreeCommandBuffers(_vkdevice, _cmdPool, 1, &cmdBuff);
 	}
-	
+
 
 	VkShaderModule Device::createShaderModule(const std::vector<char>& code)
 	{
@@ -272,7 +285,7 @@ namespace Astra {
 		return input;
 	}
 
-	void Device::createTextureImages(const VkCommandBuffer& cmdBuf, const std::vector<std::string>& new_textures, std::vector<nvvk::Texture>& textures, nvvk::ResourceAllocatorDma & alloc)
+	void Device::createTextureImages(const VkCommandBuffer& cmdBuf, const std::vector<std::string>& new_textures, std::vector<nvvk::Texture>& textures, nvvk::ResourceAllocatorDma& alloc)
 	{
 		VkSamplerCreateInfo samplerCreateInfo{ VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO };
 		samplerCreateInfo.minFilter = VK_FILTER_LINEAR;

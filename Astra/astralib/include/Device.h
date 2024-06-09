@@ -7,6 +7,7 @@
 #include <nvvk/debug_util_vk.hpp>
 #include <nvvk/raytraceKHR_vk.hpp>
 #include <Mesh.h>
+#include <nvvk/context_vk.hpp>
 
 namespace Astra {
 
@@ -21,7 +22,7 @@ namespace Astra {
 		uint32_t vkVersionMinor{ 3 };
 	};
 
-	class Device{
+	class Device {
 	private:
 		VkInstance _instance;
 		VkDevice _vkdevice;
@@ -34,6 +35,8 @@ namespace Astra {
 		bool _raytracingEnabled;
 
 		nvvk::DebugUtil            _debug;
+		nvvk::Context _vkcontext{};
+
 
 		Device() {}
 		~Device() {

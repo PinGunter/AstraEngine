@@ -3,7 +3,7 @@
 #include <host_device.h>
 
 namespace Astra {
-	enum LightType {POINT = 0, DIRECTIONAL = 1};
+	enum LightType { POINT = 0, DIRECTIONAL = 1 };
 	class Light : public Node3D {
 	protected:
 		glm::vec3 _color;
@@ -12,7 +12,7 @@ namespace Astra {
 	public:
 		glm::vec3& getColor();
 		void setColor(const glm::vec3& c);
-		float&  getIntensity();
+		float& getIntensity();
 		void setIntensity(float i);
 		LightType getType() const;
 

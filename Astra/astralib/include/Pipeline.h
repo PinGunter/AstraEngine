@@ -9,9 +9,9 @@ namespace Astra {
 		VkPipeline _pipeline;
 
 	public:
-		~Pipeline();
+		virtual void destroy();
 		inline virtual bool doesRayTracing() = 0;
-		virtual void bind(const VkCommandBuffer& cmdBuf, const std::vector<VkDescriptorSet> & descsets);
+		virtual void bind(const VkCommandBuffer& cmdBuf, const std::vector<VkDescriptorSet>& descsets);
 		void pushConstants(const VkCommandBuffer& cmdBuf, uint32_t shaderStages, uint32_t size, void* data);
 		VkPipeline getPipeline();
 		VkPipelineLayout getLayout();

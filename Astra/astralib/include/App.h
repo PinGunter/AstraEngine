@@ -9,7 +9,7 @@ namespace Astra {
 	class Renderer;
 	class Scene;
 
-	class App {	
+	class App {
 		friend class Renderer;
 	protected:
 		std::vector<Scene*> _scenes;
@@ -45,14 +45,14 @@ namespace Astra {
 
 
 	public:
-		virtual void init(const std::vector<Scene*>& scenes, Renderer * renderer, GuiController * gui = nullptr);
+		virtual void init(const std::vector<Scene*>& scenes, Renderer* renderer, GuiController* gui = nullptr);
 		virtual void addScene(Scene* s);
 		virtual void run() {};
 
-		void destroy();
-		nvvk::Buffer & getCameraUBO();
+		virtual void destroy();
+		nvvk::Buffer& getCameraUBO();
 
-		void setupCallbacks(GLFWwindow * window);
+		void setupCallbacks(GLFWwindow* window);
 		bool isMinimized() const;
 		void loadModel(const std::string& filename, const glm::mat4& transform = glm::mat4(1.0f));
 		int& getCurrentSceneIndexRef();
@@ -68,7 +68,7 @@ namespace Astra {
 		VkDescriptorSetLayout _descSetLayout;
 		VkDescriptorSet _descSet;
 		Pipeline* _rasterPipeline;
-		
+
 		// rt
 		nvvk::DescriptorSetBindings _rtDescSetLayoutBind;
 		VkDescriptorPool _rtDescPool;
@@ -82,19 +82,27 @@ namespace Astra {
 
 		bool _useRT{ true };
 
+		// camera and input controls
+		bool _mouseButtons[3] = { 0 };
+		int _lastMousePos[2] = { 0 };
+		int _inputMods{ 0 };
+
 	public:
-		void init (const std::vector<Scene*>& scenes, Renderer* renderer, GuiController* gui = nullptr) override;
+		void init(const std::vector<Scene*>& scenes, Renderer* renderer, GuiController* gui = nullptr) override;
 		void run() override;
+		void destroy() override;
 
 		void createDescriptorSetLayout() override;
 		void updateDescriptorSet() override;
 		void createRtDescriptorSet();
-		void udpateRtDescriptorSet();
+		void updateRtDescriptorSet();
 
 		void onResize(int w, int h) override;
 		void onMouseMotion(int x, int y) override;
 		void onMouseButton(int button, int action, int mods) override;
 		void onMouseWheel(int x, int y) override;
+		void onKeyboard(int key, int scancode, int action, int mods) override;
+
 
 		bool& getUseRTref();
 	};
