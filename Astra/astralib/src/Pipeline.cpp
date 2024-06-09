@@ -8,7 +8,7 @@
 #include <host_device.h>
 #include <nvh/alignment.hpp>
 
-void Astra::Pipeline::destroy()
+void Astra::Pipeline::destroy(nvvk::ResourceAllocator* alloc)
 {
 	const auto& device = AstraDevice.getVkDevice();
 	vkDeviceWaitIdle(device);
@@ -162,6 +162,12 @@ void Astra::RayTracingPipeline::createPipeline(VkDevice vkdev, const std::vector
 std::array<VkStridedDeviceAddressRegionKHR, 4> Astra::RayTracingPipeline::getSBTRegions()
 {
 	return { _rgenRegion, _missRegion, _hitRegion, _callRegion };
+}
+
+void Astra::RayTracingPipeline::destroy(nvvk::ResourceAllocator* alloc)
+{
+	Pipeline::destroy(alloc);
+	alloc->destroy(_rtSBTBuffer);
 }
 
 void Astra::RayTracingPipeline::createSBT(nvvk::ResourceAllocatorDma& alloc, const VkPhysicalDeviceRayTracingPipelinePropertiesKHR& rtProperties)

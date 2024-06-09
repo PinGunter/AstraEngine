@@ -9,7 +9,7 @@ namespace Astra {
 		VkPipeline _pipeline;
 
 	public:
-		virtual void destroy();
+		virtual void destroy(nvvk::ResourceAllocator* alloc);
 		inline virtual bool doesRayTracing() = 0;
 		virtual void bind(const VkCommandBuffer& cmdBuf, const std::vector<VkDescriptorSet>& descsets);
 		void pushConstants(const VkCommandBuffer& cmdBuf, uint32_t shaderStages, uint32_t size, void* data);
@@ -46,6 +46,7 @@ namespace Astra {
 			return true;
 		};
 		std::array<VkStridedDeviceAddressRegionKHR, 4> getSBTRegions();
+		void destroy(nvvk::ResourceAllocator* alloc) override;
 	};
 
 	class OffscreenRaster : public RasterPipeline {

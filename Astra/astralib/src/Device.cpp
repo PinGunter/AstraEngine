@@ -222,6 +222,9 @@ namespace Astra {
 
 	void Device::destroy()
 	{
+		if (_surface)
+			vkDestroySurfaceKHR(_instance, _surface, nullptr);
+
 	}
 
 	uint32_t Device::getMemoryType(uint32_t typeBits, const VkMemoryPropertyFlags& properties) const

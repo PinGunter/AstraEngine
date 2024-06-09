@@ -101,6 +101,7 @@ void Astra::App::destroy()
 	_gui->destroy();
 
 	_alloc.destroy(_globalsBuffer);
+
 }
 
 nvvk::Buffer& Astra::App::getCameraUBO()
@@ -356,10 +357,15 @@ void Astra::DefaultApp::run()
 void Astra::DefaultApp::destroy()
 {
 	App::destroy();
-	_rasterPipeline->destroy();
-	_rtPipeline->destroy();
+	_rasterPipeline->destroy(&_alloc);
+	_rtPipeline->destroy(&_alloc);
+	vkDestroyDescriptorSetLayout(AstraDevice.getVkDevice(), _descSetLayout, nullptr);
+	vkDestroyDescriptorSetLayout(AstraDevice.getVkDevice(), _rtDescSetLayout, nullptr);
+	vkDestroyDescriptorPool(AstraDevice.getVkDevice(), _rtDescPool, nullptr);
 	delete _rasterPipeline;
 	delete _rtPipeline;
+
+	_alloc.deinit();
 }
 
 void Astra::DefaultApp::createDescriptorSetLayout()

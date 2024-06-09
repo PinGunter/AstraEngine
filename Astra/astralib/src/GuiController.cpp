@@ -83,6 +83,7 @@ void Astra::GuiController::destroy()
 	ImGui_ImplVulkan_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
+	vkDestroyDescriptorPool(AstraDevice.getVkDevice(), _imguiDescPool, nullptr);
 }
 
 

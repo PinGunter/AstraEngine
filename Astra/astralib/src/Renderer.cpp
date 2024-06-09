@@ -566,11 +566,23 @@ void Astra::Renderer::destroy(nvvk::ResourceAllocator* alloc)
 	const auto& device = AstraDevice.getVkDevice();
 	alloc->destroy(_offscreenColor);
 	alloc->destroy(_offscreenDepth);
+	vkDestroyImageView(device, _depthView, nullptr);
+	vkDestroyImage(device, _depthImage, nullptr);
+	vkFreeMemory(device, _depthMemory, nullptr);
 	vkDestroyDescriptorPool(device, _postDescPool, nullptr);
 	vkDestroyDescriptorSetLayout(device, _postDescSetLayout, nullptr);
 	vkDestroyRenderPass(device, _offscreenRenderPass, nullptr);
 	vkDestroyRenderPass(device, _postRenderPass, nullptr);
 	vkDestroyFramebuffer(device, _offscreenFb, nullptr);
+	for (uint32_t i = 0; i < _swapchain.getImageCount(); i++)
+	{
+		vkDestroyFence(device, _fences[i], nullptr);
+
+		vkDestroyFramebuffer(device, _framebuffers[i], nullptr);
+
+		vkFreeCommandBuffers(device, AstraDevice.getCommandPool(), 1, &_commandBuffers[i]);
+	}
+	_swapchain.deinit();
 }
 
 void Astra::Renderer::render(const VkCommandBuffer& cmdBuf, Scene* scene, Pipeline* pipeline, const std::vector<VkDescriptorSet>& descSets)
