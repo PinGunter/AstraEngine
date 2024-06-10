@@ -65,7 +65,7 @@ void Astra::Scene::loadModel(const std::string& filename, const glm::mat4& trans
 		model.nbVertices = static_cast<uint32_t>(loader.m_vertices.size());
 
 		// Create the buffers on Device and copy vertices, indices and materials
-		nvvk::CommandPool  cmdBufGet(AstraDevice.getVkDevice(), Astra::Device::getInstance().getGraphicsQueueIndex());
+		nvvk::CommandPool  cmdBufGet(AstraDevice.getVkDevice(), AstraDevice.getGraphicsQueueIndex());
 		VkCommandBuffer    cmdBuf = cmdBufGet.createCommandBuffer();
 		VkBufferUsageFlags flag = VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT;
 		VkBufferUsageFlags rayTracingFlags = flag | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
@@ -81,7 +81,7 @@ void Astra::Scene::loadModel(const std::string& filename, const glm::mat4& trans
 		_alloc->finalizeAndReleaseStaging();
 
 		// Creating information for device access
-		ObjDesc desc;
+		ObjDesc desc{};
 		desc.txtOffset = txtOffset;
 		desc.vertexAddress = nvvk::getBufferDeviceAddress(AstraDevice.getVkDevice(), model.vertexBuffer.buffer);
 		desc.indexAddress = nvvk::getBufferDeviceAddress(AstraDevice.getVkDevice(), model.indexBuffer.buffer);
@@ -97,7 +97,11 @@ void Astra::Scene::loadModel(const std::string& filename, const glm::mat4& trans
 		Astra::MeshInstance instance(static_cast<uint32_t>(getModels().size() - 1), transform, filename.substr(filename.size() - std::min(10, (int)filename.size() / 2), filename.size()));
 		addInstance(instance);
 
+		if (_objDescBuffer.buffer != VK_NULL_HANDLE) {
+			_alloc->destroy(_objDescBuffer);
+		}
 		createObjDescBuffer();
+
 	}
 	else {
 		_lazymodels.push_back(std::make_pair(filename, transform));
@@ -111,21 +115,24 @@ void Astra::Scene::init(nvvk::ResourceAllocator* alloc)
 		loadModel(p.first, p.second);
 	}
 	_lazymodels.clear();
+	//if (!_objModels.empty()) {
+	//	createObjDescBuffer();
+	//}
 }
 
-void Astra::Scene::destroy(nvvk::ResourceAllocator* alloc) {
+void Astra::Scene::destroy() {
 
-	alloc->destroy(_objDescBuffer);
+	_alloc->destroy(_objDescBuffer);
 
 	for (auto& m : _objModels) {
-		alloc->destroy(m.vertexBuffer);
-		alloc->destroy(m.indexBuffer);
-		alloc->destroy(m.matColorBuffer);
-		alloc->destroy(m.matIndexBuffer);
+		_alloc->destroy(m.vertexBuffer);
+		_alloc->destroy(m.indexBuffer);
+		_alloc->destroy(m.matColorBuffer);
+		_alloc->destroy(m.matIndexBuffer);
 	}
 
 	for (auto& t : _textures) {
-		alloc->destroy(t);
+		_alloc->destroy(t);
 	}
 
 	for (auto& m : _instances) {
@@ -272,6 +279,10 @@ void Astra::SceneRT::update()
 
 void Astra::SceneRT::createBottomLevelAS()
 {
+	if (getTLAS() != VK_NULL_HANDLE) {
+		_rtBuilder.destroy();
+		_asInstances.clear();
+	}
 	std::vector<nvvk::RaytracingBuilderKHR::BlasInput> allBlas;
 	allBlas.reserve(_objModels.size());
 
@@ -286,6 +297,10 @@ void Astra::SceneRT::createBottomLevelAS()
 
 void Astra::SceneRT::createTopLevelAS()
 {
+	if (getTLAS() != VK_NULL_HANDLE) {
+		_rtBuilder.destroy();
+		_asInstances.clear();
+	}
 	_asInstances.reserve(_instances.size());
 	for (const Astra::MeshInstance& inst : _instances) {
 		VkAccelerationStructureInstanceKHR rayInst{};
@@ -322,8 +337,8 @@ VkAccelerationStructureKHR Astra::SceneRT::getTLAS() const
 	return _rtBuilder.getAccelerationStructure();
 }
 
-void Astra::SceneRT::destroy(nvvk::ResourceAllocator* alloc)
+void Astra::SceneRT::destroy()
 {
-	Scene::destroy(alloc);
+	Scene::destroy();
 	_rtBuilder.destroy();
 }

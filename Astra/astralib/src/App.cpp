@@ -87,7 +87,7 @@ void Astra::App::destroy()
 	_alloc.destroy(_globalsBuffer);
 
 	for (auto s : _scenes)
-		s->destroy(&_alloc);
+		s->destroy();
 }
 
 nvvk::Buffer& Astra::App::getCameraUBO()

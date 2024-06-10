@@ -33,7 +33,7 @@ namespace Astra {
 
 		virtual void loadModel(const std::string& filepath, const glm::mat4& transform = glm::mat4(1.0f));
 		virtual void init(nvvk::ResourceAllocator* alloc);
-		virtual void destroy(nvvk::ResourceAllocator* alloc);
+		virtual void destroy();
 		virtual void addModel(const HostModel& model);
 		virtual void addInstance(const MeshInstance& instance);
 		virtual void addObjDesc(const ObjDesc& objdesc);
@@ -76,7 +76,7 @@ namespace Astra {
 		void createTopLevelAS();
 		void updateTopLevelAS(int instance_id);
 		VkAccelerationStructureKHR getTLAS() const;
-		void destroy(nvvk::ResourceAllocator* alloc) override;
+		void destroy() override;
 		bool isRt() const override {
 			return true;
 		};
