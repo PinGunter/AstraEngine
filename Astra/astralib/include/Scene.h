@@ -16,16 +16,23 @@ namespace Astra {
 		std::vector<nvvk::Texture> _textures;
 		nvvk::Buffer _objDescBuffer;  // Device buffer of the OBJ descriptions
 
+		nvvk::ResourceAllocatorDma* _alloc;
 
 		std::vector< Light*> _lights; // multiple lights in the future
 		CameraController* _camera;
 		glm::mat4 _transform;
+
+		// lazy loading
+		std::vector<std::pair<std::string, glm::mat4>> _lazymodels;
+
+		virtual void createObjDescBuffer();
 	public:
 		Scene();
 
 		Scene& operator=(const Scene& s);
 
-		virtual void init(nvvk::ResourceAllocator* alloc) {};
+		virtual void loadModel(const std::string& filepath, const glm::mat4& transform = glm::mat4(1.0f));
+		virtual void init(nvvk::ResourceAllocator* alloc);
 		virtual void destroy(nvvk::ResourceAllocator* alloc);
 		virtual void addModel(const HostModel& model);
 		virtual void addInstance(const MeshInstance& instance);

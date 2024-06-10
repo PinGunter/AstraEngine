@@ -3,6 +3,19 @@
 #include <Device.h>
 #include <nvvk/buffers_vk.hpp>
 #include <Utils.h>
+#include <obj_loader.h>
+
+void Astra::Scene::createObjDescBuffer()
+{
+	nvvk::CommandPool cmdGen(AstraDevice.getVkDevice(), Astra::Device::getInstance().getGraphicsQueueIndex());
+
+	auto cmdBuf = cmdGen.createCommandBuffer();
+	if (!_objDesc.empty())
+		_objDescBuffer = _alloc->createBuffer(cmdBuf, _objDesc, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+
+	cmdGen.submitAndWait(cmdBuf);
+	_alloc->finalizeAndReleaseStaging();
+}
 
 Astra::Scene::Scene() : _transform(1.0f) {}
 
@@ -19,6 +32,85 @@ Astra::Scene& Astra::Scene::operator=(const Scene& s)
 	_transform = s._transform;
 
 	return *this;
+}
+
+void Astra::Scene::loadModel(const std::string& filename, const glm::mat4& transform)
+{
+	// we cant load models until we have access to the resource allocator
+	// if we have it, just create it
+	// if we dont, postpone the operation to the init stage
+	if (_alloc) {
+
+		ObjLoader loader;
+		loader.loadModel(filename);
+
+		// Converting from Srgb to linear
+		for (auto& m : loader.m_materials)
+		{
+			m.ambient = glm::pow(m.ambient, glm::vec3(2.2f));
+			m.diffuse = glm::pow(m.diffuse, glm::vec3(2.2f));
+			m.specular = glm::pow(m.specular, glm::vec3(2.2f));
+		}
+
+		// TODO when having correct toVulkanMesh
+		//Astra::Mesh mesh;
+		//mesh.indices = loader.m_indices;
+		//mesh.vertices = loader.m_vertices;
+		//mesh.materials = loader.m_materials;
+		//mesh.materialIndices = loader.m_matIndx;
+		//mesh.textures = loader.m_textures;
+
+		Astra::HostModel model;
+		model.nbIndices = static_cast<uint32_t>(loader.m_indices.size());
+		model.nbVertices = static_cast<uint32_t>(loader.m_vertices.size());
+
+		// Create the buffers on Device and copy vertices, indices and materials
+		nvvk::CommandPool  cmdBufGet(AstraDevice.getVkDevice(), Astra::Device::getInstance().getGraphicsQueueIndex());
+		VkCommandBuffer    cmdBuf = cmdBufGet.createCommandBuffer();
+		VkBufferUsageFlags flag = VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT;
+		VkBufferUsageFlags rayTracingFlags = flag | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
+		model.vertexBuffer = _alloc->createBuffer(cmdBuf, loader.m_vertices, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | rayTracingFlags);
+		model.indexBuffer = _alloc->createBuffer(cmdBuf, loader.m_indices, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | rayTracingFlags);
+		model.matColorBuffer = _alloc->createBuffer(cmdBuf, loader.m_materials, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | rayTracingFlags);
+		model.matIndexBuffer = _alloc->createBuffer(cmdBuf, loader.m_matIndx, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | rayTracingFlags);
+
+		// Creates all textures found and find the offset for this model
+		auto txtOffset = static_cast<uint32_t>(getTextures().size());
+		AstraDevice.createTextureImages(cmdBuf, loader.m_textures, getTextures(), *_alloc);
+		cmdBufGet.submitAndWait(cmdBuf);
+		_alloc->finalizeAndReleaseStaging();
+
+		// Creating information for device access
+		ObjDesc desc;
+		desc.txtOffset = txtOffset;
+		desc.vertexAddress = nvvk::getBufferDeviceAddress(AstraDevice.getVkDevice(), model.vertexBuffer.buffer);
+		desc.indexAddress = nvvk::getBufferDeviceAddress(AstraDevice.getVkDevice(), model.indexBuffer.buffer);
+		desc.materialAddress = nvvk::getBufferDeviceAddress(AstraDevice.getVkDevice(), model.matColorBuffer.buffer);
+		desc.materialIndexAddress = nvvk::getBufferDeviceAddress(AstraDevice.getVkDevice(), model.matIndexBuffer.buffer);
+
+
+		// Keeping the obj host model and device description
+		addModel(model);
+		addObjDesc(desc);
+
+		// Keeping transformation matrix of the instance
+		Astra::MeshInstance instance(static_cast<uint32_t>(getModels().size() - 1), transform, filename.substr(filename.size() - std::min(10, (int)filename.size() / 2), filename.size()));
+		addInstance(instance);
+
+		createObjDescBuffer();
+	}
+	else {
+		_lazymodels.push_back(std::make_pair(filename, transform));
+	}
+}
+
+void Astra::Scene::init(nvvk::ResourceAllocator* alloc)
+{
+	_alloc = (nvvk::ResourceAllocatorDma*)alloc;
+	for (auto p : _lazymodels) {
+		loadModel(p.first, p.second);
+	}
+	_lazymodels.clear();
 }
 
 void Astra::Scene::destroy(nvvk::ResourceAllocator* alloc) {
@@ -152,6 +244,10 @@ void Astra::Scene::updatePushConstant(PushConstantRay& pc)
 
 void Astra::SceneRT::init(nvvk::ResourceAllocator* alloc)
 {
+	Scene::init(alloc);
+	//if (!_objDescBuffer.buffer) {
+		//throw std::runtime_error("Empty Scene!");
+	//}
 	_rtBuilder.setup(AstraDevice.getVkDevice(), alloc, Astra::Device::getInstance().getGraphicsQueueIndex());
 }
 

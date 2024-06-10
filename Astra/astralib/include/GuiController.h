@@ -21,6 +21,7 @@ namespace Astra {
 	};
 
 	class BasiGui : public GuiController {
+		bool _showGuizmo{ false };
 	public:
 		void draw(App* app) override;
 	};

@@ -2,6 +2,15 @@
 #include <nvpsystem.hpp>
 #include <Utils.h>
 #include <nvh/fileoperations.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+
+// search paths for finding files
+std::vector<std::string> defaultSearchPaths = {
+	NVPSystem::exePath() + PROJECT_RELDIRECTORY,
+	NVPSystem::exePath() + PROJECT_RELDIRECTORY "..",
+	std::string(PROJECT_NAME),
+};
 
 int main(int argc, char** argv) {
 	// Device Initialization
@@ -30,6 +39,9 @@ int main(int argc, char** argv) {
 	scene->setCamera(camera);
 	scene->addLight(pointLight);
 
+	scene->loadModel(nvh::findFile("media/scenes/mono2.obj", defaultSearchPaths, true));
+	scene->loadModel(nvh::findFile("media/scenes/plane2.obj", defaultSearchPaths, true), glm::translate(glm::mat4(1.0f), glm::vec3(0, -1, 0)));
+
 	app.init({ scene }, renderer, gui);
 
 	try {
@@ -39,6 +51,8 @@ int main(int argc, char** argv) {
 		app.destroy();
 		Astra::Log("Exception ocurred", Astra::LOG_LEVELS::ERR);
 	}
+
+	AstraDevice.destroy();
 
 	delete camera;
 	delete renderer;

@@ -99,13 +99,18 @@ void Astra::BasiGui::draw(App* app)
 	glm::mat4      proj = scene->getCamera()->getProjectionMatrix();
 	proj[1][1] *= -1;
 
-	if (ImGuizmo::Manipulate(glm::value_ptr(scene->getCamera()->getViewMatrix()),
-		glm::value_ptr(proj),
-		ImGuizmo::OPERATION::UNIVERSAL,
-		ImGuizmo::LOCAL,
-		glm::value_ptr(app->getCurrentScene()->getInstances()[0].getTransformRef()))) {
-		scene->updateTopLevelAS(0);
+	if (ImGui::IsKeyPressed(ImGuiKey_Space)) {
+		_showGuizmo = !_showGuizmo;
 	}
+
+	if (_showGuizmo)
+		if (ImGuizmo::Manipulate(glm::value_ptr(scene->getCamera()->getViewMatrix()),
+			glm::value_ptr(proj),
+			ImGuizmo::OPERATION::UNIVERSAL,
+			ImGuizmo::LOCAL,
+			glm::value_ptr(app->getCurrentScene()->getInstances()[0].getTransformRef()))) {
+			scene->updateTopLevelAS(0);
+		}
 
 	ImGui::End();
 }

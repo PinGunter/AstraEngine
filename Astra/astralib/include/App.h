@@ -18,14 +18,14 @@ namespace Astra {
 		Renderer* _renderer;
 		GLFWwindow* _window;
 
-		nvvk::ResourceAllocatorDma _alloc;
 		nvvk::Buffer _globalsBuffer; // UBO for camera 
+		nvvk::ResourceAllocatorDma _alloc;
+
 
 		virtual void createUBO();
 		virtual void updateUBO(const VkCommandBuffer& cmdBuf);
 		virtual void createDescriptorSetLayout() {};
 		virtual void updateDescriptorSet() {};
-		virtual void createObjDescBuffer();
 
 		virtual void onResize(int w, int h) {};
 		virtual void onMouseMotion(int x, int y) {};
@@ -54,7 +54,6 @@ namespace Astra {
 
 		void setupCallbacks(GLFWwindow* window);
 		bool isMinimized() const;
-		void loadModel(const std::string& filename, const glm::mat4& transform = glm::mat4(1.0f));
 		int& getCurrentSceneIndexRef();
 		int getCurrenSceneIndex() const;
 		void setCurrentSceneIndex(int i);

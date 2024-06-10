@@ -67,7 +67,6 @@ namespace Astra {
 		bool getRtEnabled() const;
 
 
-		VkCommandBuffer createCmdBuf();
 		VkCommandBuffer createTmpCmdBuf();
 		void submitTmpCmdBuf(VkCommandBuffer cmdBuff);
 
