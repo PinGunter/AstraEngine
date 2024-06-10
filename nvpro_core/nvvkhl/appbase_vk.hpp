@@ -20,9 +20,9 @@
 #pragma once
 
 #include "vulkan/vulkan_core.h"
+#include <Camera.h>
 
 // Utilities
-#include "nvh/cameramanipulator.hpp"
 #include "nvvk/swapchain_vk.hpp"
 
 #ifdef LINUX
@@ -292,6 +292,7 @@ public:
   bool         isMinimized(bool doSleeping = true);
   void         setTitle(const std::string& title) { glfwSetWindowTitle(m_window, title.c_str()); }
   void         useNvlink(bool useNvlink) { m_useNvlink = useNvlink; }
+  void         setCamera(Astra::CameraController* cam) { camera = cam; }
 
   // GLFW Callback setup
   void        setupGlfwCallbacks(GLFWwindow* window);
@@ -312,7 +313,7 @@ public:
   VkCommandPool                       getCommandPool() { return m_cmdPool; }
   VkRenderPass                        getRenderPass() { return m_renderPass; }
   VkExtent2D                          getSize() { return m_size; }
-  VkPipelineCache                     getPipelineCache() { return m_pipelineCache; }
+  //VkPipelineCache                     getPipelineCache() { return m_pipelineCache; }
   VkSurfaceKHR                        getSurface() { return m_surface; }
   const std::vector<VkFramebuffer>&   getFramebuffers() { return m_framebuffers; }
   const std::vector<VkCommandBuffer>& getCommandBuffers() { return m_commandBuffers; }
@@ -351,7 +352,7 @@ protected:
   VkImageView                  m_depthView{VK_NULL_HANDLE};      // Depth/Stencil
   VkRenderPass                 m_renderPass{VK_NULL_HANDLE};     // Base render pass
   VkExtent2D                   m_size{0, 0};                     // Size of the window
-  VkPipelineCache              m_pipelineCache{VK_NULL_HANDLE};  // Cache for pipeline/shaders
+  //VkPipelineCache              m_pipelineCache{VK_NULL_HANDLE};  // Cache for pipeline/shaders
   bool                         m_vsync{false};                   // Swapchain with vsync
   bool                         m_useNvlink{false};               // NVLINK usage
   GLFWwindow*                  m_window{nullptr};                // GLFW Window
@@ -361,13 +362,16 @@ protected:
   VkFormat m_depthFormat{VK_FORMAT_UNDEFINED};
 
   // Camera manipulators
-  nvh::CameraManipulator::Inputs m_inputs;  // Mouse button pressed
+  //nvh::CameraManipulator::Inputs m_inputs;  // Mouse button pressed
 
   // Other
   bool  m_showHelp{false};  // Show help, pressing
   bool  m_show_gui{true};
   bool  m_useDynamicRendering{false};  // Using VK_KHR_dynamic_rendering
   float m_sceneRadius{1.f};
+
+
+  Astra::CameraController* camera;
 };
 
 

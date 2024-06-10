@@ -33,7 +33,7 @@ void main()
                 0,          // missIndex
                 origin.xyz, // ray orgin
                 tMin,       // ray min range
-                direction.xyz,  // ray max range
+                direction.xyz,  // ray direction
                 tMax,       // ray max range
                 0           // payload (location = 0)
     );

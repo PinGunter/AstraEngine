@@ -652,7 +652,7 @@ struct GraphicShaderObjectPipeline : GraphicsPipelineState
   GraphicShaderObjectPipeline()
   {
     viewports.resize(1);  // There should be at least one viewport
-    scissors.resize(1);   // 
+    scissors.resize(1);   //
   }
 
   // Set the viewport and scissor to the full extent

@@ -621,7 +621,7 @@ public:
 
 
 //--------------------------------------------------------------------------------------------------
-// GUI control elements which have a 'property page' look.
+// Gui control elements which have a 'property page' look.
 // - Name on the left, justified on the right
 // - Value filling the right side
 // - Support for 1..4 components, int, float, bool

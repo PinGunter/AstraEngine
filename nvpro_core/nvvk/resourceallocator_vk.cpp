@@ -476,7 +476,7 @@ MemHandle ResourceAllocator::AllocateMemory(const MemAllocateInfo& allocateInfo)
 
 void ResourceAllocator::CreateBufferEx(const VkBufferCreateInfo& info_, VkBuffer* buffer)
 {
-  NVVK_CHECK(vkCreateBuffer(m_device, &info_, nullptr, buffer));
+    NVVK_CHECK(vkCreateBuffer(m_device, &info_, nullptr, buffer));
 }
 
 void ResourceAllocator::CreateImageEx(const VkImageCreateInfo& info_, VkImage* image)
