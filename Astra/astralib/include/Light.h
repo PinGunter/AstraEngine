@@ -10,6 +10,7 @@ namespace Astra {
 		float _intensity;
 		LightType _type;
 	public:
+		Light();
 		glm::vec3& getColor();
 		void setColor(const glm::vec3& c);
 		float& getIntensity();
