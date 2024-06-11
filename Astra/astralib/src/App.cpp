@@ -326,6 +326,8 @@ void Astra::DefaultApp::createPipelines()
 	// wireframe
 	_wireframePipeline = new WireframePipeline();
 	((WireframePipeline*)_wireframePipeline)->createPipeline(AstraDevice.getVkDevice(), { _descSetLayout }, _renderer->getOffscreenRenderPass());
+
+	_pipelines = { _rtPipeline, _rasterPipeline, _wireframePipeline };
 }
 
 void Astra::DefaultApp::createDescriptorSetLayout()
