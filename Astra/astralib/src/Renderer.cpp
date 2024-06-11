@@ -39,6 +39,7 @@ void Astra::Renderer::renderRaster(const VkCommandBuffer& cmdBuf, Scene* scene, 
 
 	pipeline->bind(cmdBuf, descSets);
 
+	// TODO maybe the push constant should be owned by the app
 	// render scene
 	PushConstantRaster pushConstant;
 
@@ -553,7 +554,7 @@ void Astra::Renderer::updateUBO(const VkCommandBuffer& cmdBuf, const GlobalUnifo
 void Astra::Renderer::init()
 {
 	_offscreenDepthFormat = nvvk::findDepthFormat(AstraDevice.getPhysicalDevice());
-	_clearColor = glm::vec4(0.0f);
+	_clearColor = glm::vec4(0.8f);
 }
 
 void Astra::Renderer::linkApp(App* app)

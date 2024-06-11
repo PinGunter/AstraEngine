@@ -12,7 +12,7 @@ namespace Astra {
 		virtual void destroy(nvvk::ResourceAllocator* alloc);
 		inline virtual bool doesRayTracing() = 0;
 		virtual void bind(const VkCommandBuffer& cmdBuf, const std::vector<VkDescriptorSet>& descsets);
-		void pushConstants(const VkCommandBuffer& cmdBuf, uint32_t shaderStages, uint32_t size, void* data);
+		virtual void pushConstants(const VkCommandBuffer& cmdBuf, uint32_t shaderStages, uint32_t size, void* data);
 		VkPipeline getPipeline();
 		VkPipelineLayout getLayout();
 	};
@@ -55,6 +55,11 @@ namespace Astra {
 	};
 
 	class PostPipeline : public RasterPipeline {
+	public:
+		void createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsetsLayouts, VkRenderPass rp) override;
+	};
+
+	class WireframePipeline : public RasterPipeline {
 	public:
 		void createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsetsLayouts, VkRenderPass rp) override;
 	};

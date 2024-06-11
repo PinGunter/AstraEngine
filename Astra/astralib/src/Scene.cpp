@@ -7,6 +7,10 @@
 
 void Astra::Scene::createObjDescBuffer()
 {
+	if (_objDescBuffer.buffer != VK_NULL_HANDLE) {
+		_alloc->destroy(_objDescBuffer);
+	}
+
 	nvvk::CommandPool cmdGen(AstraDevice.getVkDevice(), Astra::Device::getInstance().getGraphicsQueueIndex());
 
 	auto cmdBuf = cmdGen.createCommandBuffer();
@@ -43,14 +47,6 @@ void Astra::Scene::loadModel(const std::string& filename, const glm::mat4& trans
 
 		ObjLoader loader;
 		loader.loadModel(filename);
-
-		// Converting from Srgb to linear
-		for (auto& m : loader.m_materials)
-		{
-			m.ambient = glm::pow(m.ambient, glm::vec3(2.2f));
-			m.diffuse = glm::pow(m.diffuse, glm::vec3(2.2f));
-			m.specular = glm::pow(m.specular, glm::vec3(2.2f));
-		}
 
 		// TODO when having correct toVulkanMesh
 		//Astra::Mesh mesh;
@@ -94,12 +90,11 @@ void Astra::Scene::loadModel(const std::string& filename, const glm::mat4& trans
 		addObjDesc(desc);
 
 		// Keeping transformation matrix of the instance
-		Astra::MeshInstance instance(static_cast<uint32_t>(getModels().size() - 1), transform, filename.substr(filename.size() - std::min(10, (int)filename.size() / 2), filename.size()));
+		Astra::MeshInstance instance(static_cast<uint32_t>(getModels().size() - 1), transform);
+		instance.setName(instance.getName() + " :: " + filename.substr(filename.size() - std::min(10, (int)filename.size() / 2), filename.size()));
 		addInstance(instance);
 
-		if (_objDescBuffer.buffer != VK_NULL_HANDLE) {
-			_alloc->destroy(_objDescBuffer);
-		}
+
 		createObjDescBuffer();
 
 	}
@@ -115,9 +110,6 @@ void Astra::Scene::init(nvvk::ResourceAllocator* alloc)
 		loadModel(p.first, p.second);
 	}
 	_lazymodels.clear();
-	//if (!_objModels.empty()) {
-	//	createObjDescBuffer();
-	//}
 }
 
 void Astra::Scene::destroy() {
@@ -318,7 +310,6 @@ void Astra::SceneRT::createTopLevelAS()
 
 void Astra::SceneRT::updateTopLevelAS(int instance_id)
 {
-	Astra::Log("Update AS", INFO);
 	const auto& inst = _instances[instance_id];
 	VkAccelerationStructureInstanceKHR rayInst{};
 	rayInst.transform = nvvk::toTransformMatrixKHR(inst.getTransform());

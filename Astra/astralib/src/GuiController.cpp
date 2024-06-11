@@ -91,9 +91,62 @@ void Astra::BasiGui::draw(App* app)
 {
 	DefaultApp* dapp = (DefaultApp*)app;
 	SceneRT* scene = (SceneRT*)dapp->getCurrentScene();
-	ImGui::Begin("Ventana test");
-	ImGui::Separator();
-	ImGui::Checkbox("Use Raytracing", &dapp->getUseRTref());
+
+
+	ImGui::Begin("Inspector");
+
+	if (ImGui::BeginTabBar("###Tabbar")) {
+		if (ImGui::BeginTabItem("Renderer")) {
+			ImGui::ColorEdit3("Clear Color", glm::value_ptr(app->getRenderer()->getClearColorRef()));
+
+			ImGui::Separator();
+
+			ImGui::Text("Select rendering pipeline");
+			ImGui::RadioButton("RayTracing", &dapp->getSelectedPipelineRef(), 0);
+			ImGui::RadioButton("Raster", &dapp->getSelectedPipelineRef(), 1);
+			ImGui::RadioButton("Wireframe", &dapp->getSelectedPipelineRef(), 2);
+
+			ImGui::EndTabItem();
+
+		}
+		if (ImGui::BeginTabItem("Performance")) {
+			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+			ImGui::EndTabItem();
+		}
+		ImGui::EndTabBar();
+	}
+
+	ImGui::End();
+
+
+	ImGui::Begin("Scene");
+	ImGui::BeginListBox("Instances");
+	for (int i = 0; i < scene->getInstances().size(); i++) {
+		auto inst = scene->getInstances()[i];
+		if (ImGui::Selectable(inst.getName().c_str(), i == _node)) {
+			_node = i;
+			_handlingNodes = true;
+		}
+	}
+	ImGui::EndListBox();
+
+	ImGui::BeginListBox("Lights");
+	for (int i = 0; i < scene->getLights().size(); i++) {
+		auto light = scene->getLights()[i];
+		if (ImGui::Selectable(light->getName().c_str(), i == _node)) {
+			_node = i;
+			_handlingNodes = false;
+		}
+	}
+	ImGui::EndListBox();
+	if (ImGui::Checkbox("Visible", &scene->getInstances()[_node].getVisibleRef())) {
+		scene->updateTopLevelAS(_node);
+	}
+
+	if (ImGui::Button("New instance")) {
+		dapp->addInstanceToScene(MeshInstance(scene->getInstances()[_node].getMeshIndex(), glm::mat4(1.0f), scene->getInstances()[_node].getName() + " copy" + std::to_string(_ncopies++)));
+	}
+
 	ImGuiIO& io = ImGui::GetIO();
 	ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
 	glm::mat4      proj = scene->getCamera()->getProjectionMatrix();
@@ -104,13 +157,24 @@ void Astra::BasiGui::draw(App* app)
 	}
 
 	if (_showGuizmo)
-		if (ImGuizmo::Manipulate(glm::value_ptr(scene->getCamera()->getViewMatrix()),
-			glm::value_ptr(proj),
-			ImGuizmo::OPERATION::UNIVERSAL,
-			ImGuizmo::LOCAL,
-			glm::value_ptr(app->getCurrentScene()->getInstances()[0].getTransformRef()))) {
-			scene->updateTopLevelAS(0);
+		if (_handlingNodes) {
+			if (ImGuizmo::Manipulate(glm::value_ptr(scene->getCamera()->getViewMatrix()),
+				glm::value_ptr(proj),
+				ImGuizmo::OPERATION::UNIVERSAL,
+				ImGuizmo::LOCAL,
+				glm::value_ptr(app->getCurrentScene()->getInstances()[_node].getTransformRef()))) {
+				scene->updateTopLevelAS(_node);
+			}
 		}
-
+		else {
+			if (ImGuizmo::Manipulate(glm::value_ptr(scene->getCamera()->getViewMatrix()),
+				glm::value_ptr(proj),
+				ImGuizmo::OPERATION::UNIVERSAL,
+				ImGuizmo::LOCAL,
+				glm::value_ptr(app->getCurrentScene()->getLights()[_node]->getTransformRef()))) {
+				scene->updateTopLevelAS(_node);
+			}
+		}
 	ImGui::End();
+
 }
