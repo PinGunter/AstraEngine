@@ -300,7 +300,7 @@ void Astra::SceneRT::createTopLevelAS()
 		rayInst.instanceCustomIndex = inst.getMeshIndex(); //gl_InstanceCustomIndexEXT
 		rayInst.accelerationStructureReference = _rtBuilder.getBlasDeviceAddress(inst.getMeshIndex());
 		rayInst.flags = VK_GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_KHR;
-		rayInst.mask = 0xFF; // only be hit if raymask & instance.mask != 0
+		rayInst.mask = inst.getVisible() ? 0xFF : 0x00; // only be hit if raymask & instance.mask != 0
 		rayInst.instanceShaderBindingTableRecordOffset = 0; // the same hit group for all objects
 
 		_asInstances.emplace_back(rayInst);
