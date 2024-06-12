@@ -120,17 +120,20 @@ void Astra::BasiGui::draw(App* app)
 
 
 	ImGui::Begin("Scene");
-	ImGui::BeginListBox("Instances");
-	for (int i = 0; i < scene->getInstances().size(); i++) {
-		auto inst = scene->getInstances()[i];
-		if (ImGui::Selectable(inst.getName().c_str(), i == _node)) {
-			_node = i;
-			_handlingNodes = true;
-		}
-	}
-	ImGui::EndListBox();
+	if (ImGui::BeginListBox("Instances")) {
 
-	ImGui::BeginListBox("Lights");
+		for (int i = 0; i < scene->getInstances().size(); i++) {
+			auto inst = scene->getInstances()[i];
+			if (ImGui::Selectable(inst.getName().c_str(), i == _node)) {
+				_node = i;
+				_handlingNodes = true;
+			}
+		}
+		ImGui::EndListBox();
+	}
+
+	if (ImGui::BeginListBox("Lights")) {
+
 	for (int i = 0; i < scene->getLights().size(); i++) {
 		auto light = scene->getLights()[i];
 		if (ImGui::Selectable(light->getName().c_str(), i == _node)) {
@@ -139,6 +142,7 @@ void Astra::BasiGui::draw(App* app)
 		}
 	}
 	ImGui::EndListBox();
+	}
 	if (ImGui::Checkbox("Visible", &scene->getInstances()[_node].getVisibleRef())) {
 		scene->updateTopLevelAS(_node);
 	}
