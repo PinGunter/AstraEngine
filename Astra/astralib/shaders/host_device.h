@@ -93,6 +93,12 @@ struct PushConstantRay
 	vec3  lightColor;
 };
 
+struct PushConstantWireframe {
+	mat4 modelMatrix;
+	uint objIndex;
+	vec3 wireColor;
+};
+
 struct Vertex
 {
 	vec3 pos;

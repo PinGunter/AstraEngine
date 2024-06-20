@@ -87,6 +87,7 @@ namespace Astra {
 
 		// wireframe pipeline;
 		Pipeline* _wireframePipeline;
+		glm::vec3 wireColor;
 
 		int _selectedPipeline{ 0 };
 

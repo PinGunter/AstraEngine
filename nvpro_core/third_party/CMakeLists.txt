@@ -18,7 +18,7 @@ if (NOT TARGET glfw)
   add_subdirectory(glfw)
   set_property(TARGET glfw PROPERTY FOLDER "ThirdParty")
 endif()
-
+set(USING_IMGUI, true)
 # imgui
 set(IMGUI_DIR "${CMAKE_CURRENT_SOURCE_DIR}/imgui" )
 set(IMGUI_FILES
@@ -30,7 +30,7 @@ set(IMGUI_FILES
     "${IMGUI_DIR}/imconfig.h"
     "${IMGUI_DIR}/imgui.h"
     "${IMGUI_DIR}/imgui_internal.h"
-    "${IMGUI_DIR}/imstb_rectpack.h"
+   "${IMGUI_DIR}/imstb_rectpack.h"
     "${IMGUI_DIR}/imstb_textedit.h"
     "${IMGUI_DIR}/imstb_truetype.h")
 
@@ -62,7 +62,7 @@ endif()
 if (NOT TARGET fmt)
   add_library(fmt STATIC fmt/src/format.cc)
   target_include_directories(fmt PUBLIC fmt/include)
-  set_property(TARGET fmt PROPERTY FOLDER "ThirdParty")
+ set_property(TARGET fmt PROPERTY FOLDER "ThirdParty")
 endif()
 
 
@@ -119,20 +119,20 @@ if (TARGET tinyobjloader)
 endif()
 
 # cgltf
-if (NOT TARGET cgltf AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/cgltf)
-  add_library(cgltf INTERFACE)
-  target_include_directories(cgltf INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/cgltf")
-endif()
-if (TARGET cgltf)
-  LIST(APPEND THIRDPARTY_LIBRARIES cgltf)
-endif()
+#if (NOT TARGET cgltf AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/cgltf)
+#  add_library(cgltf INTERFACE)
+#  target_include_directories(cgltf INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/cgltf")
+#endif()
+#if (TARGET cgltf)
+#  LIST(APPEND THIRDPARTY_LIBRARIES cgltf)
+#endif()
 
 #zlib
-if (USING_ZLIB)
-  if (NOT TARGET zlibstatic AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/zlib)
-    include(zlibstatic.cmake)
-  endif()
-endif()
+#if (USING_ZLIB)
+#  if (NOT TARGET zlibstatic AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/zlib)
+#    include(zlibstatic.cmake)
+#  endif()
+#endif()
 
 # vma
 if (NOT TARGET vma AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/vma)
@@ -151,23 +151,23 @@ if (TARGET vma)
 endif()
 
 # NvToolsExt
-if (NOT TARGET nvtx AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/NVTX)
-  add_library(nvtx INTERFACE)
-  set(NVTX_DIR ${CMAKE_CURRENT_SOURCE_DIR}/NVTX/c/include)
-  target_sources(nvtx INTERFACE ${NVTX_DIR}/nvtx3/nvToolsExt.h)
-  target_include_directories(nvtx INTERFACE ${NVTX_DIR})
-endif()
-if (TARGET nvtx)
-  LIST(APPEND THIRDPARTY_LIBRARIES nvtx)
-endif()
+#if (NOT TARGET nvtx AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/NVTX)
+#  add_library(nvtx INTERFACE)
+#  set(NVTX_DIR ${CMAKE_CURRENT_SOURCE_DIR}/NVTX/c/include)
+#  target_sources(nvtx INTERFACE ${NVTX_DIR}/nvtx3/nvToolsExt.h)
+#  target_include_directories(nvtx INTERFACE ${NVTX_DIR})
+#endif()
+#if (TARGET nvtx)
+#  LIST(APPEND THIRDPARTY_LIBRARIES nvtx)
+#endif()
 
 # DirectX12-Headers
-if (NOT TARGET dxh AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/dxh)
-  add_library(dxh INTERFACE)
-  target_include_directories(dxh INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/dxh/include/directx")
-endif()
-if (TARGET dxh)
-  LIST(APPEND THIRDPARTY_LIBRARIES dxh)
-endif()
+#if (NOT TARGET dxh AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/dxh)
+#  add_library(dxh INTERFACE)
+#  target_include_directories(dxh INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/dxh/include/directx")
+#endif()
+#if (TARGET dxh)
+#  LIST(APPEND THIRDPARTY_LIBRARIES dxh)
+#endif()
 
 set(THIRDPARTY_LIBRARIES "${THIRDPARTY_LIBRARIES}" PARENT_SCOPE)

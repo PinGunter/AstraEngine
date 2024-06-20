@@ -148,7 +148,7 @@ void Astra::BasiGui::draw(App* app)
 	}
 
 	if (ImGui::Button("New instance")) {
-		dapp->addInstanceToScene(MeshInstance(scene->getInstances()[_node].getMeshIndex(), glm::mat4(1.0f), scene->getInstances()[_node].getName() + " copy" + std::to_string(_ncopies++)));
+		dapp->addInstanceToScene(MeshInstance(scene->getInstances()[_node].getMeshIndex(), scene->getInstances()[_node].getTransform(), scene->getInstances()[_node].getName() + " copy" + std::to_string(_ncopies++)));
 	}
 
 	ImGuiIO& io = ImGui::GetIO();
