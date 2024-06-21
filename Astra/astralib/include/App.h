@@ -4,6 +4,7 @@
 #include <Renderer.h>
 #include <Device.h>
 #include <Scene.h>
+#include <CommandList.h>
 namespace Astra {
 	class GuiController;
 	class Renderer;
@@ -21,11 +22,14 @@ namespace Astra {
 		nvvk::Buffer _globalsBuffer; // UBO for camera 
 		nvvk::ResourceAllocatorDma _alloc;
 
+		std::vector<Pipeline*> _pipelines;
 
 		virtual void createUBO();
-		virtual void updateUBO(const VkCommandBuffer& cmdBuf);
+		virtual void updateUBO(CommandList& cmdList);
 		virtual void createDescriptorSetLayout() {};
 		virtual void updateDescriptorSet() {};
+		virtual void createPipelines() {};
+		virtual void destroyPipelines();
 
 		virtual void onResize(int w, int h) {};
 		virtual void onMouseMotion(int x, int y) {};
@@ -48,6 +52,7 @@ namespace Astra {
 		virtual void init(const std::vector<Scene*>& scenes, Renderer* renderer, GuiController* gui = nullptr);
 		virtual void addScene(Scene* s);
 		virtual void run();
+		~App();
 
 		virtual void destroy();
 		nvvk::Buffer& getCameraUBO();
@@ -81,19 +86,23 @@ namespace Astra {
 		std::vector<VkAccelerationStructureInstanceKHR> m_tlas;
 		VkPhysicalDeviceRayTracingPipelinePropertiesKHR _rtProperties{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_PROPERTIES_KHR };
 
+		// wireframe pipeline;
+		Pipeline* _wireframePipeline;
+		glm::vec3 wireColor;
 
-		bool _useRT{ true };
+		int _selectedPipeline{ 0 };
+
+		// models and instances to load after frame execution
+		std::vector<MeshInstance> _newInstances;
+		std::vector<std::pair<std::string, glm::mat4>> _newModels;
+		bool _rendering = false;
 
 		// camera and input controls
 		bool _mouseButtons[3] = { 0 };
 		int _lastMousePos[2] = { 0 };
 		int _inputMods{ 0 };
 
-	public:
-		void init(const std::vector<Scene*>& scenes, Renderer* renderer, GuiController* gui = nullptr) override;
-		void run() override;
-		void destroy() override;
-
+		void createPipelines() override;
 		void createDescriptorSetLayout() override;
 		void updateDescriptorSet() override;
 		void createRtDescriptorSet();
@@ -104,8 +113,18 @@ namespace Astra {
 		void onMouseButton(int button, int action, int mods) override;
 		void onMouseWheel(int x, int y) override;
 		void onKeyboard(int key, int scancode, int action, int mods) override;
+		void onFileDrop(int count, const char** paths) override;
+
+	public:
+		void init(const std::vector<Scene*>& scenes, Renderer* renderer, GuiController* gui = nullptr) override;
+		void run() override;
+		void destroy() override;
+
+		// add models / instances in runtime
+		void addModelToScene(const std::string& filepath, const glm::mat4& transform = glm::mat4(1.0f));
+		void addInstanceToScene(const Astra::MeshInstance& instance);
 
 
-		bool& getUseRTref();
+		int& getSelectedPipelineRef();
 	};
 }

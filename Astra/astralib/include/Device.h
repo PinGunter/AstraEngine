@@ -8,6 +8,7 @@
 #include <nvvk/raytraceKHR_vk.hpp>
 #include <Mesh.h>
 #include <nvvk/context_vk.hpp>
+#include <CommandList.h>
 
 namespace Astra {
 
@@ -66,16 +67,15 @@ namespace Astra {
 		GLFWwindow* getWindow();
 		bool getRtEnabled() const;
 
-
-		VkCommandBuffer createTmpCmdBuf();
-		void submitTmpCmdBuf(VkCommandBuffer cmdBuff);
-
 		VkShaderModule createShaderModule(const std::vector<char>& file);
-		void createTextureImages(const VkCommandBuffer& cmdBuf, const std::vector<std::string>& new_textures, std::vector<nvvk::Texture>& textures, nvvk::ResourceAllocatorDma& alloc);
+		void createTextureImages(const Astra::CommandList& cmdList, const std::vector<std::string>& new_textures, std::vector<nvvk::Texture>& textures, nvvk::ResourceAllocatorDma& alloc);
 		nvvk::RaytracingBuilderKHR::BlasInput objectToVkGeometry(const Astra::HostModel& model);
 
 		uint32_t getMemoryType(uint32_t typeBits, const VkMemoryPropertyFlags& properties) const;
 		std::array<int, 2> getWindowSize() const;
+
+		void waitIdle();
+		void queueWaitIdle();
 	};
 
 #define AstraDevice Astra::Device::getInstance()

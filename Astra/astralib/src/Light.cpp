@@ -1,5 +1,8 @@
 #include <Light.h>
 
+Astra::Light::Light() :Node3D() {
+	_name = std::string("Light - ") + std::to_string(_id);
+}
 
 glm::vec3& Astra::Light::getColor() {
 	return _color;
@@ -49,6 +52,7 @@ Astra::PointLight::PointLight(const glm::vec3& color, float intensity)
 	_type = POINT;
 	_color = color;
 	_intensity = intensity;
+	_name = std::string("Point Light - ") + std::to_string(_id);
 }
 
 Astra::DirectionalLight::DirectionalLight(const glm::vec3& color, float intensity, const glm::vec3& direction)
@@ -57,4 +61,6 @@ Astra::DirectionalLight::DirectionalLight(const glm::vec3& color, float intensit
 	_color = color;
 	_intensity = intensity;
 	_direction = direction;
+	_name = std::string("Directional Light - ") + std::to_string(_id);
 }
+

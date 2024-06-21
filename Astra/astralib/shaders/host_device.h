@@ -93,6 +93,7 @@ struct PushConstantRay
 	vec3  lightColor;
 };
 
+
 struct Vertex
 {
 	vec3 pos;

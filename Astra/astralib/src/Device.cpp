@@ -162,44 +162,9 @@ namespace Astra {
 		return _window;
 	}
 
-	VkCommandBuffer Device::createTmpCmdBuf()
-	{
-		// allocate 
-		VkCommandBufferAllocateInfo allocateInfo{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO };
-		allocateInfo.commandBufferCount = 1;
-		allocateInfo.commandPool = _cmdPool;
-		allocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-
-		// create
-		VkCommandBuffer cmdBuffer;
-		vkAllocateCommandBuffers(_vkdevice, &allocateInfo, &cmdBuffer);
-
-		// start
-		VkCommandBufferBeginInfo beginInfo{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
-		beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-		vkBeginCommandBuffer(cmdBuffer, &beginInfo);
-		return cmdBuffer;
-	}
-
-
 	bool Device::getRtEnabled() const
 	{
 		return _raytracingEnabled;
-	}
-
-	void Device::submitTmpCmdBuf(VkCommandBuffer cmdBuff)
-	{
-		// end
-		vkEndCommandBuffer(cmdBuff);
-		// submit
-		VkSubmitInfo submitInfo{ VK_STRUCTURE_TYPE_SUBMIT_INFO };
-		submitInfo.commandBufferCount = 1;
-		submitInfo.pCommandBuffers = &cmdBuff;
-		vkQueueSubmit(_queue, 1, &submitInfo, {});
-		// sync
-		vkQueueWaitIdle(_queue);
-		// free
-		vkFreeCommandBuffers(_vkdevice, _cmdPool, 1, &cmdBuff);
 	}
 
 
@@ -246,6 +211,16 @@ namespace Astra {
 		return { w, h };
 	}
 
+	void Device::waitIdle()
+	{
+		vkDeviceWaitIdle(_vkdevice);
+	}
+
+	void Device::queueWaitIdle()
+	{
+		vkQueueWaitIdle(_queue);
+	}
+
 	nvvk::RaytracingBuilderKHR::BlasInput Device::objectToVkGeometry(const Astra::HostModel& model)
 	{
 		// BLAS builder requires raw device addresses.
@@ -287,7 +262,7 @@ namespace Astra {
 		return input;
 	}
 
-	void Device::createTextureImages(const VkCommandBuffer& cmdBuf, const std::vector<std::string>& new_textures, std::vector<nvvk::Texture>& textures, nvvk::ResourceAllocatorDma& alloc)
+	void Device::createTextureImages(const Astra::CommandList& cmdList, const std::vector<std::string>& new_textures, std::vector<nvvk::Texture>& textures, nvvk::ResourceAllocatorDma& alloc)
 	{
 		VkSamplerCreateInfo samplerCreateInfo{ VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO };
 		samplerCreateInfo.minFilter = VK_FILTER_LINEAR;
@@ -296,6 +271,7 @@ namespace Astra {
 		samplerCreateInfo.maxLod = FLT_MAX;
 
 		VkFormat format = VK_FORMAT_R8G8B8A8_SRGB;
+		const auto& cmdBuf = cmdList.getCommandBuffer();
 
 		// If no textures are present, create a dummy one to accommodate the pipeline layout
 		if (new_textures.empty() && textures.empty())

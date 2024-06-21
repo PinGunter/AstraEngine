@@ -11,30 +11,28 @@
 void Astra::Pipeline::destroy(nvvk::ResourceAllocator* alloc)
 {
 	const auto& device = AstraDevice.getVkDevice();
-	vkDeviceWaitIdle(device);
+	AstraDevice.waitIdle();
 	vkDestroyPipelineLayout(device, _layout, nullptr);
 	vkDestroyPipeline(device, _pipeline, nullptr);
 }
 
-void Astra::Pipeline::bind(const VkCommandBuffer& cmdBuf, const std::vector<VkDescriptorSet>& descsets)
+void Astra::Pipeline::bind(const CommandList& cmdList, const std::vector<VkDescriptorSet>& descsets)
 {
-	vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, _pipeline);
-	vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, _layout, 0,
-		static_cast<uint32_t>(descsets.size()), descsets.data(),
-		0, nullptr);
+	cmdList.bindPipeline(Astra::PipelineBindPoints::Graphics, _pipeline);
+	cmdList.bindDescriptorSets(Astra::PipelineBindPoints::Graphics, _layout, descsets);
 }
 
-void Astra::Pipeline::pushConstants(const VkCommandBuffer& cmdBuf, uint32_t shaderStages, uint32_t size, void* data)
+void Astra::Pipeline::pushConstants(const CommandList& cmdList, uint32_t shaderStages, uint32_t size, void* data)
 {
-	vkCmdPushConstants(cmdBuf, _layout, shaderStages, 0, size, data);
+	cmdList.pushConstants(_layout, shaderStages, size, data);
 }
 
-VkPipeline Astra::Pipeline::getPipeline()
+VkPipeline Astra::Pipeline::getPipeline() const
 {
 	return _pipeline;
 }
 
-VkPipelineLayout Astra::Pipeline::getLayout()
+VkPipelineLayout Astra::Pipeline::getLayout() const
 {
 	return _layout;
 }
@@ -236,12 +234,10 @@ void Astra::RayTracingPipeline::createSBT(nvvk::ResourceAllocatorDma& alloc, con
 	alloc.finalizeAndReleaseStaging();
 }
 
-void Astra::RayTracingPipeline::bind(const VkCommandBuffer& cmdBuf, const std::vector<VkDescriptorSet>& descsets)
+void Astra::RayTracingPipeline::bind(const CommandList& cmdList, const std::vector<VkDescriptorSet>& descsets)
 {
-	vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR, _pipeline);
-	vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR, _layout, 0,
-		static_cast<uint32_t>(descsets.size()), descsets.data(),
-		0, nullptr);
+	cmdList.bindPipeline(Astra::PipelineBindPoints::RayTracing, _pipeline);
+	cmdList.bindDescriptorSets(Astra::PipelineBindPoints::RayTracing, _layout, descsets);
 }
 
 void Astra::OffscreenRaster::createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsetsLayouts, VkRenderPass rp)
@@ -256,7 +252,7 @@ void Astra::OffscreenRaster::createPipeline(VkDevice vkdev, const std::vector<Vk
 
 	// Creating the Pipeline Layout
 	VkPipelineLayoutCreateInfo createInfo{ VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO };
-	createInfo.setLayoutCount = 1;
+	createInfo.setLayoutCount = static_cast<uint32_t>(descsetsLayouts.size());
 	createInfo.pSetLayouts = descsetsLayouts.data();
 	createInfo.pushConstantRangeCount = 1;
 	createInfo.pPushConstantRanges = &pushConstantRanges;
@@ -305,5 +301,38 @@ void Astra::PostPipeline::createPipeline(VkDevice vkdev, const std::vector<VkDes
 	pipelineGenerator.addShader(nvh::loadFile("spv/passthrough.vert.spv", true, defaultSearchPaths, true), VK_SHADER_STAGE_VERTEX_BIT);
 	pipelineGenerator.addShader(nvh::loadFile("spv/post.frag.spv", true, defaultSearchPaths, true), VK_SHADER_STAGE_FRAGMENT_BIT);
 	pipelineGenerator.rasterizationState.cullMode = VK_CULL_MODE_NONE;
+	_pipeline = pipelineGenerator.createPipeline();
+}
+
+void Astra::WireframePipeline::createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsetsLayouts, VkRenderPass rp)
+{
+	std::vector<std::string> defaultSearchPaths = {
+	NVPSystem::exePath() + PROJECT_RELDIRECTORY,
+	NVPSystem::exePath() + PROJECT_RELDIRECTORY "..",
+	std::string(PROJECT_NAME),
+	};
+
+	VkPushConstantRange pushConstantRanges = { VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(PushConstantRaster) };
+
+	// Creating the Pipeline Layout
+	VkPipelineLayoutCreateInfo createInfo{ VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO };
+	createInfo.setLayoutCount = static_cast<uint32_t>(descsetsLayouts.size());
+	createInfo.pSetLayouts = descsetsLayouts.data();
+	createInfo.pushConstantRangeCount = 1;
+	createInfo.pPushConstantRanges = &pushConstantRanges;
+	vkCreatePipelineLayout(vkdev, &createInfo, nullptr, &_layout);
+
+
+	// Pipeline: completely generic, no vertices
+	nvvk::GraphicsPipelineGeneratorCombined pipelineGenerator(vkdev, _layout, rp);
+	pipelineGenerator.addShader(nvh::loadFile("spv/wireframe.vert.spv", true, defaultSearchPaths, true), VK_SHADER_STAGE_VERTEX_BIT);
+	pipelineGenerator.addShader(nvh::loadFile("spv/wireframe.frag.spv", true, defaultSearchPaths, true), VK_SHADER_STAGE_FRAGMENT_BIT);
+	pipelineGenerator.rasterizationState.cullMode = VK_CULL_MODE_NONE;
+	pipelineGenerator.rasterizationState.polygonMode = VK_POLYGON_MODE_LINE;
+	pipelineGenerator.addBindingDescription({ 0, sizeof(Vertex) });
+	pipelineGenerator.addAttributeDescriptions({
+		{0, 0, VK_FORMAT_R32G32B32_SFLOAT, static_cast<uint32_t>(offsetof(Vertex, pos))},
+		{1, 0, VK_FORMAT_R32G32B32_SFLOAT, static_cast<uint32_t>(offsetof(Vertex, color))},
+		});
 	_pipeline = pipelineGenerator.createPipeline();
 }

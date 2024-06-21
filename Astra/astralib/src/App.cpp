@@ -10,7 +10,7 @@
 #include <glm/gtx/transform.hpp>
 
 
-void Astra::App::updateUBO(const VkCommandBuffer& cmdBuf)
+void Astra::App::updateUBO(CommandList& cmdList)
 {
 	GlobalUniforms hostUBO = _scenes[_currentScene]->getCamera()->getUpdatedGlobals();
 
@@ -25,13 +25,12 @@ void Astra::App::updateUBO(const VkCommandBuffer& cmdBuf)
 	beforeBarrier.buffer = deviceUBO;
 	beforeBarrier.offset = 0;
 	beforeBarrier.size = sizeof(hostUBO);
-	vkCmdPipelineBarrier(cmdBuf, uboUsageStages, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_DEPENDENCY_DEVICE_GROUP_BIT, 0,
-		nullptr, 1, &beforeBarrier, 0, nullptr);
+	cmdList.pipelineBarrier(uboUsageStages, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_DEPENDENCY_DEVICE_GROUP_BIT, {}, { beforeBarrier }, {});
 
 
 	// Schedule the host-to-device upload. (hostUBO is copied into the cmd
 	// buffer so it is okay to deallocate when the function returns).
-	vkCmdUpdateBuffer(cmdBuf, _globalsBuffer.buffer, 0, sizeof(GlobalUniforms), &hostUBO);
+	cmdList.updateBuffer(_globalsBuffer, 0, sizeof(GlobalUniforms), &hostUBO);
 
 	// Making sure the updated UBO will be visible.
 	VkBufferMemoryBarrier afterBarrier{ VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER };
@@ -40,8 +39,15 @@ void Astra::App::updateUBO(const VkCommandBuffer& cmdBuf)
 	afterBarrier.buffer = deviceUBO;
 	afterBarrier.offset = 0;
 	afterBarrier.size = sizeof(hostUBO);
-	vkCmdPipelineBarrier(cmdBuf, VK_PIPELINE_STAGE_TRANSFER_BIT, uboUsageStages, VK_DEPENDENCY_DEVICE_GROUP_BIT, 0,
-		nullptr, 1, &afterBarrier, 0, nullptr);
+	cmdList.pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, uboUsageStages, VK_DEPENDENCY_DEVICE_GROUP_BIT, {}, { afterBarrier }, {});
+}
+
+void Astra::App::destroyPipelines()
+{
+	for (auto p : _pipelines) {
+		p->destroy(&_alloc);
+		delete p;
+	}
 }
 
 void Astra::App::createUBO()
@@ -74,11 +80,16 @@ void Astra::App::run()
 	_scenes[_currentScene]->update();
 }
 
+Astra::App::~App()
+{
+	_alloc.deinit();
+}
+
 void Astra::App::destroy()
 {
 	const auto& device = AstraDevice.getVkDevice();
 
-	vkDeviceWaitIdle(device);
+	AstraDevice.waitIdle();
 
 	_renderer->destroy(&_alloc);
 
@@ -88,6 +99,8 @@ void Astra::App::destroy()
 
 	for (auto s : _scenes)
 		s->destroy();
+
+	destroyPipelines();
 }
 
 nvvk::Buffer& Astra::App::getCameraUBO()
@@ -191,29 +204,35 @@ void Astra::App::cb_fileDrop(GLFWwindow* window, int count, const char** paths)
 
 void Astra::DefaultApp::init(const std::vector<Scene*>& scenes, Renderer* renderer, GuiController* gui)
 {
+	// init base app, copies scenes renderer and gui
+	// also inits the scenes and sets callbacks
 	Astra::App::init(scenes, renderer, gui);
+
+	// raytracing init
 	VkPhysicalDeviceProperties2 prop2{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2 };
 	prop2.pNext = &_rtProperties;
 	vkGetPhysicalDeviceProperties2(AstraDevice.getPhysicalDevice(), &prop2);
 
+	// renderer init
 	auto size = AstraDevice.getWindowSize();
 	_renderer->createSwapchain(AstraDevice.getSurface(), size[0], size[1]);
 	_renderer->createDepthBuffer();
 	_renderer->createRenderPass();
 	_renderer->createFrameBuffers();
+	_renderer->createOffscreenRender(_alloc);
+	_renderer->createPostDescriptorSet();
+	_renderer->createPostPipeline();
+	_renderer->updatePostDescriptorSet();
 
 	// gui init
 	_gui = gui;
 	_gui->init(AstraDevice.getWindow(), _renderer);
 
-	_renderer->createOffscreenRender(_alloc);
-	createDescriptorSetLayout();
-	_rasterPipeline = new OffscreenRaster();
-	((OffscreenRaster*)_rasterPipeline)->createPipeline(AstraDevice.getVkDevice(), { _descSetLayout }, _renderer->getOffscreenRenderPass());
-
+	// Scene -> GPU information || Uniforms
+	// camera uniforms
 	createUBO();
-	updateDescriptorSet();
 
+	// aceleration structures
 	for (Astra::Scene* s : _scenes) {
 		if (s->isRt()) {
 			((Astra::SceneRT*)s)->createBottomLevelAS();
@@ -221,19 +240,17 @@ void Astra::DefaultApp::init(const std::vector<Scene*>& scenes, Renderer* render
 		}
 	}
 
+	// descriptor sets
+	createDescriptorSetLayout();
+	updateDescriptorSet();
 	createRtDescriptorSet();
-	_rtPipeline = new RayTracingPipeline();
-	((RayTracingPipeline*)_rtPipeline)->createPipeline(AstraDevice.getVkDevice(), { _rtDescSetLayout, _descSetLayout }, _alloc, _rtProperties);
-
-	_renderer->createPostDescriptorSet();
-	_renderer->createPostPipeline();
-	_renderer->updatePostDescriptorSet();
+	// pipelines
+	createPipelines();
 }
 
 void Astra::DefaultApp::run()
 {
 	while (!glfwWindowShouldClose(_window)) {
-
 		App::run(); // update the scene
 
 		glfwPollEvents();
@@ -241,30 +258,47 @@ void Astra::DefaultApp::run()
 			continue;
 		}
 
-		// imgui new frame, imguizmo begin frame
-
+		_rendering = true;
 		auto cmdBuf = _renderer->beginFrame();
-		_gui->startFrame();
-
 		updateUBO(cmdBuf);
 
 		// offscren render
-		if (_useRT) {
-			_renderer->render(cmdBuf, _scenes[_currentScene], _rtPipeline, { _rtDescSet, _descSet });
+
+		if (_selectedPipeline == 0) {
+			_renderer->render(cmdBuf.getCommandBuffer(), _scenes[_currentScene], _rtPipeline, { _rtDescSet, _descSet });
 		}
-		else {
-			_renderer->render(cmdBuf, _scenes[_currentScene], _rasterPipeline, { _descSet });
+		else if (_selectedPipeline == 1) {
+			_renderer->render(cmdBuf.getCommandBuffer(), _scenes[_currentScene], _rasterPipeline, { _descSet });
+		}
+		else if (_selectedPipeline == 2) {
+			_renderer->render(cmdBuf.getCommandBuffer(), _scenes[_currentScene], _wireframePipeline, { _descSet });
 		}
 
 		// post render: ui and texture
 		_renderer->beginPost();
-		_renderer->renderPost(cmdBuf);
-		_gui->draw(this);
-		_gui->endFrame(cmdBuf);
-		_renderer->endPost(cmdBuf);
-
-		_renderer->endFrame(cmdBuf);
+		// TODO maybe make gui draw call in renderer?
+		_renderer->renderPost(cmdBuf.getCommandBuffer());
 		// render ui
+		_gui->startFrame();
+		_gui->draw(this);
+		_gui->endFrame(cmdBuf.getCommandBuffer());
+		_renderer->endPost(cmdBuf.getCommandBuffer());
+
+
+		_renderer->endFrame(cmdBuf.getCommandBuffer());
+		_rendering = false;
+
+		AstraDevice.waitIdle();
+		for (auto& model_pair : _newModels) {
+			addModelToScene(model_pair.first, model_pair.second);
+		}
+		_newModels.clear();
+
+		for (auto& inst : _newInstances) {
+			addInstanceToScene(inst);
+		}
+		_newInstances.clear();
+
 	}
 	destroy();
 }
@@ -272,15 +306,26 @@ void Astra::DefaultApp::run()
 void Astra::DefaultApp::destroy()
 {
 	App::destroy();
-	_rasterPipeline->destroy(&_alloc);
-	_rtPipeline->destroy(&_alloc);
 	vkDestroyDescriptorSetLayout(AstraDevice.getVkDevice(), _descSetLayout, nullptr);
 	vkDestroyDescriptorSetLayout(AstraDevice.getVkDevice(), _rtDescSetLayout, nullptr);
 	vkDestroyDescriptorPool(AstraDevice.getVkDevice(), _rtDescPool, nullptr);
-	delete _rasterPipeline;
-	delete _rtPipeline;
+}
 
-	_alloc.deinit();
+void Astra::DefaultApp::createPipelines()
+{
+	// raytracing pipeline
+	_rtPipeline = new RayTracingPipeline();
+	((RayTracingPipeline*)_rtPipeline)->createPipeline(AstraDevice.getVkDevice(), { _rtDescSetLayout, _descSetLayout }, _alloc, _rtProperties);
+
+	// basic raster
+	_rasterPipeline = new OffscreenRaster();
+	((OffscreenRaster*)_rasterPipeline)->createPipeline(AstraDevice.getVkDevice(), { _descSetLayout }, _renderer->getOffscreenRenderPass());
+
+	// wireframe
+	_wireframePipeline = new WireframePipeline();
+	((WireframePipeline*)_wireframePipeline)->createPipeline(AstraDevice.getVkDevice(), { _descSetLayout }, _renderer->getOffscreenRenderPass());
+
+	_pipelines = { _rtPipeline, _rasterPipeline, _wireframePipeline };
 }
 
 void Astra::DefaultApp::createDescriptorSetLayout()
@@ -378,13 +423,13 @@ void Astra::DefaultApp::onResize(int w, int h)
 	}
 
 	// wait until finishing tasks
-	vkDeviceWaitIdle(AstraDevice.getVkDevice());
-	vkQueueWaitIdle(AstraDevice.getQueue());
+	AstraDevice.waitIdle();
+	AstraDevice.queueWaitIdle();
 
 	// request swapchain image
 	_renderer->requestSwapchainImage(w, h);
 
-	_scenes[0]->getCamera()->setWindowSize(w, h);
+	_scenes[_currentScene]->getCamera()->setWindowSize(w, h);
 
 	_renderer->createOffscreenRender(_alloc);
 
@@ -426,12 +471,65 @@ void Astra::DefaultApp::onMouseWheel(int x, int y)
 
 void Astra::DefaultApp::onKeyboard(int key, int scancode, int action, int mods)
 {
-	/*if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
-		_useRT = !_useRT;
-	}*/
+	// pass;
 }
 
-bool& Astra::DefaultApp::getUseRTref()
+void Astra::DefaultApp::onFileDrop(int count, const char** paths)
 {
-	return _useRT;
+	if (count == 1) {
+		std::string string_path(paths[0]);
+		// check for obj object
+		if (string_path.substr(string_path.size() - 4, string_path.size()) == ".obj") {
+			addModelToScene(string_path);
+		}
+	}
+	else {
+		Astra::Log("Only one model at a time please!", INFO); // right now only one.
+	}
+}
+
+void Astra::DefaultApp::addModelToScene(const std::string& filepath, const glm::mat4& transform)
+{
+	if (_rendering) {
+		_newModels.push_back(std::make_pair(filepath, transform));
+	}
+	else {
+		int currentTxtSize = _scenes[_currentScene]->getTextures().size();
+		_scenes[_currentScene]->loadModel(filepath, transform);
+		((Astra::SceneRT*)_scenes[_currentScene])->createBottomLevelAS();
+		((Astra::SceneRT*)_scenes[_currentScene])->createTopLevelAS();
+		_descSetLayoutBind.clear();
+		_rtDescSetLayoutBind.clear();
+		createDescriptorSetLayout();
+		updateDescriptorSet();
+		createRtDescriptorSet();
+
+		// if we increase the number of textures in the scene we should rebuild the pipelines
+		if (_scenes[_currentScene]->getTextures().size() > currentTxtSize) {
+			destroyPipelines();
+			createPipelines();
+		}
+	}
+}
+
+void Astra::DefaultApp::addInstanceToScene(const Astra::MeshInstance& instance)
+{
+	if (_rendering) {
+		_newInstances.push_back(instance);
+	}
+	else {
+		_scenes[_currentScene]->addInstance(instance);
+		((Astra::SceneRT*)_scenes[_currentScene])->createBottomLevelAS();
+		((Astra::SceneRT*)_scenes[_currentScene])->createTopLevelAS();
+		_descSetLayoutBind.clear();
+		_rtDescSetLayoutBind.clear();
+		createDescriptorSetLayout();
+		updateDescriptorSet();
+		createRtDescriptorSet();
+	}
+}
+
+int& Astra::DefaultApp::getSelectedPipelineRef()
+{
+	return _selectedPipeline;
 }

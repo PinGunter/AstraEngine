@@ -15,13 +15,16 @@ namespace Astra {
 	public:
 		void init(GLFWwindow* window, Renderer* renderer);
 		void startFrame();
-		void endFrame(const VkCommandBuffer& cmdBuf);
+		void endFrame(const CommandList& cmdList);
 		void destroy();
 		virtual void draw(App* app) {};
 	};
 
 	class BasiGui : public GuiController {
 		bool _showGuizmo{ false };
+		int _node{ 0 };
+		int _ncopies{ 1 };
+		bool _handlingNodes{ true };
 	public:
 		void draw(App* app) override;
 	};
