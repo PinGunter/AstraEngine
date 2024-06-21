@@ -5,16 +5,16 @@
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_vulkan.h>
 
-void Astra::Renderer::renderPost(const VkCommandBuffer& cmdBuf)
+void Astra::Renderer::renderPost(const CommandList& cmdList)
 {
-	setViewport(cmdBuf);
+	setViewport(cmdList);
 	auto aspectRatio = static_cast<float>(_size.width) / static_cast<float>(_size.height);
-	_postPipeline.pushConstants(cmdBuf, VK_SHADER_STAGE_FRAGMENT_BIT, sizeof(float), &aspectRatio);
-	_postPipeline.bind(cmdBuf, { _postDescSet });
-	vkCmdDraw(cmdBuf, 3, 1, 0, 0);
+	_postPipeline.pushConstants(cmdList, VK_SHADER_STAGE_FRAGMENT_BIT, sizeof(float), &aspectRatio);
+	_postPipeline.bind(cmdList, { _postDescSet });
+	cmdList.draw(3, 1, 0, 0);
 }
 
-void Astra::Renderer::renderRaster(const VkCommandBuffer& cmdBuf, Scene* scene, RasterPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets)
+void Astra::Renderer::renderRaster(const CommandList& cmdList, Scene* scene, RasterPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets)
 {
 	// clear
 	std::array<VkClearValue, 2> clearValues{};
@@ -29,15 +29,15 @@ void Astra::Renderer::renderRaster(const VkCommandBuffer& cmdBuf, Scene* scene, 
 	offscreenRenderPassBeginInfo.framebuffer = _offscreenFb;
 	offscreenRenderPassBeginInfo.renderArea = { {0, 0}, _size };
 
-	vkCmdBeginRenderPass(cmdBuf, &offscreenRenderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
+	cmdList.beginRenderPass(offscreenRenderPassBeginInfo);
 
 	// dynamic rendering
 	VkDeviceSize offset{ 0 };
-	setViewport(cmdBuf);
+	setViewport(cmdList);
 
 	// bind pipeline
 
-	pipeline->bind(cmdBuf, descSets);
+	pipeline->bind(cmdList, descSets);
 
 	// TODO maybe the push constant should be owned by the app
 	// render scene
@@ -60,19 +60,19 @@ void Astra::Renderer::renderRaster(const VkCommandBuffer& cmdBuf, Scene* scene, 
 			pushConstant.modelMatrix = scene->getTransformRef() * pushConstant.modelMatrix;
 
 			// send pc to gpu
-			pipeline->pushConstants(cmdBuf, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+			pipeline->pushConstants(cmdList, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
 				sizeof(PushConstantRaster), &pushConstant);
 
 			// draw call
-			model.draw(cmdBuf, offset);
+			model.draw(cmdList);
 		}
 	}
 
 	// end render pass
-	vkCmdEndRenderPass(cmdBuf);
+	cmdList.endRenderPass();
 }
 
-void Astra::Renderer::renderRaytrace(const VkCommandBuffer& cmdBuf, Scene* scene, RayTracingPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets)
+void Astra::Renderer::renderRaytrace(const CommandList& cmdList, Scene* scene, RayTracingPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets)
 {
 	// push constant info
 	PushConstantRay pushConstant;
@@ -96,12 +96,10 @@ void Astra::Renderer::renderRaytrace(const VkCommandBuffer& cmdBuf, Scene* scene
 
 	// TODO si da tiempo habria que pensar una forma de generalizar uniforms
 	// probablemente con UBOs para que no haya problemas de tama�o
-
-	pipeline->bind(cmdBuf, descSets);
-	pipeline->pushConstants(cmdBuf, VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_MISS_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR,
+	pipeline->bind(cmdList, descSets);
+	pipeline->pushConstants(cmdList, VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_MISS_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR,
 		sizeof(PushConstantRay), &pushConstant);
-	auto regions = pipeline->getSBTRegions();
-	vkCmdTraceRaysKHR(cmdBuf, &regions[0], &regions[1], &regions[2], &regions[3], _size.width, _size.height, 1);;
+	cmdList.raytrace(pipeline->getSBTRegions(), _size.width, _size.height);
 }
 
 void Astra::Renderer::createPostDescriptorSet()
@@ -119,8 +117,9 @@ void Astra::Renderer::updatePostDescriptorSet()
 }
 
 
-void Astra::Renderer::setViewport(const VkCommandBuffer& cmdBuf)
+void Astra::Renderer::setViewport(const CommandList& cmdList)
 {
+	const auto& cmdBuf = cmdList.getCommandBuffer();
 	VkViewport viewport{ 0.0f, 0.0f, static_cast<float>(_size.width), static_cast<float>(_size.height), 0.0f, 1.0f };
 	vkCmdSetViewport(cmdBuf, 0, 1, &viewport);
 	VkRect2D scissor{ {0,0}, {_size.width, _size.height} };
@@ -167,18 +166,28 @@ void Astra::Renderer::createSwapchain(const VkSurfaceKHR& surface, uint32_t widt
 		vkCreateFence(device, &fenceCreateInfo, nullptr, &fence);
 	}
 
+	/*
+	* We use the CommandList type in the class attribute
+	* However, vulkan expects a VkCommandBuffer array
+	* we have a local array of VkCommandBuffer for allocation
+	* the proceed to convert it to the CommandList class
+	*/
+	std::vector<VkCommandBuffer> cmdBufs;
 	// Command buffers store a reference to the frame buffer inside their render pass info
 	// so for static usage without having to rebuild them each frame, we use one per frame buffer
 	VkCommandBufferAllocateInfo allocateInfo{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO };
 	allocateInfo.commandPool = commandPool;
 	allocateInfo.commandBufferCount = _swapchain.getImageCount();
 	allocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-	_commandBuffers.resize(_swapchain.getImageCount());
-	vkAllocateCommandBuffers(device, &allocateInfo, _commandBuffers.data());
+	cmdBufs.resize(_swapchain.getImageCount());
+	vkAllocateCommandBuffers(device, &allocateInfo, cmdBufs.data());
+	for (auto& cmdBuf : cmdBufs) {
+		_commandLists.push_back({ cmdBuf });
+	}
 
-	auto cmdBuffer = AstraDevice.createTmpCmdBuf();
-	_swapchain.cmdUpdateBarriers(cmdBuffer);
-	AstraDevice.submitTmpCmdBuf(cmdBuffer);
+	auto cmdList = Astra::CommandList::createTmpCmdList();
+	_swapchain.cmdUpdateBarriers(cmdList.getCommandBuffer());
+	cmdList.submitTmpCmdList();
 }
 
 void Astra::Renderer::createOffscreenRender(nvvk::ResourceAllocatorDma& alloc)
@@ -378,7 +387,7 @@ void Astra::Renderer::createDepthBuffer()
 	// Bind image and memory
 	vkBindImageMemory(device, _depthImage, _depthMemory, 0);
 
-	auto cmdBuffer = AstraDevice.createTmpCmdBuf();
+	auto cmdList = Astra::CommandList::createTmpCmdList();
 
 	// Put barrier on top, Put barrier inside setup command buffer
 	VkImageSubresourceRange subresourceRange{};
@@ -395,8 +404,8 @@ void Astra::Renderer::createDepthBuffer()
 	const VkPipelineStageFlags srcStageMask = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
 	const VkPipelineStageFlags destStageMask = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
 
-	vkCmdPipelineBarrier(cmdBuffer, srcStageMask, destStageMask, VK_FALSE, 0, nullptr, 0, nullptr, 1, &imageMemoryBarrier);
-	AstraDevice.submitTmpCmdBuf(cmdBuffer);
+	vkCmdPipelineBarrier(cmdList.getCommandBuffer(), srcStageMask, destStageMask, VK_FALSE, 0, nullptr, 0, nullptr, 1, &imageMemoryBarrier);
+	cmdList.submitTmpCmdList();
 
 
 	// Setting up the view
@@ -433,34 +442,34 @@ void Astra::Renderer::prepareFrame()
 	vkWaitForFences(AstraDevice.getVkDevice(), 1, &_fences[imageIndex], VK_TRUE, UINT64_MAX);
 }
 
-VkCommandBuffer Astra::Renderer::beginFrame()
+Astra::CommandList Astra::Renderer::beginFrame()
 {
 	prepareFrame();
 	uint32_t currentFrame = _swapchain.getActiveImageIndex();
-	const auto& cmdBuf = _commandBuffers[currentFrame];
+	auto& cmdList = _commandLists[currentFrame];
 
 	// begin command buffer
 	VkCommandBufferBeginInfo beginInfo{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
 	beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-	vkBeginCommandBuffer(cmdBuf, &beginInfo);
-	return cmdBuf;
+	cmdList.begin(beginInfo);
+	return cmdList;
 }
 
 void Astra::Renderer::requestSwapchainImage(int w, int h)
 {
 	_size = _swapchain.update(w, h);
-	auto cmdBuffer = AstraDevice.createTmpCmdBuf();
-	_swapchain.cmdUpdateBarriers(cmdBuffer);
-	AstraDevice.submitTmpCmdBuf(cmdBuffer);
+	auto cmdList = Astra::CommandList::createTmpCmdList();
+	_swapchain.cmdUpdateBarriers(cmdList.getCommandBuffer());
+	cmdList.submitTmpCmdList();
 
 	if (_size.height != h || _size.width != w) {
 		Astra::Log("Swapchain image size different from requested one", WARNING);
 	}
 }
 
-void Astra::Renderer::endFrame(const VkCommandBuffer& cmdBuf)
+void Astra::Renderer::endFrame(const CommandList& cmdList)
 {
-	vkEndCommandBuffer(cmdBuf);
+	cmdList.end();
 	uint32_t imageIndex = _swapchain.getActiveImageIndex();
 	vkResetFences(AstraDevice.getVkDevice(), 1, &_fences[imageIndex]);
 
@@ -480,6 +489,10 @@ void Astra::Renderer::endFrame(const VkCommandBuffer& cmdBuf)
 
 	// Pipeline stage at which the queue submission will wait (via pWaitSemaphores)
 	const VkPipelineStageFlags waitStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+	std::vector<VkCommandBuffer> commandBuffers(_commandLists.size());
+	for (int i = 0; i < commandBuffers.size(); i++) {
+		commandBuffers[i] = _commandLists[i].getCommandBuffer();
+	}
 	// The submit info structure specifies a command buffer queue submission batch
 	VkSubmitInfo submitInfo{ VK_STRUCTURE_TYPE_SUBMIT_INFO };
 	submitInfo.pWaitDstStageMask = &waitStageMask;  // Pointer to the list of pipeline stages that the semaphore waits will occur at
@@ -487,7 +500,7 @@ void Astra::Renderer::endFrame(const VkCommandBuffer& cmdBuf)
 	submitInfo.waitSemaphoreCount = 1;                // One wait semaphore
 	submitInfo.pSignalSemaphores = &semaphoreWrite;  // Semaphore(s) to be signaled when command buffers have completed
 	submitInfo.signalSemaphoreCount = 1;                // One signal semaphore
-	submitInfo.pCommandBuffers = &_commandBuffers[imageIndex];  // Command buffers(s) to execute in this batch (submission)
+	submitInfo.pCommandBuffers = &commandBuffers[imageIndex];  // Command buffers(s) to execute in this batch (submission)
 	submitInfo.commandBufferCount = 1;                           // One command buffer
 	submitInfo.pNext = &deviceGroupSubmitInfo;
 
@@ -505,7 +518,7 @@ void Astra::Renderer::beginPost()
 	clearValues[1].depthStencil = { 1.0f, 0 };
 
 	uint32_t currentFrame = _swapchain.getActiveImageIndex();
-	const auto& cmdBuf = _commandBuffers[currentFrame];
+	auto& cmdBuf = _commandLists[currentFrame];
 
 	VkRenderPassBeginInfo postRenderPassBeginInfo{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO };
 	postRenderPassBeginInfo.clearValueCount = 2;
@@ -514,41 +527,12 @@ void Astra::Renderer::beginPost()
 	postRenderPassBeginInfo.framebuffer = _framebuffers[currentFrame];
 	postRenderPassBeginInfo.renderArea = { {0, 0}, _size };
 
-	vkCmdBeginRenderPass(cmdBuf, &postRenderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
+	cmdBuf.beginRenderPass(postRenderPassBeginInfo);
 }
 
-void Astra::Renderer::endPost(const VkCommandBuffer& cmdBuf)
+void Astra::Renderer::endPost(const CommandList& cmdList)
 {
-	vkCmdEndRenderPass(cmdBuf);
-}
-
-void Astra::Renderer::updateUBO(const VkCommandBuffer& cmdBuf, const GlobalUniforms& hostUbo)
-{
-	VkBuffer deviceUBO = _app->getCameraUBO().buffer;
-	auto uboStages = VK_PIPELINE_STAGE_VERTEX_SHADER_BIT | VK_PIPELINE_STAGE_RAY_TRACING_SHADER_BIT_KHR;
-
-	// sync (new UBO not visible to previous frames)
-	VkBufferMemoryBarrier beforeBarrier{ VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER };
-	beforeBarrier.srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
-	beforeBarrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
-	beforeBarrier.buffer = deviceUBO;
-	beforeBarrier.offset = 0;
-	beforeBarrier.size = sizeof(hostUbo);
-	vkCmdPipelineBarrier(cmdBuf, uboStages, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_DEPENDENCY_DEVICE_GROUP_BIT,
-		0, nullptr, 1, &beforeBarrier, 0, nullptr);
-
-	// copy to device
-	vkCmdUpdateBuffer(cmdBuf, _app->getCameraUBO().buffer, 0, sizeof(GlobalUniforms), &hostUbo);
-
-	// sync (making the UBO visible)
-	VkBufferMemoryBarrier afterBarrier{ VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER };
-	afterBarrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
-	afterBarrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
-	afterBarrier.buffer = deviceUBO;
-	afterBarrier.offset = 0;
-	afterBarrier.size = sizeof(GlobalUniforms);
-	vkCmdPipelineBarrier(cmdBuf, VK_PIPELINE_STAGE_TRANSFER_BIT, uboStages,
-		VK_DEPENDENCY_DEVICE_GROUP_BIT, 0, nullptr, 1, &afterBarrier, 0, nullptr);
+	cmdList.endRenderPass();
 }
 
 void Astra::Renderer::init()
@@ -581,12 +565,12 @@ void Astra::Renderer::destroy(nvvk::ResourceAllocator* alloc)
 
 		vkDestroyFramebuffer(device, _framebuffers[i], nullptr);
 
-		vkFreeCommandBuffers(device, AstraDevice.getCommandPool(), 1, &_commandBuffers[i]);
+		_commandLists[i].free();
 	}
 	_swapchain.deinit();
 }
 
-void Astra::Renderer::render(const VkCommandBuffer& cmdBuf, Scene* scene, Pipeline* pipeline, const std::vector<VkDescriptorSet>& descSets)
+void Astra::Renderer::render(const Astra::CommandList& cmdBuf, Scene* scene, Pipeline* pipeline, const std::vector<VkDescriptorSet>& descSets)
 {
 	if (pipeline->doesRayTracing()) {
 		renderRaytrace(cmdBuf, scene, (RayTracingPipeline*)pipeline, descSets);

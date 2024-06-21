@@ -216,6 +216,11 @@ namespace Astra {
 		vkDeviceWaitIdle(_vkdevice);
 	}
 
+	void Device::queueWaitIdle()
+	{
+		vkQueueWaitIdle(_queue);
+	}
+
 	nvvk::RaytracingBuilderKHR::BlasInput Device::objectToVkGeometry(const Astra::HostModel& model)
 	{
 		// BLAS builder requires raw device addresses.
@@ -257,7 +262,7 @@ namespace Astra {
 		return input;
 	}
 
-	void Device::createTextureImages(const VkCommandBuffer& cmdBuf, const std::vector<std::string>& new_textures, std::vector<nvvk::Texture>& textures, nvvk::ResourceAllocatorDma& alloc)
+	void Device::createTextureImages(const Astra::CommandList& cmdList, const std::vector<std::string>& new_textures, std::vector<nvvk::Texture>& textures, nvvk::ResourceAllocatorDma& alloc)
 	{
 		VkSamplerCreateInfo samplerCreateInfo{ VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO };
 		samplerCreateInfo.minFilter = VK_FILTER_LINEAR;
@@ -266,6 +271,7 @@ namespace Astra {
 		samplerCreateInfo.maxLod = FLT_MAX;
 
 		VkFormat format = VK_FORMAT_R8G8B8A8_SRGB;
+		const auto& cmdBuf = cmdList.getCommandBuffer();
 
 		// If no textures are present, create a dummy one to accommodate the pipeline layout
 		if (new_textures.empty() && textures.empty())

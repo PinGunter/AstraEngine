@@ -4,6 +4,7 @@
 #include <App.h>
 #include <nvvk/swapchain_vk.hpp>
 #include <GLFW/glfw3.h>
+#include <CommandList.h>
 
 namespace Astra {
 	class App;
@@ -33,7 +34,7 @@ namespace Astra {
 
 		nvvk::SwapChain _swapchain;
 		std::vector<VkFramebuffer> _framebuffers;
-		std::vector<VkCommandBuffer> _commandBuffers;
+		std::vector<CommandList> _commandLists;
 		std::vector<VkFence> _fences;
 		VkImage _depthImage;
 		VkDeviceMemory _depthMemory;
@@ -43,27 +44,26 @@ namespace Astra {
 		App* _app;
 		glm::vec4 _clearColor;
 
-		void renderRaster(const VkCommandBuffer& cmdBuf, Scene* scene, RasterPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets);
-		void renderRaytrace(const VkCommandBuffer& cmdBuf, Scene* scene, RayTracingPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets);
+		void renderRaster(const CommandList& cmdBuf, Scene* scene, RasterPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets);
+		void renderRaytrace(const CommandList& cmdBuf, Scene* scene, RayTracingPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets);
 
 
-		void setViewport(const VkCommandBuffer& cmdBuf);
+		void setViewport(const CommandList& cmdBuf);
 
 
 		void resize(int w, int h);
 		void prepareFrame();
-		void updateUBO(const VkCommandBuffer& cmdBuf, const GlobalUniforms& hostUbo);
 
 	public:
 		void init();
 		void linkApp(App* app);
 		void destroy(nvvk::ResourceAllocator* alloc);
-		void render(const VkCommandBuffer& cmdBuf, Scene* scene, Pipeline* pipeline, const std::vector<VkDescriptorSet>& descSets);
-		VkCommandBuffer beginFrame();
-		void endFrame(const VkCommandBuffer& cmdBuf);
+		void render(const CommandList& cmdBuf, Scene* scene, Pipeline* pipeline, const std::vector<VkDescriptorSet>& descSets);
+		Astra::CommandList beginFrame();
+		void endFrame(const CommandList& cmdBuf);
 		void beginPost();
-		void endPost(const VkCommandBuffer& cmdBuf);
-		void renderPost(const VkCommandBuffer& cmdBuf); // mandatory step! after drawing
+		void endPost(const CommandList& cmdBuf);
+		void renderPost(const CommandList& cmdBuf); // mandatory step! after drawing
 
 
 		glm::vec4& getClearColorRef();

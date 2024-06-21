@@ -46,9 +46,7 @@ void Astra::MeshInstance::updatePushConstantRT(PushConstantRay& pc) const
 	// nothing to do
 }
 
-void Astra::HostModel::draw(const VkCommandBuffer& cmdBuf, VkDeviceSize offset) const
+void Astra::HostModel::draw(const Astra::CommandList& cmdList) const
 {
-	vkCmdBindVertexBuffers(cmdBuf, 0, 1, &vertexBuffer.buffer, &offset);
-	vkCmdBindIndexBuffer(cmdBuf, indexBuffer.buffer, 0, VK_INDEX_TYPE_UINT32);
-	vkCmdDrawIndexed(cmdBuf, nbIndices, 1, 0, 0, 0);
+	cmdList.drawIndexed(vertexBuffer.buffer, indexBuffer.buffer, nbIndices);
 }

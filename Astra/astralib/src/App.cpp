@@ -89,7 +89,7 @@ void Astra::App::destroy()
 {
 	const auto& device = AstraDevice.getVkDevice();
 
-	vkDeviceWaitIdle(device);
+	AstraDevice.waitIdle();
 
 	_renderer->destroy(&_alloc);
 
@@ -265,27 +265,27 @@ void Astra::DefaultApp::run()
 		// offscren render
 
 		if (_selectedPipeline == 0) {
-			_renderer->render(cmdBuf, _scenes[_currentScene], _rtPipeline, { _rtDescSet, _descSet });
+			_renderer->render(cmdBuf.getCommandBuffer(), _scenes[_currentScene], _rtPipeline, { _rtDescSet, _descSet });
 		}
 		else if (_selectedPipeline == 1) {
-			_renderer->render(cmdBuf, _scenes[_currentScene], _rasterPipeline, { _descSet });
+			_renderer->render(cmdBuf.getCommandBuffer(), _scenes[_currentScene], _rasterPipeline, { _descSet });
 		}
 		else if (_selectedPipeline == 2) {
-			_renderer->render(cmdBuf, _scenes[_currentScene], _wireframePipeline, { _descSet });
+			_renderer->render(cmdBuf.getCommandBuffer(), _scenes[_currentScene], _wireframePipeline, { _descSet });
 		}
 
 		// post render: ui and texture
 		_renderer->beginPost();
 		// TODO maybe make gui draw call in renderer?
-		_renderer->renderPost(cmdBuf);
+		_renderer->renderPost(cmdBuf.getCommandBuffer());
 		// render ui
 		_gui->startFrame();
 		_gui->draw(this);
-		_gui->endFrame(cmdBuf);
-		_renderer->endPost(cmdBuf);
+		_gui->endFrame(cmdBuf.getCommandBuffer());
+		_renderer->endPost(cmdBuf.getCommandBuffer());
 
 
-		_renderer->endFrame(cmdBuf);
+		_renderer->endFrame(cmdBuf.getCommandBuffer());
 		_rendering = false;
 
 		AstraDevice.waitIdle();
@@ -423,8 +423,8 @@ void Astra::DefaultApp::onResize(int w, int h)
 	}
 
 	// wait until finishing tasks
-	vkDeviceWaitIdle(AstraDevice.getVkDevice());
-	vkQueueWaitIdle(AstraDevice.getQueue());
+	AstraDevice.waitIdle();
+	AstraDevice.queueWaitIdle();
 
 	// request swapchain image
 	_renderer->requestSwapchainImage(w, h);

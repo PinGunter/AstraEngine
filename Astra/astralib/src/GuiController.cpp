@@ -72,10 +72,10 @@ void Astra::GuiController::startFrame()
 	ImGuizmo::BeginFrame();
 }
 
-void Astra::GuiController::endFrame(const VkCommandBuffer& cmdBuf)
+void Astra::GuiController::endFrame(const Astra::CommandList& cmdList)
 {
 	ImGui::Render();
-	ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), cmdBuf);
+	ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), cmdList.getCommandBuffer());
 }
 
 void Astra::GuiController::destroy()
@@ -134,14 +134,14 @@ void Astra::BasiGui::draw(App* app)
 
 	if (ImGui::BeginListBox("Lights")) {
 
-	for (int i = 0; i < scene->getLights().size(); i++) {
-		auto light = scene->getLights()[i];
-		if (ImGui::Selectable(light->getName().c_str(), i == _node)) {
-			_node = i;
-			_handlingNodes = false;
+		for (int i = 0; i < scene->getLights().size(); i++) {
+			auto light = scene->getLights()[i];
+			if (ImGui::Selectable(light->getName().c_str(), i == _node)) {
+				_node = i;
+				_handlingNodes = false;
+			}
 		}
-	}
-	ImGui::EndListBox();
+		ImGui::EndListBox();
 	}
 	if (ImGui::Checkbox("Visible", &scene->getInstances()[_node].getVisibleRef())) {
 		scene->updateTopLevelAS(_node);

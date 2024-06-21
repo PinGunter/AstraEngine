@@ -15,7 +15,7 @@ namespace Astra {
 	public:
 		void init(GLFWwindow* window, Renderer* renderer);
 		void startFrame();
-		void endFrame(const VkCommandBuffer& cmdBuf);
+		void endFrame(const CommandList& cmdList);
 		void destroy();
 		virtual void draw(App* app) {};
 	};

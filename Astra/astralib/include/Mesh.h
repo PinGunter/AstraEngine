@@ -6,6 +6,7 @@
 #include <vector>
 #include <nvvk/commands_vk.hpp>
 #include <vulkan/vulkan.h>
+#include <CommandList.h>
 namespace Astra {
 
 	/**
@@ -35,7 +36,7 @@ namespace Astra {
 		nvvk::Buffer matColorBuffer;  // Device buffer of array of 'Wavefront material'
 		nvvk::Buffer matIndexBuffer;  // Device buffer of array of 'Wavefront material'
 
-		void draw(const VkCommandBuffer& cmdBuf, VkDeviceSize offset) const;
+		void draw(const CommandList& cmdList) const;
 	};
 
 	/**
