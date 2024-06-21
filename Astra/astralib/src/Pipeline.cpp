@@ -316,7 +316,7 @@ void Astra::WireframePipeline::createPipeline(VkDevice vkdev, const std::vector<
 	std::string(PROJECT_NAME),
 	};
 
-	VkPushConstantRange pushConstantRanges = { VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(PushConstantWireframe) };
+	VkPushConstantRange pushConstantRanges = { VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(PushConstantRaster) };
 
 	// Creating the Pipeline Layout
 	VkPipelineLayoutCreateInfo createInfo{ VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO };
@@ -335,6 +335,8 @@ void Astra::WireframePipeline::createPipeline(VkDevice vkdev, const std::vector<
 	pipelineGenerator.rasterizationState.polygonMode = VK_POLYGON_MODE_LINE;
 	pipelineGenerator.addBindingDescription({ 0, sizeof(Vertex) });
 	pipelineGenerator.addAttributeDescriptions({
-		{0, 0, VK_FORMAT_R32G32B32_SFLOAT, static_cast<uint32_t>(offsetof(Vertex, pos))},		});
+		{0, 0, VK_FORMAT_R32G32B32_SFLOAT, static_cast<uint32_t>(offsetof(Vertex, pos))},
+		{1, 0, VK_FORMAT_R32G32B32_SFLOAT, static_cast<uint32_t>(offsetof(Vertex, color))},
+		});
 	_pipeline = pipelineGenerator.createPipeline();
 }

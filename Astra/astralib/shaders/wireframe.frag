@@ -1,18 +1,10 @@
 #version 450
-#extension GL_ARB_separate_shader_objects : enable
-#extension GL_EXT_scalar_block_layout : enable
-#extension GL_GOOGLE_include_directive : enable
 
-#extension GL_EXT_shader_explicit_arithmetic_types_int64 : require
+layout(location = 0) in vec3 i_color;
 
-#include "wavefront.glsl"
-
-layout(push_constant) uniform _PushConstantWireframe
-{
-  PushConstantWireframe pc;
-};
+layout(location = 0) out vec4 fragColor;
 
 void main()
 {
-  o_color = vec4(pc.wireColor, 1.0f);
+  fragColor = vec4(i_color, 1.0f);
 }

@@ -162,44 +162,9 @@ namespace Astra {
 		return _window;
 	}
 
-	VkCommandBuffer Device::createTmpCmdBuf()
-	{
-		// allocate 
-		VkCommandBufferAllocateInfo allocateInfo{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO };
-		allocateInfo.commandBufferCount = 1;
-		allocateInfo.commandPool = _cmdPool;
-		allocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-
-		// create
-		VkCommandBuffer cmdBuffer;
-		vkAllocateCommandBuffers(_vkdevice, &allocateInfo, &cmdBuffer);
-
-		// start
-		VkCommandBufferBeginInfo beginInfo{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
-		beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-		vkBeginCommandBuffer(cmdBuffer, &beginInfo);
-		return cmdBuffer;
-	}
-
-
 	bool Device::getRtEnabled() const
 	{
 		return _raytracingEnabled;
-	}
-
-	void Device::submitTmpCmdBuf(VkCommandBuffer cmdBuff)
-	{
-		// end
-		vkEndCommandBuffer(cmdBuff);
-		// submit
-		VkSubmitInfo submitInfo{ VK_STRUCTURE_TYPE_SUBMIT_INFO };
-		submitInfo.commandBufferCount = 1;
-		submitInfo.pCommandBuffers = &cmdBuff;
-		vkQueueSubmit(_queue, 1, &submitInfo, {});
-		// sync
-		vkQueueWaitIdle(_queue);
-		// free
-		vkFreeCommandBuffers(_vkdevice, _cmdPool, 1, &cmdBuff);
 	}
 
 
@@ -244,6 +209,11 @@ namespace Astra {
 		int w, h;
 		glfwGetFramebufferSize(_window, &w, &h);
 		return { w, h };
+	}
+
+	void Device::waitIdle()
+	{
+		vkDeviceWaitIdle(_vkdevice);
 	}
 
 	nvvk::RaytracingBuilderKHR::BlasInput Device::objectToVkGeometry(const Astra::HostModel& model)

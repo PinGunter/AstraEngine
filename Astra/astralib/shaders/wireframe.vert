@@ -9,11 +9,14 @@
 
 
 layout(location=0) in vec3 i_position;
+layout(location=1) in vec3 i_color;
 
 layout(binding = 0) uniform _GlobalUniforms
 {
   GlobalUniforms uni;
 };
+
+layout (location = 0) out vec3 o_color;
 
 layout(push_constant) uniform _PushConstantRaster
 {
@@ -29,4 +32,6 @@ out gl_PerVertex
 void main()
 {
   vec3 worldPos = vec3(pcRaster.modelMatrix * vec4(i_position, 1.0));
-  gl_Position = uni.viewProj * vec4(worldPos, 1.0);}
+  gl_Position = uni.viewProj * vec4(worldPos, 1.0);
+  o_color = i_color;
+}

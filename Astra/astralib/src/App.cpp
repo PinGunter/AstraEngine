@@ -10,7 +10,7 @@
 #include <glm/gtx/transform.hpp>
 
 
-void Astra::App::updateUBO(const VkCommandBuffer& cmdBuf)
+void Astra::App::updateUBO(CommandList& cmdList)
 {
 	GlobalUniforms hostUBO = _scenes[_currentScene]->getCamera()->getUpdatedGlobals();
 
@@ -25,13 +25,12 @@ void Astra::App::updateUBO(const VkCommandBuffer& cmdBuf)
 	beforeBarrier.buffer = deviceUBO;
 	beforeBarrier.offset = 0;
 	beforeBarrier.size = sizeof(hostUBO);
-	vkCmdPipelineBarrier(cmdBuf, uboUsageStages, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_DEPENDENCY_DEVICE_GROUP_BIT, 0,
-		nullptr, 1, &beforeBarrier, 0, nullptr);
+	cmdList.pipelineBarrier(uboUsageStages, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_DEPENDENCY_DEVICE_GROUP_BIT, {}, { beforeBarrier }, {});
 
 
 	// Schedule the host-to-device upload. (hostUBO is copied into the cmd
 	// buffer so it is okay to deallocate when the function returns).
-	vkCmdUpdateBuffer(cmdBuf, _globalsBuffer.buffer, 0, sizeof(GlobalUniforms), &hostUBO);
+	cmdList.updateBuffer(_globalsBuffer, 0, sizeof(GlobalUniforms), &hostUBO);
 
 	// Making sure the updated UBO will be visible.
 	VkBufferMemoryBarrier afterBarrier{ VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER };
@@ -40,8 +39,7 @@ void Astra::App::updateUBO(const VkCommandBuffer& cmdBuf)
 	afterBarrier.buffer = deviceUBO;
 	afterBarrier.offset = 0;
 	afterBarrier.size = sizeof(hostUBO);
-	vkCmdPipelineBarrier(cmdBuf, VK_PIPELINE_STAGE_TRANSFER_BIT, uboUsageStages, VK_DEPENDENCY_DEVICE_GROUP_BIT, 0,
-		nullptr, 1, &afterBarrier, 0, nullptr);
+	cmdList.pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, uboUsageStages, VK_DEPENDENCY_DEVICE_GROUP_BIT, {}, { afterBarrier }, {});
 }
 
 void Astra::App::destroyPipelines()
@@ -290,7 +288,7 @@ void Astra::DefaultApp::run()
 		_renderer->endFrame(cmdBuf);
 		_rendering = false;
 
-		vkDeviceWaitIdle(AstraDevice.getVkDevice());
+		AstraDevice.waitIdle();
 		for (auto& model_pair : _newModels) {
 			addModelToScene(model_pair.first, model_pair.second);
 		}

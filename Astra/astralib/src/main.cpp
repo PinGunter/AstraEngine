@@ -4,7 +4,6 @@
 #include <nvh/fileoperations.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-
 // search paths for finding files
 std::vector<std::string> defaultSearchPaths = {
 	NVPSystem::exePath() + PROJECT_RELDIRECTORY,

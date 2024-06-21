@@ -4,6 +4,7 @@
 #include <Renderer.h>
 #include <Device.h>
 #include <Scene.h>
+#include <CommandList.h>
 namespace Astra {
 	class GuiController;
 	class Renderer;
@@ -24,7 +25,7 @@ namespace Astra {
 		std::vector<Pipeline*> _pipelines;
 
 		virtual void createUBO();
-		virtual void updateUBO(const VkCommandBuffer& cmdBuf);
+		virtual void updateUBO(CommandList& cmdList);
 		virtual void createDescriptorSetLayout() {};
 		virtual void updateDescriptorSet() {};
 		virtual void createPipelines() {};

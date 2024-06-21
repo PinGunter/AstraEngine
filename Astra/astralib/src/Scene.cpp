@@ -55,7 +55,7 @@ void Astra::Scene::loadModel(const std::string& filename, const glm::mat4& trans
 		//mesh.materials = loader.m_materials;
 		//mesh.materialIndices = loader.m_matIndx;
 		//mesh.textures = loader.m_textures;
-		
+
 		Astra::HostModel model;
 		model.nbIndices = static_cast<uint32_t>(loader.m_indices.size());
 		model.nbVertices = static_cast<uint32_t>(loader.m_vertices.size());

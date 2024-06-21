@@ -12,6 +12,6 @@ pushc;
 
 void main()
 {
-  vec2  uv    = outUV;
-  fragColor   = texture(offscreenTxt, uv).rgba;
+	vec2  uv    = outUV;
+	fragColor   = texture(offscreenTxt, uv).rgba;
 }
