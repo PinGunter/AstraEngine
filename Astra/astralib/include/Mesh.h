@@ -9,34 +9,28 @@
 #include <CommandList.h>
 namespace Astra {
 
-	/**
-		Represents a mesh in host memory, easy to manipulate and create
-		Has method to change to vulkan mesh, in gpu memory
-	*/
-	struct Model {
+	struct Mesh {
+		int meshId{ -1 };
+
+		// CPU side
 		std::vector<uint32_t> indices;
 		std::vector<Vertex> vertices;
 		std::vector<WaveFrontMaterial> materials;
 		std::vector<int32_t> materialIndices;
 		std::vector<std::string> textures;
 
-		// TODO should be in future device/app class
-		/*HostModel toVulkanMesh() {
-		}*/
-	};
-	/**
-	* Struct that stores the neccesary information for vulkan for a mesh
-	* It has to be created within an App since it needs connection to the vulkan device
-	*/
-	struct HostModel {
-		uint32_t     nbIndices{ 0 };
-		uint32_t     nbVertices{ 0 };
+		// CPU - GPU side
 		nvvk::Buffer vertexBuffer;    // Device buffer of all 'Vertex'
 		nvvk::Buffer indexBuffer;     // Device buffer of the indices forming triangles
 		nvvk::Buffer matColorBuffer;  // Device buffer of array of 'Wavefront material'
 		nvvk::Buffer matIndexBuffer;  // Device buffer of array of 'Wavefront material'
 
+		// GPU side
+		ObjDesc descriptor{}; // gpu buffer addresses
+
 		void draw(const CommandList& cmdList) const;
+		void create(const Astra::CommandList& cmdList, nvvk::ResourceAllocatorDma* alloc, uint32_t txtOffset);
+		void createBuffers(const Astra::CommandList& cmdList, nvvk::ResourceAllocatorDma* alloc); // fills the gpu buffers with the vector data
 	};
 
 	/**
@@ -54,12 +48,12 @@ namespace Astra {
 		* @param name the name of the instance object
 		* @param transform the transform matrix
 		*/
-		MeshInstance(uint32_t index, const glm::mat4& transform = glm::mat4(1.0f), const std::string& name = "");
+		MeshInstance(uint32_t mesh, const glm::mat4& transform = glm::mat4(1.0f), const std::string& name = "");
 
-		// SETTERS
+		MeshInstance& operator=(const MeshInstance& other);
+
 		void setVisible(bool v);
 
-		// GETTERS
 		bool getVisible() const;
 		bool& getVisibleRef();
 		uint32_t getMeshIndex() const;

@@ -221,25 +221,24 @@ namespace Astra {
 		vkQueueWaitIdle(_queue);
 	}
 
-	nvvk::RaytracingBuilderKHR::BlasInput Device::objectToVkGeometry(const Astra::HostModel& model)
+	nvvk::RaytracingBuilderKHR::BlasInput Device::objectToVkGeometry(const Astra::Mesh& model)
 	{
+		size_t nbIndices = model.indices.size();
+		size_t nbVertices = model.vertices.size();
 		// BLAS builder requires raw device addresses.
-		VkDeviceAddress vertexAddress = nvvk::getBufferDeviceAddress(_vkdevice, model.vertexBuffer.buffer);
-		VkDeviceAddress indexAddress = nvvk::getBufferDeviceAddress(_vkdevice, model.indexBuffer.buffer);
-
-		uint32_t maxPrimitiveCount = model.nbIndices / 3;
+		uint32_t maxPrimitiveCount = nbIndices / 3;
 
 		// Describe buffer as array of VertexObj.
 		VkAccelerationStructureGeometryTrianglesDataKHR triangles{ VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR };
 		triangles.vertexFormat = VK_FORMAT_R32G32B32_SFLOAT;  // vec3 vertex position data.
-		triangles.vertexData.deviceAddress = vertexAddress;
+		triangles.vertexData.deviceAddress = model.descriptor.vertexAddress;
 		triangles.vertexStride = sizeof(Vertex);
 		// Describe index data (32-bit unsigned int)
 		triangles.indexType = VK_INDEX_TYPE_UINT32;
-		triangles.indexData.deviceAddress = indexAddress;
+		triangles.indexData.deviceAddress = model.descriptor.indexAddress;
 		// Indicate identity transform by setting transformData to null device pointer.
 		//triangles.transformData = {};
-		triangles.maxVertex = model.nbVertices - 1;
+		triangles.maxVertex = nbVertices - 1;
 
 		// Identify the above data as containing opaque triangles.
 		VkAccelerationStructureGeometryKHR asGeom{ VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR };
@@ -248,7 +247,7 @@ namespace Astra {
 		asGeom.geometry.triangles = triangles;
 
 		// The entire array will be used to build the BLAS.
-		VkAccelerationStructureBuildRangeInfoKHR offset;
+		VkAccelerationStructureBuildRangeInfoKHR offset{};
 		offset.firstVertex = 0;
 		offset.primitiveCount = maxPrimitiveCount;
 		offset.primitiveOffset = 0;

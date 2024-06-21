@@ -69,7 +69,7 @@ namespace Astra {
 
 		VkShaderModule createShaderModule(const std::vector<char>& file);
 		void createTextureImages(const Astra::CommandList& cmdList, const std::vector<std::string>& new_textures, std::vector<nvvk::Texture>& textures, nvvk::ResourceAllocatorDma& alloc);
-		nvvk::RaytracingBuilderKHR::BlasInput objectToVkGeometry(const Astra::HostModel& model);
+		nvvk::RaytracingBuilderKHR::BlasInput objectToVkGeometry(const Astra::Mesh& model);
 
 		uint32_t getMemoryType(uint32_t typeBits, const VkMemoryPropertyFlags& properties) const;
 		std::array<int, 2> getWindowSize() const;

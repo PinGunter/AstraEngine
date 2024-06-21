@@ -9,9 +9,9 @@
 namespace Astra {
 	class Scene {
 	protected:
-		std::vector<HostModel> _objModels;  // the actual models
+		// Models in scene
+		std::vector<Mesh> _objModels;  // the actual models (vertices, indices, etc)
 		std::vector<MeshInstance> _instances; // instances of the models
-		std::vector<ObjDesc> _objDesc; // device access
 
 		std::vector<nvvk::Texture> _textures;
 		nvvk::Buffer _objDescBuffer;  // Device buffer of the OBJ descriptions
@@ -29,14 +29,13 @@ namespace Astra {
 	public:
 		Scene();
 
-		Scene& operator=(const Scene& s);
+		//	Scene& operator=(const Scene& s);
 
 		virtual void loadModel(const std::string& filepath, const glm::mat4& transform = glm::mat4(1.0f));
 		virtual void init(nvvk::ResourceAllocator* alloc);
 		virtual void destroy();
-		virtual void addModel(const HostModel& model);
+		virtual void addModel(const Mesh& model);
 		virtual void addInstance(const MeshInstance& instance);
-		virtual void addObjDesc(const ObjDesc& objdesc);
 		virtual void removeNode(const MeshInstance& n);
 		virtual void addLight(Light* l);
 		virtual void setCamera(CameraController* c);
@@ -46,8 +45,7 @@ namespace Astra {
 		CameraController* getCamera() const;
 
 		std::vector<MeshInstance>& getInstances();
-		std::vector<HostModel>& getModels();
-		std::vector<ObjDesc>& getObjDesc();
+		std::vector<Mesh>& getModels();
 		std::vector<nvvk::Texture>& getTextures();
 		nvvk::Buffer& getObjDescBuff();
 
