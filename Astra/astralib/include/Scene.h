@@ -11,7 +11,6 @@ namespace Astra {
 	protected:
 		// Models in scene
 		std::vector<Mesh> _objModels;  // the actual models (vertices, indices, etc)
-		std::vector<ObjDesc> _objDesc; // device access (gpu buffer addresses)
 		std::vector<MeshInstance> _instances; // instances of the models
 
 		std::vector<nvvk::Texture> _textures;
@@ -37,7 +36,6 @@ namespace Astra {
 		virtual void destroy();
 		virtual void addModel(const Mesh& model);
 		virtual void addInstance(const MeshInstance& instance);
-		virtual void addObjDesc(const ObjDesc& objdesc);
 		virtual void removeNode(const MeshInstance& n);
 		virtual void addLight(Light* l);
 		virtual void setCamera(CameraController* c);
@@ -48,7 +46,6 @@ namespace Astra {
 
 		std::vector<MeshInstance>& getInstances();
 		std::vector<Mesh>& getModels();
-		std::vector<ObjDesc>& getObjDesc();
 		std::vector<nvvk::Texture>& getTextures();
 		nvvk::Buffer& getObjDescBuff();
 

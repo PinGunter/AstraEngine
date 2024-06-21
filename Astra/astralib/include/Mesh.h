@@ -26,10 +26,10 @@ namespace Astra {
 		nvvk::Buffer matIndexBuffer;  // Device buffer of array of 'Wavefront material'
 
 		// GPU side
-		//ObjDesc descriptor{}; // gpu buffer addresses
+		ObjDesc descriptor{}; // gpu buffer addresses
 
 		void draw(const CommandList& cmdList) const;
-
+		void create(const Astra::CommandList& cmdList, nvvk::ResourceAllocatorDma* alloc, uint32_t txtOffset);
 		void createBuffers(const Astra::CommandList& cmdList, nvvk::ResourceAllocatorDma* alloc); // fills the gpu buffers with the vector data
 	};
 

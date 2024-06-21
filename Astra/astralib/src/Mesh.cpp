@@ -1,5 +1,6 @@
 #include <Mesh.h>
 #include <Device.h>
+#include <nvvk/buffers_vk.hpp>
 
 Astra::MeshInstance::MeshInstance(uint32_t mesh, const glm::mat4& transform, const std::string& name) : Node3D(transform, name), _mesh(mesh)
 {
@@ -59,6 +60,16 @@ void Astra::MeshInstance::updatePushConstantRT(PushConstantRay& pc) const
 void Astra::Mesh::draw(const CommandList& cmdList) const
 {
 	cmdList.drawIndexed(vertexBuffer.buffer, indexBuffer.buffer, indices.size());
+}
+
+void Astra::Mesh::create(const Astra::CommandList& cmdList, nvvk::ResourceAllocatorDma* alloc, uint32_t txtOffset)
+{
+	createBuffers(cmdList, alloc);
+	descriptor.txtOffset = txtOffset;
+	descriptor.vertexAddress = nvvk::getBufferDeviceAddress(AstraDevice.getVkDevice(), vertexBuffer.buffer);
+	descriptor.indexAddress = nvvk::getBufferDeviceAddress(AstraDevice.getVkDevice(), indexBuffer.buffer);
+	descriptor.materialAddress = nvvk::getBufferDeviceAddress(AstraDevice.getVkDevice(), matColorBuffer.buffer);
+	descriptor.materialIndexAddress = nvvk::getBufferDeviceAddress(AstraDevice.getVkDevice(), matIndexBuffer.buffer);
 }
 
 void Astra::Mesh::createBuffers(const Astra::CommandList& cmdList, nvvk::ResourceAllocatorDma* alloc) {
