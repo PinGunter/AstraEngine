@@ -11,7 +11,7 @@ void Astra::Scene::createObjDescBuffer()
 		_alloc->destroy(_objDescBuffer);
 	}
 
-	nvvk::CommandPool cmdGen(AstraDevice.getVkDevice(), Astra::Device::getInstance().getGraphicsQueueIndex());
+	nvvk::CommandPool cmdGen(AstraDevice.getVkDevice(), AstraDevice.getGraphicsQueueIndex());
 
 	auto cmdBuf = cmdGen.createCommandBuffer();
 	if (!_objDesc.empty())
@@ -23,21 +23,6 @@ void Astra::Scene::createObjDescBuffer()
 
 Astra::Scene::Scene() : _transform(1.0f) {}
 
-Astra::Scene& Astra::Scene::operator=(const Scene& s)
-{
-	_objModels = s._objModels;
-	_instances = s._instances;
-	_objDesc = s._objDesc;
-	_textures = s._textures;
-	_objDescBuffer = s._objDescBuffer;
-
-	_lights = s._lights;
-	_camera = s._camera;
-	_transform = s._transform;
-
-	return *this;
-}
-
 void Astra::Scene::loadModel(const std::string& filename, const glm::mat4& transform)
 {
 	// we cant load models until we have access to the resource allocator
@@ -48,27 +33,20 @@ void Astra::Scene::loadModel(const std::string& filename, const glm::mat4& trans
 		ObjLoader loader;
 		loader.loadModel(filename);
 
-		// TODO when having correct toVulkanMesh
-		//Astra::Mesh mesh;
-		//mesh.indices = loader.m_indices;
-		//mesh.vertices = loader.m_vertices;
-		//mesh.materials = loader.m_materials;
-		//mesh.materialIndices = loader.m_matIndx;
-		//mesh.textures = loader.m_textures;
-
-		Astra::HostModel model;
-		model.nbIndices = static_cast<uint32_t>(loader.m_indices.size());
-		model.nbVertices = static_cast<uint32_t>(loader.m_vertices.size());
+		Astra::Mesh mesh;
+		mesh.meshId = getModels().size();
+		mesh.indices = loader.m_indices;
+		mesh.vertices = loader.m_vertices;
+		mesh.materials = loader.m_materials;
+		mesh.materialIndices = loader.m_matIndx;
+		mesh.textures = loader.m_textures;
 
 		// Create the buffers on Device and copy vertices, indices and materials
 		nvvk::CommandPool  cmdBufGet(AstraDevice.getVkDevice(), AstraDevice.getGraphicsQueueIndex());
 		VkCommandBuffer    cmdBuf = cmdBufGet.createCommandBuffer();
-		VkBufferUsageFlags flag = VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT;
-		VkBufferUsageFlags rayTracingFlags = flag | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
-		model.vertexBuffer = _alloc->createBuffer(cmdBuf, loader.m_vertices, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | rayTracingFlags);
-		model.indexBuffer = _alloc->createBuffer(cmdBuf, loader.m_indices, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | rayTracingFlags);
-		model.matColorBuffer = _alloc->createBuffer(cmdBuf, loader.m_materials, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | rayTracingFlags);
-		model.matIndexBuffer = _alloc->createBuffer(cmdBuf, loader.m_matIndx, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | rayTracingFlags);
+		Astra::CommandList cmdList(cmdBuf);
+
+		mesh.createBuffers(cmdList, _alloc);
 
 		// Creates all textures found and find the offset for this model
 		auto txtOffset = static_cast<uint32_t>(getTextures().size());
@@ -79,18 +57,18 @@ void Astra::Scene::loadModel(const std::string& filename, const glm::mat4& trans
 		// Creating information for device access
 		ObjDesc desc{};
 		desc.txtOffset = txtOffset;
-		desc.vertexAddress = nvvk::getBufferDeviceAddress(AstraDevice.getVkDevice(), model.vertexBuffer.buffer);
-		desc.indexAddress = nvvk::getBufferDeviceAddress(AstraDevice.getVkDevice(), model.indexBuffer.buffer);
-		desc.materialAddress = nvvk::getBufferDeviceAddress(AstraDevice.getVkDevice(), model.matColorBuffer.buffer);
-		desc.materialIndexAddress = nvvk::getBufferDeviceAddress(AstraDevice.getVkDevice(), model.matIndexBuffer.buffer);
+		desc.vertexAddress = nvvk::getBufferDeviceAddress(AstraDevice.getVkDevice(), mesh.vertexBuffer.buffer);
+		desc.indexAddress = nvvk::getBufferDeviceAddress(AstraDevice.getVkDevice(), mesh.indexBuffer.buffer);
+		desc.materialAddress = nvvk::getBufferDeviceAddress(AstraDevice.getVkDevice(), mesh.matColorBuffer.buffer);
+		desc.materialIndexAddress = nvvk::getBufferDeviceAddress(AstraDevice.getVkDevice(), mesh.matIndexBuffer.buffer);
 
 
 		// Keeping the obj host model and device description
-		addModel(model);
+		addModel(mesh);
 		addObjDesc(desc);
 
 		// Keeping transformation matrix of the instance
-		Astra::MeshInstance instance(static_cast<uint32_t>(getModels().size() - 1), transform);
+		Astra::MeshInstance instance(mesh.meshId, transform);
 		instance.setName(instance.getName() + " :: " + filename.substr(filename.size() - std::min(10, (int)filename.size() / 2), filename.size()));
 		addInstance(instance);
 
@@ -106,7 +84,7 @@ void Astra::Scene::loadModel(const std::string& filename, const glm::mat4& trans
 void Astra::Scene::init(nvvk::ResourceAllocator* alloc)
 {
 	_alloc = (nvvk::ResourceAllocatorDma*)alloc;
-	for (auto p : _lazymodels) {
+	for (auto& p : _lazymodels) {
 		loadModel(p.first, p.second);
 	}
 	_lazymodels.clear();
@@ -133,7 +111,7 @@ void Astra::Scene::destroy() {
 
 }
 
-void Astra::Scene::addModel(const HostModel& model)
+void Astra::Scene::addModel(const Astra::Mesh& model)
 {
 	_objModels.push_back(model);
 }
@@ -199,7 +177,7 @@ std::vector<Astra::MeshInstance>& Astra::Scene::getInstances()
 	return _instances;
 }
 
-std::vector<Astra::HostModel>& Astra::Scene::getModels()
+std::vector<Astra::Mesh>& Astra::Scene::getModels()
 {
 	return _objModels;
 }

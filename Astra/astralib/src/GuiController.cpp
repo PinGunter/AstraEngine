@@ -123,7 +123,7 @@ void Astra::BasiGui::draw(App* app)
 	if (ImGui::BeginListBox("Instances")) {
 
 		for (int i = 0; i < scene->getInstances().size(); i++) {
-			auto inst = scene->getInstances()[i];
+			auto& inst = scene->getInstances()[i];
 			if (ImGui::Selectable(inst.getName().c_str(), i == _node)) {
 				_node = i;
 				_handlingNodes = true;

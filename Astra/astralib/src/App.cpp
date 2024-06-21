@@ -259,33 +259,33 @@ void Astra::DefaultApp::run()
 		}
 
 		_rendering = true;
-		auto cmdBuf = _renderer->beginFrame();
-		updateUBO(cmdBuf);
+		auto cmdList = _renderer->beginFrame();
+		updateUBO(cmdList);
 
 		// offscren render
 
 		if (_selectedPipeline == 0) {
-			_renderer->render(cmdBuf.getCommandBuffer(), _scenes[_currentScene], _rtPipeline, { _rtDescSet, _descSet });
+			_renderer->render(cmdList, _scenes[_currentScene], _rtPipeline, { _rtDescSet, _descSet });
 		}
 		else if (_selectedPipeline == 1) {
-			_renderer->render(cmdBuf.getCommandBuffer(), _scenes[_currentScene], _rasterPipeline, { _descSet });
+			_renderer->render(cmdList, _scenes[_currentScene], _rasterPipeline, { _descSet });
 		}
 		else if (_selectedPipeline == 2) {
-			_renderer->render(cmdBuf.getCommandBuffer(), _scenes[_currentScene], _wireframePipeline, { _descSet });
+			_renderer->render(cmdList, _scenes[_currentScene], _wireframePipeline, { _descSet });
 		}
 
 		// post render: ui and texture
 		_renderer->beginPost();
 		// TODO maybe make gui draw call in renderer?
-		_renderer->renderPost(cmdBuf.getCommandBuffer());
+		_renderer->renderPost(cmdList);
 		// render ui
 		_gui->startFrame();
 		_gui->draw(this);
-		_gui->endFrame(cmdBuf.getCommandBuffer());
-		_renderer->endPost(cmdBuf.getCommandBuffer());
+		_gui->endFrame(cmdList);
+		_renderer->endPost(cmdList);
 
 
-		_renderer->endFrame(cmdBuf.getCommandBuffer());
+		_renderer->endFrame(cmdList);
 		_rendering = false;
 
 		AstraDevice.waitIdle();
@@ -362,12 +362,12 @@ void Astra::DefaultApp::updateDescriptorSet()
 	VkDescriptorBufferInfo dbiUnif{ _globalsBuffer.buffer, 0, VK_WHOLE_SIZE };
 	writes.emplace_back(_descSetLayoutBind.makeWrite(_descSet, SceneBindings::eGlobals, &dbiUnif));
 
-	VkDescriptorBufferInfo dbiSceneDesc{ _scenes[0]->getObjDescBuff().buffer, 0, VK_WHOLE_SIZE };
+	VkDescriptorBufferInfo dbiSceneDesc{ _scenes[_currentScene]->getObjDescBuff().buffer, 0, VK_WHOLE_SIZE };
 	writes.emplace_back(_descSetLayoutBind.makeWrite(_descSet, SceneBindings::eObjDescs, &dbiSceneDesc));
 
 	// All texture samplers
 	std::vector<VkDescriptorImageInfo> diit;
-	for (auto& texture : _scenes[0]->getTextures())
+	for (auto& texture : _scenes[_currentScene]->getTextures())
 	{
 		diit.emplace_back(texture.descriptor);
 	}

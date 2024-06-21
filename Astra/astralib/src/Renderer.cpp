@@ -75,7 +75,7 @@ void Astra::Renderer::renderRaster(const CommandList& cmdList, Scene* scene, Ras
 void Astra::Renderer::renderRaytrace(const CommandList& cmdList, Scene* scene, RayTracingPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets)
 {
 	// push constant info
-	PushConstantRay pushConstant;
+	PushConstantRay pushConstant{};
 	pushConstant.clearColor = _clearColor;
 	// lights
 
