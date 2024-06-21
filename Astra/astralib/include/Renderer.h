@@ -5,9 +5,11 @@
 #include <nvvk/swapchain_vk.hpp>
 #include <GLFW/glfw3.h>
 #include <CommandList.h>
+#include <GuiController.h>
 
 namespace Astra {
 	class App;
+	class GuiController;
 	// the default renderer uses an offscreen renderpass to a texture
 	// then renders that texture as a fullscreen triangle
 	// this allows us to mix raytracing and rasterization
@@ -46,7 +48,9 @@ namespace Astra {
 
 		void renderRaster(const CommandList& cmdBuf, Scene* scene, RasterPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets);
 		void renderRaytrace(const CommandList& cmdBuf, Scene* scene, RayTracingPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets);
-
+		void beginPost();
+		void endPost(const CommandList& cmdBuf);
+		void renderPost(const CommandList& cmdBuf); // mandatory step! after drawing
 
 		void setViewport(const CommandList& cmdBuf);
 
@@ -58,13 +62,10 @@ namespace Astra {
 		void init();
 		void linkApp(App* app);
 		void destroy(nvvk::ResourceAllocator* alloc);
-		void render(const CommandList& cmdBuf, Scene* scene, Pipeline* pipeline, const std::vector<VkDescriptorSet>& descSets);
+		// renders both offscreen and post 
+		void render(const CommandList& cmdBuf, Scene* scene, Pipeline* pipeline, const std::vector<VkDescriptorSet>& descSets, Astra::GuiController* gui = nullptr);
 		Astra::CommandList beginFrame();
 		void endFrame(const CommandList& cmdBuf);
-		void beginPost();
-		void endPost(const CommandList& cmdBuf);
-		void renderPost(const CommandList& cmdBuf); // mandatory step! after drawing
-
 
 		glm::vec4& getClearColorRef();
 		glm::vec4 getClearColor() const;

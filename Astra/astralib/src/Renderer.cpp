@@ -570,14 +570,26 @@ void Astra::Renderer::destroy(nvvk::ResourceAllocator* alloc)
 	_swapchain.deinit();
 }
 
-void Astra::Renderer::render(const Astra::CommandList& cmdBuf, Scene* scene, Pipeline* pipeline, const std::vector<VkDescriptorSet>& descSets)
+void Astra::Renderer::render(const Astra::CommandList& cmdList, Scene* scene, Pipeline* pipeline, const std::vector<VkDescriptorSet>& descSets, Astra::GuiController* gui)
 {
 	if (pipeline->doesRayTracing()) {
-		renderRaytrace(cmdBuf, scene, (RayTracingPipeline*)pipeline, descSets);
+		renderRaytrace(cmdList, scene, (RayTracingPipeline*)pipeline, descSets);
 	}
 	else {
-		renderRaster(cmdBuf, scene, (RasterPipeline*)pipeline, descSets);
+		renderRaster(cmdList, scene, (RasterPipeline*)pipeline, descSets);
 	}
+
+	// post render: ui and texture
+	beginPost();
+	renderPost(cmdList);
+	// render ui
+	if (gui != nullptr) {
+		gui->startFrame();
+		gui->draw(_app);
+		gui->endFrame(cmdList);
+	}
+	endPost(cmdList);
+
 }
 
 glm::vec4& Astra::Renderer::getClearColorRef()

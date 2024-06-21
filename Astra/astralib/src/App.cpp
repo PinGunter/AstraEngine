@@ -265,24 +265,14 @@ void Astra::DefaultApp::run()
 		// offscren render
 
 		if (_selectedPipeline == 0) {
-			_renderer->render(cmdList, _scenes[_currentScene], _rtPipeline, { _rtDescSet, _descSet });
+			_renderer->render(cmdList, _scenes[_currentScene], _rtPipeline, { _rtDescSet, _descSet }, _gui);
 		}
 		else if (_selectedPipeline == 1) {
-			_renderer->render(cmdList, _scenes[_currentScene], _rasterPipeline, { _descSet });
+			_renderer->render(cmdList, _scenes[_currentScene], _rasterPipeline, { _descSet }, _gui);
 		}
 		else if (_selectedPipeline == 2) {
-			_renderer->render(cmdList, _scenes[_currentScene], _wireframePipeline, { _descSet });
+			_renderer->render(cmdList, _scenes[_currentScene], _wireframePipeline, { _descSet }, _gui);
 		}
-
-		// post render: ui and texture
-		_renderer->beginPost();
-		// TODO maybe make gui draw call in renderer?
-		_renderer->renderPost(cmdList);
-		// render ui
-		_gui->startFrame();
-		_gui->draw(this);
-		_gui->endFrame(cmdList);
-		_renderer->endPost(cmdList);
 
 
 		_renderer->endFrame(cmdList);
