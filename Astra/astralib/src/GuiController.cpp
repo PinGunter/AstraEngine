@@ -98,6 +98,9 @@ void Astra::BasiGui::draw(App* app)
 		if (ImGui::BeginTabItem("Renderer")) {
 			ImGui::ColorEdit3("Clear Color", glm::value_ptr(app->getRenderer()->getClearColorRef()));
 
+			ImGui::SliderInt("Max Ray Recursion Depth", &app->getRenderer()->getMaxDepthRef(), 0, AstraDevice.getRtProperties().maxRayRecursionDepth - 1);
+
+
 			ImGui::Separator();
 
 			ImGui::Text("Select rendering pipeline");

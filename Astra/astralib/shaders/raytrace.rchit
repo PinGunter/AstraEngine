@@ -86,11 +86,11 @@ void main()
 
 	vec3 specular = vec3(0);
 	float attenuation = 1;
+	float tMin = 0.1;
+	float tMax = 100000.0f;
 
 	// tracing shadow if the light is visible from the surface
 	if (dot(worldNrm, L) > 0){
-		float tMin = 0.001;
-		float tMax = lightDistance;
 		vec3 origin = gl_WorldRayOriginEXT + gl_WorldRayDirectionEXT * gl_HitTEXT;
 		vec3 rayDir = L;
 		uint flags = gl_RayFlagsTerminateOnFirstHitEXT | gl_RayFlagsOpaqueEXT | gl_RayFlagsSkipClosestHitShaderEXT;
@@ -114,7 +114,30 @@ void main()
 			specular = computeSpecular(mat, gl_WorldRayDirectionEXT, L, worldNrm);
 		}
 	}
-	prd.hitValue = vec3(lightIntensity * attenuation * (diffuse + specular) );
+
+	if (mat.illum == 3 && prd.depth < pcRay.maxDepth) // change to uniform
+	{
+		vec3 origin = worldPos;
+		vec3 rayDir = reflect(gl_WorldRayDirectionEXT, worldNrm);
+		prd.attenuation *= mat.specular;
+
+		prd.depth++;
+
+		traceRayEXT(topLevelAS,
+					gl_RayFlagsNoneEXT,
+					0xFF,
+					0,0,0,
+					origin,
+					tMin,
+					rayDir,
+					tMax,
+					0
+		);
+		prd.depth--;
+
+	} 
+	prd.hitValue += vec3(lightIntensity * attenuation * (diffuse + specular) ) * prd.attenuation;
+		//prd.hitValue = prd.attenuation;
 
 }
 

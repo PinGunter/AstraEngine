@@ -87,7 +87,6 @@ namespace Astra {
 		Pipeline* _rtPipeline;
 		std::vector<nvvk::AccelKHR> _blas;
 		std::vector<VkAccelerationStructureInstanceKHR> m_tlas;
-		VkPhysicalDeviceRayTracingPipelinePropertiesKHR _rtProperties{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_PROPERTIES_KHR };
 
 		// wireframe pipeline;
 		Pipeline* _wireframePipeline;

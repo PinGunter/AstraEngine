@@ -37,8 +37,9 @@ VkPipelineLayout Astra::Pipeline::getLayout() const
 	return _layout;
 }
 
-void Astra::RayTracingPipeline::createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsets, nvvk::ResourceAllocatorDma& alloc, const VkPhysicalDeviceRayTracingPipelinePropertiesKHR& rtProperties)
+void Astra::RayTracingPipeline::createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsets, nvvk::ResourceAllocatorDma& alloc)
 {
+	auto rtProperties = AstraDevice.getRtProperties();
 	if (!AstraDevice.getRtEnabled()) {
 		throw std::runtime_error("Can't create raytracing pipeline without enabling raytracing!");
 	}
@@ -142,7 +143,7 @@ void Astra::RayTracingPipeline::createPipeline(VkDevice vkdev, const std::vector
 	rayPipelineInfo.pGroups = _rtShaderGroups.data();
 
 	// recursion depth
-	rayPipelineInfo.maxPipelineRayRecursionDepth = 2; // shadow
+	rayPipelineInfo.maxPipelineRayRecursionDepth = rtProperties.maxRayRecursionDepth; // shadow
 	rayPipelineInfo.layout = _layout;
 
 	if ((vkCreateRayTracingPipelinesKHR(vkdev, {}, {}, 1, &rayPipelineInfo, nullptr, &_pipeline) != VK_SUCCESS)) {

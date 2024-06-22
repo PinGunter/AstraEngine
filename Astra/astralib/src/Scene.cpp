@@ -50,6 +50,12 @@ void Astra::Scene::loadModel(const std::string& filename, const glm::mat4& trans
 		mesh.materialIndices = loader.m_matIndx;
 		mesh.textures = loader.m_textures;
 
+		for (auto& m : mesh.materials) {
+			m.ambient = glm::pow(m.ambient, glm::vec3(2.2f));
+			m.diffuse = glm::pow(m.diffuse, glm::vec3(2.2f));
+			m.specular = glm::pow(m.specular, glm::vec3(2.2f));
+		}
+
 		// creates the buffers and descriptors neeeded
 		mesh.create(cmdList, _alloc, txtOffset);
 

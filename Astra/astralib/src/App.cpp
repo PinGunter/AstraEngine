@@ -217,11 +217,6 @@ void Astra::DefaultApp::init(const std::vector<Scene*>& scenes, Renderer* render
 	// also inits the scenes and sets callbacks
 	Astra::App::init(scenes, renderer, gui);
 
-	// raytracing init
-	VkPhysicalDeviceProperties2 prop2{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2 };
-	prop2.pNext = &_rtProperties;
-	vkGetPhysicalDeviceProperties2(AstraDevice.getPhysicalDevice(), &prop2);
-
 	// renderer init
 	auto size = AstraDevice.getWindowSize();
 	_renderer->createSwapchain(AstraDevice.getSurface(), size[0], size[1]);
@@ -318,7 +313,7 @@ void Astra::DefaultApp::createPipelines()
 {
 	// raytracing pipeline
 	_rtPipeline = new RayTracingPipeline();
-	((RayTracingPipeline*)_rtPipeline)->createPipeline(AstraDevice.getVkDevice(), { _rtDescSetLayout, _descSetLayout }, _alloc, _rtProperties);
+	((RayTracingPipeline*)_rtPipeline)->createPipeline(AstraDevice.getVkDevice(), { _rtDescSetLayout, _descSetLayout }, _alloc);
 
 	// basic raster
 	_rasterPipeline = new OffscreenRaster();

@@ -81,6 +81,8 @@ void Astra::Renderer::renderRaytrace(const CommandList& cmdList, Scene* scene, R
 	// push constant info
 	PushConstantRay pushConstant{};
 	pushConstant.clearColor = _clearColor;
+	_maxDepth = std::min(static_cast<uint32_t>(_maxDepth), AstraDevice.getRtProperties().maxRayRecursionDepth - 1);
+	pushConstant.maxDepth = _maxDepth;
 	// lights
 
 	// TODO este tipo de cosas me gustaria que fuera mas generico
@@ -324,6 +326,21 @@ void Astra::Renderer::getGuiControllerInfo(VkRenderPass& renderpass, int& imageC
 	imageCount = _swapchain.getImageCount();
 	colorFormat = _colorFormat;
 	depthFormat = _depthFormat;
+}
+
+int& Astra::Renderer::getMaxDepthRef()
+{
+	return _maxDepth;
+}
+
+int Astra::Renderer::getMaxDepth() const
+{
+	return _maxDepth;
+}
+
+void Astra::Renderer::setMaxDepth(int depth)
+{
+	_maxDepth = depth;
 }
 
 void Astra::Renderer::createFrameBuffers()

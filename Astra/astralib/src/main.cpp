@@ -3,7 +3,7 @@
 #include <Utils.h>
 #include <nvh/fileoperations.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-
+#include <iostream>
 // search paths for finding files
 std::vector<std::string> defaultSearchPaths = {
 	NVPSystem::exePath() + PROJECT_RELDIRECTORY,
@@ -53,6 +53,8 @@ int main(int argc, char** argv) {
 	scene2->addLight(sun);
 
 	scene->loadModel(nvh::findFile("media/scenes/mono2.obj", defaultSearchPaths, true));
+	scene->loadModel(nvh::findFile("media/scenes/espejo.obj", defaultSearchPaths, true));
+	scene->loadModel(nvh::findFile("media/scenes/cube.obj", defaultSearchPaths, true));
 	scene->loadModel(nvh::findFile("media/scenes/plane2.obj", defaultSearchPaths, true), glm::translate(glm::mat4(1.0f), glm::vec3(0, -1, 0)));
 
 	scene2->loadModel(nvh::findFile("media/scenes/lizardmech.obj", defaultSearchPaths, true));

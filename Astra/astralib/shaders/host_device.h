@@ -90,7 +90,7 @@ struct PushConstantRay
 	vec3  lightPosition;
 	float lightIntensity;
 	int   lightType;
-	vec3  lightColor;
+	int  maxDepth;
 };
 
 

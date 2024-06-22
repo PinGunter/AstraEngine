@@ -36,7 +36,7 @@ void Astra::Light::updatePushConstantRaster(PushConstantRaster& pc) const
 
 void Astra::Light::updatePushConstantRT(PushConstantRay& pc) const
 {
-	pc.lightColor = _color;
+	//pc.lightColor = _color;
 	pc.lightIntensity = _intensity;
 	pc.lightPosition = getPosition();
 	pc.lightType = static_cast<int>(_type);

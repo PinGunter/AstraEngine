@@ -12,6 +12,7 @@ pushc;
 
 void main()
 {
-	vec2  uv    = outUV;
-	fragColor   = texture(offscreenTxt, uv).rgba;
+  vec2  uv    = outUV;
+  float gamma = 1. / 2.2;
+  fragColor   = pow(texture(offscreenTxt, uv).rgba, vec4(gamma));
 }

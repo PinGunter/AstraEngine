@@ -122,6 +122,12 @@ namespace Astra {
 		_raytracingEnabled = createInfo.useRT;
 
 		_debug.setup(_vkdevice);
+
+
+		// raytracing init
+		VkPhysicalDeviceProperties2 prop2{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2 };
+		prop2.pNext = &_rtProperties;
+		vkGetPhysicalDeviceProperties2(AstraDevice.getPhysicalDevice(), &prop2);
 	}
 
 	VkInstance Device::getVkInstance() const
@@ -165,6 +171,11 @@ namespace Astra {
 	bool Device::getRtEnabled() const
 	{
 		return _raytracingEnabled;
+	}
+
+	VkPhysicalDeviceRayTracingPipelinePropertiesKHR Device::getRtProperties() const
+	{
+		return _rtProperties;
 	}
 
 

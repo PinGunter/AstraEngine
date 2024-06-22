@@ -38,6 +38,7 @@ namespace Astra {
 		nvvk::DebugUtil            _debug;
 		nvvk::Context _vkcontext{};
 
+		VkPhysicalDeviceRayTracingPipelinePropertiesKHR _rtProperties{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_PROPERTIES_KHR };
 
 		Device() {}
 		~Device() {
@@ -66,6 +67,7 @@ namespace Astra {
 		VkCommandPool getCommandPool() const;
 		GLFWwindow* getWindow();
 		bool getRtEnabled() const;
+		VkPhysicalDeviceRayTracingPipelinePropertiesKHR getRtProperties() const;
 
 		VkShaderModule createShaderModule(const std::vector<char>& file);
 		void createTextureImages(const Astra::CommandList& cmdList, const std::vector<std::string>& new_textures, std::vector<nvvk::Texture>& textures, nvvk::ResourceAllocatorDma& alloc);

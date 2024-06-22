@@ -43,7 +43,7 @@ namespace Astra {
 
 	public:
 		void bind(const CommandList& cmdList, const std::vector<VkDescriptorSet>& descsets) override;
-		void createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsetsLayouts, nvvk::ResourceAllocatorDma& alloc, const VkPhysicalDeviceRayTracingPipelinePropertiesKHR& rtProperties);
+		void createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsetsLayouts, nvvk::ResourceAllocatorDma& alloc);
 		inline bool doesRayTracing() override {
 			return true;
 		};
