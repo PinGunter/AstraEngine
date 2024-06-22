@@ -31,8 +31,9 @@ void Astra::Scene::loadModel(const std::string& filename, const glm::mat4& trans
 	// if we have it, just create it
 	// if we dont, postpone the operation to the init stage
 	if (_alloc) {
-		// allocating cmdbuffers
+		// find the offset for this model
 		auto txtOffset = static_cast<uint32_t>(getTextures().size());
+		// allocating cmdbuffers
 		nvvk::CommandPool  cmdBufGet(AstraDevice.getVkDevice(), AstraDevice.getGraphicsQueueIndex());
 		VkCommandBuffer    cmdBuf = cmdBufGet.createCommandBuffer();
 		Astra::CommandList cmdList(cmdBuf);
@@ -52,7 +53,7 @@ void Astra::Scene::loadModel(const std::string& filename, const glm::mat4& trans
 		// creates the buffers and descriptors neeeded
 		mesh.create(cmdList, _alloc, txtOffset);
 
-		// Creates all textures found and find the offset for this model
+		// Creates all textures found 
 		AstraDevice.createTextureImages(cmdBuf, loader.m_textures, getTextures(), *_alloc);
 		cmdBufGet.submitAndWait(cmdBuf);
 		_alloc->finalizeAndReleaseStaging();
