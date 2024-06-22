@@ -99,6 +99,9 @@ namespace Astra {
 		std::vector<MeshInstance> _newInstances;
 		std::vector<std::pair<std::string, glm::mat4>> _newModels;
 		bool _rendering = false;
+		bool _needsReset = false;
+		bool _fullReset = false;
+
 
 		// camera and input controls
 		bool _mouseButtons[3] = { 0 };
@@ -118,7 +121,8 @@ namespace Astra {
 		void onKeyboard(int key, int scancode, int action, int mods) override;
 		void onFileDrop(int count, const char** paths) override;
 
-		void resetScene();
+		void resetScene(bool recreatePipelines = false);
+		void scheduleReset(bool recreatePipelines = false);
 
 	public:
 		void init(const std::vector<Scene*>& scenes, Renderer* renderer, GuiController* gui = nullptr) override;

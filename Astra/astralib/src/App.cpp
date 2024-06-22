@@ -44,6 +44,7 @@ void Astra::App::updateUBO(CommandList& cmdList)
 
 void Astra::App::destroyPipelines()
 {
+	AstraDevice.waitIdle();
 	for (auto p : _pipelines) {
 		p->destroy(&_alloc);
 		delete p;
@@ -266,6 +267,10 @@ void Astra::DefaultApp::run()
 			continue;
 		}
 
+		if (_needsReset) {
+			resetScene(_fullReset);
+		}
+
 		_rendering = true;
 		auto cmdList = _renderer->beginFrame();
 		updateUBO(cmdList);
@@ -329,10 +334,7 @@ void Astra::DefaultApp::createPipelines()
 void Astra::DefaultApp::createDescriptorSetLayout()
 {
 	// TODO rework into different descriptor for texturesss
-	int nbTxt = 0;
-	for (auto s : _scenes) {
-		nbTxt += s->getTextures().size();
-	}
+	int nbTxt = _scenes[_currentScene]->getTextures().size();
 
 	// Camera matrices
 	_descSetLayoutBind.addBinding(SceneBindings::eGlobals, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1,
@@ -343,7 +345,6 @@ void Astra::DefaultApp::createDescriptorSetLayout()
 	// Textures
 	_descSetLayoutBind.addBinding(SceneBindings::eTextures, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, nbTxt,
 		VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR);
-
 
 	_descSetLayout = _descSetLayoutBind.createLayout(AstraDevice.getVkDevice());
 	_descPool = _descSetLayoutBind.createPool(AstraDevice.getVkDevice(), 1);
@@ -365,13 +366,13 @@ void Astra::DefaultApp::updateDescriptorSet()
 
 	// All texture samplers
 	std::vector<VkDescriptorImageInfo> diit;
-	for (int i = 0; i < _scenes.size(); i++) {
+	//for (int i = 0; i < _scenes.size(); i++) {
 
-		for (auto& texture : _scenes[i]->getTextures())
-		{
-			diit.emplace_back(texture.descriptor);
-		}
+	for (auto& texture : _scenes[_currentScene]->getTextures())
+	{
+		diit.emplace_back(texture.descriptor);
 	}
+	//}
 	writes.emplace_back(_descSetLayoutBind.makeWriteArray(_descSet, SceneBindings::eTextures, diit.data()));
 
 	// Writing the information
@@ -491,12 +492,14 @@ void Astra::DefaultApp::onFileDrop(int count, const char** paths)
 
 void Astra::DefaultApp::setCurrentSceneIndex(int i)
 {
+	int nbTxt = _scenes[_currentScene]->getTextures().size();
 	Astra::App::setCurrentSceneIndex(i);
-	if (_status == Running)
-		resetScene();
+	if (_status == Running) {
+		scheduleReset(nbTxt != _scenes[_currentScene]->getTextures().size());
+	}
 }
 
-void Astra::DefaultApp::resetScene()
+void Astra::DefaultApp::resetScene(bool recreatePipelines)
 {
 	((Astra::DefaultSceneRT*)_scenes[_currentScene])->createBottomLevelAS();
 	((Astra::DefaultSceneRT*)_scenes[_currentScene])->createTopLevelAS();
@@ -505,6 +508,18 @@ void Astra::DefaultApp::resetScene()
 	createDescriptorSetLayout();
 	updateDescriptorSet();
 	createRtDescriptorSet();
+
+	if (recreatePipelines) {
+		destroyPipelines();
+		createPipelines();
+	}
+	_needsReset = false;
+}
+
+void Astra::DefaultApp::scheduleReset(bool recreatePipelines)
+{
+	_needsReset = true;
+	_fullReset = recreatePipelines;
 }
 
 void Astra::DefaultApp::addModelToScene(const std::string& filepath, const glm::mat4& transform)
@@ -515,14 +530,7 @@ void Astra::DefaultApp::addModelToScene(const std::string& filepath, const glm::
 	else {
 		int currentTxtSize = _scenes[_currentScene]->getTextures().size();
 		_scenes[_currentScene]->loadModel(filepath, transform);
-		resetScene();
-
-
-		// if we increase the number of textures in the scene we should rebuild the pipelines
-		if (_scenes[_currentScene]->getTextures().size() > currentTxtSize) {
-			destroyPipelines();
-			createPipelines();
-		}
+		resetScene(_scenes[_currentScene]->getTextures().size() > currentTxtSize);
 	}
 }
 
@@ -534,7 +542,6 @@ void Astra::DefaultApp::addInstanceToScene(const Astra::MeshInstance& instance)
 	else {
 		_scenes[_currentScene]->addInstance(instance);
 		resetScene();
-
 	}
 }
 
