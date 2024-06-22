@@ -1,4 +1,5 @@
 #include <Light.h>
+#include <glm/ext/matrix_transform.hpp>
 
 Astra::Light::Light() :Node3D() {
 	_name = std::string("Light - ") + std::to_string(_id);
@@ -43,7 +44,6 @@ void Astra::Light::updatePushConstantRT(PushConstantRay& pc) const
 
 bool Astra::Light::update()
 {
-	// pass
 	return false;
 }
 

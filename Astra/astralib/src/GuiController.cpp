@@ -90,8 +90,7 @@ void Astra::GuiController::destroy()
 void Astra::BasiGui::draw(App* app)
 {
 	DefaultApp* dapp = (DefaultApp*)app;
-	SceneRT* scene = (SceneRT*)dapp->getCurrentScene();
-
+	DefaultSceneRT* scene = (DefaultSceneRT*)dapp->getCurrentScene();
 
 	ImGui::Begin("Inspector");
 
@@ -120,6 +119,14 @@ void Astra::BasiGui::draw(App* app)
 
 
 	ImGui::Begin("Scene");
+
+	ImGui::Text((std::string("Current Scene ") + std::to_string(app->getCurrentSceneIndex())).c_str());
+	ImGui::SameLine();
+	if (ImGui::Button("Switch")) {
+		app->setCurrentSceneIndex((app->getCurrentSceneIndex() + 1) % 2);
+		_node = 0;
+	}
+
 	if (ImGui::BeginListBox("Instances")) {
 
 		for (int i = 0; i < scene->getInstances().size(); i++) {

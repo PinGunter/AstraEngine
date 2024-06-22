@@ -18,7 +18,8 @@ int main(int argc, char** argv) {
 
 	// App creation
 	Astra::DefaultApp app;
-	Astra::SceneRT* scene = new Astra::SceneRT();
+	Astra::DefaultSceneRT* scene = new Astra::DefaultSceneRT();
+	Astra::DefaultSceneRT* scene2 = new Astra::DefaultSceneRT();
 	Astra::Renderer* renderer = new Astra::Renderer();
 	Astra::GuiController* gui = new Astra::BasiGui();
 
@@ -28,20 +29,37 @@ int main(int argc, char** argv) {
 	// Scene creation
 	Astra::Camera cam;
 	Astra::CameraController* camera = new Astra::OrbitCameraController(cam);
+	Astra::Camera cam2;
+	Astra::CameraController* camera2 = new Astra::OrbitCameraController(cam2);
+
 	Astra::Light* pointLight = new Astra::PointLight(glm::vec3(1.0f), 60.0f);
 	pointLight->translate(glm::vec3(10, 15, 20));
+
+	Astra::Light* sun = new Astra::PointLight(glm::vec3(1.0f), 60.0f);
+	sun->translate(glm::vec3(10, 15, 20));
+
 	// Setup camera
 	auto windowSize = AstraDevice.getWindowSize();
 	camera->setWindowSize(windowSize[0], windowSize[1]);
 	camera->setLookAt(glm::vec3(5.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 
+	camera2->setWindowSize(windowSize[0], windowSize[1]);
+	camera2->setLookAt(glm::vec3(5.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+
 	scene->setCamera(camera);
 	scene->addLight(pointLight);
+
+	scene2->setCamera(camera2);
+	scene2->addLight(sun);
 
 	scene->loadModel(nvh::findFile("media/scenes/mono2.obj", defaultSearchPaths, true));
 	scene->loadModel(nvh::findFile("media/scenes/plane2.obj", defaultSearchPaths, true), glm::translate(glm::mat4(1.0f), glm::vec3(0, -1, 0)));
 
-	app.init({ scene }, renderer, gui);
+	scene2->loadModel(nvh::findFile("media/scenes/lizardmech.obj", defaultSearchPaths, true));
+	scene2->loadModel(nvh::findFile("media/scenes/plane2.obj", defaultSearchPaths, true));
+
+
+	app.init({ scene, scene2 }, renderer, gui);
 
 	try {
 		app.run();
@@ -56,6 +74,9 @@ int main(int argc, char** argv) {
 	delete camera;
 	delete renderer;
 	delete scene;
+	delete scene2;
+	delete sun;
+	delete camera2;
 	delete pointLight;
 	delete gui;
 }

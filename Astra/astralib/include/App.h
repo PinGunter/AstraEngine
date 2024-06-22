@@ -13,6 +13,7 @@ namespace Astra {
 	class App {
 		friend class Renderer;
 	protected:
+		AppStatus _status{ Created };
 		std::vector<Scene*> _scenes;
 		int _currentScene{ 0 };
 		GuiController* _gui;
@@ -60,11 +61,13 @@ namespace Astra {
 		void setupCallbacks(GLFWwindow* window);
 		bool isMinimized() const;
 		int& getCurrentSceneIndexRef();
-		int getCurrenSceneIndex() const;
-		void setCurrentSceneIndex(int i);
+		int getCurrentSceneIndex() const;
+		virtual void setCurrentSceneIndex(int i);
 
 		Scene* getCurrentScene();
 		Renderer* getRenderer();
+
+		AppStatus getStatus() const;
 	};
 
 	class DefaultApp : public App {
@@ -96,6 +99,9 @@ namespace Astra {
 		std::vector<MeshInstance> _newInstances;
 		std::vector<std::pair<std::string, glm::mat4>> _newModels;
 		bool _rendering = false;
+		bool _needsReset = false;
+		bool _fullReset = false;
+
 
 		// camera and input controls
 		bool _mouseButtons[3] = { 0 };
@@ -115,6 +121,9 @@ namespace Astra {
 		void onKeyboard(int key, int scancode, int action, int mods) override;
 		void onFileDrop(int count, const char** paths) override;
 
+		void resetScene(bool recreatePipelines = false);
+		void scheduleReset(bool recreatePipelines = false);
+
 	public:
 		void init(const std::vector<Scene*>& scenes, Renderer* renderer, GuiController* gui = nullptr) override;
 		void run() override;
@@ -124,6 +133,7 @@ namespace Astra {
 		void addModelToScene(const std::string& filepath, const glm::mat4& transform = glm::mat4(1.0f));
 		void addInstanceToScene(const Astra::MeshInstance& instance);
 
+		void setCurrentSceneIndex(int i) override;
 
 		int& getSelectedPipelineRef();
 	};

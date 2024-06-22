@@ -20,16 +20,12 @@ namespace Astra {
 
 		std::vector< Light*> _lights; // multiple lights in the future
 		CameraController* _camera;
-		glm::mat4 _transform;
-
 		// lazy loading
 		std::vector<std::pair<std::string, glm::mat4>> _lazymodels;
 
 		virtual void createObjDescBuffer();
 	public:
-		Scene();
-
-		//	Scene& operator=(const Scene& s);
+		Scene() = default;
 
 		virtual void loadModel(const std::string& filepath, const glm::mat4& transform = glm::mat4(1.0f));
 		virtual void init(nvvk::ResourceAllocator* alloc);
@@ -49,9 +45,6 @@ namespace Astra {
 		std::vector<nvvk::Texture>& getTextures();
 		nvvk::Buffer& getObjDescBuff();
 
-		glm::mat4& getTransformRef();
-		const glm::mat4& getTransformRef() const;
-
 
 		virtual void updatePushConstantRaster(PushConstantRaster& pc);
 		virtual void updatePushConstant(PushConstantRay& pc);
@@ -61,7 +54,7 @@ namespace Astra {
 		};
 	};
 
-	class SceneRT : public Scene {
+	class DefaultSceneRT : public Scene {
 	protected:
 		nvvk::RaytracingBuilderKHR _rtBuilder;
 		std::vector<VkAccelerationStructureInstanceKHR> _asInstances;
