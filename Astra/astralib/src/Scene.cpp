@@ -25,8 +25,6 @@ void Astra::Scene::createObjDescBuffer()
 	_alloc->finalizeAndReleaseStaging();
 }
 
-Astra::Scene::Scene() : _transform(1.0f) {}
-
 void Astra::Scene::loadModel(const std::string& filename, const glm::mat4& transform)
 {
 	// we cant load models until we have access to the resource allocator
@@ -182,16 +180,6 @@ nvvk::Buffer& Astra::Scene::getObjDescBuff()
 	return _objDescBuffer;
 }
 
-glm::mat4& Astra::Scene::getTransformRef()
-{
-	return _transform;
-}
-
-const glm::mat4& Astra::Scene::getTransformRef() const
-{
-	return _transform;
-}
-
 void Astra::Scene::updatePushConstantRaster(PushConstantRaster& pc)
 {
 	// TODO, futurure
@@ -204,7 +192,7 @@ void Astra::Scene::updatePushConstant(PushConstantRay& pc)
 
 // rt scene
 
-void Astra::SceneRT::init(nvvk::ResourceAllocator* alloc)
+void Astra::DefaultSceneRT::init(nvvk::ResourceAllocator* alloc)
 {
 	Scene::init(alloc);
 	//if (!_objDescBuffer.buffer) {
@@ -213,7 +201,7 @@ void Astra::SceneRT::init(nvvk::ResourceAllocator* alloc)
 	_rtBuilder.setup(AstraDevice.getVkDevice(), alloc, Astra::Device::getInstance().getGraphicsQueueIndex());
 }
 
-void Astra::SceneRT::update()
+void Astra::DefaultSceneRT::update()
 {
 	for (auto l : _lights) {
 		l->update();
@@ -232,7 +220,7 @@ void Astra::SceneRT::update()
 
 }
 
-void Astra::SceneRT::createBottomLevelAS()
+void Astra::DefaultSceneRT::createBottomLevelAS()
 {
 	if (getTLAS() != VK_NULL_HANDLE) {
 		_rtBuilder.destroy();
@@ -250,7 +238,7 @@ void Astra::SceneRT::createBottomLevelAS()
 	_rtBuilder.buildBlas(allBlas, VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR);
 }
 
-void Astra::SceneRT::createTopLevelAS()
+void Astra::DefaultSceneRT::createTopLevelAS()
 {
 	if (getTLAS() != VK_NULL_HANDLE) {
 		_rtBuilder.destroy();
@@ -271,7 +259,7 @@ void Astra::SceneRT::createTopLevelAS()
 	_rtBuilder.buildTlas(_asInstances, VK_BUILD_ACCELERATION_STRUCTURE_ALLOW_UPDATE_BIT_KHR | VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR);
 }
 
-void Astra::SceneRT::updateTopLevelAS(int instance_id)
+void Astra::DefaultSceneRT::updateTopLevelAS(int instance_id)
 {
 	const auto& inst = _instances[instance_id];
 	VkAccelerationStructureInstanceKHR rayInst{};
@@ -286,12 +274,12 @@ void Astra::SceneRT::updateTopLevelAS(int instance_id)
 	_rtBuilder.buildTlas(_asInstances, VK_BUILD_ACCELERATION_STRUCTURE_ALLOW_UPDATE_BIT_KHR | VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR, true);
 }
 
-VkAccelerationStructureKHR Astra::SceneRT::getTLAS() const
+VkAccelerationStructureKHR Astra::DefaultSceneRT::getTLAS() const
 {
 	return _rtBuilder.getAccelerationStructure();
 }
 
-void Astra::SceneRT::destroy()
+void Astra::DefaultSceneRT::destroy()
 {
 	Scene::destroy();
 	_rtBuilder.destroy();

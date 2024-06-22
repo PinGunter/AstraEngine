@@ -4,6 +4,7 @@
 #include <imgui.h>
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_vulkan.h>
+#include <glm/ext/matrix_transform.hpp>
 
 void Astra::Renderer::renderPost(const CommandList& cmdList)
 {
@@ -41,7 +42,9 @@ void Astra::Renderer::renderRaster(const CommandList& cmdList, Scene* scene, Ras
 
 	// TODO maybe the push constant should be owned by the app
 	// render scene
-	PushConstantRaster pushConstant;
+	PushConstantRaster pushConstant{};
+
+	RenderContext context{};
 
 	// lights
 	for (auto light : scene->getLights())
@@ -51,13 +54,14 @@ void Astra::Renderer::renderRaster(const CommandList& cmdList, Scene* scene, Ras
 
 	// scene.draw(renderingContext);
 	// TODO Rendering Context with all draw data needed
+	scene->update();
 	for (auto& inst : scene->getInstances()) {
 		// skip invisibles
 		if (inst.getVisible()) {
 			// get model (with buffers) and update transform matrix
 			auto& model = scene->getModels()[inst.getMeshIndex()];
 			inst.updatePushConstantRaster(pushConstant);
-			pushConstant.modelMatrix = scene->getTransformRef() * pushConstant.modelMatrix;
+			pushConstant.modelMatrix = pushConstant.modelMatrix;
 
 			// send pc to gpu
 			pipeline->pushConstants(cmdList, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
@@ -95,7 +99,7 @@ void Astra::Renderer::renderRaytrace(const CommandList& cmdList, Scene* scene, R
 		light->updatePushConstantRT(pushConstant);
 
 	// TODO si da tiempo habria que pensar una forma de generalizar uniforms
-	// probablemente con UBOs para que no haya problemas de tama�o
+	// probablemente con UBOs para que no haya problemas de tamaño
 	pipeline->bind(cmdList, descSets);
 	pipeline->pushConstants(cmdList, VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_MISS_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR,
 		sizeof(PushConstantRay), &pushConstant);

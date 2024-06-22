@@ -10,6 +10,14 @@
 namespace Astra {
 	class App;
 	class GuiController;
+
+	// struct that contains the information for rendering something
+	// usually the pipeline and push constants
+	struct RenderContext {
+		Pipeline* pipeline;
+
+	};
+
 	// the default renderer uses an offscreen renderpass to a texture
 	// then renders that texture as a fullscreen triangle
 	// this allows us to mix raytracing and rasterization

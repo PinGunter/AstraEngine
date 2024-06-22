@@ -59,6 +59,7 @@ void Astra::App::createUBO()
 
 void Astra::App::init(const std::vector<Scene*>& scenes, Renderer* renderer, GuiController* gui)
 {
+	_status = Running;
 	_alloc.init(AstraDevice.getVkDevice(), AstraDevice.getPhysicalDevice());
 	for (auto s : scenes) {
 		s->init(&_alloc);
@@ -87,6 +88,8 @@ Astra::App::~App()
 
 void Astra::App::destroy()
 {
+	_status = Destroyed;
+
 	const auto& device = AstraDevice.getVkDevice();
 
 	AstraDevice.waitIdle();
@@ -134,7 +137,7 @@ int& Astra::App::getCurrentSceneIndexRef()
 	return _currentScene;
 }
 
-int Astra::App::getCurrenSceneIndex() const
+int Astra::App::getCurrentSceneIndex() const
 {
 	return _currentScene;
 }
@@ -157,6 +160,11 @@ Astra::Scene* Astra::App::getCurrentScene()
 Astra::Renderer* Astra::App::getRenderer()
 {
 	return _renderer;
+}
+
+Astra::AppStatus Astra::App::getStatus() const
+{
+	return _status;
 }
 
 void Astra::App::cb_resize(GLFWwindow* window, int w, int h)
@@ -235,8 +243,8 @@ void Astra::DefaultApp::init(const std::vector<Scene*>& scenes, Renderer* render
 	// aceleration structures
 	for (Astra::Scene* s : _scenes) {
 		if (s->isRt()) {
-			((Astra::SceneRT*)s)->createBottomLevelAS();
-			((Astra::SceneRT*)s)->createTopLevelAS();
+			((Astra::DefaultSceneRT*)s)->createBottomLevelAS();
+			((Astra::DefaultSceneRT*)s)->createTopLevelAS();
 		}
 	}
 
@@ -357,9 +365,12 @@ void Astra::DefaultApp::updateDescriptorSet()
 
 	// All texture samplers
 	std::vector<VkDescriptorImageInfo> diit;
-	for (auto& texture : _scenes[_currentScene]->getTextures())
-	{
-		diit.emplace_back(texture.descriptor);
+	for (int i = 0; i < _scenes.size(); i++) {
+
+		for (auto& texture : _scenes[i]->getTextures())
+		{
+			diit.emplace_back(texture.descriptor);
+		}
 	}
 	writes.emplace_back(_descSetLayoutBind.makeWriteArray(_descSet, SceneBindings::eTextures, diit.data()));
 
@@ -382,7 +393,7 @@ void Astra::DefaultApp::createRtDescriptorSet()
 	allocateInfo.pSetLayouts = &_rtDescSetLayout;
 	vkAllocateDescriptorSets(device, &allocateInfo, &_rtDescSet);
 
-	VkAccelerationStructureKHR tlas = ((SceneRT*)_scenes[0])->getTLAS();
+	VkAccelerationStructureKHR tlas = ((DefaultSceneRT*)_scenes[_currentScene])->getTLAS();
 	VkWriteDescriptorSetAccelerationStructureKHR descASInfo{ VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_KHR };
 	descASInfo.accelerationStructureCount = 1;
 	descASInfo.pAccelerationStructures = &tlas;
@@ -478,6 +489,24 @@ void Astra::DefaultApp::onFileDrop(int count, const char** paths)
 	}
 }
 
+void Astra::DefaultApp::setCurrentSceneIndex(int i)
+{
+	Astra::App::setCurrentSceneIndex(i);
+	if (_status == Running)
+		resetScene();
+}
+
+void Astra::DefaultApp::resetScene()
+{
+	((Astra::DefaultSceneRT*)_scenes[_currentScene])->createBottomLevelAS();
+	((Astra::DefaultSceneRT*)_scenes[_currentScene])->createTopLevelAS();
+	_descSetLayoutBind.clear();
+	_rtDescSetLayoutBind.clear();
+	createDescriptorSetLayout();
+	updateDescriptorSet();
+	createRtDescriptorSet();
+}
+
 void Astra::DefaultApp::addModelToScene(const std::string& filepath, const glm::mat4& transform)
 {
 	if (_rendering) {
@@ -486,13 +515,8 @@ void Astra::DefaultApp::addModelToScene(const std::string& filepath, const glm::
 	else {
 		int currentTxtSize = _scenes[_currentScene]->getTextures().size();
 		_scenes[_currentScene]->loadModel(filepath, transform);
-		((Astra::SceneRT*)_scenes[_currentScene])->createBottomLevelAS();
-		((Astra::SceneRT*)_scenes[_currentScene])->createTopLevelAS();
-		_descSetLayoutBind.clear();
-		_rtDescSetLayoutBind.clear();
-		createDescriptorSetLayout();
-		updateDescriptorSet();
-		createRtDescriptorSet();
+		resetScene();
+
 
 		// if we increase the number of textures in the scene we should rebuild the pipelines
 		if (_scenes[_currentScene]->getTextures().size() > currentTxtSize) {
@@ -509,13 +533,8 @@ void Astra::DefaultApp::addInstanceToScene(const Astra::MeshInstance& instance)
 	}
 	else {
 		_scenes[_currentScene]->addInstance(instance);
-		((Astra::SceneRT*)_scenes[_currentScene])->createBottomLevelAS();
-		((Astra::SceneRT*)_scenes[_currentScene])->createTopLevelAS();
-		_descSetLayoutBind.clear();
-		_rtDescSetLayoutBind.clear();
-		createDescriptorSetLayout();
-		updateDescriptorSet();
-		createRtDescriptorSet();
+		resetScene();
+
 	}
 }
 

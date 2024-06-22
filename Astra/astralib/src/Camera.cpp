@@ -177,15 +177,15 @@ Astra::OrbitCameraController::OrbitCameraController(Camera& cam) : CameraControl
 
 void Astra::OrbitCameraController::handleMouseInput(bool buttons[3], int movement[2], float wheel, int mods)
 {
-	if (buttons[MouseButtons::RIGHT]) { // right click
-		if (mods & InputMods::CONTROL) {
+	if (buttons[MouseButtons::Right]) { // right click
+		if (mods & InputMods::Control) {
 			zoom(movement[1]);
 		}
 		else {
 			orbit(movement[0], movement[1]);
 		}
 	}
-	else if (buttons[MouseButtons::MIDDLE]) { // middle click
+	else if (buttons[MouseButtons::Middle]) { // middle click
 		pan(movement[0], movement[1]);
 	}
 
