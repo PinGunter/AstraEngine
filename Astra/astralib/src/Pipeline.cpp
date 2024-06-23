@@ -3,10 +3,11 @@
 #include <Device.h>
 #include <Utils.h>
 #include <array>
-#include <nvh/fileoperations.hpp>
-#include <nvpsystem.hpp>
 #include <host_device.h>
 #include <nvh/alignment.hpp>
+#include <nvvk/pipeline_vk.hpp>
+#include <nvh/fileoperations.hpp>
+#include <nvpsystem.hpp>
 
 void Astra::Pipeline::destroy(nvvk::ResourceAllocator* alloc)
 {
@@ -261,11 +262,10 @@ void Astra::OffscreenRaster::createPipeline(VkDevice vkdev, const std::vector<Vk
 
 
 	// Creating the Pipeline
-	std::vector<std::string>                paths = defaultSearchPaths;
 	nvvk::GraphicsPipelineGeneratorCombined gpb(vkdev, _layout, rp);
 	gpb.depthStencilState.depthTestEnable = true;
-	gpb.addShader(nvh::loadFile("spv/vert_shader.vert.spv", true, paths, true), VK_SHADER_STAGE_VERTEX_BIT);
-	gpb.addShader(nvh::loadFile("spv/frag_shader.frag.spv", true, paths, true), VK_SHADER_STAGE_FRAGMENT_BIT);
+	gpb.addShader(nvh::loadFile("spv/vert_shader.vert.spv", true, defaultSearchPaths, true), VK_SHADER_STAGE_VERTEX_BIT);
+	gpb.addShader(nvh::loadFile("spv/frag_shader.frag.spv", true, defaultSearchPaths, true), VK_SHADER_STAGE_FRAGMENT_BIT);
 	gpb.addBindingDescription({ 0, sizeof(Vertex) });
 	gpb.addAttributeDescriptions({
 		{0, 0, VK_FORMAT_R32G32B32_SFLOAT, static_cast<uint32_t>(offsetof(Vertex, pos))},

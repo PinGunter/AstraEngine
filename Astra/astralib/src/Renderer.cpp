@@ -5,6 +5,8 @@
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_vulkan.h>
 #include <glm/ext/matrix_transform.hpp>
+#include <nvvk/images_vk.hpp>
+#include <nvvk/renderpasses_vk.hpp>
 
 void Astra::Renderer::renderPost(const CommandList& cmdList)
 {

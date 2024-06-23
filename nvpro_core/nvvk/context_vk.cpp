@@ -216,11 +216,6 @@ bool Context::init(const ContextCreateInfo& info)
 //
 bool Context::initInstance(const ContextCreateInfo& info)
 {
-  // #Aftermath - Initialization
-  if(::isAftermathAvailable() && info.enableAftermath)
-  {
-    m_gpuCrashTracker.initialize();
-  }
 
   VkApplicationInfo applicationInfo{VK_STRUCTURE_TYPE_APPLICATION_INFO};
   applicationInfo.pApplicationName = info.appTitle.c_str();

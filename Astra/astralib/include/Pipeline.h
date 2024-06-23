@@ -1,7 +1,7 @@
 #pragma once
 #include <vulkan/vulkan.h>
 #include <vector>
-#include <nvvk/vulkanhppsupport.hpp>
+#include <nvvk/descriptorsets_vk.hpp>
 #include <CommandList.h>
 namespace Astra {
 	class CommandList;

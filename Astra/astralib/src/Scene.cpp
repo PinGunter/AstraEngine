@@ -3,7 +3,6 @@
 #include <Device.h>
 #include <nvvk/buffers_vk.hpp>
 #include <Utils.h>
-#include <obj_loader.h>
 
 void Astra::Scene::createObjDescBuffer()
 {
@@ -38,18 +37,11 @@ void Astra::Scene::loadModel(const std::string& filename, const glm::mat4& trans
 		VkCommandBuffer    cmdBuf = cmdBufGet.createCommandBuffer();
 		Astra::CommandList cmdList(cmdBuf);
 
-		// loading model
-		ObjLoader loader;
-		loader.loadModel(filename);
-
 		Astra::Mesh mesh;
+		mesh.loadFromFile(filename);
 		mesh.meshId = getModels().size();
-		mesh.indices = loader.m_indices;
-		mesh.vertices = loader.m_vertices;
-		mesh.materials = loader.m_materials;
-		mesh.materialIndices = loader.m_matIndx;
-		mesh.textures = loader.m_textures;
 
+		// color space to linear
 		for (auto& m : mesh.materials) {
 			m.ambient = glm::pow(m.ambient, glm::vec3(2.2f));
 			m.diffuse = glm::pow(m.diffuse, glm::vec3(2.2f));
@@ -60,7 +52,7 @@ void Astra::Scene::loadModel(const std::string& filename, const glm::mat4& trans
 		mesh.create(cmdList, _alloc, txtOffset);
 
 		// Creates all textures found 
-		AstraDevice.createTextureImages(cmdBuf, loader.m_textures, getTextures(), *_alloc);
+		AstraDevice.createTextureImages(cmdBuf, mesh.textures, getTextures(), *_alloc);
 		cmdBufGet.submitAndWait(cmdBuf);
 		_alloc->finalizeAndReleaseStaging();
 
@@ -69,7 +61,7 @@ void Astra::Scene::loadModel(const std::string& filename, const glm::mat4& trans
 
 		// creates an instance of the model
 		Astra::MeshInstance instance(mesh.meshId, transform);
-		instance.setName(instance.getName() + " :: " + filename.substr(filename.size() - std::min(10, (int)filename.size() / 2), filename.size()));
+		instance.setName(instance.getName() + " :: " + filename.substr(filename.size() - std::min(10, (int)filename.size() / 2 - 4), filename.size()));
 		addInstance(instance);
 
 		// creates the descriptor buffer

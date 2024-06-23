@@ -60,6 +60,9 @@ namespace Astra {
 
 
 		nvvk::ContextCreateInfo contextInfo;
+		contextInfo.verboseAvailable = false;
+		contextInfo.verboseUsed = false;
+		contextInfo.verboseCompatibleDevices = false;
 		contextInfo.setVersion(createInfo.vkVersionMajor, createInfo.vkVersionMinor);
 		for (const auto& layer : createInfo.instanceLayers) {
 			contextInfo.addInstanceLayer(layer.data(), true);
@@ -272,6 +275,7 @@ namespace Astra {
 		return input;
 	}
 
+	// TODO maybe rework so that it builds a single image and then from app keep track of all those.
 	void Device::createTextureImages(const Astra::CommandList& cmdList, const std::vector<std::string>& new_textures, std::vector<nvvk::Texture>& textures, nvvk::ResourceAllocatorDma& alloc)
 	{
 		VkSamplerCreateInfo samplerCreateInfo{ VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO };

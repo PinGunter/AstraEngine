@@ -4,7 +4,6 @@
 #include "nvvk/resourceallocator_vk.hpp"
 #include <host_device.h>
 #include <vector>
-#include <nvvk/commands_vk.hpp>
 #include <vulkan/vulkan.h>
 #include <CommandList.h>
 namespace Astra {
@@ -31,6 +30,7 @@ namespace Astra {
 		void draw(const CommandList& cmdList) const;
 		void create(const Astra::CommandList& cmdList, nvvk::ResourceAllocatorDma* alloc, uint32_t txtOffset);
 		void createBuffers(const Astra::CommandList& cmdList, nvvk::ResourceAllocatorDma* alloc); // fills the gpu buffers with the vector data
+		void loadFromFile(const std::string& path);
 	};
 
 	/**

@@ -1,7 +1,6 @@
 #pragma once
 #include <Node3D.h>
 #include <glm/gtc/constants.hpp>
-#include <nvvk/resourceallocator_vk.hpp>
 #include <host_device.h>
 
 namespace Astra {

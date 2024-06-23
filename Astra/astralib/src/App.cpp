@@ -2,13 +2,8 @@
 #include <imgui.h>
 #include <Device.h>
 #include <nvvk/buffers_vk.hpp>
-
-#include <obj_loader.h>
-#include <nvh/fileoperations.hpp>
-#include <nvpsystem.hpp>
 #include <Utils.h>
 #include <glm/gtx/transform.hpp>
-
 
 void Astra::App::updateUBO(CommandList& cmdList)
 {
@@ -16,7 +11,7 @@ void Astra::App::updateUBO(CommandList& cmdList)
 
 	// UBO on the device, and what stages access it.
 	VkBuffer deviceUBO = _globalsBuffer.buffer;
-	auto     uboUsageStages = VK_PIPELINE_STAGE_VERTEX_SHADER_BIT | VK_PIPELINE_STAGE_RAY_TRACING_SHADER_BIT_KHR;
+	auto uboUsageStages = VK_PIPELINE_STAGE_VERTEX_SHADER_BIT | VK_PIPELINE_STAGE_RAY_TRACING_SHADER_BIT_KHR;
 
 	// Ensure that the modified UBO is not visible to previous frames.
 	VkBufferMemoryBarrier beforeBarrier{ VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER };
@@ -26,7 +21,6 @@ void Astra::App::updateUBO(CommandList& cmdList)
 	beforeBarrier.offset = 0;
 	beforeBarrier.size = sizeof(hostUBO);
 	cmdList.pipelineBarrier(uboUsageStages, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_DEPENDENCY_DEVICE_GROUP_BIT, {}, { beforeBarrier }, {});
-
 
 	// Schedule the host-to-device upload. (hostUBO is copied into the cmd
 	// buffer so it is okay to deallocate when the function returns).
@@ -45,7 +39,8 @@ void Astra::App::updateUBO(CommandList& cmdList)
 void Astra::App::destroyPipelines()
 {
 	AstraDevice.waitIdle();
-	for (auto p : _pipelines) {
+	for (auto p : _pipelines)
+	{
 		p->destroy(&_alloc);
 		delete p;
 	}
@@ -53,7 +48,7 @@ void Astra::App::destroyPipelines()
 
 void Astra::App::createUBO()
 {
-	//TODO change to device function with size param
+	// TODO change to device function with size param
 	_globalsBuffer = _alloc.createBuffer(sizeof(GlobalUniforms), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
 		VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 }
@@ -62,7 +57,8 @@ void Astra::App::init(const std::vector<Scene*>& scenes, Renderer* renderer, Gui
 {
 	_status = Running;
 	_alloc.init(AstraDevice.getVkDevice(), AstraDevice.getPhysicalDevice());
-	for (auto s : scenes) {
+	for (auto s : scenes)
+	{
 		s->init(&_alloc);
 	}
 	_scenes = scenes;
@@ -145,10 +141,12 @@ int Astra::App::getCurrentSceneIndex() const
 
 void Astra::App::setCurrentSceneIndex(int i)
 {
-	if (i >= 0 && i < _scenes.size()) {
+	if (i >= 0 && i < _scenes.size())
+	{
 		_currentScene = i;
 	}
-	else {
+	else
+	{
 		Astra::Log("Invalid scene index", WARNING);
 	}
 }
@@ -170,43 +168,43 @@ Astra::AppStatus Astra::App::getStatus() const
 
 void Astra::App::cb_resize(GLFWwindow* window, int w, int h)
 {
-	auto app = static_cast<Astra::App*> (glfwGetWindowUserPointer(window));
+	auto app = static_cast<Astra::App*>(glfwGetWindowUserPointer(window));
 	app->onResize(w, h);
 }
 
 void Astra::App::cb_keyboard(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	auto app = static_cast<Astra::App*> (glfwGetWindowUserPointer(window));
+	auto app = static_cast<Astra::App*>(glfwGetWindowUserPointer(window));
 	app->onKeyboard(key, scancode, action, mods);
 }
 
 void Astra::App::cb_keyboardChar(GLFWwindow* window, unsigned int key)
 {
-	auto app = static_cast<Astra::App*> (glfwGetWindowUserPointer(window));
+	auto app = static_cast<Astra::App*>(glfwGetWindowUserPointer(window));
 	app->onKeyboardChar(key);
 }
 
 void Astra::App::cb_mouseMotion(GLFWwindow* window, double x, double y)
 {
-	auto app = static_cast<Astra::App*> (glfwGetWindowUserPointer(window));
+	auto app = static_cast<Astra::App*>(glfwGetWindowUserPointer(window));
 	app->onMouseMotion(x, y);
 }
 
 void Astra::App::cb_mouseButton(GLFWwindow* window, int button, int action, int mods)
 {
-	auto app = static_cast<Astra::App*> (glfwGetWindowUserPointer(window));
+	auto app = static_cast<Astra::App*>(glfwGetWindowUserPointer(window));
 	app->onMouseButton(button, action, mods);
 }
 
 void Astra::App::cb_mouseWheel(GLFWwindow* window, double x, double y)
 {
-	auto app = static_cast<Astra::App*> (glfwGetWindowUserPointer(window));
+	auto app = static_cast<Astra::App*>(glfwGetWindowUserPointer(window));
 	app->onMouseWheel(x, y);
 }
 
 void Astra::App::cb_fileDrop(GLFWwindow* window, int count, const char** paths)
 {
-	auto app = static_cast<Astra::App*> (glfwGetWindowUserPointer(window));
+	auto app = static_cast<Astra::App*>(glfwGetWindowUserPointer(window));
 	app->onFileDrop(count, paths);
 }
 
@@ -237,8 +235,10 @@ void Astra::DefaultApp::init(const std::vector<Scene*>& scenes, Renderer* render
 	createUBO();
 
 	// aceleration structures
-	for (Astra::Scene* s : _scenes) {
-		if (s->isRt()) {
+	for (Astra::Scene* s : _scenes)
+	{
+		if (s->isRt())
+		{
 			((Astra::DefaultSceneRT*)s)->createBottomLevelAS();
 			((Astra::DefaultSceneRT*)s)->createTopLevelAS();
 		}
@@ -254,15 +254,18 @@ void Astra::DefaultApp::init(const std::vector<Scene*>& scenes, Renderer* render
 
 void Astra::DefaultApp::run()
 {
-	while (!glfwWindowShouldClose(_window)) {
+	while (!glfwWindowShouldClose(_window))
+	{
 		App::run(); // update the scene
 
 		glfwPollEvents();
-		if (isMinimized()) {
+		if (isMinimized())
+		{
 			continue;
 		}
 
-		if (_needsReset) {
+		if (_needsReset)
+		{
 			resetScene(_fullReset);
 		}
 
@@ -272,31 +275,34 @@ void Astra::DefaultApp::run()
 
 		// offscren render
 
-		if (_selectedPipeline == 0) {
+		if (_selectedPipeline == 0)
+		{
 			_renderer->render(cmdList, _scenes[_currentScene], _rtPipeline, { _rtDescSet, _descSet }, _gui);
 		}
-		else if (_selectedPipeline == 1) {
+		else if (_selectedPipeline == 1)
+		{
 			_renderer->render(cmdList, _scenes[_currentScene], _rasterPipeline, { _descSet }, _gui);
 		}
-		else if (_selectedPipeline == 2) {
+		else if (_selectedPipeline == 2)
+		{
 			_renderer->render(cmdList, _scenes[_currentScene], _wireframePipeline, { _descSet }, _gui);
 		}
-
 
 		_renderer->endFrame(cmdList);
 		_rendering = false;
 
 		AstraDevice.waitIdle();
-		for (auto& model_pair : _newModels) {
+		for (auto& model_pair : _newModels)
+		{
 			addModelToScene(model_pair.first, model_pair.second);
 		}
 		_newModels.clear();
 
-		for (auto& inst : _newInstances) {
+		for (auto& inst : _newInstances)
+		{
 			addInstanceToScene(inst);
 		}
 		_newInstances.clear();
-
 	}
 	destroy();
 }
@@ -361,7 +367,7 @@ void Astra::DefaultApp::updateDescriptorSet()
 
 	// All texture samplers
 	std::vector<VkDescriptorImageInfo> diit;
-	//for (int i = 0; i < _scenes.size(); i++) {
+	// for (int i = 0; i < _scenes.size(); i++) {
 
 	for (auto& texture : _scenes[_currentScene]->getTextures())
 	{
@@ -393,7 +399,7 @@ void Astra::DefaultApp::createRtDescriptorSet()
 	VkWriteDescriptorSetAccelerationStructureKHR descASInfo{ VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_KHR };
 	descASInfo.accelerationStructureCount = 1;
 	descASInfo.pAccelerationStructures = &tlas;
-	VkDescriptorImageInfo imageInfo{ {},_renderer->getOffscreenColor().descriptor.imageView, VK_IMAGE_LAYOUT_GENERAL };
+	VkDescriptorImageInfo imageInfo{ {}, _renderer->getOffscreenColor().descriptor.imageView, VK_IMAGE_LAYOUT_GENERAL };
 
 	std::vector<VkWriteDescriptorSet> writes;
 	writes.emplace_back(_rtDescSetLayoutBind.makeWrite(_rtDescSet, RtxBindings::eTlas, &descASInfo));
@@ -408,13 +414,13 @@ void Astra::DefaultApp::updateRtDescriptorSet()
 	vkUpdateDescriptorSets(AstraDevice.getVkDevice(), 1, &wds, 0, nullptr);
 }
 
-
 void Astra::DefaultApp::onResize(int w, int h)
 {
 	if (w == 0 || h == 0)
 		return;
 
-	if (_gui) {
+	if (_gui)
+	{
 		auto& imgui_io = ImGui::GetIO();
 		imgui_io.DisplaySize = ImVec2(static_cast<float>(w), static_cast<float>(h));
 	}
@@ -436,7 +442,6 @@ void Astra::DefaultApp::onResize(int w, int h)
 
 	_renderer->createDepthBuffer();
 	_renderer->createFrameBuffers();
-
 }
 
 void Astra::DefaultApp::onMouseMotion(int x, int y)
@@ -473,14 +478,17 @@ void Astra::DefaultApp::onKeyboard(int key, int scancode, int action, int mods)
 
 void Astra::DefaultApp::onFileDrop(int count, const char** paths)
 {
-	if (count == 1) {
+	if (count == 1)
+	{
 		std::string string_path(paths[0]);
 		// check for obj object
-		if (string_path.substr(string_path.size() - 4, string_path.size()) == ".obj") {
+		if (string_path.substr(string_path.size() - 4, string_path.size()) == ".obj")
+		{
 			addModelToScene(string_path);
 		}
 	}
-	else {
+	else
+	{
 		Astra::Log("Only one model at a time please!", INFO); // right now only one.
 	}
 }
@@ -489,7 +497,8 @@ void Astra::DefaultApp::setCurrentSceneIndex(int i)
 {
 	int nbTxt = _scenes[_currentScene]->getTextures().size();
 	Astra::App::setCurrentSceneIndex(i);
-	if (_status == Running) {
+	if (_status == Running)
+	{
 		scheduleReset(nbTxt != _scenes[_currentScene]->getTextures().size());
 	}
 }
@@ -504,7 +513,8 @@ void Astra::DefaultApp::resetScene(bool recreatePipelines)
 	updateDescriptorSet();
 	createRtDescriptorSet();
 
-	if (recreatePipelines) {
+	if (recreatePipelines)
+	{
 		destroyPipelines();
 		createPipelines();
 	}
@@ -519,10 +529,12 @@ void Astra::DefaultApp::scheduleReset(bool recreatePipelines)
 
 void Astra::DefaultApp::addModelToScene(const std::string& filepath, const glm::mat4& transform)
 {
-	if (_rendering) {
+	if (_rendering)
+	{
 		_newModels.push_back(std::make_pair(filepath, transform));
 	}
-	else {
+	else
+	{
 		int currentTxtSize = _scenes[_currentScene]->getTextures().size();
 		_scenes[_currentScene]->loadModel(filepath, transform);
 		resetScene(_scenes[_currentScene]->getTextures().size() > currentTxtSize);
@@ -531,10 +543,12 @@ void Astra::DefaultApp::addModelToScene(const std::string& filepath, const glm::
 
 void Astra::DefaultApp::addInstanceToScene(const Astra::MeshInstance& instance)
 {
-	if (_rendering) {
+	if (_rendering)
+	{
 		_newInstances.push_back(instance);
 	}
-	else {
+	else
+	{
 		_scenes[_currentScene]->addInstance(instance);
 		resetScene();
 	}

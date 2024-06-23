@@ -32,7 +32,10 @@ set(IMGUI_FILES
     "${IMGUI_DIR}/imgui_internal.h"
    "${IMGUI_DIR}/imstb_rectpack.h"
     "${IMGUI_DIR}/imstb_textedit.h"
-    "${IMGUI_DIR}/imstb_truetype.h")
+    "${IMGUI_DIR}/imstb_truetype.h"
+    "${IMGUI_DIR}/ImGuizmo.h"
+     "${IMGUI_DIR}/backends/imgui_impl_glfw.h"
+)
 
 if (NOT TARGET imgui)
   add_library(imgui STATIC ${IMGUI_FILES})
