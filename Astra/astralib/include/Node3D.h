@@ -36,21 +36,21 @@ namespace Astra {
 
 		bool operator==(const Node3D& other);
 
-		void addChild(Node3D* child);
-		void removeChild(const Node3D& child);
+		virtual void addChild(Node3D* child);
+		virtual void removeChild(const Node3D& child);
 
 		// TRANSFORM OPERATIONS
 
-		void rotate(const glm::vec3& axis, const float& angle);
+		virtual void rotate(const glm::vec3& axis, const float& angle);
 
-		void scale(const glm::vec3& scaling);
+		virtual void scale(const glm::vec3& scaling);
 
-		void translate(const glm::vec3& position);
+		virtual void translate(const glm::vec3& position);
 
 		// GETTERS
-		glm::vec3 getPosition() const;
-		glm::vec3 getRotation() const;
-		glm::vec3 getScale() const;
+		virtual glm::vec3 getPosition() const;
+		virtual glm::vec3 getRotation() const;
+		virtual glm::vec3 getScale() const;
 
 		glm::mat4& getTransformRef() { return _transform; }
 

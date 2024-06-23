@@ -13,7 +13,8 @@ namespace Astra {
 		Light();
 		glm::vec3& getColor();
 		void setColor(const glm::vec3& c);
-		float& getIntensity();
+		float& getIntensityRef();
+		float getIntensity() const;
 		void setIntensity(float i);
 		LightType getType() const;
 
@@ -32,5 +33,15 @@ namespace Astra {
 		glm::vec3 _direction;
 	public:
 		DirectionalLight(const glm::vec3& color, float intensity, const glm::vec3& direction);
+		glm::vec3& getDirectionRef();
+		glm::vec3 getDirection() const;
+		void setDirection(const glm::vec3& dir);
+
+		void rotate(const glm::vec3& axis, const float& angle) override;
+		void updatePushConstantRaster(PushConstantRaster& pc) const override;
+		void updatePushConstantRT(PushConstantRay& pc) const override;
+
+		bool update() override;
+
 	};
 }

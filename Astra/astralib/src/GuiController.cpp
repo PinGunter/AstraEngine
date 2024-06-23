@@ -98,6 +98,7 @@ void Astra::BasiGui::draw(App* app)
 		if (ImGui::BeginTabItem("Renderer")) {
 			ImGui::ColorEdit3("Clear Color", glm::value_ptr(app->getRenderer()->getClearColorRef()));
 
+			ImGui::Checkbox("Recursive reflections", &app->getRenderer()->getRecursiveRef());
 			ImGui::SliderInt("Max Ray Recursion Depth", &app->getRenderer()->getMaxDepthRef(), 0, AstraDevice.getRtProperties().maxRayRecursionDepth - 1);
 
 
@@ -153,6 +154,21 @@ void Astra::BasiGui::draw(App* app)
 		}
 		ImGui::EndListBox();
 	}
+
+	if (!_handlingNodes) {
+		auto light = scene->getLights()[_node];
+		auto lightType = light->getType();
+		ImGui::SliderFloat("Intensity", &light->getIntensityRef(), 0.0f, lightType == DIRECTIONAL ? 1.0f : 100.0f);
+		ImGui::Text((std::string("Light Type: ") + std::to_string(light->getType())).c_str());
+		if (lightType == LightType::DIRECTIONAL) {
+			std::string x = std::to_string(((Astra::DirectionalLight*)light)->getDirection().x);
+			std::string y = std::to_string(((Astra::DirectionalLight*)light)->getDirection().y);
+			std::string z = std::to_string(((Astra::DirectionalLight*)light)->getDirection().z);
+
+			ImGui::Text((x + ", " + y + ", " + z).c_str());
+		}
+	}
+
 	if (ImGui::Checkbox("Visible", &scene->getInstances()[_node].getVisibleRef())) {
 		scene->updateTopLevelAS(_node);
 	}
@@ -190,5 +206,4 @@ void Astra::BasiGui::draw(App* app)
 			}
 		}
 	ImGui::End();
-
 }

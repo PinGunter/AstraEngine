@@ -91,6 +91,7 @@ struct PushConstantRay
 	float lightIntensity;
 	int   lightType;
 	int  maxDepth;
+	bool recursive;
 };
 
 

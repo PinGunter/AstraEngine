@@ -51,7 +51,7 @@ void main()
 
 	// Computing normal
 	const vec3 nrm = v0.nrm * barycentrics.x + v1.nrm * barycentrics.y + v2.nrm * barycentrics.z;
-	const vec3 worldNrm = normalize(vec3(nrm * gl_WorldToObjectEXT));
+	vec3 worldNrm = normalize(vec3(nrm * gl_WorldToObjectEXT));
 
 	// Vector toward the light
 	vec3  L;
@@ -116,28 +116,56 @@ void main()
 	}
 
 	if (mat.illum == 3 && prd.depth < pcRay.maxDepth) // change to uniform
-	{
-		vec3 origin = worldPos;
-		vec3 rayDir = reflect(gl_WorldRayDirectionEXT, worldNrm);
-		prd.attenuation *= mat.specular;
+		{
+			vec3 origin = worldPos;
+			vec3 rayDir = reflect(gl_WorldRayDirectionEXT, worldNrm);
+			prd.attenuation *= mat.specular;
 
-		prd.depth++;
+			prd.depth++;
 
-		traceRayEXT(topLevelAS,
-					gl_RayFlagsNoneEXT,
-					0xFF,
-					0,0,0,
-					origin,
-					tMin,
-					rayDir,
-					tMax,
-					0
-		);
-		prd.depth--;
-
+			traceRayEXT(topLevelAS,
+						gl_RayFlagsNoneEXT,
+						0xFF,
+						0,0,0,
+						origin,
+						tMin,
+						rayDir,
+						tMax,
+						0
+			);
+			prd.depth--;
+			
 	} 
+
+	if ((mat.illum == 5 || mat.illum == 6) && prd.depth < pcRay.maxDepth){
+			vec3 origin = worldPos;
+
+			float roi = 1.0 / 1.31f;
+			float eta;
+			if (dot(gl_WorldRayDirectionEXT, worldNrm) > 0.0f){
+				worldNrm *= -1;
+				eta = 1.0f / roi;
+			} else{
+				eta = roi;
+			}
+
+			vec3 rayDir = refract(gl_WorldRayDirectionEXT, worldNrm, eta);
+			prd.depth++;
+
+			traceRayEXT(topLevelAS,
+						gl_RayFlagsNoneEXT,
+						0xFF,
+						0,0,0,
+						origin,
+						tMin,
+						rayDir,
+						tMax,
+						0
+			);
+			prd.depth--;
+	}
+	
 	prd.hitValue += vec3(lightIntensity * attenuation * (diffuse + specular) ) * prd.attenuation;
-		//prd.hitValue = prd.attenuation;
 
 }
 

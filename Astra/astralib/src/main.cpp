@@ -35,7 +35,7 @@ int main(int argc, char** argv) {
 	Astra::Light* pointLight = new Astra::PointLight(glm::vec3(1.0f), 60.0f);
 	pointLight->translate(glm::vec3(10, 15, 20));
 
-	Astra::Light* sun = new Astra::PointLight(glm::vec3(1.0f), 60.0f);
+	Astra::Light* sun = new Astra::DirectionalLight(glm::vec3(1.0f), .6f, glm::vec3(1.0f));
 	sun->translate(glm::vec3(10, 15, 20));
 
 	// Setup camera
@@ -54,7 +54,6 @@ int main(int argc, char** argv) {
 
 	scene->loadModel(nvh::findFile("media/scenes/mono2.obj", defaultSearchPaths, true));
 	scene->loadModel(nvh::findFile("media/scenes/espejo.obj", defaultSearchPaths, true));
-	scene->loadModel(nvh::findFile("media/scenes/cube.obj", defaultSearchPaths, true));
 	scene->loadModel(nvh::findFile("media/scenes/plane2.obj", defaultSearchPaths, true), glm::translate(glm::mat4(1.0f), glm::vec3(0, -1, 0)));
 
 	scene2->loadModel(nvh::findFile("media/scenes/lizardmech.obj", defaultSearchPaths, true));

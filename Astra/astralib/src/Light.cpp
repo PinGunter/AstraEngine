@@ -13,7 +13,12 @@ void Astra::Light::setColor(const glm::vec3& c) {
 	_color = c;
 }
 
-float& Astra::Light::getIntensity() {
+float& Astra::Light::getIntensityRef() {
+	return _intensity;
+}
+
+float Astra::Light::getIntensity() const
+{
 	return _intensity;
 }
 
@@ -62,5 +67,45 @@ Astra::DirectionalLight::DirectionalLight(const glm::vec3& color, float intensit
 	_intensity = intensity;
 	_direction = direction;
 	_name = std::string("Directional Light - ") + std::to_string(_id);
+}
+
+glm::vec3& Astra::DirectionalLight::getDirectionRef()
+{
+	return _direction;
+}
+
+glm::vec3 Astra::DirectionalLight::getDirection() const
+{
+	return _direction;
+}
+
+void Astra::DirectionalLight::setDirection(const glm::vec3& dir)
+{
+	_direction = dir;
+}
+
+void Astra::DirectionalLight::rotate(const glm::vec3& axis, const float& angle)
+{
+	auto homoDir = glm::rotate(glm::mat4(1.0f), angle, axis) * glm::vec4(_direction, 1.0f);
+	_direction = { homoDir.x / homoDir.w, homoDir.y / homoDir.w, homoDir.z / homoDir.w };
+}
+
+void Astra::DirectionalLight::updatePushConstantRaster(PushConstantRaster& pc) const
+{
+	Light::updatePushConstantRaster(pc);
+	pc.lightPosition = _direction;
+}
+
+void Astra::DirectionalLight::updatePushConstantRT(PushConstantRay& pc) const
+{
+	Light::updatePushConstantRT(pc);
+	pc.lightPosition = _direction;
+}
+
+bool Astra::DirectionalLight::update()
+{
+	rotate(glm::vec3(1, 0, 0), 0.0004f);
+	_transform = glm::translate(glm::mat4(1.0f), _direction);
+	return true;
 }
 
