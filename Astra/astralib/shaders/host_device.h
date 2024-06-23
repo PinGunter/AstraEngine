@@ -79,11 +79,13 @@ struct PushConstantRaster
 	uint  objIndex;
 	float lightIntensity;
 	int   lightType;
-	vec3  lightColor;
+	float r;
+	float g;
+	float b;
 };
 
 
-// Push constant structure for the ray tracer
+//Push constant structure for the ray tracer
 struct PushConstantRay
 {
 	vec4  clearColor;
@@ -92,6 +94,9 @@ struct PushConstantRay
 	int   lightType;
 	int  maxDepth;
 	bool recursive;
+	float r;
+	float g;
+	float b;
 };
 
 
@@ -117,5 +122,13 @@ struct WaveFrontMaterial
 	int   textureId;
 };
 
+// future things :)
+
+struct Light {
+	vec3 position;
+	vec3 color;
+	float intensity;
+	int type;
+};
 
 #endif

@@ -75,7 +75,7 @@ void main()
 	WaveFrontMaterial mat = materials.m[matIdx];
 
 	// Diffuse
-	vec3 diffuse = computeDiffuse(mat, L, worldNrm);
+	vec3 diffuse = computeDiffuse(mat, L, vec3(pcRay.r, pcRay.g, pcRay.b), worldNrm);
 	
 	if (mat.textureId >= 0){
 		uint txtId = mat.textureId + objDesc.i[gl_InstanceCustomIndexEXT].txtOffset;
@@ -111,7 +111,7 @@ void main()
 		if (isShadowed){
 			attenuation = 0.3f;
 		} else{
-			specular = computeSpecular(mat, gl_WorldRayDirectionEXT, L, worldNrm);
+			specular = computeSpecular(mat, gl_WorldRayDirectionEXT, L,  vec3(pcRay.r, pcRay.g, pcRay.b), worldNrm);
 		}
 	}
 
@@ -137,7 +137,7 @@ void main()
 			
 	} 
 
-	if ((mat.illum == 5 || mat.illum == 6) && prd.depth < pcRay.maxDepth){
+	if ((mat.illum == 5 || mat.illum == 6 || mat.illum == 9 ) && prd.depth < pcRay.maxDepth){
 			vec3 origin = worldPos;
 
 			float roi = 1.0 / 1.31f;

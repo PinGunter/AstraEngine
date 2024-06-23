@@ -97,7 +97,7 @@ void main()
 
 
   // Diffuse
-  vec3 diffuse = computeDiffuse(mat, L, worldNrm);
+  vec3 diffuse = computeDiffuse(mat, L, vec3(pcRay.r, pcRay.g, pcRay.b), worldNrm);
   if(mat.textureId >= 0)
   {
     uint txtId    = mat.textureId + objDesc.i[gl_InstanceCustomIndexEXT].txtOffset;
@@ -137,7 +137,7 @@ void main()
     else
     {
       // Specular
-      specular = computeSpecular(mat, gl_WorldRayDirectionEXT, L, worldNrm);
+      specular = computeSpecular(mat, gl_WorldRayDirectionEXT, L,vec3(pcRay.r, pcRay.g, pcRay.b), worldNrm);
     }
   }
 
@@ -152,10 +152,10 @@ void main()
     prd.rayDir    = rayDir;
   }
 
-  if (mat.illum == 5 || mat.illum == 6){
+  if (mat.illum == 5 || mat.illum == 6  || mat.illum == 9){
     vec3 hitNormal = worldNrm;
     vec3 origin = worldPos;
-	float ior = 1.0 / 1.31f;
+	float ior = 1.0 / 1.35;
 	float ior_ratio;
 	if (dot(gl_WorldRayDirectionEXT, hitNormal) > 0.0f){
 		hitNormal *= -1;

@@ -54,7 +54,6 @@ namespace Astra {
 		App* _app;
 		glm::vec4 _clearColor;
 		int _maxDepth{ 10 };
-		bool _recursive = true;
 
 		void renderRaster(const CommandList& cmdBuf, Scene* scene, RasterPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets);
 		void renderRaytrace(const CommandList& cmdBuf, Scene* scene, RayTracingPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets);
@@ -83,9 +82,6 @@ namespace Astra {
 		int& getMaxDepthRef();
 		int getMaxDepth() const;
 		void setMaxDepth(int depth);
-		bool& getRecursiveRef();
-		bool getRecursive() const;
-		void setRecursive(bool r);
 
 
 		const nvvk::Texture& getOffscreenColor() const;

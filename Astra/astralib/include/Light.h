@@ -11,7 +11,8 @@ namespace Astra {
 		LightType _type;
 	public:
 		Light();
-		glm::vec3& getColor();
+		glm::vec3& getColorRef();
+		glm::vec3 getColor() const;
 		void setColor(const glm::vec3& c);
 		float& getIntensityRef();
 		float getIntensity() const;

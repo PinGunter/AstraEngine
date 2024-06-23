@@ -98,8 +98,7 @@ void Astra::BasiGui::draw(App* app)
 		if (ImGui::BeginTabItem("Renderer")) {
 			ImGui::ColorEdit3("Clear Color", glm::value_ptr(app->getRenderer()->getClearColorRef()));
 
-			ImGui::Checkbox("Recursive reflections", &app->getRenderer()->getRecursiveRef());
-			ImGui::SliderInt("Max Ray Recursion Depth", &app->getRenderer()->getMaxDepthRef(), 0, AstraDevice.getRtProperties().maxRayRecursionDepth - 1);
+			ImGui::SliderInt("Max Ray bounces", &app->getRenderer()->getMaxDepthRef(), 0, 30);
 
 
 			ImGui::Separator();
@@ -147,27 +146,27 @@ void Astra::BasiGui::draw(App* app)
 
 		for (int i = 0; i < scene->getLights().size(); i++) {
 			auto light = scene->getLights()[i];
-			if (ImGui::Selectable(light->getName().c_str(), i == _node)) {
-				_node = i;
+			if (ImGui::Selectable(light->getName().c_str(), i == _light)) {
+				_light = i;
 				_handlingNodes = false;
 			}
 		}
 		ImGui::EndListBox();
 	}
 
-	if (!_handlingNodes) {
-		auto light = scene->getLights()[_node];
-		auto lightType = light->getType();
-		ImGui::SliderFloat("Intensity", &light->getIntensityRef(), 0.0f, lightType == DIRECTIONAL ? 1.0f : 100.0f);
-		ImGui::Text((std::string("Light Type: ") + std::to_string(light->getType())).c_str());
-		if (lightType == LightType::DIRECTIONAL) {
-			std::string x = std::to_string(((Astra::DirectionalLight*)light)->getDirection().x);
-			std::string y = std::to_string(((Astra::DirectionalLight*)light)->getDirection().y);
-			std::string z = std::to_string(((Astra::DirectionalLight*)light)->getDirection().z);
+	auto light = scene->getLights()[_light];
+	auto lightType = light->getType();
+	ImGui::ColorEdit3("Light Color", glm::value_ptr(light->getColorRef()));
+	ImGui::SliderFloat("Intensity", &light->getIntensityRef(), 0.0f, lightType == DIRECTIONAL ? 1.0f : 100.0f);
+	ImGui::Text((std::string("Light Type: ") + std::to_string(light->getType())).c_str());
+	if (lightType == LightType::DIRECTIONAL) {
+		std::string x = std::to_string(((Astra::DirectionalLight*)light)->getDirection().x);
+		std::string y = std::to_string(((Astra::DirectionalLight*)light)->getDirection().y);
+		std::string z = std::to_string(((Astra::DirectionalLight*)light)->getDirection().z);
 
-			ImGui::Text((x + ", " + y + ", " + z).c_str());
-		}
+		ImGui::Text((x + ", " + y + ", " + z).c_str());
 	}
+
 
 	if (ImGui::Checkbox("Visible", &scene->getInstances()[_node].getVisibleRef())) {
 		scene->updateTopLevelAS(_node);
@@ -197,13 +196,11 @@ void Astra::BasiGui::draw(App* app)
 			}
 		}
 		else {
-			if (ImGuizmo::Manipulate(glm::value_ptr(scene->getCamera()->getViewMatrix()),
+			ImGuizmo::Manipulate(glm::value_ptr(scene->getCamera()->getViewMatrix()),
 				glm::value_ptr(proj),
 				ImGuizmo::OPERATION::UNIVERSAL,
 				ImGuizmo::LOCAL,
-				glm::value_ptr(app->getCurrentScene()->getLights()[_node]->getTransformRef()))) {
-				scene->updateTopLevelAS(_node);
-			}
+				glm::value_ptr(app->getCurrentScene()->getLights()[_light]->getTransformRef()));
 		}
 	ImGui::End();
 }

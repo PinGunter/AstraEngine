@@ -30,3 +30,22 @@ void Astra::Log(const std::string& s, LOG_LEVELS level)
 	}
 	std::cerr << s << std::endl;
 }
+
+void Astra::Log(const std::string& name, const glm::vec3& s, LOG_LEVELS level)
+{
+	auto x = std::to_string(s.x);
+	auto y = std::to_string(s.y);
+	auto z = std::to_string(s.z);
+
+	Log(name + ": " + x + ", " + y + ", " + z, level);
+}
+
+void Astra::Log(const std::string& name, const glm::vec4& s, LOG_LEVELS level)
+{
+	auto x = std::to_string(s.x);
+	auto y = std::to_string(s.y);
+	auto z = std::to_string(s.z);
+	auto w = std::to_string(s.w);
+
+	Log(name + ": " + x + ", " + y + ", " + z + ", " + w, level);
+}

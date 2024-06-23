@@ -5,7 +5,12 @@ Astra::Light::Light() :Node3D() {
 	_name = std::string("Light - ") + std::to_string(_id);
 }
 
-glm::vec3& Astra::Light::getColor() {
+glm::vec3& Astra::Light::getColorRef() {
+	return _color;
+}
+
+glm::vec3 Astra::Light::getColor() const
+{
 	return _color;
 }
 
@@ -33,7 +38,9 @@ Astra::LightType Astra::Light::getType() const
 
 void Astra::Light::updatePushConstantRaster(PushConstantRaster& pc) const
 {
-	pc.lightColor = _color;
+	pc.r = _color.x;
+	pc.g = _color.y;
+	pc.b = _color.z;
 	pc.lightIntensity = _intensity;
 	pc.lightPosition = getPosition();
 	pc.lightType = static_cast<int>(_type);
@@ -42,6 +49,9 @@ void Astra::Light::updatePushConstantRaster(PushConstantRaster& pc) const
 void Astra::Light::updatePushConstantRT(PushConstantRay& pc) const
 {
 	//pc.lightColor = _color;
+	pc.r = _color.x;
+	pc.g = _color.y;
+	pc.b = _color.z;
 	pc.lightIntensity = _intensity;
 	pc.lightPosition = getPosition();
 	pc.lightType = static_cast<int>(_type);

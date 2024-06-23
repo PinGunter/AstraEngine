@@ -83,7 +83,6 @@ void Astra::Renderer::renderRaytrace(const CommandList& cmdList, Scene* scene, R
 	pushConstant.clearColor = _clearColor;
 	_maxDepth = std::min(static_cast<uint32_t>(_maxDepth), AstraDevice.getRtProperties().maxRayRecursionDepth - 1);
 	pushConstant.maxDepth = _maxDepth;
-	pushConstant.recursive = _recursive;
 	// lights
 
 	// TODO este tipo de cosas me gustaria que fuera mas generico
@@ -342,21 +341,6 @@ int Astra::Renderer::getMaxDepth() const
 void Astra::Renderer::setMaxDepth(int depth)
 {
 	_maxDepth = depth;
-}
-
-bool& Astra::Renderer::getRecursiveRef()
-{
-	return _recursive;
-}
-
-bool Astra::Renderer::getRecursive() const
-{
-	return _recursive;
-}
-
-void Astra::Renderer::setRecursive(bool r)
-{
-	_recursive = r;
 }
 
 void Astra::Renderer::createFrameBuffers()

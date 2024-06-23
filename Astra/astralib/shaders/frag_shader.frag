@@ -82,7 +82,7 @@ void main()
 
 
   // Diffuse
-  vec3 diffuse = computeDiffuse(mat, L, N);
+  vec3 diffuse = computeDiffuse(mat, L, vec3(pcRaster.r, pcRaster.g, pcRaster.b), N);
   if(mat.textureId >= 0)
   {
     int  txtOffset  = objDesc.i[pcRaster.objIndex].txtOffset;
@@ -92,7 +92,7 @@ void main()
   }
 
   // Specular
-  vec3 specular = computeSpecular(mat, i_viewDir, L, N);
+  vec3 specular = computeSpecular(mat, i_viewDir, L,  vec3(pcRaster.r, pcRaster.g, pcRaster.b), N);
 
   // Result
   o_color = vec4(lightIntensity * (diffuse + specular), 1);
