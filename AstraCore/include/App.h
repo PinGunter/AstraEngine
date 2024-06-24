@@ -27,10 +27,10 @@ namespace Astra {
 
 		virtual void createUBO();
 		virtual void updateUBO(CommandList& cmdList);
-		virtual void createDescriptorSetLayout() {};
-		virtual void updateDescriptorSet() {};
-		virtual void createPipelines() {};
+
+		virtual void createPipelines() = 0;
 		virtual void destroyPipelines();
+		virtual void resetScene(bool recreatePipelines = false) = 0;
 
 		virtual void onResize(int w, int h) {};
 		virtual void onMouseMotion(int x, int y) {};

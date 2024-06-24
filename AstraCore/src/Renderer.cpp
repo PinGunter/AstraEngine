@@ -63,7 +63,6 @@ void Astra::Renderer::renderRaster(const CommandList& cmdList, Scene* scene, Ras
 			// get model (with buffers) and update transform matrix
 			auto& model = scene->getModels()[inst.getMeshIndex()];
 			inst.updatePushConstantRaster(pushConstant);
-			pushConstant.modelMatrix = pushConstant.modelMatrix;
 
 			// send pc to gpu
 			pipeline->pushConstants(cmdList, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
