@@ -1,7 +1,7 @@
 # Astra Core
 
-[!WARNING]  
-This is currently a work in progress and is not intented for final use.
+> [!WARNING]  
+> This is currently a work in progress and is not intented for final use.
 
 Astra Core is a C++  library to develop visualization apps in Vulkan using rasterization or hardware-accelerated ray-tracing. However, development is currently focused on ray-tracing.
 
@@ -36,11 +36,8 @@ Aside from improving on the library itself (better quality code, improved Vulkan
 * [ ] Game example
 
 * [ ] Async obj loader
-
 - [ ] Scene graph support
 
 - [ ] FPS Camera
 
 - [ ] Multiple colored lights
-  
-  
