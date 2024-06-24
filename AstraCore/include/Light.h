@@ -42,7 +42,5 @@ namespace Astra {
 		void updatePushConstantRaster(PushConstantRaster& pc) const override;
 		void updatePushConstantRT(PushConstantRay& pc) const override;
 
-		bool update() override;
-
 	};
 }

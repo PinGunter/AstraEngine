@@ -60,9 +60,4 @@ namespace Astra {
 	public:
 		void createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsetsLayouts, VkRenderPass rp) override;
 	};
-
-	class WireframePipeline : public RasterPipeline {
-	public:
-		void createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsetsLayouts, VkRenderPass rp) override;
-	};
 }

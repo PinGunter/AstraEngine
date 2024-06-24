@@ -19,14 +19,4 @@ namespace Astra {
 		void destroy();
 		virtual void draw(App* app) {};
 	};
-
-	class BasiGui : public GuiController {
-		bool _showGuizmo{ false };
-		int _node{ 0 };
-		int _light{ 0 };
-		int _ncopies{ 1 };
-		bool _handlingNodes{ true };
-	public:
-		void draw(App* app) override;
-	};
 }

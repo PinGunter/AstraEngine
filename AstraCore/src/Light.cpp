@@ -112,10 +112,3 @@ void Astra::DirectionalLight::updatePushConstantRT(PushConstantRay& pc) const
 	pc.lightPosition = _direction;
 }
 
-bool Astra::DirectionalLight::update()
-{
-	rotate(glm::vec3(1, 0, 0), 0.0004f);
-	_transform = glm::translate(glm::mat4(1.0f), _direction);
-	return true;
-}
-
