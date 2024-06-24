@@ -20,7 +20,6 @@ namespace Astra {
 		Renderer* _renderer;
 		GLFWwindow* _window;
 
-		nvvk::Buffer _globalsBuffer; // UBO for camera 
 		nvvk::ResourceAllocatorDma _alloc;
 
 		std::vector<Pipeline*> _pipelines;
@@ -32,9 +31,6 @@ namespace Astra {
 		VkDescriptorSetLayout _descSetLayout;
 		VkDescriptorSet _descSet;
 
-		virtual void createUBO();
-		virtual void updateUBO(CommandList& cmdList);
-
 		virtual void createPipelines() = 0;
 		virtual void destroyPipelines();
 		virtual void createDescriptorSetLayout();
@@ -42,7 +38,7 @@ namespace Astra {
 
 		virtual void resetScene(bool recreatePipelines = false) = 0;
 
-		virtual void onResize(int w, int h) {};
+		virtual void onResize(int w, int h);
 		virtual void onMouseMotion(int x, int y) {};
 		virtual void onKeyboard(int key, int scancode, int action, int mods) {};
 		virtual void onKeyboardChar(unsigned char key) {};
@@ -62,11 +58,10 @@ namespace Astra {
 	public:
 		virtual void init(const std::vector<Scene*>& scenes, Renderer* renderer, GuiController* gui = nullptr);
 		virtual void addScene(Scene* s);
-		virtual void run();
+		virtual void run() = 0;
 		~App();
 
 		virtual void destroy();
-		nvvk::Buffer& getCameraUBO();
 
 		void setupCallbacks(GLFWwindow* window);
 		bool isMinimized() const;

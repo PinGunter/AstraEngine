@@ -42,8 +42,7 @@ namespace Astra {
 
 		Device() {}
 		~Device() {
-			// quizas encargarse de eliminar recursos
-			// o en app quizas
+			glfwDestroyWindow(_window);
 		}
 	public:
 

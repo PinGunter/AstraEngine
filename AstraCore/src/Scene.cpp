@@ -24,6 +24,43 @@ void Astra::Scene::createObjDescBuffer()
 	_alloc->finalizeAndReleaseStaging();
 }
 
+void Astra::Scene::createCameraUBO()
+{
+	_cameraUBO = _alloc->createBuffer(sizeof(GlobalUniforms), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+		VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+}
+
+void Astra::Scene::updateCameraUBO(const CommandList& cmdList)
+{
+	GlobalUniforms hostUBO = _camera->getUpdatedGlobals();
+
+	// UBO on the device, and what stages access it.
+	VkBuffer deviceUBO = _cameraUBO.buffer;
+	auto uboUsageStages = VK_PIPELINE_STAGE_VERTEX_SHADER_BIT | VK_PIPELINE_STAGE_RAY_TRACING_SHADER_BIT_KHR;
+
+	// Ensure that the modified UBO is not visible to previous frames.
+	VkBufferMemoryBarrier beforeBarrier{ VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER };
+	beforeBarrier.srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
+	beforeBarrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+	beforeBarrier.buffer = deviceUBO;
+	beforeBarrier.offset = 0;
+	beforeBarrier.size = sizeof(hostUBO);
+	cmdList.pipelineBarrier(uboUsageStages, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_DEPENDENCY_DEVICE_GROUP_BIT, {}, { beforeBarrier }, {});
+
+	// Schedule the host-to-device upload. (hostUBO is copied into the cmd
+	// buffer so it is okay to deallocate when the function returns).
+	cmdList.updateBuffer(_cameraUBO, 0, sizeof(GlobalUniforms), &hostUBO);
+
+	// Making sure the updated UBO will be visible.
+	VkBufferMemoryBarrier afterBarrier{ VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER };
+	afterBarrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+	afterBarrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+	afterBarrier.buffer = deviceUBO;
+	afterBarrier.offset = 0;
+	afterBarrier.size = sizeof(hostUBO);
+	cmdList.pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, uboUsageStages, VK_DEPENDENCY_DEVICE_GROUP_BIT, {}, { afterBarrier }, {});
+}
+
 void Astra::Scene::loadModel(const std::string& filename, const glm::mat4& transform)
 {
 	// we cant load models until we have access to the resource allocator
@@ -80,6 +117,7 @@ void Astra::Scene::init(nvvk::ResourceAllocator* alloc)
 		loadModel(p.first, p.second);
 	}
 	_lazymodels.clear();
+	createCameraUBO();
 }
 
 void Astra::Scene::destroy() {
@@ -101,6 +139,9 @@ void Astra::Scene::destroy() {
 		m.destroy();
 	}
 
+	_alloc->destroy(_cameraUBO);
+
+
 }
 
 void Astra::Scene::addModel(const Astra::Mesh& model)
@@ -113,7 +154,7 @@ void Astra::Scene::addInstance(const MeshInstance& instance)
 	_instances.push_back(instance);
 }
 
-void Astra::Scene::removeNode(const MeshInstance& n)
+void Astra::Scene::removeInstance(const MeshInstance& n)
 {
 	auto eraser = _instances.begin();
 	bool found = false;
@@ -137,12 +178,13 @@ void Astra::Scene::setCamera(CameraController* c)
 	_camera = c;
 }
 
-void Astra::Scene::update()
+void Astra::Scene::update(const CommandList& cmdList)
 {
 	for (auto l : _lights) {
 		l->update();
 	}
 	_camera->update();
+	updateCameraUBO(cmdList);
 	for (auto& i : _instances) {
 		i.update();
 	}
@@ -179,6 +221,16 @@ nvvk::Buffer& Astra::Scene::getObjDescBuff()
 	return _objDescBuffer;
 }
 
+nvvk::Buffer& Astra::Scene::getCameraUBO()
+{
+	return _cameraUBO;
+}
+
+void Astra::Scene::reset()
+{
+	// default raster scenes dont have to do anything by default
+}
+
 void Astra::Scene::updatePushConstantRaster(PushConstantRaster& pc)
 {
 	// TODO, futurure
@@ -200,12 +252,9 @@ void Astra::DefaultSceneRT::init(nvvk::ResourceAllocator* alloc)
 	createTopLevelAS();
 }
 
-void Astra::DefaultSceneRT::update()
+void Astra::DefaultSceneRT::update(const CommandList& cmdList)
 {
-	for (auto l : _lights) {
-		l->update();
-	}
-	_camera->update();
+	Astra::Scene::update(cmdList);
 	std::vector<int> asupdates;
 	for (int i = 0; i < _instances.size(); i++) {
 		if (_instances[i].update()) {
@@ -273,6 +322,12 @@ void Astra::DefaultSceneRT::updateTopLevelAS(int instance_id)
 	_rtBuilder.buildTlas(_asInstances, VK_BUILD_ACCELERATION_STRUCTURE_ALLOW_UPDATE_BIT_KHR | VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR, true);
 }
 
+void Astra::DefaultSceneRT::rebuildAS()
+{
+	createBottomLevelAS();
+	createTopLevelAS();
+}
+
 VkAccelerationStructureKHR Astra::DefaultSceneRT::getTLAS() const
 {
 	return _rtBuilder.getAccelerationStructure();
@@ -282,4 +337,9 @@ void Astra::DefaultSceneRT::destroy()
 {
 	Scene::destroy();
 	_rtBuilder.destroy();
+}
+
+void Astra::DefaultSceneRT::reset()
+{
+	rebuildAS();
 }

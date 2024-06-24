@@ -5,36 +5,6 @@
 #include <Utils.h>
 #include <glm/gtx/transform.hpp>
 
-void Astra::App::updateUBO(CommandList& cmdList)
-{
-	GlobalUniforms hostUBO = _scenes[_currentScene]->getCamera()->getUpdatedGlobals();
-
-	// UBO on the device, and what stages access it.
-	VkBuffer deviceUBO = _globalsBuffer.buffer;
-	auto uboUsageStages = VK_PIPELINE_STAGE_VERTEX_SHADER_BIT | VK_PIPELINE_STAGE_RAY_TRACING_SHADER_BIT_KHR;
-
-	// Ensure that the modified UBO is not visible to previous frames.
-	VkBufferMemoryBarrier beforeBarrier{ VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER };
-	beforeBarrier.srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
-	beforeBarrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
-	beforeBarrier.buffer = deviceUBO;
-	beforeBarrier.offset = 0;
-	beforeBarrier.size = sizeof(hostUBO);
-	cmdList.pipelineBarrier(uboUsageStages, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_DEPENDENCY_DEVICE_GROUP_BIT, {}, { beforeBarrier }, {});
-
-	// Schedule the host-to-device upload. (hostUBO is copied into the cmd
-	// buffer so it is okay to deallocate when the function returns).
-	cmdList.updateBuffer(_globalsBuffer, 0, sizeof(GlobalUniforms), &hostUBO);
-
-	// Making sure the updated UBO will be visible.
-	VkBufferMemoryBarrier afterBarrier{ VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER };
-	afterBarrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
-	afterBarrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
-	afterBarrier.buffer = deviceUBO;
-	afterBarrier.offset = 0;
-	afterBarrier.size = sizeof(hostUBO);
-	cmdList.pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, uboUsageStages, VK_DEPENDENCY_DEVICE_GROUP_BIT, {}, { afterBarrier }, {});
-}
 
 void Astra::App::destroyPipelines()
 {
@@ -71,7 +41,7 @@ void Astra::App::updateDescriptorSet()
 	std::vector<VkWriteDescriptorSet> writes;
 
 	// Camera matrices and scene description
-	VkDescriptorBufferInfo dbiUnif{ _globalsBuffer.buffer, 0, VK_WHOLE_SIZE };
+	VkDescriptorBufferInfo dbiUnif{ _scenes[_currentScene]->getCameraUBO().buffer, 0, VK_WHOLE_SIZE };
 	writes.emplace_back(_descSetLayoutBind.makeWrite(_descSet, SceneBindings::eGlobals, &dbiUnif));
 
 	VkDescriptorBufferInfo dbiSceneDesc{ _scenes[_currentScene]->getObjDescBuff().buffer, 0, VK_WHOLE_SIZE };
@@ -92,11 +62,33 @@ void Astra::App::updateDescriptorSet()
 	vkUpdateDescriptorSets(AstraDevice.getVkDevice(), static_cast<uint32_t>(writes.size()), writes.data(), 0, nullptr);
 }
 
-void Astra::App::createUBO()
+void Astra::App::onResize(int w, int h)
 {
-	// TODO change to device function with size param
-	_globalsBuffer = _alloc.createBuffer(sizeof(GlobalUniforms), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-		VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+	if (w == 0 || h == 0)
+		return;
+
+	if (_gui)
+	{
+		auto& imgui_io = ImGui::GetIO();
+		imgui_io.DisplaySize = ImVec2(static_cast<float>(w), static_cast<float>(h));
+	}
+
+	// wait until finishing tasks
+	AstraDevice.waitIdle();
+	AstraDevice.queueWaitIdle();
+
+	// request swapchain image
+	_renderer->requestSwapchainImage(w, h);
+
+	_scenes[_currentScene]->getCamera()->setWindowSize(w, h);
+
+	_renderer->createOffscreenRender(_alloc);
+
+	_renderer->updatePostDescriptorSet();
+	updateDescriptorSet();
+
+	_renderer->createDepthBuffer();
+	_renderer->createFrameBuffers();
 }
 
 void Astra::App::init(const std::vector<Scene*>& scenes, Renderer* renderer, GuiController* gui)
@@ -115,8 +107,6 @@ void Astra::App::init(const std::vector<Scene*>& scenes, Renderer* renderer, Gui
 	_renderer->init(this, _alloc);
 
 
-
-	createUBO();
 	createDescriptorSetLayout();
 	updateDescriptorSet();
 	setupCallbacks(AstraDevice.getWindow());
@@ -126,11 +116,6 @@ void Astra::App::init(const std::vector<Scene*>& scenes, Renderer* renderer, Gui
 void Astra::App::addScene(Scene* s)
 {
 	_scenes.push_back(s);
-}
-
-void Astra::App::run()
-{
-	_scenes[_currentScene]->update();
 }
 
 Astra::App::~App()
@@ -150,17 +135,11 @@ void Astra::App::destroy()
 
 	_gui->destroy();
 
-	_alloc.destroy(_globalsBuffer);
 
 	for (auto s : _scenes)
 		s->destroy();
 
 	destroyPipelines();
-}
-
-nvvk::Buffer& Astra::App::getCameraUBO()
-{
-	return _globalsBuffer;
 }
 
 void Astra::App::setupCallbacks(GLFWwindow* window)

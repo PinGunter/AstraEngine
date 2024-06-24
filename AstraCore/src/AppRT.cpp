@@ -37,3 +37,11 @@ void Astra::AppRT::updateRtDescriptorSet()
 	vkUpdateDescriptorSets(AstraDevice.getVkDevice(), static_cast<uint32_t>(writes.size()), writes.data(), 0, nullptr);
 
 }
+
+void Astra::AppRT::onResize(int w, int h)
+{
+	Astra::App::onResize(w, h);
+	updateRtDescriptorSet();
+}
+
+

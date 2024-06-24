@@ -40,36 +40,36 @@ void Astra::Renderer::renderRaster(const CommandList& cmdList, Scene* scene, Ras
 
 	// bind pipeline
 
-	pipeline->bind(cmdList, descSets);
+	if (!scene->getInstances().empty()) {
 
-	// TODO maybe the push constant should be owned by the app
-	// render scene
-	PushConstantRaster pushConstant{};
+		pipeline->bind(cmdList, descSets);
 
-	RenderContext context{};
+		// TODO maybe the push constant should be owned by the app
+		// render scene
+		PushConstantRaster pushConstant{};
 
-	// lights
-	for (auto light : scene->getLights())
-		light->updatePushConstantRaster(pushConstant);
+		// lights
+		for (auto light : scene->getLights())
+			light->updatePushConstantRaster(pushConstant);
 
-	// meshes
+		// meshes
 
-	// scene.draw(renderingContext);
-	// TODO Rendering Context with all draw data needed
-	scene->update();
-	for (auto& inst : scene->getInstances()) {
-		// skip invisibles
-		if (inst.getVisible()) {
-			// get model (with buffers) and update transform matrix
-			auto& model = scene->getModels()[inst.getMeshIndex()];
-			inst.updatePushConstantRaster(pushConstant);
+		// scene.draw(renderingContext);
+		// TODO Rendering Context with all draw data needed
+		for (auto& inst : scene->getInstances()) {
+			// skip invisibles
+			if (inst.getVisible()) {
+				// get model (with buffers) and update transform matrix
+				auto& model = scene->getModels()[inst.getMeshIndex()];
+				inst.updatePushConstantRaster(pushConstant);
 
-			// send pc to gpu
-			pipeline->pushConstants(cmdList, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
-				sizeof(PushConstantRaster), &pushConstant);
+				// send pc to gpu
+				pipeline->pushConstants(cmdList, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+					sizeof(PushConstantRaster), &pushConstant);
 
-			// draw call
-			model.draw(cmdList);
+				// draw call
+				model.draw(cmdList);
+			}
 		}
 	}
 
@@ -94,10 +94,10 @@ void Astra::Renderer::renderRaytrace(const CommandList& cmdList, Scene* scene, R
 	// ahora mismo esta hecho con dos metodos sobrecargados para admitir
 	// los dos tipos de push constant
 
-	/*pushConstant.lightColor = scene.getLight()->getColor();
-	pushConstant.lightIntensity = scene.getLight()->getIntensity();
-	pushConstant.lightPosition = scene.getLight()->getPosition();
-	pushConstant.lightType = scene.getLight()->getType();*/
+		/*pushConstant.lightColor = scene.getLight()->getColor();
+		pushConstant.lightIntensity = scene.getLight()->getIntensity();
+		pushConstant.lightPosition = scene.getLight()->getPosition();
+		pushConstant.lightType = scene.getLight()->getType();*/
 	for (auto light : scene->getLights())
 		light->updatePushConstantRT(pushConstant);
 
@@ -107,6 +107,7 @@ void Astra::Renderer::renderRaytrace(const CommandList& cmdList, Scene* scene, R
 	pipeline->pushConstants(cmdList, VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_MISS_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR,
 		sizeof(PushConstantRay), &pushConstant);
 	cmdList.raytrace(pipeline->getSBTRegions(), _size.width, _size.height);
+
 }
 
 void Astra::Renderer::createPostDescriptorSet()
