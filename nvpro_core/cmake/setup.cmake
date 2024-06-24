@@ -91,7 +91,7 @@ else ()
 endif()
 
 if(NOT OUTPUT_PATH)
-  set(OUTPUT_PATH ${BASE_DIRECTORY}/bin_${ARCH} CACHE PATH "Directory where outputs will be stored")
+  set(OUTPUT_PATH ${BASE_DIRECTORY}/../build CACHE PATH "Directory where outputs will be stored")
 endif()
 
 # Set the default build to Release.  Note this doesn't do anything for the VS
@@ -99,13 +99,6 @@ endif()
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel." FORCE)
 endif()
-
-if(NOT EXISTS ${BASE_DIRECTORY}/downloaded_resources)
-  file(MAKE_DIRECTORY ${BASE_DIRECTORY}/downloaded_resources)
-endif()
-
-set(DOWNLOAD_TARGET_DIR "${BASE_DIRECTORY}/downloaded_resources")
-set(DOWNLOAD_SITE http://developer.download.nvidia.com/ProGraphics/nvpro-samples)
 
 #####################################################################################
 function(_make_relative FROM TO OUT)
@@ -133,7 +126,6 @@ macro(_add_project_definitions name)
   # the "config" directory doesn't really exist but serves as place holder
   # for the actual CONFIG based directories (Release, RelWithDebInfo etc.)
   _make_relative("${OUTPUT_PATH}/config" "${CMAKE_CURRENT_SOURCE_DIR}" TO_CURRENT_SOURCE_DIR)
-  _make_relative("${OUTPUT_PATH}/config" "${DOWNLOAD_TARGET_DIR}" TO_DOWNLOAD_TARGET_DIR)
   
   add_definitions(-DPROJECT_NAME="${name}")
   add_definitions(-DPROJECT_RELDIRECTORY="${TO_CURRENT_SOURCE_DIR}/")

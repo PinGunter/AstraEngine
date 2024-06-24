@@ -28,8 +28,6 @@
 #include <functional>
 #include <vulkan/vulkan_core.h>
 
-#include "nsight_aftermath_vk.hpp"
-
 static_assert(VK_HEADER_VERSION >= 261, "Vulkan SDK version needs to be 1.3.261.0 or greater");
 
 namespace nvvk {
@@ -177,7 +175,7 @@ struct ContextCreateInfo
 
   // Will Enable GPU crash dumps when Aftermath is available.
   // No-op when Aftermath has not been made available via SUPPORT_AFTERMATH in CMakeLists.txt
-  bool enableAftermath = true;
+  bool                             enableAftermath = true;
   VkDeviceDiagnosticsConfigFlagsNV aftermathFlags  = defaultAftermathFlags;
 
   struct Entry
@@ -499,7 +497,6 @@ private:
   uint32_t m_dbgSeverity{VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT};
 
   // nSight Aftermath
-  GpuCrashTracker m_gpuCrashTracker;
 
   void initDebugUtils();
   bool hasDebugUtils() const { return m_createDebugUtilsMessengerEXT != nullptr; }

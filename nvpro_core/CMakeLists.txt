@@ -123,18 +123,7 @@ endif()
 
 if(USING_IMGUI)
   set(IMGUI_SOURCE 
-      imgui/imgui_axis.cpp  
-      imgui/imgui_axis.hpp
-      imgui/imgui_camera_widget.cpp 
-      imgui/imgui_camera_widget.h 
-      imgui/imgui_helper.cpp
-      imgui/imgui_helper.h
-      imgui/imgui_icon.cpp
-      imgui/imgui_icon.h
-      imgui/imgui_orient.cpp  
-      imgui/imgui_orient.h
-      imgui/ImGuizmo.h
-      imgui/ImGuizmo.cpp
+      ${IMGUI_DIR}/ImGuizmo.cpp
       ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp
       ${IMGUI_DIR}/backends/imgui_impl_glfw.h
       )
@@ -154,8 +143,6 @@ if(USING_IMGUI)
  
   if(USING_VULKANSDK)
     list(APPEND IMGUI_SOURCE 
-         ${CMAKE_CURRENT_SOURCE_DIR}/imgui/backends/imgui_vk_extra.cpp 
-         ${CMAKE_CURRENT_SOURCE_DIR}/imgui/backends/imgui_vk_extra.h
          ${IMGUI_DIR}/backends/imgui_impl_vulkan.cpp 
          ${IMGUI_DIR}/backends/imgui_impl_vulkan.h)
   endif()
