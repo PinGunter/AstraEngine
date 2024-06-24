@@ -68,7 +68,7 @@ namespace Astra {
 		void prepareFrame();
 
 	public:
-		void init();
+		void init(App* app, nvvk::ResourceAllocatorDma& alloc);
 		void linkApp(App* app);
 		void destroy(nvvk::ResourceAllocator* alloc);
 		// renders both offscreen and post 

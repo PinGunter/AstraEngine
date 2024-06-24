@@ -557,10 +557,21 @@ void Astra::Renderer::endPost(const CommandList& cmdList)
 	cmdList.endRenderPass();
 }
 
-void Astra::Renderer::init()
+void Astra::Renderer::init(App* app, nvvk::ResourceAllocatorDma& alloc)
 {
 	_offscreenDepthFormat = nvvk::findDepthFormat(AstraDevice.getPhysicalDevice());
 	_clearColor = glm::vec4(0.8f);
+	linkApp(app);
+	// renderer init
+	auto size = AstraDevice.getWindowSize();
+	createSwapchain(AstraDevice.getSurface(), size[0], size[1]);
+	createDepthBuffer();
+	createRenderPass();
+	createFrameBuffers();
+	createOffscreenRender(alloc);
+	createPostDescriptorSet();
+	createPostPipeline();
+	updatePostDescriptorSet();
 }
 
 void Astra::Renderer::linkApp(App* app)

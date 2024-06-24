@@ -2,7 +2,7 @@
 #include <App.h>
 
 namespace Astra {
-	class AppRT : virtual public App {
+	class AppRT : public App {
 	protected:
 		nvvk::DescriptorSetBindings _rtDescSetLayoutBind;
 		VkDescriptorPool _rtDescPool;
@@ -11,7 +11,10 @@ namespace Astra {
 		std::vector<nvvk::AccelKHR> _blas;
 		std::vector<VkAccelerationStructureInstanceKHR> m_tlas;
 
-		virtual void createRtDescriptorSet() = 0;
-		virtual void updateRtDescriptorSet() = 0;
+		virtual void createRtDescriptorSetLayout();
+		virtual void updateRtDescriptorSet();
+	public:
+		void init(const std::vector<Scene*>& scenes, Renderer* renderer, GuiController* gui = nullptr) override;
 	};
+
 }

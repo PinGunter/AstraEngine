@@ -24,12 +24,22 @@ namespace Astra {
 		nvvk::ResourceAllocatorDma _alloc;
 
 		std::vector<Pipeline*> _pipelines;
+		int _selectedPipeline{ 0 };
+
+		// descriptor sets (common for both raster and raytracing apps)
+		nvvk::DescriptorSetBindings _descSetLayoutBind;
+		VkDescriptorPool _descPool;
+		VkDescriptorSetLayout _descSetLayout;
+		VkDescriptorSet _descSet;
 
 		virtual void createUBO();
 		virtual void updateUBO(CommandList& cmdList);
 
 		virtual void createPipelines() = 0;
 		virtual void destroyPipelines();
+		virtual void createDescriptorSetLayout();
+		virtual void updateDescriptorSet();
+
 		virtual void resetScene(bool recreatePipelines = false) = 0;
 
 		virtual void onResize(int w, int h) {};

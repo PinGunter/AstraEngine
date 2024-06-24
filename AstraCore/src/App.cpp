@@ -46,6 +46,52 @@ void Astra::App::destroyPipelines()
 	}
 }
 
+void Astra::App::createDescriptorSetLayout()
+{
+	// TODO rework into different descriptor for texturesss
+	int nbTxt = _scenes[_currentScene]->getTextures().size();
+
+	// Camera matrices
+	_descSetLayoutBind.addBinding(SceneBindings::eGlobals, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1,
+		VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR);
+	// Obj descriptions
+	_descSetLayoutBind.addBinding(SceneBindings::eObjDescs, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1,
+		VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR);
+	// Textures
+	_descSetLayoutBind.addBinding(SceneBindings::eTextures, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, nbTxt,
+		VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR);
+
+	_descSetLayout = _descSetLayoutBind.createLayout(AstraDevice.getVkDevice());
+	_descPool = _descSetLayoutBind.createPool(AstraDevice.getVkDevice(), 1);
+	_descSet = nvvk::allocateDescriptorSet(AstraDevice.getVkDevice(), _descPool, _descSetLayout);
+}
+
+void Astra::App::updateDescriptorSet()
+{
+	std::vector<VkWriteDescriptorSet> writes;
+
+	// Camera matrices and scene description
+	VkDescriptorBufferInfo dbiUnif{ _globalsBuffer.buffer, 0, VK_WHOLE_SIZE };
+	writes.emplace_back(_descSetLayoutBind.makeWrite(_descSet, SceneBindings::eGlobals, &dbiUnif));
+
+	VkDescriptorBufferInfo dbiSceneDesc{ _scenes[_currentScene]->getObjDescBuff().buffer, 0, VK_WHOLE_SIZE };
+	writes.emplace_back(_descSetLayoutBind.makeWrite(_descSet, SceneBindings::eObjDescs, &dbiSceneDesc));
+
+	// All texture samplers
+	std::vector<VkDescriptorImageInfo> diit;
+	// for (int i = 0; i < _scenes.size(); i++) {
+
+	for (auto& texture : _scenes[_currentScene]->getTextures())
+	{
+		diit.emplace_back(texture.descriptor);
+	}
+	//}
+	writes.emplace_back(_descSetLayoutBind.makeWriteArray(_descSet, SceneBindings::eTextures, diit.data()));
+
+	// Writing the information
+	vkUpdateDescriptorSets(AstraDevice.getVkDevice(), static_cast<uint32_t>(writes.size()), writes.data(), 0, nullptr);
+}
+
 void Astra::App::createUBO()
 {
 	// TODO change to device function with size param
@@ -63,9 +109,18 @@ void Astra::App::init(const std::vector<Scene*>& scenes, Renderer* renderer, Gui
 	}
 	_scenes = scenes;
 	_renderer = renderer;
-	_renderer->linkApp(this);
 	_gui = gui;
+
+	// renderer init
+	_renderer->init(this, _alloc);
+
+
+
+	createUBO();
+	createDescriptorSetLayout();
+	updateDescriptorSet();
 	setupCallbacks(AstraDevice.getWindow());
+	_gui->init(AstraDevice.getWindow(), _renderer);
 }
 
 void Astra::App::addScene(Scene* s)
