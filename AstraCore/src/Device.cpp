@@ -52,7 +52,7 @@ namespace Astra {
 
 		if (createInfo.deviceExtensions.empty()) {
 			createInfo.deviceExtensions.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
-			createInfo.deviceExtensions.push_back(VK_KHR_SHADER_NON_SEMANTIC_INFO_EXTENSION_NAME); // enable shader printf
+			//createInfo.deviceExtensions.push_back(VK_KHR_SHADER_NON_SEMANTIC_INFO_EXTENSION_NAME); // enable shader printf
 
 			emptyRT = createInfo.useRT;
 		}

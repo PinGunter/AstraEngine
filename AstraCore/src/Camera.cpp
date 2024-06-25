@@ -131,10 +131,10 @@ bool Astra::CameraController::update()
 	return true;
 }
 
-GlobalUniforms Astra::CameraController::getUpdatedGlobals()
+CameraUniform Astra::CameraController::getUpdatedGlobals()
 {
 	updateCamera();
-	GlobalUniforms hostUBO = {};
+	CameraUniform hostUBO = {};
 	hostUBO.viewProj = getProjectionMatrix() * getViewMatrix();
 	hostUBO.viewInverse = glm::inverse(getViewMatrix());
 	hostUBO.projInverse = glm::inverse(getProjectionMatrix());

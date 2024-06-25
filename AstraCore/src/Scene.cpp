@@ -4,6 +4,7 @@
 #include <nvvk/buffers_vk.hpp>
 #include <Utils.h>
 
+
 void Astra::Scene::createObjDescBuffer()
 {
 	if (_objDescBuffer.buffer != VK_NULL_HANDLE) {
@@ -24,41 +25,26 @@ void Astra::Scene::createObjDescBuffer()
 	_alloc->finalizeAndReleaseStaging();
 }
 
+
 void Astra::Scene::createCameraUBO()
 {
-	_cameraUBO = _alloc->createBuffer(sizeof(GlobalUniforms), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-		VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+	_cameraUBO = AstraDevice.createUBO<CameraUniform>(_alloc);
 }
 
 void Astra::Scene::updateCameraUBO(const CommandList& cmdList)
 {
-	GlobalUniforms hostUBO = _camera->getUpdatedGlobals();
+	AstraDevice.updateUBO<CameraUniform>(_camera->getUpdatedGlobals(), _cameraUBO, cmdList);
+}
 
-	// UBO on the device, and what stages access it.
-	VkBuffer deviceUBO = _cameraUBO.buffer;
-	auto uboUsageStages = VK_PIPELINE_STAGE_VERTEX_SHADER_BIT | VK_PIPELINE_STAGE_RAY_TRACING_SHADER_BIT_KHR;
+void Astra::Scene::createLightsUBO()
+{
+	_lightsUBO = AstraDevice.createUBO<LightsUniform>(_alloc);
 
-	// Ensure that the modified UBO is not visible to previous frames.
-	VkBufferMemoryBarrier beforeBarrier{ VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER };
-	beforeBarrier.srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
-	beforeBarrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
-	beforeBarrier.buffer = deviceUBO;
-	beforeBarrier.offset = 0;
-	beforeBarrier.size = sizeof(hostUBO);
-	cmdList.pipelineBarrier(uboUsageStages, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_DEPENDENCY_DEVICE_GROUP_BIT, {}, { beforeBarrier }, {});
+}
 
-	// Schedule the host-to-device upload. (hostUBO is copied into the cmd
-	// buffer so it is okay to deallocate when the function returns).
-	cmdList.updateBuffer(_cameraUBO, 0, sizeof(GlobalUniforms), &hostUBO);
-
-	// Making sure the updated UBO will be visible.
-	VkBufferMemoryBarrier afterBarrier{ VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER };
-	afterBarrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
-	afterBarrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
-	afterBarrier.buffer = deviceUBO;
-	afterBarrier.offset = 0;
-	afterBarrier.size = sizeof(hostUBO);
-	cmdList.pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, uboUsageStages, VK_DEPENDENCY_DEVICE_GROUP_BIT, {}, { afterBarrier }, {});
+void Astra::Scene::updateLightsUBO(const CommandList& cmdList)
+{
+	AstraDevice.updateUBO<LightsUniform>(_lightsUniform, _lightsUBO, cmdList);
 }
 
 void Astra::Scene::loadModel(const std::string& filename, const glm::mat4& transform)
@@ -118,6 +104,7 @@ void Astra::Scene::init(nvvk::ResourceAllocator* alloc)
 	}
 	_lazymodels.clear();
 	createCameraUBO();
+	createLightsUBO();
 }
 
 void Astra::Scene::destroy() {
@@ -140,6 +127,7 @@ void Astra::Scene::destroy() {
 	}
 
 	_alloc->destroy(_cameraUBO);
+	_alloc->destroy(_lightsUBO);
 
 
 }
@@ -169,8 +157,10 @@ void Astra::Scene::removeInstance(const MeshInstance& n)
 
 void Astra::Scene::addLight(Light* l)
 {
-	// since currently we only have 1
-	_lights.push_back(l);
+	if (_lights.size() < MAX_LIGHTS)
+		_lights.push_back(l);
+	else
+		Astra::Log("The maximum number of lights is " + std::to_string(MAX_LIGHTS) + "!", WARNING);
 }
 
 void Astra::Scene::setCamera(CameraController* c)
@@ -180,11 +170,20 @@ void Astra::Scene::setCamera(CameraController* c)
 
 void Astra::Scene::update(const CommandList& cmdList)
 {
-	for (auto l : _lights) {
-		l->update();
+	// updating lights
+	_lightsUniform = {};
+	//_lightsUniform.nLights = _lights.size();
+	for (int i = 0; i < _lights.size(); i++) {
+		_lights[i]->update();
+		_lightsUniform.lights[i] = _lights[i]->getLightSource();
 	}
+	updateLightsUBO(cmdList);
+
+	// updating camera
 	_camera->update();
 	updateCameraUBO(cmdList);
+
+	// updating instances
 	for (auto& i : _instances) {
 		i.update();
 	}
@@ -224,6 +223,11 @@ nvvk::Buffer& Astra::Scene::getObjDescBuff()
 nvvk::Buffer& Astra::Scene::getCameraUBO()
 {
 	return _cameraUBO;
+}
+
+nvvk::Buffer& Astra::Scene::getLightsUBO()
+{
+	return _lightsUBO;
 }
 
 void Astra::Scene::reset()

@@ -17,9 +17,11 @@ namespace Astra {
 		nvvk::Buffer _objDescBuffer;  // Device buffer of the OBJ descriptions
 
 		nvvk::Buffer _cameraUBO; // UBO for camera 
+		nvvk::Buffer _lightsUBO;
 		nvvk::ResourceAllocatorDma* _alloc;
 
-		std::vector< Light*> _lights; // multiple lights in the future
+		LightsUniform _lightsUniform;
+		std::vector <Light* > _lights; // multiple lights in the future
 		CameraController* _camera;
 		// lazy loading
 		std::vector<std::pair<std::string, glm::mat4>> _lazymodels;
@@ -27,6 +29,8 @@ namespace Astra {
 		virtual void createObjDescBuffer();
 		virtual void createCameraUBO();
 		virtual void updateCameraUBO(const CommandList& cmdList);
+		virtual void createLightsUBO();
+		virtual void updateLightsUBO(const CommandList& cmdList);
 	public:
 		Scene() = default;
 
@@ -48,6 +52,7 @@ namespace Astra {
 		std::vector<nvvk::Texture>& getTextures();
 		nvvk::Buffer& getObjDescBuff();
 		nvvk::Buffer& getCameraUBO();
+		nvvk::Buffer& getLightsUBO();
 
 		virtual void reset();
 
@@ -64,7 +69,6 @@ namespace Astra {
 	protected:
 		nvvk::RaytracingBuilderKHR _rtBuilder;
 		std::vector<VkAccelerationStructureInstanceKHR> _asInstances;
-
 
 	public:
 		void init(nvvk::ResourceAllocator* alloc) override;

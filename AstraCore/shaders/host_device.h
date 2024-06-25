@@ -40,10 +40,13 @@ using uint = unsigned int;
 #define END_BINDING() 
 #endif
 
+#define MAX_LIGHTS 32
+
 START_BINDING(SceneBindings)
-eGlobals = 0,  // Global uniform containing camera matrices
-eObjDescs = 1,  // Access to the object descriptions
-eTextures = 2   // Access to textures
+eCamera = 0,  // Global uniform containing camera matrices
+eLights = 1,	// Lights in the scene
+eObjDescs = 2,  // Access to the object descriptions
+eTextures = 3   // Access to textures
 END_BINDING();
 
 START_BINDING(RtxBindings)
@@ -64,24 +67,40 @@ struct ObjDesc
 };
 
 // Uniform buffer set at each frame
-struct GlobalUniforms
+struct CameraUniform
 {
 	mat4 viewProj;     // Camera view * projection
 	mat4 viewInverse;  // Camera inverse view matrix
 	mat4 projInverse;  // Camera inverse projection matrix
 };
 
+// Uniform for lights
+#ifdef __cplusplus
+struct alignas(16)LightSource
+#else
+struct LightSource
+#endif
+{
+	vec3 position;
+	float intensity;
+	vec3 color;
+	int type;
+};
+#ifdef __cplusplus
+struct alignas(16)LightsUniform
+#else
+struct LightsUniform
+#endif
+{
+	LightSource lights[MAX_LIGHTS];
+};
+
 // Push constant structure for the raster
 struct PushConstantRaster
 {
 	mat4  modelMatrix;  // matrix of the instance
-	vec3  lightPosition;
 	uint  objIndex;
-	float lightIntensity;
-	int   lightType;
-	float r;
-	float g;
-	float b;
+	uint  nLights;
 };
 
 
@@ -89,14 +108,8 @@ struct PushConstantRaster
 struct PushConstantRay
 {
 	vec4  clearColor;
-	vec3  lightPosition;
-	float lightIntensity;
-	int   lightType;
 	int  maxDepth;
-	bool recursive;
-	float r;
-	float g;
-	float b;
+	int  nLights;
 };
 
 
@@ -122,13 +135,5 @@ struct WaveFrontMaterial
 	int   textureId;
 };
 
-// future things :)
-
-struct Light {
-	vec3 position;
-	vec3 color;
-	float intensity;
-	int type;
-};
 
 #endif

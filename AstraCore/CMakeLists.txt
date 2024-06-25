@@ -30,7 +30,7 @@ include_directories(include/ shaders/)
 # GLSL to SPIR-V custom build
 compile_glsl_directory(
 	SRC "${CMAKE_CURRENT_SOURCE_DIR}/shaders" 
-	DST "${ASTRA_DIR}/spv/AstraCore" 
+	DST "${SPV_DIR}/AstraCore" 
 	VULKAN_TARGET "vulkan1.2"
 	DEPENDENCY ${VULKAN_BUILD_DEPENDENCIES}
 	)

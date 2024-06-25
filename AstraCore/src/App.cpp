@@ -22,14 +22,17 @@ void Astra::App::createDescriptorSetLayout()
 	int nbTxt = _scenes[_currentScene]->getTextures().size();
 
 	// Camera matrices
-	_descSetLayoutBind.addBinding(SceneBindings::eGlobals, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1,
-		VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR);
+	_descSetLayoutBind.addBinding(SceneBindings::eCamera, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1,
+		VK_SHADER_STAGE_VERTEX_BIT | (AstraDevice.getRtEnabled() ? (VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR) : 0));
+	// Lights
+	_descSetLayoutBind.addBinding(SceneBindings::eLights, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1,
+		VK_SHADER_STAGE_FRAGMENT_BIT | (AstraDevice.getRtEnabled() ? (VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR) : 0));
 	// Obj descriptions
 	_descSetLayoutBind.addBinding(SceneBindings::eObjDescs, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1,
-		VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR);
+		VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT | (AstraDevice.getRtEnabled() ? (VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR) : 0));
 	// Textures
 	_descSetLayoutBind.addBinding(SceneBindings::eTextures, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, nbTxt,
-		VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR);
+		VK_SHADER_STAGE_FRAGMENT_BIT | (AstraDevice.getRtEnabled() ? (VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR) : 0));
 
 	_descSetLayout = _descSetLayoutBind.createLayout(AstraDevice.getVkDevice());
 	_descPool = _descSetLayoutBind.createPool(AstraDevice.getVkDevice(), 1);
@@ -41,8 +44,11 @@ void Astra::App::updateDescriptorSet()
 	std::vector<VkWriteDescriptorSet> writes;
 
 	// Camera matrices and scene description
-	VkDescriptorBufferInfo dbiUnif{ _scenes[_currentScene]->getCameraUBO().buffer, 0, VK_WHOLE_SIZE };
-	writes.emplace_back(_descSetLayoutBind.makeWrite(_descSet, SceneBindings::eGlobals, &dbiUnif));
+	VkDescriptorBufferInfo dbiCamUnif{ _scenes[_currentScene]->getCameraUBO().buffer, 0, VK_WHOLE_SIZE };
+	writes.emplace_back(_descSetLayoutBind.makeWrite(_descSet, SceneBindings::eCamera, &dbiCamUnif));
+
+	VkDescriptorBufferInfo dbiLightUnif{ _scenes[_currentScene]->getLightsUBO().buffer, 0, VK_WHOLE_SIZE };
+	writes.emplace_back(_descSetLayoutBind.makeWrite(_descSet, SceneBindings::eLights, &dbiLightUnif));
 
 	VkDescriptorBufferInfo dbiSceneDesc{ _scenes[_currentScene]->getObjDescBuff().buffer, 0, VK_WHOLE_SIZE };
 	writes.emplace_back(_descSetLayoutBind.makeWrite(_descSet, SceneBindings::eObjDescs, &dbiSceneDesc));
@@ -125,21 +131,26 @@ Astra::App::~App()
 
 void Astra::App::destroy()
 {
-	_status = Destroyed;
+	if (_status == Running) { // if the app failed to init, we dont destroy it
 
-	const auto& device = AstraDevice.getVkDevice();
+		_status = Destroyed;
 
-	AstraDevice.waitIdle();
+		const auto& device = AstraDevice.getVkDevice();
 
-	_renderer->destroy(&_alloc);
+		AstraDevice.waitIdle();
 
-	_gui->destroy();
+		_renderer->destroy(&_alloc);
+
+		_gui->destroy();
 
 
-	for (auto s : _scenes)
-		s->destroy();
+		for (auto s : _scenes)
+			s->destroy();
 
-	destroyPipelines();
+		vkDestroyDescriptorSetLayout(AstraDevice.getVkDevice(), _descSetLayout, nullptr);
+
+		destroyPipelines();
+	}
 }
 
 void Astra::App::setupCallbacks(GLFWwindow* window)

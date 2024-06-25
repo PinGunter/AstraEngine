@@ -50,7 +50,7 @@ namespace Astra {
 
 
 		bool update() override;
-		GlobalUniforms getUpdatedGlobals();
+		CameraUniform getUpdatedGlobals();
 		void updatePushConstantRaster(PushConstantRaster& pc) const override;
 		void updatePushConstantRT(PushConstantRay& pc) const override;
 

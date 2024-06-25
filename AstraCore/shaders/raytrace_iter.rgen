@@ -6,7 +6,7 @@
 #include "host_device.h"
 #include "raycommon.glsl"
 
-layout(set = 1, binding = eGlobals) uniform _GlobalUniforms { GlobalUniforms uni; };
+layout(set = 1, binding = eCamera) uniform _CameraUniform { CameraUniform uni; };
 layout (location = 0) rayPayloadEXT hitPayload prd;
 layout(binding = 0, set = 0) uniform accelerationStructureEXT topLevelAS;
 layout(binding = 1, set = 0, rgba32f) uniform image2D image;

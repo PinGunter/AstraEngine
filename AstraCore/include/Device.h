@@ -72,6 +72,11 @@ namespace Astra {
 		void createTextureImages(const Astra::CommandList& cmdList, const std::vector<std::string>& new_textures, std::vector<nvvk::Texture>& textures, nvvk::ResourceAllocatorDma& alloc);
 		nvvk::RaytracingBuilderKHR::BlasInput objectToVkGeometry(const Astra::Mesh& model);
 
+		template<typename T>
+		nvvk::Buffer createUBO(nvvk::ResourceAllocator* alloc);
+		template<typename T>
+		void updateUBO(T hostUBO, nvvk::Buffer& deviceBuffer, const CommandList& cmdList);
+
 		uint32_t getMemoryType(uint32_t typeBits, const VkMemoryPropertyFlags& properties) const;
 		std::array<int, 2> getWindowSize() const;
 
@@ -80,4 +85,45 @@ namespace Astra {
 	};
 
 #define AstraDevice Astra::Device::getInstance()
+
+
+	template<typename T>
+	inline nvvk::Buffer Device::createUBO(nvvk::ResourceAllocator* alloc)
+	{
+		return alloc->createBuffer(sizeof(T), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+	}
+
+	template<typename T>
+	inline void Device::updateUBO(T hostUBO, nvvk::Buffer& deviceBuffer, const CommandList& cmdList) {
+
+		// UBO on the device, and what stages access it.
+		VkBuffer deviceUBO = deviceBuffer.buffer;
+		uint32_t uboUsageStages = VK_PIPELINE_STAGE_VERTEX_SHADER_BIT;
+		if (getRtEnabled())
+			uboUsageStages = uboUsageStages | VK_PIPELINE_STAGE_RAY_TRACING_SHADER_BIT_KHR;
+
+		// Ensure that the modified UBO is not visible to previous frames.
+		VkBufferMemoryBarrier beforeBarrier{ VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER };
+		beforeBarrier.srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
+		beforeBarrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+		beforeBarrier.buffer = deviceUBO;
+		beforeBarrier.offset = 0;
+		beforeBarrier.size = sizeof(hostUBO);
+		cmdList.pipelineBarrier(uboUsageStages, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_DEPENDENCY_DEVICE_GROUP_BIT, {}, { beforeBarrier }, {});
+
+		// Schedule the host-to-device upload. (hostUBO is copied into the cmd
+		// buffer so it is okay to deallocate when the function returns).
+		cmdList.updateBuffer(deviceBuffer, 0, sizeof(T), &hostUBO);
+
+		// Making sure the updated UBO will be visible.
+		VkBufferMemoryBarrier afterBarrier{ VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER };
+		afterBarrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+		afterBarrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+		afterBarrier.buffer = deviceUBO;
+		afterBarrier.offset = 0;
+		afterBarrier.size = sizeof(hostUBO);
+		cmdList.pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, uboUsageStages, VK_DEPENDENCY_DEVICE_GROUP_BIT, {}, { afterBarrier }, {});
+
+	}
 }

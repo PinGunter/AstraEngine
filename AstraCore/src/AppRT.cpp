@@ -2,9 +2,21 @@
 
 void Astra::AppRT::init(const std::vector<Scene*>& scenes, Renderer* renderer, GuiController* gui)
 {
+	if (!AstraDevice.getRtEnabled()) {
+		throw std::runtime_error("Raytracing has to be enabled!");
+	}
 	Astra::App::init(scenes, renderer, gui);
 	createRtDescriptorSetLayout();
 	updateRtDescriptorSet();
+}
+
+void Astra::AppRT::destroy()
+{
+	if (_status == Astra::Running) {
+		App::destroy();
+		vkDestroyDescriptorSetLayout(AstraDevice.getVkDevice(), _rtDescSetLayout, nullptr);
+		vkDestroyDescriptorPool(AstraDevice.getVkDevice(), _rtDescPool, nullptr);
+	}
 }
 
 void Astra::AppRT::createRtDescriptorSetLayout()

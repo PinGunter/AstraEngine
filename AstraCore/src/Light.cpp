@@ -36,30 +36,23 @@ Astra::LightType Astra::Light::getType() const
 	return _type;
 }
 
-void Astra::Light::updatePushConstantRaster(PushConstantRaster& pc) const
-{
-	pc.r = _color.x;
-	pc.g = _color.y;
-	pc.b = _color.z;
-	pc.lightIntensity = _intensity;
-	pc.lightPosition = getPosition();
-	pc.lightType = static_cast<int>(_type);
-}
-
-void Astra::Light::updatePushConstantRT(PushConstantRay& pc) const
-{
-	//pc.lightColor = _color;
-	pc.r = _color.x;
-	pc.g = _color.y;
-	pc.b = _color.z;
-	pc.lightIntensity = _intensity;
-	pc.lightPosition = getPosition();
-	pc.lightType = static_cast<int>(_type);
-}
 
 bool Astra::Light::update()
 {
 	return false;
+}
+
+LightSource Astra::Light::getLightSource() const
+{
+	LightSource src{};
+	src.color = _color;
+	//src.color = glm::vec4(_color, 1.0f);
+	src.intensity = _intensity;
+	src.position = getPosition();
+	//src.position = glm::vec4(getPosition(), 1.0f);
+	src.type = _type;
+
+	return src;
 }
 
 Astra::PointLight::PointLight(const glm::vec3& color, float intensity)
@@ -98,17 +91,5 @@ void Astra::DirectionalLight::rotate(const glm::vec3& axis, const float& angle)
 {
 	auto homoDir = glm::rotate(glm::mat4(1.0f), angle, axis) * glm::vec4(_direction, 1.0f);
 	_direction = { homoDir.x / homoDir.w, homoDir.y / homoDir.w, homoDir.z / homoDir.w };
-}
-
-void Astra::DirectionalLight::updatePushConstantRaster(PushConstantRaster& pc) const
-{
-	Light::updatePushConstantRaster(pc);
-	pc.lightPosition = _direction;
-}
-
-void Astra::DirectionalLight::updatePushConstantRT(PushConstantRay& pc) const
-{
-	Light::updatePushConstantRT(pc);
-	pc.lightPosition = _direction;
 }
 

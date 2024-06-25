@@ -82,7 +82,7 @@ void Astra::Mesh::create(const Astra::CommandList& cmdList, nvvk::ResourceAlloca
 void Astra::Mesh::createBuffers(const Astra::CommandList& cmdList, nvvk::ResourceAllocatorDma* alloc) {
 	const auto& cmdBuf = cmdList.getCommandBuffer();
 	VkBufferUsageFlags flag = VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT;
-	VkBufferUsageFlags rayTracingFlags = flag | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
+	VkBufferUsageFlags rayTracingFlags = flag | (AstraDevice.getRtEnabled() ? (VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT) : 0);
 	vertexBuffer = alloc->createBuffer(cmdBuf, vertices, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | rayTracingFlags);
 	indexBuffer = alloc->createBuffer(cmdBuf, indices, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | rayTracingFlags);
 	matColorBuffer = alloc->createBuffer(cmdBuf, materials, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | rayTracingFlags);

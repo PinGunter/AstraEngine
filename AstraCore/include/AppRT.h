@@ -17,6 +17,7 @@ namespace Astra {
 
 	public:
 		void init(const std::vector<Scene*>& scenes, Renderer* renderer, GuiController* gui = nullptr) override;
+		void destroy() override;
 	};
 
 }
