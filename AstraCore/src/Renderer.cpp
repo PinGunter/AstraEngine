@@ -7,6 +7,7 @@
 #include <glm/ext/matrix_transform.hpp>
 #include <nvvk/images_vk.hpp>
 #include <nvvk/renderpasses_vk.hpp>
+#include <RenderContext.h>
 
 void Astra::Renderer::renderPost(const CommandList& cmdList)
 {
@@ -47,27 +48,10 @@ void Astra::Renderer::renderRaster(const CommandList& cmdList, Scene* scene, Ras
 		// TODO maybe the push constant should be owned by the app
 		// render scene
 		PushConstantRaster pushConstant{};
-		pushConstant.nLights = scene->getLights().size();
+		Pipeline* rasterPL = (Pipeline*)pipeline;
+		RenderContext<PushConstantRaster> renderContext(rasterPL, pushConstant, cmdList, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+		scene->draw(renderContext);
 
-		// meshes
-
-		// scene.draw(renderingContext);
-		// TODO Rendering Context with all draw data needed
-		for (auto& inst : scene->getInstances()) {
-			// skip invisibles
-			if (inst.getVisible()) {
-				// get model (with buffers) and update transform matrix
-				auto& model = scene->getModels()[inst.getMeshIndex()];
-				inst.updatePushConstantRaster(pushConstant);
-
-				// send pc to gpu
-				pipeline->pushConstants(cmdList, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
-					sizeof(PushConstantRaster), &pushConstant);
-
-				// draw call
-				model.draw(cmdList);
-			}
-		}
 	}
 
 	// end render pass
@@ -81,21 +65,14 @@ void Astra::Renderer::renderRaytrace(const CommandList& cmdList, Scene* scene, R
 	pushConstant.clearColor = _clearColor;
 	_maxDepth = std::min(static_cast<uint32_t>(_maxDepth), AstraDevice.getRtProperties().maxRayRecursionDepth - 1);
 	pushConstant.maxDepth = _maxDepth;
-	// TODO este tipo de cosas me gustaria que fuera mas generico
-	// que yo haga un "light->update()" o algo y que se encargara la luz 
-	// de manejar sus datos. Asi tambien podria hacer scene.update() y no
-	// me importaria si cambia su estructura interna
-	// el problema es que el tipo de dato que se envia depende del pipeline
-	// ahora mismo esta hecho con dos metodos sobrecargados para admitir
-	// los dos tipos de push constant;
 
-	// TODO si da tiempo habria que pensar una forma de generalizar uniforms
-	// probablemente con UBOs para que no haya problemas de tamaño
-	pushConstant.nLights = scene->getLights().size();
+	Pipeline* rtPl = (Pipeline*)pipeline;
+	RenderContext<PushConstantRay> renderContext(rtPl, pushConstant, cmdList, VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_MISS_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR);
 
 	pipeline->bind(cmdList, descSets);
-	pipeline->pushConstants(cmdList, VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_MISS_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR,
-		sizeof(PushConstantRay), &pushConstant);
+
+	scene->draw(renderContext);
+
 	cmdList.raytrace(pipeline->getSBTRegions(), _size.width, _size.height);
 
 }

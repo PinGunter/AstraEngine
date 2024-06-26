@@ -18,9 +18,6 @@ namespace Astra {
 		void setIntensity(float i);
 		LightType getType() const;
 
-		void updatePushConstantRaster(PushConstantRaster& pc) const override {};
-		void updatePushConstantRT(PushConstantRay& pc) const override {};
-
 		bool update() override;
 
 		virtual LightSource getLightSource() const;

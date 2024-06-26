@@ -73,8 +73,8 @@ namespace Astra {
 		*/
 		virtual bool update() { return false; };
 
-		virtual void updatePushConstantRaster(PushConstantRaster& pc) const = 0;
-		virtual void updatePushConstantRT(PushConstantRay& pc)const = 0;
+		virtual void updatePushConstantRaster(PushConstantRaster& pc) const {};
+		virtual void updatePushConstantRT(PushConstantRay& pc)const {};
 
 	};
 }

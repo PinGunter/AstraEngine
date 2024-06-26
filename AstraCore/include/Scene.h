@@ -5,6 +5,7 @@
 #include <vulkan/vulkan.h>
 #include <nvvk/resourceallocator_vk.hpp>
 #include <nvvk/raytraceKHR_vk.hpp>
+#include <RenderContext.h>
 
 namespace Astra {
 	class Scene {
@@ -41,8 +42,11 @@ namespace Astra {
 		virtual void addInstance(const MeshInstance& instance);
 		virtual void removeInstance(const MeshInstance& n);
 		virtual void addLight(Light* l);
+		virtual void removeLight(Light* l);
 		virtual void setCamera(CameraController* c);
 		virtual void update(const CommandList& cmdList);
+		virtual void draw(RenderContext<PushConstantRaster>& renderContext);
+		virtual void draw(RenderContext<PushConstantRay>& renderContext);
 
 		const std::vector<Light*>& getLights() const;
 		CameraController* getCamera() const;

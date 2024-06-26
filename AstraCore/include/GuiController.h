@@ -8,6 +8,7 @@
 
 namespace Astra {
 	class App;
+	class Renderer;
 	class GuiController {
 		friend class Renderer;
 	protected:

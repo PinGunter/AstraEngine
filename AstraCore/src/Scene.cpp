@@ -163,6 +163,19 @@ void Astra::Scene::addLight(Light* l)
 		Astra::Log("The maximum number of lights is " + std::to_string(MAX_LIGHTS) + "!", WARNING);
 }
 
+void Astra::Scene::removeLight(Light* l)
+{
+	auto eraser = _lights.begin();
+	bool found = false;
+	for (auto it = _lights.begin(); it != _lights.end() && !found; ++it) {
+		if (*(*it) == *l) {
+			eraser = it;
+			found = true;
+		}
+	}
+	if (found)	_lights.erase(eraser);
+}
+
 void Astra::Scene::setCamera(CameraController* c)
 {
 	_camera = c;
@@ -187,6 +200,31 @@ void Astra::Scene::update(const CommandList& cmdList)
 	for (auto& i : _instances) {
 		i.update();
 	}
+}
+
+void Astra::Scene::draw(RenderContext<PushConstantRaster>& renderContext)
+{
+	renderContext.pushConstant.nLights = _lights.size();
+	for (auto& inst : _instances) {
+		// skip invisibles
+		if (inst.getVisible()) {
+			// get model (with buffers) and update transform matrix
+			auto& model = _objModels[inst.getMeshIndex()];
+			inst.updatePushConstantRaster(renderContext.pushConstant);
+
+			// send pc to gpu
+			renderContext.pushConstants();
+
+			// draw call
+			model.draw(renderContext.cmdList);
+		}
+	}
+}
+
+void Astra::Scene::draw(RenderContext<PushConstantRay>& renderContext)
+{
+	renderContext.pushConstant.nLights = _lights.size();
+	renderContext.pushConstants();
 }
 
 const std::vector<Astra::Light*>& Astra::Scene::getLights() const

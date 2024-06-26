@@ -100,6 +100,10 @@ void Astra::App::onResize(int w, int h)
 void Astra::App::init(const std::vector<Scene*>& scenes, Renderer* renderer, GuiController* gui)
 {
 	_status = Running;
+	_window = AstraDevice.getWindow();
+
+	Input.init(_window, this);
+
 	_alloc.init(AstraDevice.getVkDevice(), AstraDevice.getPhysicalDevice());
 	for (auto s : scenes)
 	{
@@ -115,8 +119,7 @@ void Astra::App::init(const std::vector<Scene*>& scenes, Renderer* renderer, Gui
 
 	createDescriptorSetLayout();
 	updateDescriptorSet();
-	setupCallbacks(AstraDevice.getWindow());
-	_gui->init(AstraDevice.getWindow(), _renderer);
+	_gui->init(_window, _renderer);
 }
 
 void Astra::App::addScene(Scene* s)
@@ -151,19 +154,6 @@ void Astra::App::destroy()
 
 		destroyPipelines();
 	}
-}
-
-void Astra::App::setupCallbacks(GLFWwindow* window)
-{
-	_window = window;
-	glfwSetWindowUserPointer(window, this);
-	glfwSetKeyCallback(window, &cb_keyboard);
-	glfwSetCharCallback(window, &cb_keyboardChar);
-	glfwSetCursorPosCallback(window, &cb_mouseMotion);
-	glfwSetMouseButtonCallback(window, &cb_mouseButton);
-	glfwSetScrollCallback(window, &cb_mouseWheel);
-	glfwSetFramebufferSizeCallback(window, &cb_resize);
-	glfwSetDropCallback(window, &cb_fileDrop);
 }
 
 bool Astra::App::isMinimized() const
@@ -209,46 +199,4 @@ Astra::Renderer* Astra::App::getRenderer()
 Astra::AppStatus Astra::App::getStatus() const
 {
 	return _status;
-}
-
-void Astra::App::cb_resize(GLFWwindow* window, int w, int h)
-{
-	auto app = static_cast<Astra::App*>(glfwGetWindowUserPointer(window));
-	app->onResize(w, h);
-}
-
-void Astra::App::cb_keyboard(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-	auto app = static_cast<Astra::App*>(glfwGetWindowUserPointer(window));
-	app->onKeyboard(key, scancode, action, mods);
-}
-
-void Astra::App::cb_keyboardChar(GLFWwindow* window, unsigned int key)
-{
-	auto app = static_cast<Astra::App*>(glfwGetWindowUserPointer(window));
-	app->onKeyboardChar(key);
-}
-
-void Astra::App::cb_mouseMotion(GLFWwindow* window, double x, double y)
-{
-	auto app = static_cast<Astra::App*>(glfwGetWindowUserPointer(window));
-	app->onMouseMotion(x, y);
-}
-
-void Astra::App::cb_mouseButton(GLFWwindow* window, int button, int action, int mods)
-{
-	auto app = static_cast<Astra::App*>(glfwGetWindowUserPointer(window));
-	app->onMouseButton(button, action, mods);
-}
-
-void Astra::App::cb_mouseWheel(GLFWwindow* window, double x, double y)
-{
-	auto app = static_cast<Astra::App*>(glfwGetWindowUserPointer(window));
-	app->onMouseWheel(x, y);
-}
-
-void Astra::App::cb_fileDrop(GLFWwindow* window, int count, const char** paths)
-{
-	auto app = static_cast<Astra::App*>(glfwGetWindowUserPointer(window));
-	app->onFileDrop(count, paths);
 }

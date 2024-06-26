@@ -5,12 +5,12 @@
 
 namespace Astra {
 	struct Camera {
-		float _near{ 0.1f };
-		float _far{ 1000.0f };
-		float _fov{ 60.0f };
-		glm::vec3 _eye{ 2.0f };
-		glm::vec3 _up{ 0.0f,1.0f,0.0f };
-		glm::vec3 _centre{ 0.0f };
+		float nearPlane{ 0.1f };
+		float farPlane{ 1000.0f };
+		float fov{ 60.0f };
+		glm::vec3 eye{ 2.0f };
+		glm::vec3 up{ 0.0f,1.0f,0.0f };
+		glm::vec3 centre{ 0.0f };
 
 		glm::mat4 viewMatrix{ 1.0f };
 	};
@@ -37,6 +37,8 @@ namespace Astra {
 		const glm::vec3& getUp() const;
 		const glm::vec3& getCentre() const;
 
+		Camera getCamera() const;
+
 		float& getNearRef();
 		float& fetFarRef();
 		float& getFovRef();
@@ -51,17 +53,16 @@ namespace Astra {
 
 		bool update() override;
 		CameraUniform getUpdatedGlobals();
-		void updatePushConstantRaster(PushConstantRaster& pc) const override;
-		void updatePushConstantRT(PushConstantRay& pc) const override;
-
-		virtual void handleMouseInput(bool buttons[3], int movement[2], float wheel, int mods);
 	};
 
 	class FPSCameraController : public CameraController {
+	protected:
+		float _speed = 0.1f;
+		void move(bool front, bool back, bool right, bool left, bool up, bool down, float speed);
+		void rotate(float dx, float dy);
 	public:
 		FPSCameraController(Camera& cam);
-		void mouseMovement(float x, float y);
-		void move(float qty);
+		bool update() override;
 	};
 
 	class OrbitCameraController : public CameraController {
@@ -69,10 +70,10 @@ namespace Astra {
 		float maxXRotation = glm::pi<float>() * 0.4f;
 		float minXRotation = -glm::pi<float>() * 0.4f;
 		void orbit(float x, float y);
-		void zoom(float increment);
 		void pan(float x, float y);
+		void zoom(float increment);
 	public:
 		OrbitCameraController(Camera& cam);
-		void handleMouseInput(bool buttons[3], int movement[2], float wheel, int mods) override;
+		bool update() override;
 	};
 }

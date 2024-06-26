@@ -164,10 +164,6 @@ void main()
         float ior = 1.0 / mat.ior;
         float ior_ratio;
         //    prd.attenuation *= mat.specular;
-        if (mat.illum == 9){
-            ior = 1.0f;
-            prd.attenuation *= mat.dissolve;// * mat.specular;
-        }
         if (dot(gl_WorldRayDirectionEXT, hitNormal) > 0.0f){
 	        hitNormal *= -1;
 	        ior_ratio = 1.0f / ior;
