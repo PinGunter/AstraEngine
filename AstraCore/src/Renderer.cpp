@@ -58,7 +58,7 @@ void Astra::Renderer::renderRaster(const CommandList& cmdList, Scene* scene, Ras
 	cmdList.endRenderPass();
 }
 
-void Astra::Renderer::renderRaytrace(const CommandList& cmdList, Scene* scene, RayTracingPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets)
+void Astra::Renderer::renderRaytrace(const CommandList& cmdList, SceneRT* scene, RayTracingPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets)
 {
 	// push constant info
 	PushConstantRay pushConstant{};
@@ -71,6 +71,7 @@ void Astra::Renderer::renderRaytrace(const CommandList& cmdList, Scene* scene, R
 
 	pipeline->bind(cmdList, descSets);
 
+	// if its drawing a raytraced scene we can cast it to a sceneRT
 	scene->draw(renderContext);
 
 	cmdList.raytrace(pipeline->getSBTRegions(), _size.width, _size.height);
@@ -574,7 +575,7 @@ void Astra::Renderer::destroy(nvvk::ResourceAllocator* alloc)
 void Astra::Renderer::render(const Astra::CommandList& cmdList, Scene* scene, Pipeline* pipeline, const std::vector<VkDescriptorSet>& descSets, Astra::GuiController* gui)
 {
 	if (pipeline->doesRayTracing()) {
-		renderRaytrace(cmdList, scene, (RayTracingPipeline*)pipeline, descSets);
+		renderRaytrace(cmdList, (SceneRT*)scene, (RayTracingPipeline*)pipeline, descSets);
 	}
 	else {
 		renderRaster(cmdList, scene, (RasterPipeline*)pipeline, descSets);

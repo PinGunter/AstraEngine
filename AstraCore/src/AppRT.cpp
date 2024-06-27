@@ -37,7 +37,7 @@ void Astra::AppRT::createRtDescriptorSetLayout()
 
 void Astra::AppRT::updateRtDescriptorSet()
 {
-	VkAccelerationStructureKHR tlas = ((DefaultSceneRT*)_scenes[_currentScene])->getTLAS();
+	VkAccelerationStructureKHR tlas = ((SceneRT*)_scenes[_currentScene])->getTLAS();
 	VkWriteDescriptorSetAccelerationStructureKHR descASInfo{ VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_KHR };
 	descASInfo.accelerationStructureCount = 1;
 	descASInfo.pAccelerationStructures = &tlas;

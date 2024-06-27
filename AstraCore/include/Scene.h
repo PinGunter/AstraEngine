@@ -46,7 +46,6 @@ namespace Astra {
 		virtual void setCamera(CameraController* c);
 		virtual void update(const CommandList& cmdList);
 		virtual void draw(RenderContext<PushConstantRaster>& renderContext);
-		virtual void draw(RenderContext<PushConstantRay>& renderContext);
 
 		const std::vector<Light*>& getLights() const;
 		CameraController* getCamera() const;
@@ -69,7 +68,7 @@ namespace Astra {
 		};
 	};
 
-	class DefaultSceneRT : public Astra::Scene {
+	class SceneRT : public Astra::Scene {
 	protected:
 		nvvk::RaytracingBuilderKHR _rtBuilder;
 		std::vector<VkAccelerationStructureInstanceKHR> _asInstances;
@@ -86,6 +85,7 @@ namespace Astra {
 		bool isRt() const override {
 			return true;
 		};
+		virtual void draw(RenderContext<PushConstantRay>& renderContext);
 
 		void reset() override;
 	};

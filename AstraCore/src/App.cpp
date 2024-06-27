@@ -18,7 +18,6 @@ void Astra::App::destroyPipelines()
 
 void Astra::App::createDescriptorSetLayout()
 {
-	// TODO rework into different descriptor for texturesss
 	int nbTxt = _scenes[_currentScene]->getTextures().size();
 
 	// Camera matrices

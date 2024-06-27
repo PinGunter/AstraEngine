@@ -49,7 +49,7 @@ namespace Astra {
 		int _maxDepth{ 10 };
 
 		void renderRaster(const CommandList& cmdBuf, Scene* scene, RasterPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets);
-		void renderRaytrace(const CommandList& cmdBuf, Scene* scene, RayTracingPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets);
+		void renderRaytrace(const CommandList& cmdBuf, SceneRT* scene, RayTracingPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets);
 		void beginPost();
 		void endPost(const CommandList& cmdBuf);
 		void renderPost(const CommandList& cmdBuf); // mandatory step! after drawing
