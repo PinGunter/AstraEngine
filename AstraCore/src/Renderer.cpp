@@ -287,7 +287,7 @@ void Astra::Renderer::createRenderPass()
 
 void Astra::Renderer::createPostPipeline()
 {
-	_postPipeline.createPipeline(AstraDevice.getVkDevice(), { _postDescSetLayout }, _postRenderPass);
+	_postPipeline.create(AstraDevice.getVkDevice(), { _postDescSetLayout }, _postRenderPass);
 }
 
 void Astra::Renderer::getGuiControllerInfo(VkRenderPass& renderpass, int& imageCount, VkFormat& colorFormat, VkFormat& depthFormat)
@@ -408,9 +408,13 @@ void Astra::Renderer::createDepthBuffer()
 	vkCreateImageView(device, &depthStencilView, nullptr, &_depthView);
 }
 
-void Astra::Renderer::resize(int w, int h)
+void Astra::Renderer::resize(int w, int h, nvvk::ResourceAllocatorDma& alloc)
 {
-
+	requestSwapchainImage(w, h);
+	createOffscreenRender(alloc);
+	updatePostDescriptorSet();
+	createDepthBuffer();
+	createFrameBuffers();
 }
 
 void Astra::Renderer::prepareFrame()

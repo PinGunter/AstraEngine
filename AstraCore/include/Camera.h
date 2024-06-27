@@ -15,12 +15,12 @@ namespace Astra {
 		glm::mat4 viewMatrix{ 1.0f };
 	};
 
-	class CameraController : public Node3D {
+	class CameraController {
 	protected:
 		Camera& _camera;
 		float _sens = 0.01f;
 		uint32_t _width, _height;
-		void updateCamera(bool from_transform = true);
+		void updateCamera();
 	public:
 		CameraController(Camera& cam);
 		void setSens(float s) { _sens = s; }
@@ -51,17 +51,17 @@ namespace Astra {
 		void setFov(float f);
 
 
-		bool update() override;
-		CameraUniform getUpdatedGlobals();
+		virtual bool update();
+		CameraUniform getCameraUniform();
 	};
 
-	class FPSCameraController : public CameraController {
+	class FreeCameraController : public CameraController {
 	protected:
 		float _speed = 0.1f;
 		void move(bool front, bool back, bool right, bool left, bool up, bool down, float speed);
 		void rotate(float dx, float dy);
 	public:
-		FPSCameraController(Camera& cam);
+		FreeCameraController(Camera& cam);
 		bool update() override;
 	};
 

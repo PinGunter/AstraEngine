@@ -11,20 +11,8 @@ Astra::CameraController::CameraController(Camera& cam) : _camera(cam)
 	updateCamera();
 }
 
-void Astra::CameraController::updateCamera(bool from_transform)
+void Astra::CameraController::updateCamera()
 {
-	// we can update the cam params either from the transform matrix or the cam attributes
-	// made this way so that it can be a compatible node3d and be nested within other nodes
-	if (from_transform) {
-		_camera.eye.x = _transform[3][0];
-		_camera.eye.y = _transform[3][1];
-		_camera.eye.z = _transform[3][2];
-	}
-	else {
-		_transform[3][0] = _camera.eye.x;
-		_transform[3][1] = _camera.eye.y;
-		_transform[3][2] = _camera.eye.z;
-	}
 	_camera.viewMatrix = glm::lookAt(_camera.eye, _camera.centre, _camera.up);
 }
 
@@ -47,7 +35,6 @@ void Astra::CameraController::setLookAt(const glm::vec3& eye, const glm::vec3& c
 	_camera.eye = eye;
 	_camera.centre = center;
 	_camera.up = up;
-	_transform = glm::translate(glm::mat4(1.0f), eye);
 	updateCamera();
 }
 
@@ -138,9 +125,8 @@ bool Astra::CameraController::update()
 	return true;
 }
 
-CameraUniform Astra::CameraController::getUpdatedGlobals()
+CameraUniform Astra::CameraController::getCameraUniform()
 {
-	updateCamera();
 	CameraUniform hostUBO = {};
 	hostUBO.viewProj = getProjectionMatrix() * getViewMatrix();
 	hostUBO.viewInverse = glm::inverse(getViewMatrix());
@@ -150,12 +136,12 @@ CameraUniform Astra::CameraController::getUpdatedGlobals()
 }
 
 
-Astra::FPSCameraController::FPSCameraController(Camera& cam) : CameraController(cam)
+Astra::FreeCameraController::FreeCameraController(Camera& cam) : CameraController(cam)
 {
 	_sens = 0.005f;
 }
 
-bool Astra::FPSCameraController::update()
+bool Astra::FreeCameraController::update()
 {
 	CameraController::update();
 
@@ -182,11 +168,11 @@ bool Astra::FPSCameraController::update()
 		Input.freeMouse();
 	}
 
-	updateCamera(false);
+	updateCamera();
 	return true;
 }
 
-void Astra::FPSCameraController::move(bool front, bool back, bool right, bool left, bool up, bool down, float speed)
+void Astra::FreeCameraController::move(bool front, bool back, bool right, bool left, bool up, bool down, float speed)
 {
 	glm::vec3 frontBack = _camera.centre - _camera.eye;
 	float length = glm::length(frontBack);
@@ -228,7 +214,7 @@ void Astra::FPSCameraController::move(bool front, bool back, bool right, bool le
 	_camera.centre = _camera.eye + direction * length;
 }
 
-void Astra::FPSCameraController::rotate(float dx, float dy)
+void Astra::FreeCameraController::rotate(float dx, float dy)
 {
 
 	// Get the length of sight
@@ -285,7 +271,7 @@ bool Astra::OrbitCameraController::update()
 
 	zoom(wheel * 10.0f);
 
-	updateCamera(false);
+	updateCamera();
 	return true;
 }
 

@@ -38,7 +38,7 @@ VkPipelineLayout Astra::Pipeline::getLayout() const
 	return _layout;
 }
 
-void Astra::RayTracingPipeline::createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsets, nvvk::ResourceAllocatorDma& alloc)
+void Astra::RayTracingPipeline::create(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsets, nvvk::ResourceAllocatorDma& alloc)
 {
 	auto rtProperties = AstraDevice.getRtProperties();
 	if (!AstraDevice.getRtEnabled()) {
@@ -69,22 +69,22 @@ void Astra::RayTracingPipeline::createPipeline(VkDevice vkdev, const std::vector
 	stage.pName = "main";
 
 	// raygen
-	stage.module = nvvk::createShaderModule(vkdev, nvh::loadFile("spv/AstraCore/raytrace_iter.rgen.spv", true, defaultSearchPaths, true));
+	stage.module = AstraDevice.createShaderModule(nvh::loadFile("spv/AstraCore/raytrace_iter.rgen.spv", true, defaultSearchPaths, true));
 	stage.stage = VK_SHADER_STAGE_RAYGEN_BIT_KHR;
 	stages[eRaygen] = stage;
 
 	// miss
-	stage.module = nvvk::createShaderModule(vkdev, nvh::loadFile("spv/AstraCore/raytrace_iter.rmiss.spv", true, defaultSearchPaths, true));
+	stage.module = AstraDevice.createShaderModule(nvh::loadFile("spv/AstraCore/raytrace_iter.rmiss.spv", true, defaultSearchPaths, true));
 	stage.stage = VK_SHADER_STAGE_MISS_BIT_KHR;
 	stages[eMiss] = stage;
 
 	// shadow miss
-	stage.module = nvvk::createShaderModule(vkdev, nvh::loadFile("spv/AstraCore/raytraceShadow.rmiss.spv", true, defaultSearchPaths, true));
+	stage.module = AstraDevice.createShaderModule(nvh::loadFile("spv/AstraCore/raytraceShadow.rmiss.spv", true, defaultSearchPaths, true));
 	stage.stage = VK_SHADER_STAGE_MISS_BIT_KHR;
 	stages[eMiss2] = stage;
 
 	// chit
-	stage.module = nvvk::createShaderModule(vkdev, nvh::loadFile("spv/AstraCore/raytrace_iter.rchit.spv", true, defaultSearchPaths, true));
+	stage.module = AstraDevice.createShaderModule(nvh::loadFile("spv/AstraCore/raytrace_iter.rchit.spv", true, defaultSearchPaths, true));
 	stage.stage = VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR;
 	stages[eClosestHit] = stage;
 
@@ -242,7 +242,7 @@ void Astra::RayTracingPipeline::bind(const CommandList& cmdList, const std::vect
 	cmdList.bindDescriptorSets(Astra::PipelineBindPoints::RayTracing, _layout, descsets);
 }
 
-void Astra::OffscreenRaster::createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsetsLayouts, VkRenderPass rp)
+void Astra::OffscreenRaster::create(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsetsLayouts, VkRenderPass rp)
 {
 	std::vector<std::string> defaultSearchPaths = {
 		NVPSystem::exePath() + PROJECT_RELDIRECTORY,
@@ -277,7 +277,7 @@ void Astra::OffscreenRaster::createPipeline(VkDevice vkdev, const std::vector<Vk
 	_pipeline = gpb.createPipeline();
 }
 
-void Astra::PostPipeline::createPipeline(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsetsLayouts, VkRenderPass rp)
+void Astra::PostPipeline::create(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsetsLayouts, VkRenderPass rp)
 {
 	std::vector<std::string> defaultSearchPaths = {
 		NVPSystem::exePath() + PROJECT_RELDIRECTORY,

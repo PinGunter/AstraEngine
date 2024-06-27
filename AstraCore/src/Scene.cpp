@@ -33,7 +33,7 @@ void Astra::Scene::createCameraUBO()
 
 void Astra::Scene::updateCameraUBO(const CommandList& cmdList)
 {
-	AstraDevice.updateUBO<CameraUniform>(_camera->getUpdatedGlobals(), _cameraUBO, cmdList);
+	AstraDevice.updateUBO<CameraUniform>(_camera->getCameraUniform(), _cameraUBO, cmdList);
 }
 
 void Astra::Scene::createLightsUBO()

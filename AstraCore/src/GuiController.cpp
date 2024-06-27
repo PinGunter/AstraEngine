@@ -20,7 +20,6 @@ void Astra::GuiController::init(GLFWwindow* window, Astra::Renderer* renderer)
 	io.LogFilename = nullptr;
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;      // Enable Docking
-	//io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;    // Enable Multi-Viewport / Platform Windows
 
 	//ImGuiH::setStyle();
 	//ImGuiH::setFonts();

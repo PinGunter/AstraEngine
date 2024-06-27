@@ -82,18 +82,11 @@ void Astra::App::onResize(int w, int h)
 	AstraDevice.waitIdle();
 	AstraDevice.queueWaitIdle();
 
-	// request swapchain image
-	_renderer->requestSwapchainImage(w, h);
+	// resize renderer
+	_renderer->resize(w, h, _alloc);
 
-	_scenes[_currentScene]->getCamera()->setWindowSize(w, h);
-
-	_renderer->createOffscreenRender(_alloc);
-
-	_renderer->updatePostDescriptorSet();
 	updateDescriptorSet();
-
-	_renderer->createDepthBuffer();
-	_renderer->createFrameBuffers();
+	_scenes[_currentScene]->getCamera()->setWindowSize(w, h);
 }
 
 void Astra::App::init(const std::vector<Scene*>& scenes, Renderer* renderer, GuiController* gui)
@@ -118,7 +111,8 @@ void Astra::App::init(const std::vector<Scene*>& scenes, Renderer* renderer, Gui
 
 	createDescriptorSetLayout();
 	updateDescriptorSet();
-	_gui->init(_window, _renderer);
+	if (_gui != nullptr)
+		_gui->init(_window, _renderer);
 }
 
 void Astra::App::addScene(Scene* s)
@@ -143,7 +137,8 @@ void Astra::App::destroy()
 
 		_renderer->destroy(&_alloc);
 
-		_gui->destroy();
+		if (_gui != nullptr)
+			_gui->destroy();
 
 
 		for (auto s : _scenes)

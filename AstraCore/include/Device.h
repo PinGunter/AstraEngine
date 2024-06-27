@@ -69,6 +69,8 @@ namespace Astra {
 		VkPhysicalDeviceRayTracingPipelinePropertiesKHR getRtProperties() const;
 
 		VkShaderModule createShaderModule(const std::vector<char>& file);
+		VkShaderModule createShaderModule(const std::string& file);
+
 		void createTextureImages(const Astra::CommandList& cmdList, const std::vector<std::string>& new_textures, std::vector<nvvk::Texture>& textures, nvvk::ResourceAllocatorDma& alloc);
 		nvvk::RaytracingBuilderKHR::BlasInput objectToVkGeometry(const Astra::Mesh& model);
 

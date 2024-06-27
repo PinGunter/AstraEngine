@@ -101,43 +101,48 @@ void Astra::InputManager::pollEvents()
 	glfwPollEvents();
 }
 
-void Astra::InputManager::hideMouse()
+void Astra::InputManager::hideMouse() const
 {
 	glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 }
 
-void Astra::InputManager::captureMouse()
+void Astra::InputManager::captureMouse() const
 {
 	glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
-void Astra::InputManager::freeMouse()
+void Astra::InputManager::freeMouse() const
 {
 	glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
 
 
-glm::ivec2 Astra::InputManager::getMousePos()
+glm::ivec2 Astra::InputManager::getMousePos() const
 {
 	return _lastMousePos;
 }
 
-glm::ivec2 Astra::InputManager::getMouseDelta()
+glm::ivec2 Astra::InputManager::getMouseDelta() const
 {
 	return _mouseDelta;
 }
 
-glm::ivec2 Astra::InputManager::getMouseWheel()
+glm::ivec2 Astra::InputManager::getMouseWheel() const
 {
 	return _mouseWheel;
 }
 
-bool Astra::InputManager::mouseClick(MouseButtons button)
+bool Astra::InputManager::mouseClick(MouseButtons button) const
 {
 	return _mouseButton[button];
 }
 
-bool Astra::InputManager::keyPressed(Keys key)
+bool Astra::InputManager::keyPressed(Keys key) const
 {
 	return _keyMap[key];
+}
+
+bool Astra::InputManager::windowShouldClose() const
+{
+	return glfwWindowShouldClose(_window);
 }

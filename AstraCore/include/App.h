@@ -17,7 +17,7 @@ namespace Astra {
 	protected:
 		AppStatus _status{ Created };
 		std::vector<Scene*> _scenes;
-		int _currentScene{ 0 };
+		int _currentScene{ 1 };
 		GuiController* _gui;
 		Renderer* _renderer;
 		GLFWwindow* _window;

@@ -48,15 +48,17 @@ namespace Astra
 		void init(GLFWwindow* window, App* app);
 		void pollEvents();
 
-		void hideMouse();
-		void captureMouse();
-		void freeMouse();
+		void hideMouse() const;
+		void captureMouse() const;
+		void freeMouse() const;
 
-		glm::ivec2 getMousePos();
-		glm::ivec2 getMouseDelta();
-		glm::ivec2 getMouseWheel();
-		bool mouseClick(MouseButtons button);
-		bool keyPressed(Keys key);
+		glm::ivec2 getMousePos() const;
+		glm::ivec2 getMouseDelta() const;
+		glm::ivec2 getMouseWheel() const;
+		bool mouseClick(MouseButtons button) const;
+		bool keyPressed(Keys key) const;
+
+		bool windowShouldClose() const;
 	};
 
 #define Input InputManager::getInstance()

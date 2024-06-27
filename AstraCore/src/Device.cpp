@@ -199,6 +199,23 @@ namespace Astra {
 		return shaderModule;
 	}
 
+	VkShaderModule Device::createShaderModule(const std::string& code)
+	{
+		VkShaderModuleCreateInfo createInfo = {};
+		createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+		createInfo.flags = {};
+		createInfo.codeSize = code.size();
+		createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
+
+		VkShaderModule shaderModule = VK_NULL_HANDLE;
+		if (vkCreateShaderModule(_vkdevice, &createInfo, nullptr, &shaderModule) != VK_SUCCESS)
+		{
+			throw std::runtime_error("Error creating shader module");
+		}
+
+		return shaderModule;
+	}
+
 	void Device::destroy()
 	{
 		if (_surface)
