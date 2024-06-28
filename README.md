@@ -11,7 +11,7 @@ It depends on the nvpro_core library. This dependency should be removed sometime
 
 This repository includes the core library wich is used as a dependency in projects that use it. To see some examples check out the [examples repository](https://github.com/PinGunter/AstraExamples).
 
-You can check the documentation [here](https://pingunter.github.io/AstraEngine)
+You can check the API reference [here](https://pingunter.github.io/AstraEngine)
 
 It currently supports ray-traced shadows, reflections and refraction.
 
