@@ -126,6 +126,7 @@ void Astra::App::init(const std::vector<Scene*>& scenes, Renderer* renderer, Gui
 	if (_gui != nullptr)
 		_gui->init(_window, _renderer);
 
+	createPipelines();
 	_status = Running;
 }
 
