@@ -1,0 +1,73 @@
+\doxysection{Input\+Manager.\+h}
+\hypertarget{_input_manager_8h_source}{}\label{_input_manager_8h_source}\index{include/InputManager.h@{include/InputManager.h}}
+\mbox{\hyperlink{_input_manager_8h}{Ir a la documentación de este archivo.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00001}00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00002}00002\ \textcolor{preprocessor}{\#include\ <glm/glm.hpp>}}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00003}00003\ \textcolor{preprocessor}{\#include\ <GLFW/glfw3.h>}}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_app_8h}{App.h}}>}}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00006}00006\ }
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00007}00007\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespace_astra}{Astra}}}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00008}00008\ \{}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00009}00009\ \ \ \ \ \textcolor{comment}{//\ forward\ declaration}}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00010}00010\ \ \ \ \ \textcolor{keyword}{class\ }App;}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00011}00011\ }
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00017}\mbox{\hyperlink{class_astra_1_1_input_manager}{00017}}\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_astra_1_1_input_manager}{InputManager}}}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00018}00018\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00019}00019\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_astra_1_1_app}{App}}\ *\_appPtr;}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00020}00020\ \ \ \ \ \ \ \ \ GLFWwindow\ *\_window;}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00021}00021\ \ \ \ \ \ \ \ \ glm::ivec2\ \_lastMousePos;}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00022}00022\ \ \ \ \ \ \ \ \ glm::ivec2\ \_mouseDelta;}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00023}00023\ \ \ \ \ \ \ \ \ glm::ivec2\ \_mouseWheel;}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00024}00024\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \_mouseButton[\mbox{\hyperlink{namespace_astra_a943ae035e017b5fd68ab4824a97b9f62a96bcf2b235886f7af63e6e2437c67cb9}{MouseButtons::SIZE\_MOUSEBUTTONS}}];}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00025}00025\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \_keyMap[\mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a73872c18838e5403d393cc729c5b7cf4}{Keys::SIZE\_KEYMAP}}];}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00026}00026\ }
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00027}00027\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ setUpCallbacks();}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00028}00028\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ onResize(\textcolor{keywordtype}{int}\ w,\ \textcolor{keywordtype}{int}\ h);}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00029}00029\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ onKey(\textcolor{keywordtype}{int}\ key,\ \textcolor{keywordtype}{int}\ scancode,\ \textcolor{keywordtype}{int}\ action,\ \textcolor{keywordtype}{int}\ mods);}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00030}00030\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ onMouseMotion(\textcolor{keywordtype}{int}\ x,\ \textcolor{keywordtype}{int}\ y);}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00031}00031\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ onMouseButton(\textcolor{keywordtype}{int}\ button,\ \textcolor{keywordtype}{int}\ action,\ \textcolor{keywordtype}{int}\ mods);}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00032}00032\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ onMouseWheel(\textcolor{keywordtype}{double}\ x,\ \textcolor{keywordtype}{double}\ y);}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00033}00033\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ onFileDrop(\textcolor{keywordtype}{int}\ count,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ **paths);}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00035}00035\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_astra_1_1_input_manager}{InputManager}}()\ \{\}}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00036}00036\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_astra_1_1_input_manager}{\string~InputManager}}()\ \{\}}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00038}00038\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ cb\_resize(GLFWwindow\ *window,\ \textcolor{keywordtype}{int}\ w,\ \textcolor{keywordtype}{int}\ h);}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00039}00039\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ cb\_keyboard(GLFWwindow\ *window,\ \textcolor{keywordtype}{int}\ key,\ \textcolor{keywordtype}{int}\ scancode,\ \textcolor{keywordtype}{int}\ action,\ \textcolor{keywordtype}{int}\ mods);}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00040}00040\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ cb\_mouseMotion(GLFWwindow\ *window,\ \textcolor{keywordtype}{double}\ x,\ \textcolor{keywordtype}{double}\ y);}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00041}00041\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ cb\_mouseButton(GLFWwindow\ *window,\ \textcolor{keywordtype}{int}\ button,\ \textcolor{keywordtype}{int}\ action,\ \textcolor{keywordtype}{int}\ mods);}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00042}00042\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ cb\_mouseWheel(GLFWwindow\ *window,\ \textcolor{keywordtype}{double}\ x,\ \textcolor{keywordtype}{double}\ y);}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00043}00043\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ cb\_fileDrop(GLFWwindow\ *window,\ \textcolor{keywordtype}{int}\ count,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ **paths);}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00044}00044\ }
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00045}00045\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00046}\mbox{\hyperlink{class_astra_1_1_input_manager_acf4e1c6f2ec32eefe61d82dfc780d32f}{00046}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{class_astra_1_1_input_manager}{InputManager}}\ \&\mbox{\hyperlink{class_astra_1_1_input_manager_acf4e1c6f2ec32eefe61d82dfc780d32f}{getInstance}}()}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00047}00047\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00048}00048\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{class_astra_1_1_input_manager}{InputManager}}\ instance;}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00049}00049\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ instance;}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00050}00050\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00051}\mbox{\hyperlink{class_astra_1_1_input_manager_aebcd961ac66f9dabe60e227cd2d02b1e}{00051}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_astra_1_1_input_manager_aebcd961ac66f9dabe60e227cd2d02b1e}{InputManager}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_astra_1_1_input_manager}{InputManager}}\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00052}\mbox{\hyperlink{class_astra_1_1_input_manager_ae01a13daab5f8a93f7c5373a3b1119bd}{00052}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_astra_1_1_input_manager}{InputManager}}\ \&\mbox{\hyperlink{class_astra_1_1_input_manager_ae01a13daab5f8a93f7c5373a3b1119bd}{operator=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_astra_1_1_input_manager}{InputManager}}\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00053}00053\ }
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00058}00058\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_input_manager_a7fdeaf6e8d18cf1908097b01cee23799}{init}}(GLFWwindow\ *window,\ \mbox{\hyperlink{class_astra_1_1_app}{App}}\ *app);}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00065}00065\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_input_manager_abc724ac812a008fb4720936dec5d5ad6}{pollEvents}}();}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00066}00066\ }
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00071}00071\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_input_manager_a617cdb0361015a6456d023f8c9dc57f4}{hideMouse}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00076}00076\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_input_manager_ac847352c40ba35ce513dc913acc390a5}{captureMouse}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00081}00081\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_input_manager_adee3887fadc930370f6f6c9c3b99d5b7}{freeMouse}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00082}00082\ }
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00087}00087\ \ \ \ \ \ \ \ \ glm::ivec2\ \mbox{\hyperlink{class_astra_1_1_input_manager_a2c06ae94b2fe874c83ae6cf00c2b9333}{getMousePos}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00092}00092\ \ \ \ \ \ \ \ \ glm::ivec2\ \mbox{\hyperlink{class_astra_1_1_input_manager_a1ccec6fcd93a3e05ce522b97238381cd}{getMouseDelta}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00097}00097\ \ \ \ \ \ \ \ \ glm::ivec2\ \mbox{\hyperlink{class_astra_1_1_input_manager_aea22f9765793359fe4bd511537f4651c}{getMouseWheel}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00106}00106\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_astra_1_1_input_manager_a8c144176e80197ef74723968d415318b}{mouseClick}}(\mbox{\hyperlink{namespace_astra_a943ae035e017b5fd68ab4824a97b9f62}{MouseButtons}}\ button)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00115}00115\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_astra_1_1_input_manager_a79810b6a5cad89044a12beacc6489234}{keyPressed}}(\mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8}{Keys}}\ key)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00116}00116\ }
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00121}00121\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_astra_1_1_input_manager_a2bd3a4b7922d03ef6ff38155fd635bdc}{windowShouldClose}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00122}00122\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00123}00123\ }
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00124}\mbox{\hyperlink{_input_manager_8h_afca87b5481ad35a34ecd859921e65f30}{00124}}\ \textcolor{preprocessor}{\#define\ Input\ InputManager::getInstance()}}
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00125}00125\ }
+\DoxyCodeLine{\Hypertarget{_input_manager_8h_source_l00126}00126\ \}}
+
+\end{DoxyCode}

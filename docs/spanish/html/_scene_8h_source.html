@@ -1,0 +1,287 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.11.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>AstraCore: Archivo de código fuente include/Scene.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">AstraCore
+   </div>
+   <div id="projectbrief">Astra Core is a C++ library to develop visualization apps in Vulkan using rasterization or hardware-accelerated ray-tracing.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.11.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Buscar',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('_scene_8h_source.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Scene.h</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="_scene_8h.html">Ir a la documentación de este archivo.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#include &lt;<a class="code" href="_mesh_8h.html">Mesh.h</a>&gt;</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;<a class="code" href="_light_8h.html">Light.h</a>&gt;</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;<a class="code" href="_camera_8h.html">Camera.h</a>&gt;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;vulkan/vulkan.h&gt;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;nvvk/resourceallocator_vk.hpp&gt;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;nvvk/raytraceKHR_vk.hpp&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;<a class="code" href="_render_context_8h.html">RenderContext.h</a>&gt;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespace_astra.html">Astra</a></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>{</div>
+<div class="foldopen" id="foldopen00016" data-start="{" data-end="};">
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="class_astra_1_1_scene.html">   16</a></span>    <span class="keyword">class </span><a class="code hl_class" href="class_astra_1_1_scene.html">Scene</a></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    {</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>        <span class="comment">// Models in scene</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="class_astra_1_1_scene.html#ae4eea6a690ea99685c1d09af9577c808">   20</a></span>        std::vector&lt;Mesh&gt; <a class="code hl_variable" href="class_astra_1_1_scene.html#ae4eea6a690ea99685c1d09af9577c808">_objModels</a>;         <span class="comment">// the actual models (vertices, indices, etc)</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="class_astra_1_1_scene.html#a7bc4bfbcc869bd2e59b11be0805fbb8b">   21</a></span>        std::vector&lt;MeshInstance&gt; <a class="code hl_variable" href="class_astra_1_1_scene.html#a7bc4bfbcc869bd2e59b11be0805fbb8b">_instances</a>; <span class="comment">// instances of the models</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="class_astra_1_1_scene.html#aa52406decf898d4343620336207be4f9">   23</a></span>        std::vector&lt;nvvk::Texture&gt; <a class="code hl_variable" href="class_astra_1_1_scene.html#aa52406decf898d4343620336207be4f9">_textures</a>;</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="class_astra_1_1_scene.html#ad50612c5d19430bbbbd9b0e2b8dd9a72">   24</a></span>        nvvk::Buffer <a class="code hl_variable" href="class_astra_1_1_scene.html#ad50612c5d19430bbbbd9b0e2b8dd9a72">_objDescBuffer</a>; <span class="comment">// Device buffer of the OBJ descriptions</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="class_astra_1_1_scene.html#afa4086bbbc12fcece3bbcbfed290f7fb">   26</a></span>        nvvk::Buffer <a class="code hl_variable" href="class_astra_1_1_scene.html#afa4086bbbc12fcece3bbcbfed290f7fb">_cameraUBO</a>; <span class="comment">// UBO for camera</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="class_astra_1_1_scene.html#a8edde55abe8559465ba332a5e9b0424c">   27</a></span>        nvvk::Buffer <a class="code hl_variable" href="class_astra_1_1_scene.html#a8edde55abe8559465ba332a5e9b0424c">_lightsUBO</a>;</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="class_astra_1_1_scene.html#a802e3940b4f72ce487102ef3760395bc">   28</a></span>        nvvk::ResourceAllocatorDma *<a class="code hl_variable" href="class_astra_1_1_scene.html#a802e3940b4f72ce487102ef3760395bc">_alloc</a>;</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="class_astra_1_1_scene.html#a563a84d4307b3afe996f8a6c347e688f">   30</a></span>        <a class="code hl_struct" href="struct_lights_uniform.html">LightsUniform</a> <a class="code hl_variable" href="class_astra_1_1_scene.html#a563a84d4307b3afe996f8a6c347e688f">_lightsUniform</a>;</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="class_astra_1_1_scene.html#a75772fd8225e4b4f67caa86c33b5e545">   31</a></span>        std::vector&lt;Light *&gt; <a class="code hl_variable" href="class_astra_1_1_scene.html#a75772fd8225e4b4f67caa86c33b5e545">_lights</a>; <span class="comment">// multiple lights in the future</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="class_astra_1_1_scene.html#a1242356b484aa977bcdcac65876d2607">   32</a></span>        <a class="code hl_class" href="class_astra_1_1_camera_controller.html">CameraController</a> *<a class="code hl_variable" href="class_astra_1_1_scene.html#a1242356b484aa977bcdcac65876d2607">_camera</a>;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>        <span class="comment">// lazy loading</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="class_astra_1_1_scene.html#a39866965c7252f48c07de88435c8e422">   34</a></span>        std::vector&lt;std::pair&lt;std::string, glm::mat4&gt;&gt; <a class="code hl_variable" href="class_astra_1_1_scene.html#a39866965c7252f48c07de88435c8e422">_lazymodels</a>;</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_scene.html#a11555c3d45c0c1545eccbf645a8133eb">createObjDescBuffer</a>();</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_scene.html#a1dabe0ad5b25b17da98fa9f9104f36a8">createCameraUBO</a>();</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_scene.html#abf237fb1632c47dfe594f970bae355c2">updateCameraUBO</a>(<span class="keyword">const</span> <a class="code hl_class" href="class_astra_1_1_command_list.html">CommandList</a> &amp;cmdList);</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_scene.html#afc4e71f51b9aadc2a41b4b2c8e102233">createLightsUBO</a>();</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_scene.html#abed2d19410f337b3f867a4811a89cc20">updateLightsUBO</a>(<span class="keyword">const</span> <a class="code hl_class" href="class_astra_1_1_command_list.html">CommandList</a> &amp;cmdList);</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="class_astra_1_1_scene.html#a9edaf20a84e427dcca94113c9daacfae">   43</a></span>        <a class="code hl_function" href="class_astra_1_1_scene.html#a9edaf20a84e427dcca94113c9daacfae">Scene</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_scene.html#a928ee433829dd7b0de80ecb2fcd7e58f">loadModel</a>(<span class="keyword">const</span> std::string &amp;filepath, <span class="keyword">const</span> glm::mat4 &amp;transform = glm::mat4(1.0f));</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_scene.html#ade431180c9dd89931860d9e52ad4351d">init</a>(nvvk::ResourceAllocator *alloc);</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_scene.html#a94e3c4bdf20302a240393748fcf4c392">destroy</a>();</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_scene.html#a69f678f88b385038a034ccf1864444f9">addModel</a>(<span class="keyword">const</span> <a class="code hl_struct" href="struct_astra_1_1_mesh.html">Mesh</a> &amp;model);</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_scene.html#a83d50eb66762c5dc21ebaaa3f00f0f76">addInstance</a>(<span class="keyword">const</span> <a class="code hl_class" href="class_astra_1_1_mesh_instance.html">MeshInstance</a> &amp;instance);</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_scene.html#adde7d242f5c917514c91915d61290089">removeInstance</a>(<span class="keyword">const</span> <a class="code hl_class" href="class_astra_1_1_mesh_instance.html">MeshInstance</a> &amp;n);</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_scene.html#acb1365bf739c8dfe2cc7c6ad3845fbe2">addLight</a>(<a class="code hl_class" href="class_astra_1_1_light.html">Light</a> *l);</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_scene.html#ae489098fc2e76a3c9beb04d54ea5c8e6">removeLight</a>(<a class="code hl_class" href="class_astra_1_1_light.html">Light</a> *l);</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_scene.html#ad59cf474cb998ea803f4ea4db7921481">setCamera</a>(<a class="code hl_class" href="class_astra_1_1_camera_controller.html">CameraController</a> *c);</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_scene.html#ac14754b7b769246a494a22b8023be29b">update</a>(<span class="keyword">const</span> <a class="code hl_class" href="class_astra_1_1_command_list.html">CommandList</a> &amp;cmdList);</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_scene.html#a179d8d41b7f790013b8d1d64f5ca4766">draw</a>(<a class="code hl_struct" href="struct_astra_1_1_render_context.html">RenderContext&lt;PushConstantRaster&gt;</a> &amp;renderContext);</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        <span class="keyword">const</span> std::vector&lt;Light *&gt; &amp;<a class="code hl_function" href="class_astra_1_1_scene.html#a704de58d3243ad0155b97409980c7d5c">getLights</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>        <a class="code hl_class" href="class_astra_1_1_camera_controller.html">CameraController</a> *<a class="code hl_function" href="class_astra_1_1_scene.html#ae7611f87ac6a6e4edb49e90bac584a64">getCamera</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>        std::vector&lt;MeshInstance&gt; &amp;<a class="code hl_function" href="class_astra_1_1_scene.html#ad6dc761e769768fd6b2262f9cdac3231">getInstances</a>();</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        std::vector&lt;Mesh&gt; &amp;<a class="code hl_function" href="class_astra_1_1_scene.html#a1787c5019bee3ac3bcf64372460049a3">getModels</a>();</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        std::vector&lt;nvvk::Texture&gt; &amp;<a class="code hl_function" href="class_astra_1_1_scene.html#a728053037aef63bdce2cf71b0882a9ea">getTextures</a>();</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>        nvvk::Buffer &amp;<a class="code hl_function" href="class_astra_1_1_scene.html#a23d89d0e9df28e75cb04e3c0ac2f138d">getObjDescBuff</a>();</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        nvvk::Buffer &amp;<a class="code hl_function" href="class_astra_1_1_scene.html#a40192952d3c15d4c91acea8ab19a7b73">getCameraUBO</a>();</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        nvvk::Buffer &amp;<a class="code hl_function" href="class_astra_1_1_scene.html#a87650ad89a2ccfd40916b78bfd51d121">getLightsUBO</a>();</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_scene.html#a64b0f19c6142e3ae29185fcefb2d349d">reset</a>();</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_scene.html#a8bdddac889dab4cb319c57e4b1b15fe7">updatePushConstantRaster</a>(<a class="code hl_struct" href="struct_push_constant_raster.html">PushConstantRaster</a> &amp;pc);</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_scene.html#aefa14838faa66384802d20e46541f375">updatePushConstant</a>(<a class="code hl_struct" href="struct_push_constant_ray.html">PushConstantRay</a> &amp;pc);</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
+<div class="foldopen" id="foldopen00078" data-start="{" data-end="}">
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno"><a class="line" href="class_astra_1_1_scene.html#a3089aac4839d406a72da45159302c52d">   78</a></span>        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="class_astra_1_1_scene.html#a3089aac4839d406a72da45159302c52d">isRt</a>()<span class="keyword"> const</span></div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span><span class="keyword">        </span>{</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>        };</div>
+</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    };</div>
+</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span> </div>
+<div class="foldopen" id="foldopen00088" data-start="{" data-end="};">
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno"><a class="line" href="class_astra_1_1_scene_r_t.html">   88</a></span>    <span class="keyword">class </span><a class="code hl_class" href="class_astra_1_1_scene_r_t.html">SceneRT</a> : <span class="keyword">public</span> <a class="code hl_class" href="class_astra_1_1_scene.html">Astra::Scene</a></div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    {</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>    <span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno"><a class="line" href="class_astra_1_1_scene_r_t.html#a1009db70a77098f77ef7299cd60a0449">   91</a></span>        nvvk::RaytracingBuilderKHR <a class="code hl_variable" href="class_astra_1_1_scene_r_t.html#a1009db70a77098f77ef7299cd60a0449">_rtBuilder</a>;</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno"><a class="line" href="class_astra_1_1_scene_r_t.html#a442429a07676be2f6c23af2a03388d7e">   92</a></span>        std::vector&lt;VkAccelerationStructureInstanceKHR&gt; <a class="code hl_variable" href="class_astra_1_1_scene_r_t.html#a442429a07676be2f6c23af2a03388d7e">_asInstances</a>;</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_scene_r_t.html#ab97856b9443916f030617b2424c49087">init</a>(nvvk::ResourceAllocator *alloc) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_scene_r_t.html#aeb506d52d6a609f8b8473d699b6604d7">update</a>(<span class="keyword">const</span> <a class="code hl_class" href="class_astra_1_1_command_list.html">CommandList</a> &amp;cmdList) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_scene_r_t.html#abb4ed53c53b6ad69ffcffca8650f7e16">createBottomLevelAS</a>();</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_scene_r_t.html#a1e7c970ed9090884ebc47efc155ffd1d">createTopLevelAS</a>();</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_scene_r_t.html#a4585ac5347269d745d61e07e7e1f0dcd">updateTopLevelAS</a>(<span class="keywordtype">int</span> instance_id);</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_scene_r_t.html#a6b0f6c926a1e91716812ae33e2cebe8b">rebuildAS</a>();</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>        VkAccelerationStructureKHR <a class="code hl_function" href="class_astra_1_1_scene_r_t.html#a7e3645a0d6e7795c650976f275f3b330">getTLAS</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_scene_r_t.html#a77607df5b16c6f7028b199d2c3785d2f">destroy</a>() <span class="keyword">override</span>;</div>
+<div class="foldopen" id="foldopen00123" data-start="{" data-end="}">
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno"><a class="line" href="class_astra_1_1_scene_r_t.html#aecde99c5770ef46b87586b326f360af5">  123</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="class_astra_1_1_scene_r_t.html#aecde99c5770ef46b87586b326f360af5">isRt</a>()<span class="keyword"> const override</span></div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span><span class="keyword">        </span>{</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>        };</div>
+</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_scene_r_t.html#aef022456055bc4f5ba0c93dbc52d7ff9">draw</a>(<a class="code hl_struct" href="struct_astra_1_1_render_context.html">RenderContext&lt;PushConstantRay&gt;</a> &amp;renderContext);</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span> </div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_scene_r_t.html#a0e34f2f00e401218eabb3371e9e280f2">reset</a>() <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>    };</div>
+</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>}</div>
+<div class="ttc" id="a_camera_8h_html"><div class="ttname"><a href="_camera_8h.html">Camera.h</a></div></div>
+<div class="ttc" id="a_light_8h_html"><div class="ttname"><a href="_light_8h.html">Light.h</a></div></div>
+<div class="ttc" id="a_mesh_8h_html"><div class="ttname"><a href="_mesh_8h.html">Mesh.h</a></div></div>
+<div class="ttc" id="a_render_context_8h_html"><div class="ttname"><a href="_render_context_8h.html">RenderContext.h</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_camera_controller_html"><div class="ttname"><a href="class_astra_1_1_camera_controller.html">Astra::CameraController</a></div><div class="ttdoc">Manipula la cámara según el comportamiento definido en el método update de las clases que lo implemen...</div><div class="ttdef"><b>Definition</b> <a href="_camera_8h_source.html#l00031">Camera.h:32</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_command_list_html"><div class="ttname"><a href="class_astra_1_1_command_list.html">Astra::CommandList</a></div><div class="ttdoc">Clase que representa un objeto VkCommandBuffer de Vulkan. Proporciona métodos para realizar las funci...</div><div class="ttdef"><b>Definition</b> <a href="_command_list_8h_source.html#l00016">CommandList.h:17</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_light_html"><div class="ttname"><a href="class_astra_1_1_light.html">Astra::Light</a></div><div class="ttdoc">Clase abstracta que representa una luz en una escena. Hereda de Node3D.</div><div class="ttdef"><b>Definition</b> <a href="_light_8h_source.html#l00017">Light.h:18</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_mesh_instance_html"><div class="ttname"><a href="class_astra_1_1_mesh_instance.html">Astra::MeshInstance</a></div><div class="ttdoc">Clase que representa una instancia de una malla en una escena.</div><div class="ttdef"><b>Definition</b> <a href="_mesh_8h_source.html#l00111">Mesh.h:112</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html"><div class="ttname"><a href="class_astra_1_1_scene.html">Astra::Scene</a></div><div class="ttdoc">Clase Escena. Contiene las mallas, instancias, luces y cámara. Esta es para rasterización.</div><div class="ttdef"><b>Definition</b> <a href="#l00016">Scene.h:17</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_a11555c3d45c0c1545eccbf645a8133eb"><div class="ttname"><a href="class_astra_1_1_scene.html#a11555c3d45c0c1545eccbf645a8133eb">Astra::Scene::createObjDescBuffer</a></div><div class="ttdeci">virtual void createObjDescBuffer()</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00007">Scene.cpp:7</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_a1242356b484aa977bcdcac65876d2607"><div class="ttname"><a href="class_astra_1_1_scene.html#a1242356b484aa977bcdcac65876d2607">Astra::Scene::_camera</a></div><div class="ttdeci">CameraController * _camera</div><div class="ttdef"><b>Definition</b> <a href="#l00032">Scene.h:32</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_a1787c5019bee3ac3bcf64372460049a3"><div class="ttname"><a href="class_astra_1_1_scene.html#a1787c5019bee3ac3bcf64372460049a3">Astra::Scene::getModels</a></div><div class="ttdeci">std::vector&lt; Mesh &gt; &amp; getModels()</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00259">Scene.cpp:259</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_a179d8d41b7f790013b8d1d64f5ca4766"><div class="ttname"><a href="class_astra_1_1_scene.html#a179d8d41b7f790013b8d1d64f5ca4766">Astra::Scene::draw</a></div><div class="ttdeci">virtual void draw(RenderContext&lt; PushConstantRaster &gt; &amp;renderContext)</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00217">Scene.cpp:217</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_a1dabe0ad5b25b17da98fa9f9104f36a8"><div class="ttname"><a href="class_astra_1_1_scene.html#a1dabe0ad5b25b17da98fa9f9104f36a8">Astra::Scene::createCameraUBO</a></div><div class="ttdeci">virtual void createCameraUBO()</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00029">Scene.cpp:29</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_a23d89d0e9df28e75cb04e3c0ac2f138d"><div class="ttname"><a href="class_astra_1_1_scene.html#a23d89d0e9df28e75cb04e3c0ac2f138d">Astra::Scene::getObjDescBuff</a></div><div class="ttdeci">nvvk::Buffer &amp; getObjDescBuff()</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00269">Scene.cpp:269</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_a3089aac4839d406a72da45159302c52d"><div class="ttname"><a href="class_astra_1_1_scene.html#a3089aac4839d406a72da45159302c52d">Astra::Scene::isRt</a></div><div class="ttdeci">virtual bool isRt() const</div><div class="ttdef"><b>Definition</b> <a href="#l00078">Scene.h:78</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_a39866965c7252f48c07de88435c8e422"><div class="ttname"><a href="class_astra_1_1_scene.html#a39866965c7252f48c07de88435c8e422">Astra::Scene::_lazymodels</a></div><div class="ttdeci">std::vector&lt; std::pair&lt; std::string, glm::mat4 &gt; &gt; _lazymodels</div><div class="ttdef"><b>Definition</b> <a href="#l00034">Scene.h:34</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_a40192952d3c15d4c91acea8ab19a7b73"><div class="ttname"><a href="class_astra_1_1_scene.html#a40192952d3c15d4c91acea8ab19a7b73">Astra::Scene::getCameraUBO</a></div><div class="ttdeci">nvvk::Buffer &amp; getCameraUBO()</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00274">Scene.cpp:274</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_a563a84d4307b3afe996f8a6c347e688f"><div class="ttname"><a href="class_astra_1_1_scene.html#a563a84d4307b3afe996f8a6c347e688f">Astra::Scene::_lightsUniform</a></div><div class="ttdeci">LightsUniform _lightsUniform</div><div class="ttdef"><b>Definition</b> <a href="#l00030">Scene.h:30</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_a64b0f19c6142e3ae29185fcefb2d349d"><div class="ttname"><a href="class_astra_1_1_scene.html#a64b0f19c6142e3ae29185fcefb2d349d">Astra::Scene::reset</a></div><div class="ttdeci">virtual void reset()</div><div class="ttdoc">Resetea la escena. Se debe llamar cada vez que la App cambia de escena o si se agrega un nuevo modelo...</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00284">Scene.cpp:284</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_a69f678f88b385038a034ccf1864444f9"><div class="ttname"><a href="class_astra_1_1_scene.html#a69f678f88b385038a034ccf1864444f9">Astra::Scene::addModel</a></div><div class="ttdeci">virtual void addModel(const Mesh &amp;model)</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00139">Scene.cpp:139</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_a704de58d3243ad0155b97409980c7d5c"><div class="ttname"><a href="class_astra_1_1_scene.html#a704de58d3243ad0155b97409980c7d5c">Astra::Scene::getLights</a></div><div class="ttdeci">const std::vector&lt; Light * &gt; &amp; getLights() const</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00244">Scene.cpp:244</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_a728053037aef63bdce2cf71b0882a9ea"><div class="ttname"><a href="class_astra_1_1_scene.html#a728053037aef63bdce2cf71b0882a9ea">Astra::Scene::getTextures</a></div><div class="ttdeci">std::vector&lt; nvvk::Texture &gt; &amp; getTextures()</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00264">Scene.cpp:264</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_a75772fd8225e4b4f67caa86c33b5e545"><div class="ttname"><a href="class_astra_1_1_scene.html#a75772fd8225e4b4f67caa86c33b5e545">Astra::Scene::_lights</a></div><div class="ttdeci">std::vector&lt; Light * &gt; _lights</div><div class="ttdef"><b>Definition</b> <a href="#l00031">Scene.h:31</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_a7bc4bfbcc869bd2e59b11be0805fbb8b"><div class="ttname"><a href="class_astra_1_1_scene.html#a7bc4bfbcc869bd2e59b11be0805fbb8b">Astra::Scene::_instances</a></div><div class="ttdeci">std::vector&lt; MeshInstance &gt; _instances</div><div class="ttdef"><b>Definition</b> <a href="#l00021">Scene.h:21</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_a802e3940b4f72ce487102ef3760395bc"><div class="ttname"><a href="class_astra_1_1_scene.html#a802e3940b4f72ce487102ef3760395bc">Astra::Scene::_alloc</a></div><div class="ttdeci">nvvk::ResourceAllocatorDma * _alloc</div><div class="ttdef"><b>Definition</b> <a href="#l00028">Scene.h:28</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_a83d50eb66762c5dc21ebaaa3f00f0f76"><div class="ttname"><a href="class_astra_1_1_scene.html#a83d50eb66762c5dc21ebaaa3f00f0f76">Astra::Scene::addInstance</a></div><div class="ttdeci">virtual void addInstance(const MeshInstance &amp;instance)</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00144">Scene.cpp:144</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_a87650ad89a2ccfd40916b78bfd51d121"><div class="ttname"><a href="class_astra_1_1_scene.html#a87650ad89a2ccfd40916b78bfd51d121">Astra::Scene::getLightsUBO</a></div><div class="ttdeci">nvvk::Buffer &amp; getLightsUBO()</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00279">Scene.cpp:279</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_a8bdddac889dab4cb319c57e4b1b15fe7"><div class="ttname"><a href="class_astra_1_1_scene.html#a8bdddac889dab4cb319c57e4b1b15fe7">Astra::Scene::updatePushConstantRaster</a></div><div class="ttdeci">virtual void updatePushConstantRaster(PushConstantRaster &amp;pc)</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00289">Scene.cpp:289</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_a8edde55abe8559465ba332a5e9b0424c"><div class="ttname"><a href="class_astra_1_1_scene.html#a8edde55abe8559465ba332a5e9b0424c">Astra::Scene::_lightsUBO</a></div><div class="ttdeci">nvvk::Buffer _lightsUBO</div><div class="ttdef"><b>Definition</b> <a href="#l00027">Scene.h:27</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_a928ee433829dd7b0de80ecb2fcd7e58f"><div class="ttname"><a href="class_astra_1_1_scene.html#a928ee433829dd7b0de80ecb2fcd7e58f">Astra::Scene::loadModel</a></div><div class="ttdeci">virtual void loadModel(const std::string &amp;filepath, const glm::mat4 &amp;transform=glm::mat4(1.0f))</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00049">Scene.cpp:49</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_a94e3c4bdf20302a240393748fcf4c392"><div class="ttname"><a href="class_astra_1_1_scene.html#a94e3c4bdf20302a240393748fcf4c392">Astra::Scene::destroy</a></div><div class="ttdeci">virtual void destroy()</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00112">Scene.cpp:112</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_a9edaf20a84e427dcca94113c9daacfae"><div class="ttname"><a href="class_astra_1_1_scene.html#a9edaf20a84e427dcca94113c9daacfae">Astra::Scene::Scene</a></div><div class="ttdeci">Scene()=default</div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_aa52406decf898d4343620336207be4f9"><div class="ttname"><a href="class_astra_1_1_scene.html#aa52406decf898d4343620336207be4f9">Astra::Scene::_textures</a></div><div class="ttdeci">std::vector&lt; nvvk::Texture &gt; _textures</div><div class="ttdef"><b>Definition</b> <a href="#l00023">Scene.h:23</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_abed2d19410f337b3f867a4811a89cc20"><div class="ttname"><a href="class_astra_1_1_scene.html#abed2d19410f337b3f867a4811a89cc20">Astra::Scene::updateLightsUBO</a></div><div class="ttdeci">virtual void updateLightsUBO(const CommandList &amp;cmdList)</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00044">Scene.cpp:44</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_abf237fb1632c47dfe594f970bae355c2"><div class="ttname"><a href="class_astra_1_1_scene.html#abf237fb1632c47dfe594f970bae355c2">Astra::Scene::updateCameraUBO</a></div><div class="ttdeci">virtual void updateCameraUBO(const CommandList &amp;cmdList)</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00034">Scene.cpp:34</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_ac14754b7b769246a494a22b8023be29b"><div class="ttname"><a href="class_astra_1_1_scene.html#ac14754b7b769246a494a22b8023be29b">Astra::Scene::update</a></div><div class="ttdeci">virtual void update(const CommandList &amp;cmdList)</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00194">Scene.cpp:194</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_acb1365bf739c8dfe2cc7c6ad3845fbe2"><div class="ttname"><a href="class_astra_1_1_scene.html#acb1365bf739c8dfe2cc7c6ad3845fbe2">Astra::Scene::addLight</a></div><div class="ttdeci">virtual void addLight(Light *l)</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00165">Scene.cpp:165</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_ad50612c5d19430bbbbd9b0e2b8dd9a72"><div class="ttname"><a href="class_astra_1_1_scene.html#ad50612c5d19430bbbbd9b0e2b8dd9a72">Astra::Scene::_objDescBuffer</a></div><div class="ttdeci">nvvk::Buffer _objDescBuffer</div><div class="ttdef"><b>Definition</b> <a href="#l00024">Scene.h:24</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_ad59cf474cb998ea803f4ea4db7921481"><div class="ttname"><a href="class_astra_1_1_scene.html#ad59cf474cb998ea803f4ea4db7921481">Astra::Scene::setCamera</a></div><div class="ttdeci">virtual void setCamera(CameraController *c)</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00189">Scene.cpp:189</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_ad6dc761e769768fd6b2262f9cdac3231"><div class="ttname"><a href="class_astra_1_1_scene.html#ad6dc761e769768fd6b2262f9cdac3231">Astra::Scene::getInstances</a></div><div class="ttdeci">std::vector&lt; MeshInstance &gt; &amp; getInstances()</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00254">Scene.cpp:254</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_adde7d242f5c917514c91915d61290089"><div class="ttname"><a href="class_astra_1_1_scene.html#adde7d242f5c917514c91915d61290089">Astra::Scene::removeInstance</a></div><div class="ttdeci">virtual void removeInstance(const MeshInstance &amp;n)</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00149">Scene.cpp:149</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_ade431180c9dd89931860d9e52ad4351d"><div class="ttname"><a href="class_astra_1_1_scene.html#ade431180c9dd89931860d9e52ad4351d">Astra::Scene::init</a></div><div class="ttdeci">virtual void init(nvvk::ResourceAllocator *alloc)</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00100">Scene.cpp:100</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_ae489098fc2e76a3c9beb04d54ea5c8e6"><div class="ttname"><a href="class_astra_1_1_scene.html#ae489098fc2e76a3c9beb04d54ea5c8e6">Astra::Scene::removeLight</a></div><div class="ttdeci">virtual void removeLight(Light *l)</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00173">Scene.cpp:173</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_ae4eea6a690ea99685c1d09af9577c808"><div class="ttname"><a href="class_astra_1_1_scene.html#ae4eea6a690ea99685c1d09af9577c808">Astra::Scene::_objModels</a></div><div class="ttdeci">std::vector&lt; Mesh &gt; _objModels</div><div class="ttdef"><b>Definition</b> <a href="#l00020">Scene.h:20</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_ae7611f87ac6a6e4edb49e90bac584a64"><div class="ttname"><a href="class_astra_1_1_scene.html#ae7611f87ac6a6e4edb49e90bac584a64">Astra::Scene::getCamera</a></div><div class="ttdeci">CameraController * getCamera() const</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00249">Scene.cpp:249</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_aefa14838faa66384802d20e46541f375"><div class="ttname"><a href="class_astra_1_1_scene.html#aefa14838faa66384802d20e46541f375">Astra::Scene::updatePushConstant</a></div><div class="ttdeci">virtual void updatePushConstant(PushConstantRay &amp;pc)</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00294">Scene.cpp:294</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_afa4086bbbc12fcece3bbcbfed290f7fb"><div class="ttname"><a href="class_astra_1_1_scene.html#afa4086bbbc12fcece3bbcbfed290f7fb">Astra::Scene::_cameraUBO</a></div><div class="ttdeci">nvvk::Buffer _cameraUBO</div><div class="ttdef"><b>Definition</b> <a href="#l00026">Scene.h:26</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html_afc4e71f51b9aadc2a41b4b2c8e102233"><div class="ttname"><a href="class_astra_1_1_scene.html#afc4e71f51b9aadc2a41b4b2c8e102233">Astra::Scene::createLightsUBO</a></div><div class="ttdeci">virtual void createLightsUBO()</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00039">Scene.cpp:39</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_r_t_html"><div class="ttname"><a href="class_astra_1_1_scene_r_t.html">Astra::SceneRT</a></div><div class="ttdoc">Clase que agrega los elementos necesarios para el raytracing a una escena.</div><div class="ttdef"><b>Definition</b> <a href="#l00088">Scene.h:89</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_r_t_html_a0e34f2f00e401218eabb3371e9e280f2"><div class="ttname"><a href="class_astra_1_1_scene_r_t.html#a0e34f2f00e401218eabb3371e9e280f2">Astra::SceneRT::reset</a></div><div class="ttdeci">void reset() override</div><div class="ttdoc">Resetea la escena. Se debe llamar cada vez que la App cambia de escena o si se agrega un nuevo modelo...</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00402">Scene.cpp:402</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_r_t_html_a1009db70a77098f77ef7299cd60a0449"><div class="ttname"><a href="class_astra_1_1_scene_r_t.html#a1009db70a77098f77ef7299cd60a0449">Astra::SceneRT::_rtBuilder</a></div><div class="ttdeci">nvvk::RaytracingBuilderKHR _rtBuilder</div><div class="ttdef"><b>Definition</b> <a href="#l00091">Scene.h:91</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_r_t_html_a1e7c970ed9090884ebc47efc155ffd1d"><div class="ttname"><a href="class_astra_1_1_scene_r_t.html#a1e7c970ed9090884ebc47efc155ffd1d">Astra::SceneRT::createTopLevelAS</a></div><div class="ttdeci">void createTopLevelAS()</div><div class="ttdoc">Crea la estructura de aceleración de alto nivel.</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00347">Scene.cpp:347</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_r_t_html_a442429a07676be2f6c23af2a03388d7e"><div class="ttname"><a href="class_astra_1_1_scene_r_t.html#a442429a07676be2f6c23af2a03388d7e">Astra::SceneRT::_asInstances</a></div><div class="ttdeci">std::vector&lt; VkAccelerationStructureInstanceKHR &gt; _asInstances</div><div class="ttdef"><b>Definition</b> <a href="#l00092">Scene.h:92</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_r_t_html_a4585ac5347269d745d61e07e7e1f0dcd"><div class="ttname"><a href="class_astra_1_1_scene_r_t.html#a4585ac5347269d745d61e07e7e1f0dcd">Astra::SceneRT::updateTopLevelAS</a></div><div class="ttdeci">void updateTopLevelAS(int instance_id)</div><div class="ttdoc">Actualiza la estructura de aceleración de alto nivel Necesario para permitir transformaciones en tiem...</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00370">Scene.cpp:370</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_r_t_html_a6b0f6c926a1e91716812ae33e2cebe8b"><div class="ttname"><a href="class_astra_1_1_scene_r_t.html#a6b0f6c926a1e91716812ae33e2cebe8b">Astra::SceneRT::rebuildAS</a></div><div class="ttdeci">void rebuildAS()</div><div class="ttdoc">Reconstruye la estructura de aceleración ompleta.</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00385">Scene.cpp:385</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_r_t_html_a77607df5b16c6f7028b199d2c3785d2f"><div class="ttname"><a href="class_astra_1_1_scene_r_t.html#a77607df5b16c6f7028b199d2c3785d2f">Astra::SceneRT::destroy</a></div><div class="ttdeci">void destroy() override</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00396">Scene.cpp:396</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_r_t_html_a7e3645a0d6e7795c650976f275f3b330"><div class="ttname"><a href="class_astra_1_1_scene_r_t.html#a7e3645a0d6e7795c650976f275f3b330">Astra::SceneRT::getTLAS</a></div><div class="ttdeci">VkAccelerationStructureKHR getTLAS() const</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00391">Scene.cpp:391</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_r_t_html_ab97856b9443916f030617b2424c49087"><div class="ttname"><a href="class_astra_1_1_scene_r_t.html#ab97856b9443916f030617b2424c49087">Astra::SceneRT::init</a></div><div class="ttdeci">void init(nvvk::ResourceAllocator *alloc) override</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00301">Scene.cpp:301</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_r_t_html_abb4ed53c53b6ad69ffcffca8650f7e16"><div class="ttname"><a href="class_astra_1_1_scene_r_t.html#abb4ed53c53b6ad69ffcffca8650f7e16">Astra::SceneRT::createBottomLevelAS</a></div><div class="ttdeci">void createBottomLevelAS()</div><div class="ttdoc">Crea la estructura de aceleración de bajo nivel.</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00327">Scene.cpp:327</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_r_t_html_aeb506d52d6a609f8b8473d699b6604d7"><div class="ttname"><a href="class_astra_1_1_scene_r_t.html#aeb506d52d6a609f8b8473d699b6604d7">Astra::SceneRT::update</a></div><div class="ttdeci">void update(const CommandList &amp;cmdList) override</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00309">Scene.cpp:309</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_r_t_html_aecde99c5770ef46b87586b326f360af5"><div class="ttname"><a href="class_astra_1_1_scene_r_t.html#aecde99c5770ef46b87586b326f360af5">Astra::SceneRT::isRt</a></div><div class="ttdeci">bool isRt() const override</div><div class="ttdef"><b>Definition</b> <a href="#l00123">Scene.h:123</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_r_t_html_aef022456055bc4f5ba0c93dbc52d7ff9"><div class="ttname"><a href="class_astra_1_1_scene_r_t.html#aef022456055bc4f5ba0c93dbc52d7ff9">Astra::SceneRT::draw</a></div><div class="ttdeci">virtual void draw(RenderContext&lt; PushConstantRay &gt; &amp;renderContext)</div><div class="ttdef"><b>Definition</b> <a href="_scene_8cpp_source.html#l00238">Scene.cpp:238</a></div></div>
+<div class="ttc" id="anamespace_astra_html"><div class="ttname"><a href="namespace_astra.html">Astra</a></div><div class="ttdef"><b>Definition</b> <a href="_app_8h_source.html#l00010">App.h:11</a></div></div>
+<div class="ttc" id="astruct_astra_1_1_mesh_html"><div class="ttname"><a href="struct_astra_1_1_mesh.html">Astra::Mesh</a></div><div class="ttdoc">Representa un modelo 3D como una malla de vértices y triángulos Contiene la información necesaria par...</div><div class="ttdef"><b>Definition</b> <a href="_mesh_8h_source.html#l00019">Mesh.h:20</a></div></div>
+<div class="ttc" id="astruct_astra_1_1_render_context_html"><div class="ttname"><a href="struct_astra_1_1_render_context.html">Astra::RenderContext</a></div><div class="ttdoc">Struct con plantilla para admitir los distintos tipos de push constant. Contiene la información neces...</div><div class="ttdef"><b>Definition</b> <a href="_render_context_8h_source.html#l00013">RenderContext.h:14</a></div></div>
+<div class="ttc" id="astruct_lights_uniform_html"><div class="ttname"><a href="struct_lights_uniform.html">LightsUniform</a></div><div class="ttdef"><b>Definition</b> <a href="host__device_8h_source.html#l00099">host_device.h:101</a></div></div>
+<div class="ttc" id="astruct_push_constant_raster_html"><div class="ttname"><a href="struct_push_constant_raster.html">PushConstantRaster</a></div><div class="ttdef"><b>Definition</b> <a href="host__device_8h_source.html#l00106">host_device.h:107</a></div></div>
+<div class="ttc" id="astruct_push_constant_ray_html"><div class="ttname"><a href="struct_push_constant_ray.html">PushConstantRay</a></div><div class="ttdef"><b>Definition</b> <a href="host__device_8h_source.html#l00114">host_device.h:115</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="_scene_8h.html">Scene.h</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.11.0 </li>
+  </ul>
+</div>
+</body>
+</html>

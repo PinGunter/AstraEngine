@@ -1,0 +1,119 @@
+\doxysection{Node3\+D.\+cpp}
+\hypertarget{_node3_d_8cpp_source}{}\label{_node3_d_8cpp_source}\index{src/Node3D.cpp@{src/Node3D.cpp}}
+\mbox{\hyperlink{_node3_d_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00001}00001\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_node3_d_8h}{Node3D.h}}>}}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00002}00002\ \textcolor{preprocessor}{\#include\ <random>}}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00003}00003\ \textcolor{preprocessor}{\#include\ <glm/gtc/matrix\_transform.hpp>}}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <glm/gtx/matrix\_decompose.hpp>}}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00005}00005\ }
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00006}00006\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespace_astra}{Astra}};}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00007}00007\ }
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00008}00008\ uint32\_t\ \mbox{\hyperlink{class_astra_1_1_node3_d_a5b62476ec6a0f9967ee49a4d1fea82b5}{Node3D::NodeCount}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00009}00009\ }
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00010}\mbox{\hyperlink{class_astra_1_1_node3_d_a3b48ae464f50048ccfc974171958d606}{00010}}\ \mbox{\hyperlink{class_astra_1_1_node3_d_a3b48ae464f50048ccfc974171958d606}{Node3D::Node3D}}(\textcolor{keyword}{const}\ glm::mat4\ \&transform\_mat,\ \textcolor{keyword}{const}\ std::string\ \&name)\ :\ \_transform(transform\_mat),\ \_name(name)}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00011}00011\ \{}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00012}00012\ \ \ \ \ \mbox{\hyperlink{class_astra_1_1_node3_d_aab151ec6499dce5ac1076a521cb04663}{\_id}}\ =\ \mbox{\hyperlink{class_astra_1_1_node3_d_a5b62476ec6a0f9967ee49a4d1fea82b5}{NodeCount}}++;}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00014}00014\ \ \ \ \ \textcolor{keywordflow}{if}\ (name.empty())}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00015}00015\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00016}00016\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_astra_1_1_node3_d_a48307dedbeb3506f904e75150bfbc7f0}{\_name}}\ =\ std::string(\textcolor{stringliteral}{"{}Node3D\ -\/\ "{}})\ +\ std::to\_string(\mbox{\hyperlink{class_astra_1_1_node3_d_a5b62476ec6a0f9967ee49a4d1fea82b5}{Node3D::NodeCount}});}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00017}00017\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00018}00018\ \}}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00019}00019\ }
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00020}\mbox{\hyperlink{class_astra_1_1_node3_d_a786417d244594c602e153ab0ec105d4b}{00020}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_astra_1_1_node3_d_a786417d244594c602e153ab0ec105d4b}{Astra::Node3D::operator==}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_astra_1_1_node3_d}{Node3D}}\ \&other)}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00021}00021\ \{}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00022}00022\ \ \ \ \ \textcolor{keywordflow}{return}\ \_id\ ==\ other.\mbox{\hyperlink{class_astra_1_1_node3_d_aab151ec6499dce5ac1076a521cb04663}{\_id}};}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00023}00023\ \}}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00024}00024\ }
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00025}\mbox{\hyperlink{class_astra_1_1_node3_d_a0bf8e1597841a4ffed8df6a602d44a58}{00025}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_node3_d_a0bf8e1597841a4ffed8df6a602d44a58}{Astra::Node3D::addChild}}(\mbox{\hyperlink{class_astra_1_1_node3_d}{Node3D}}\ *child)}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00026}00026\ \{}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00027}00027\ \ \ \ \ \_children.push\_back(child);}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00028}00028\ \}}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00029}00029\ }
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00030}\mbox{\hyperlink{class_astra_1_1_node3_d_a077fb296fe077d55dc4c256aea2a6f97}{00030}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_node3_d_a077fb296fe077d55dc4c256aea2a6f97}{Astra::Node3D::removeChild}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_astra_1_1_node3_d}{Node3D}}\ \&child)}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00031}00031\ \{}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00032}00032\ \ \ \ \ \textcolor{keyword}{auto}\ eraser\ =\ \_children.begin();}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00033}00033\ \ \ \ \ \textcolor{keywordtype}{bool}\ found\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00034}00034\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ it\ =\ \_children.begin();\ it\ !=\ \_children.end()\ \&\&\ !found;\ ++it)}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00035}00035\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00036}00036\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (*(*it)\ ==\ child)}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00037}00037\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00038}00038\ \ \ \ \ \ \ \ \ \ \ \ \ eraser\ =\ it;}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00039}00039\ \ \ \ \ \ \ \ \ \ \ \ \ found\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00040}00040\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00041}00041\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00042}00042\ \ \ \ \ \textcolor{keywordflow}{if}\ (found)}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00043}00043\ \ \ \ \ \ \ \ \ \_children.erase(eraser);}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00044}00044\ \}}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00045}00045\ }
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00046}\mbox{\hyperlink{class_astra_1_1_node3_d_a546031f4ceabb3a2d38f6d7eeb16c9c6}{00046}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_node3_d_a546031f4ceabb3a2d38f6d7eeb16c9c6}{Node3D::rotate}}(\textcolor{keyword}{const}\ glm::vec3\ \&axis,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ \&angle)}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00047}00047\ \{}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00048}00048\ \ \ \ \ \mbox{\hyperlink{class_astra_1_1_node3_d_ac3fc8c9959d2c1eaac876a3ccd6cf0dc}{\_transform}}\ =\ glm::rotate(\mbox{\hyperlink{class_astra_1_1_node3_d_ac3fc8c9959d2c1eaac876a3ccd6cf0dc}{\_transform}},\ angle,\ axis);}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00049}00049\ \}}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00050}00050\ }
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00051}\mbox{\hyperlink{class_astra_1_1_node3_d_a62536798c9a4d02e60119b98d79f8b7a}{00051}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_node3_d_a62536798c9a4d02e60119b98d79f8b7a}{Node3D::scale}}(\textcolor{keyword}{const}\ glm::vec3\ \&scaling)}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00052}00052\ \{}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00053}00053\ \ \ \ \ \mbox{\hyperlink{class_astra_1_1_node3_d_ac3fc8c9959d2c1eaac876a3ccd6cf0dc}{\_transform}}\ =\ glm::scale(\mbox{\hyperlink{class_astra_1_1_node3_d_ac3fc8c9959d2c1eaac876a3ccd6cf0dc}{\_transform}},\ scaling);}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00054}00054\ \}}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00055}00055\ }
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00056}\mbox{\hyperlink{class_astra_1_1_node3_d_a846b75e2ce3b844ea428ad0401a1a5ef}{00056}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_node3_d_a846b75e2ce3b844ea428ad0401a1a5ef}{Node3D::translate}}(\textcolor{keyword}{const}\ glm::vec3\ \&position)}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00057}00057\ \{}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00058}00058\ \ \ \ \ \mbox{\hyperlink{class_astra_1_1_node3_d_ac3fc8c9959d2c1eaac876a3ccd6cf0dc}{\_transform}}\ =\ glm::translate(\mbox{\hyperlink{class_astra_1_1_node3_d_ac3fc8c9959d2c1eaac876a3ccd6cf0dc}{\_transform}},\ position);}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00059}00059\ \}}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00060}00060\ }
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00061}\mbox{\hyperlink{class_astra_1_1_node3_d_a8d7b9aabaf915d4e3748a260529bd900}{00061}}\ glm::vec3\ \mbox{\hyperlink{class_astra_1_1_node3_d_a8d7b9aabaf915d4e3748a260529bd900}{Astra::Node3D::getPosition}}()\textcolor{keyword}{\ const}}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00062}00062\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00063}00063\ \ \ \ \ glm::vec3\ scale;}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00064}00064\ \ \ \ \ glm::quat\ rotation;}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00065}00065\ \ \ \ \ glm::vec3\ translation;}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00066}00066\ \ \ \ \ glm::vec3\ skew;}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00067}00067\ \ \ \ \ glm::vec4\ perspective;}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00068}00068\ }
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00069}00069\ \ \ \ \ glm::decompose(\_transform,\ scale,\ rotation,\ translation,\ skew,\ perspective);}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00070}00070\ }
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00071}00071\ \ \ \ \ \textcolor{keywordflow}{return}\ translation;}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00072}00072\ \}}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00073}00073\ }
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00074}\mbox{\hyperlink{class_astra_1_1_node3_d_aee17f0a570da3f3571f865d05f76ff3f}{00074}}\ glm::vec3\ \mbox{\hyperlink{class_astra_1_1_node3_d_aee17f0a570da3f3571f865d05f76ff3f}{Astra::Node3D::getRotation}}()\textcolor{keyword}{\ const}}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00075}00075\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00076}00076\ \ \ \ \ glm::vec3\ scale;}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00077}00077\ \ \ \ \ glm::quat\ rotation;}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00078}00078\ \ \ \ \ glm::vec3\ translation;}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00079}00079\ \ \ \ \ glm::vec3\ skew;}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00080}00080\ \ \ \ \ glm::vec4\ perspective;}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00081}00081\ }
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00082}00082\ \ \ \ \ glm::decompose(\_transform,\ scale,\ rotation,\ translation,\ skew,\ perspective);}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00083}00083\ }
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00084}00084\ \ \ \ \ \textcolor{keywordflow}{return}\ glm::eulerAngles(rotation);}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00085}00085\ \}}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00086}00086\ }
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00087}\mbox{\hyperlink{class_astra_1_1_node3_d_a98710aad404be9c8e2d4a35083092c9e}{00087}}\ glm::vec3\ \mbox{\hyperlink{class_astra_1_1_node3_d_a98710aad404be9c8e2d4a35083092c9e}{Astra::Node3D::getScale}}()\textcolor{keyword}{\ const}}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00088}00088\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00089}00089\ \ \ \ \ glm::vec3\ scale;}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00090}00090\ \ \ \ \ glm::quat\ rotation;}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00091}00091\ \ \ \ \ glm::vec3\ translation;}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00092}00092\ \ \ \ \ glm::vec3\ skew;}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00093}00093\ \ \ \ \ glm::vec4\ perspective;}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00094}00094\ }
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00095}00095\ \ \ \ \ glm::decompose(\_transform,\ scale,\ rotation,\ translation,\ skew,\ perspective);}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00096}00096\ }
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00097}00097\ \ \ \ \ \textcolor{keywordflow}{return}\ scale;}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00098}00098\ \}}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00099}00099\ }
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00100}\mbox{\hyperlink{class_astra_1_1_node3_d_ac40d03c56bb5d049325a6351367c13b1}{00100}}\ std::string\ \&\mbox{\hyperlink{class_astra_1_1_node3_d_ac40d03c56bb5d049325a6351367c13b1}{Astra::Node3D::getNameRef}}()}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00101}00101\ \{}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00102}00102\ \ \ \ \ \textcolor{keywordflow}{return}\ \_name;}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00103}00103\ \}}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00104}00104\ }
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00105}\mbox{\hyperlink{class_astra_1_1_node3_d_ae5c0483b6c8e7fad4df446daa3a8f541}{00105}}\ std::string\ \mbox{\hyperlink{class_astra_1_1_node3_d_ae5c0483b6c8e7fad4df446daa3a8f541}{Astra::Node3D::getName}}()\textcolor{keyword}{\ const}}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00106}00106\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00107}00107\ \ \ \ \ \textcolor{keywordflow}{return}\ \_name;}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00108}00108\ \}}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00109}00109\ }
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00110}\mbox{\hyperlink{class_astra_1_1_node3_d_a26ceddfab38b142ffde715413c8816d1}{00110}}\ uint32\_t\ \mbox{\hyperlink{class_astra_1_1_node3_d_a26ceddfab38b142ffde715413c8816d1}{Astra::Node3D::getID}}()\textcolor{keyword}{\ const}}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00111}00111\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00112}00112\ \ \ \ \ \textcolor{keywordflow}{return}\ \_id;}
+\DoxyCodeLine{\Hypertarget{_node3_d_8cpp_source_l00113}00113\ \}}
+
+\end{DoxyCode}

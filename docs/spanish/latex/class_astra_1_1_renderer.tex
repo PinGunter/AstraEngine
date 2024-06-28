@@ -1,0 +1,754 @@
+\doxysection{Referencia de la clase Astra\+::Renderer}
+\hypertarget{class_astra_1_1_renderer}{}\label{class_astra_1_1_renderer}\index{Astra::Renderer@{Astra::Renderer}}
+
+
+Clase renderer. Contiene todo lo necesario para renderizar la escena. Se encarga de todo el proceso de dibujado. Contiene también los descriptor sets y pipeline de post procesado. Es una clase que interactua con vulkan a bajo nivel y no está pensada para ser sobreescrita. ~\newline
+La forma en la que funciona el renderer es con dos render pass. El primero rasteriza o traza con rayos la escena y guarda el resultado en una textura. Esa textura luego se utiliza en el segundo render pass para mostrarse en pantalla junto con la interfaz de Im\+Gui. De esta forma podemos combinar el trazado de rayos para modelos de la escena con la rasterización para fuentes y elementos gráficos de la interfaz.  
+
+
+
+
+{\ttfamily \#include $<$Renderer.\+h$>$}
+
+\doxysubsubsection*{Métodos públicos}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_astra_1_1_renderer_a44915ed5cc166cec22cea4af7b1e7274}{init}} (\mbox{\hyperlink{class_astra_1_1_app}{App}} \texorpdfstring{$\ast$}{*}app, nvvk\+::\+Resource\+Allocator\+Dma \&alloc)
+\item 
+void \mbox{\hyperlink{class_astra_1_1_renderer_a8a12c92441b80079c2bb6c6a8857ba38}{link\+App}} (\mbox{\hyperlink{class_astra_1_1_app}{App}} \texorpdfstring{$\ast$}{*}app)
+\item 
+void \mbox{\hyperlink{class_astra_1_1_renderer_a9cc281d20178384d1a56a17888356399}{destroy}} (nvvk\+::\+Resource\+Allocator \texorpdfstring{$\ast$}{*}alloc)
+\item 
+\mbox{\hyperlink{class_astra_1_1_command_list}{Astra\+::\+Command\+List}} \mbox{\hyperlink{class_astra_1_1_renderer_af0a8dc21941fd6b86eea52c7bdd4bd1e}{begin\+Frame}} ()
+\begin{DoxyCompactList}\small\item\em Inicia el renderizado de la escena. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_astra_1_1_renderer_a1cdf31b67b3a35d3c1023c364b1646c4}{render}} (const \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}} \&cmd\+List, \mbox{\hyperlink{class_astra_1_1_scene}{Scene}} \texorpdfstring{$\ast$}{*}scene, \mbox{\hyperlink{class_astra_1_1_pipeline}{Pipeline}} \texorpdfstring{$\ast$}{*}pipeline, const std\+::vector$<$ Vk\+Descriptor\+Set $>$ \&desc\+Sets, \mbox{\hyperlink{class_astra_1_1_gui_controller}{Astra\+::\+Gui\+Controller}} \texorpdfstring{$\ast$}{*}gui=nullptr)
+\begin{DoxyCompactList}\small\item\em Renderiza la escena, raster o trazado de rayos según el tipo de pipeline que se le pase. También hace el dibujo de la interfaz y el postprocesado. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_astra_1_1_renderer_a6dd0f6fcbe9636ab7a948178bdf34643}{end\+Frame}} (const \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}} \&cmd\+List)
+\begin{DoxyCompactList}\small\item\em Finaliza el renderizado del frame. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_astra_1_1_renderer_a4c69c95e488bad0c440c2634105aec5c}{resize}} (int w, int h, nvvk\+::\+Resource\+Allocator\+Dma \&alloc)
+\item 
+glm\+::vec4 \& \mbox{\hyperlink{class_astra_1_1_renderer_ac40f45f6d9db163fd3b3f4b8e613d1a5}{get\+Clear\+Color\+Ref}} ()
+\item 
+glm\+::vec4 \mbox{\hyperlink{class_astra_1_1_renderer_aba955fd748f0290e84175af8a7006474}{get\+Clear\+Color}} () const
+\item 
+void \mbox{\hyperlink{class_astra_1_1_renderer_a63174edcbe98bfccf8530bea6ce506f0}{set\+Clear\+Color}} (const glm\+::vec4 \&color)
+\item 
+int \& \mbox{\hyperlink{class_astra_1_1_renderer_aaba2e14e9fd6706e23a7d768e7b97046}{get\+Max\+Depth\+Ref}} ()
+\item 
+int \mbox{\hyperlink{class_astra_1_1_renderer_abc84666dfc659fc07be647506afcc8a1}{get\+Max\+Depth}} () const
+\item 
+void \mbox{\hyperlink{class_astra_1_1_renderer_a95e0b6dd5173f85280c18d360d23323d}{set\+Max\+Depth}} (int depth)
+\item 
+const nvvk\+::\+Texture \& \mbox{\hyperlink{class_astra_1_1_renderer_aa64153f4d5f9ef1e59374b7dc5d1f5c2}{get\+Offscreen\+Color}} () const
+\item 
+Vk\+Render\+Pass \mbox{\hyperlink{class_astra_1_1_renderer_aec96a83dcc18d65fb1a28e5122613e38}{get\+Offscreen\+Render\+Pass}} () const
+\item 
+void \mbox{\hyperlink{class_astra_1_1_renderer_a3649ee6381177ddb7e7446fa7cf06b6b}{get\+Gui\+Controller\+Info}} (Vk\+Render\+Pass \&renderpass, int \&image\+Count, Vk\+Format \&color\+Format, Vk\+Format \&depth\+Format)
+\begin{DoxyCompactList}\small\item\em Devuelve los atributos necesarios para configurar la interfaz de imgui. Modifica la referencia que recibe. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Métodos protegidos}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_astra_1_1_renderer_a70572d85101e450facecbdff489d35ea}{render\+Raster}} (const \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}} \&cmd\+Buf, \mbox{\hyperlink{class_astra_1_1_scene}{Scene}} \texorpdfstring{$\ast$}{*}scene, \mbox{\hyperlink{class_astra_1_1_raster_pipeline}{Raster\+Pipeline}} \texorpdfstring{$\ast$}{*}pipeline, const std\+::vector$<$ Vk\+Descriptor\+Set $>$ \&desc\+Sets)
+\item 
+void \mbox{\hyperlink{class_astra_1_1_renderer_aa9e65896a7e6f1ead0c7fb20cdaec69e}{render\+Raytrace}} (const \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}} \&cmd\+Buf, \mbox{\hyperlink{class_astra_1_1_scene_r_t}{Scene\+RT}} \texorpdfstring{$\ast$}{*}scene, \mbox{\hyperlink{class_astra_1_1_ray_tracing_pipeline}{Ray\+Tracing\+Pipeline}} \texorpdfstring{$\ast$}{*}pipeline, const std\+::vector$<$ Vk\+Descriptor\+Set $>$ \&desc\+Sets)
+\item 
+void \mbox{\hyperlink{class_astra_1_1_renderer_ad758489c4801b8957a6549e6089383b4}{begin\+Post}} ()
+\item 
+void \mbox{\hyperlink{class_astra_1_1_renderer_addd8eb0c471c7c44308a5defd6814280}{end\+Post}} (const \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}} \&cmd\+Buf)
+\item 
+void \mbox{\hyperlink{class_astra_1_1_renderer_abb1e8309320027bd7ee64d889c9a062f}{render\+Post}} (const \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}} \&cmd\+Buf)
+\item 
+void \mbox{\hyperlink{class_astra_1_1_renderer_a53b5ee84d52a70cf36ad3cddc2137f6b}{set\+Viewport}} (const \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}} \&cmd\+Buf)
+\item 
+void \mbox{\hyperlink{class_astra_1_1_renderer_a8db7f08c5821f3c66309a549f2aa23ce}{prepare\+Frame}} ()
+\item 
+void \mbox{\hyperlink{class_astra_1_1_renderer_a7109b93b1add9c4ded1e26d8ca95a458}{create\+Swapchain}} (const Vk\+Surface\+KHR \&surface, uint32\+\_\+t width, uint32\+\_\+t height, Vk\+Format color\+Format=VK\+\_\+\+FORMAT\+\_\+\+B8\+G8\+R8\+A8\+\_\+\+UNORM, Vk\+Format depth\+Format=VK\+\_\+\+FORMAT\+\_\+\+UNDEFINED)
+\item 
+void \mbox{\hyperlink{class_astra_1_1_renderer_a82980b116b620a95f30e0a309999b0b1}{request\+Swapchain\+Image}} (int w, int h)
+\item 
+void \mbox{\hyperlink{class_astra_1_1_renderer_a7e6f36931d1c91240296a0d072074fe0}{create\+Offscreen\+Render}} (nvvk\+::\+Resource\+Allocator\+Dma \&alloc)
+\item 
+void \mbox{\hyperlink{class_astra_1_1_renderer_a0405bce64b917865045058c460f26873}{create\+Post\+Descriptor\+Set}} ()
+\item 
+void \mbox{\hyperlink{class_astra_1_1_renderer_a42f1463f80d7661a2c73fff1f1cca868}{update\+Post\+Descriptor\+Set}} ()
+\item 
+void \mbox{\hyperlink{class_astra_1_1_renderer_a1eeb8ce2feae734edfaa8e6038ba2ff0}{create\+Frame\+Buffers}} ()
+\item 
+void \mbox{\hyperlink{class_astra_1_1_renderer_abe87a489b196324b6e06e0ae5b36647c}{create\+Depth\+Buffer}} ()
+\item 
+void \mbox{\hyperlink{class_astra_1_1_renderer_af55683872a908d60a42f6b6fa8231b51}{create\+Render\+Pass}} ()
+\item 
+void \mbox{\hyperlink{class_astra_1_1_renderer_a343e2a902fbd2b94afe33fda4e6d8d15}{create\+Post\+Pipeline}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Atributos protegidos}
+\begin{DoxyCompactItemize}
+\item 
+Vk\+Render\+Pass \mbox{\hyperlink{class_astra_1_1_renderer_a6a9d4b84a619190bad7afcd9e0626e00}{\+\_\+offscreen\+Render\+Pass}}
+\item 
+Vk\+Framebuffer \mbox{\hyperlink{class_astra_1_1_renderer_a8ca10e4dac7c21c691e9ed6be31774f7}{\+\_\+offscreen\+Fb}}
+\item 
+nvvk\+::\+Texture \mbox{\hyperlink{class_astra_1_1_renderer_a6de3a5ab79972d61e752a71ec4b84986}{\+\_\+offscreen\+Color}}
+\item 
+nvvk\+::\+Texture \mbox{\hyperlink{class_astra_1_1_renderer_a3dcce31a018ac5ea993c88831256dc3e}{\+\_\+offscreen\+Depth}}
+\item 
+Vk\+Format \mbox{\hyperlink{class_astra_1_1_renderer_a5860242a8ace7538dc951082dd329341}{\+\_\+offscreen\+Color\+Format}} \{VK\+\_\+\+FORMAT\+\_\+\+R32\+G32\+B32\+A32\+\_\+\+SFLOAT\}
+\item 
+Vk\+Format \mbox{\hyperlink{class_astra_1_1_renderer_a77395ba6c83bbdbd87713b902d76c6f4}{\+\_\+offscreen\+Depth\+Format}} \{VK\+\_\+\+FORMAT\+\_\+\+X8\+\_\+\+D24\+\_\+\+UNORM\+\_\+\+PACK32\}
+\item 
+\mbox{\hyperlink{class_astra_1_1_post_pipeline}{Post\+Pipeline}} \mbox{\hyperlink{class_astra_1_1_renderer_a80a6749b0dcde398bf68965bd931519d}{\+\_\+post\+Pipeline}}
+\item 
+Vk\+Render\+Pass \mbox{\hyperlink{class_astra_1_1_renderer_ad16578d1b36de2cf125b2ee39ec06f11}{\+\_\+post\+Render\+Pass}}
+\item 
+Vk\+Format \mbox{\hyperlink{class_astra_1_1_renderer_a6863308493311c1c530cdef44a00cd68}{\+\_\+color\+Format}} \{VK\+\_\+\+FORMAT\+\_\+\+B8\+G8\+R8\+A8\+\_\+\+UNORM\}
+\item 
+Vk\+Format \mbox{\hyperlink{class_astra_1_1_renderer_a269bb7d191f4f433f32fc4af1298b8d7}{\+\_\+depth\+Format}} \{VK\+\_\+\+FORMAT\+\_\+\+UNDEFINED\}
+\item 
+nvvk\+::\+Descriptor\+Set\+Bindings \mbox{\hyperlink{class_astra_1_1_renderer_a1ee0900fcc9d945acd02ac27020ae881}{\+\_\+post\+Desc\+Set\+Layout\+Bind}}
+\item 
+Vk\+Descriptor\+Pool \mbox{\hyperlink{class_astra_1_1_renderer_a931c77f74a8ae912d7616f9f0f001778}{\+\_\+post\+Desc\+Pool}} \{VK\+\_\+\+NULL\+\_\+\+HANDLE\}
+\item 
+Vk\+Descriptor\+Set\+Layout \mbox{\hyperlink{class_astra_1_1_renderer_a1baddd0090e3915ba7305fb7146bc03f}{\+\_\+post\+Desc\+Set\+Layout}} \{VK\+\_\+\+NULL\+\_\+\+HANDLE\}
+\item 
+Vk\+Descriptor\+Set \mbox{\hyperlink{class_astra_1_1_renderer_ad02c44d021620d8698c9037356a60d56}{\+\_\+post\+Desc\+Set}} \{VK\+\_\+\+NULL\+\_\+\+HANDLE\}
+\item 
+nvvk\+::\+Swap\+Chain \mbox{\hyperlink{class_astra_1_1_renderer_ab111e22288aae4d0db6a633215a075c2}{\+\_\+swapchain}}
+\item 
+std\+::vector$<$ Vk\+Framebuffer $>$ \mbox{\hyperlink{class_astra_1_1_renderer_a2e77d6d396d6d01cfdaf223421820e03}{\+\_\+framebuffers}}
+\item 
+std\+::vector$<$ \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}} $>$ \mbox{\hyperlink{class_astra_1_1_renderer_a32aaf327fc8fac0e874e5c1859336b04}{\+\_\+command\+Lists}}
+\item 
+std\+::vector$<$ Vk\+Fence $>$ \mbox{\hyperlink{class_astra_1_1_renderer_ab450158ae4cff57b3ac064123d7805b5}{\+\_\+fences}}
+\item 
+Vk\+Image \mbox{\hyperlink{class_astra_1_1_renderer_a45c49c40397ade0b781578faad9bc260}{\+\_\+depth\+Image}}
+\item 
+Vk\+Device\+Memory \mbox{\hyperlink{class_astra_1_1_renderer_a2a911b75f8ddaf0fc1ee20a06324068d}{\+\_\+depth\+Memory}}
+\item 
+Vk\+Image\+View \mbox{\hyperlink{class_astra_1_1_renderer_ae201212b6772cfb2b63c8088dee95d48}{\+\_\+depth\+View}}
+\item 
+Vk\+Extent2D \mbox{\hyperlink{class_astra_1_1_renderer_a69c5b4e697a27991610d5c1a9cca1a19}{\+\_\+size}} \{0, 0\}
+\item 
+\mbox{\hyperlink{class_astra_1_1_app}{App}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_astra_1_1_renderer_a83f1b836bccbd2838acda4fd8a816008}{\+\_\+app}}
+\item 
+glm\+::vec4 \mbox{\hyperlink{class_astra_1_1_renderer_aa4a481836c1f50a01e439eaa2b48b537}{\+\_\+clear\+Color}}
+\item 
+int \mbox{\hyperlink{class_astra_1_1_renderer_ae0495571100bf2304c19757d8dbd0daa}{\+\_\+max\+Depth}} \{10\}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Clase renderer. Contiene todo lo necesario para renderizar la escena. Se encarga de todo el proceso de dibujado. Contiene también los descriptor sets y pipeline de post procesado. Es una clase que interactua con vulkan a bajo nivel y no está pensada para ser sobreescrita. ~\newline
+La forma en la que funciona el renderer es con dos render pass. El primero rasteriza o traza con rayos la escena y guarda el resultado en una textura. Esa textura luego se utiliza en el segundo render pass para mostrarse en pantalla junto con la interfaz de Im\+Gui. De esta forma podemos combinar el trazado de rayos para modelos de la escena con la rasterización para fuentes y elementos gráficos de la interfaz. 
+
+Definición en la línea \mbox{\hyperlink{_renderer_8h_source_l00031}{31}} del archivo \mbox{\hyperlink{_renderer_8h_source}{Renderer.\+h}}.
+
+
+
+\doxysubsection{Documentación de funciones miembro}
+\Hypertarget{class_astra_1_1_renderer_af0a8dc21941fd6b86eea52c7bdd4bd1e}\index{Astra::Renderer@{Astra::Renderer}!beginFrame@{beginFrame}}
+\index{beginFrame@{beginFrame}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{beginFrame()}{beginFrame()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_af0a8dc21941fd6b86eea52c7bdd4bd1e} 
+\mbox{\hyperlink{class_astra_1_1_command_list}{Astra\+::\+Command\+List}} Astra\+::\+Renderer\+::begin\+Frame (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Inicia el renderizado de la escena. 
+
+\begin{DoxyReturn}{Devuelve}
+Un objeto command\+List que sera necesario para que la escena actualice sus buffers. 
+\end{DoxyReturn}
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00434}{434}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_renderer_ad758489c4801b8957a6549e6089383b4}\index{Astra::Renderer@{Astra::Renderer}!beginPost@{beginPost}}
+\index{beginPost@{beginPost}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{beginPost()}{beginPost()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_ad758489c4801b8957a6549e6089383b4} 
+void Astra\+::\+Renderer\+::begin\+Post (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00505}{505}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_renderer_abe87a489b196324b6e06e0ae5b36647c}\index{Astra::Renderer@{Astra::Renderer}!createDepthBuffer@{createDepthBuffer}}
+\index{createDepthBuffer@{createDepthBuffer}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{createDepthBuffer()}{createDepthBuffer()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_abe87a489b196324b6e06e0ae5b36647c} 
+void Astra\+::\+Renderer\+::create\+Depth\+Buffer (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00338}{338}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_renderer_a1eeb8ce2feae734edfaa8e6038ba2ff0}\index{Astra::Renderer@{Astra::Renderer}!createFrameBuffers@{createFrameBuffers}}
+\index{createFrameBuffers@{createFrameBuffers}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{createFrameBuffers()}{createFrameBuffers()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a1eeb8ce2feae734edfaa8e6038ba2ff0} 
+void Astra\+::\+Renderer\+::create\+Frame\+Buffers (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00310}{310}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_renderer_a7e6f36931d1c91240296a0d072074fe0}\index{Astra::Renderer@{Astra::Renderer}!createOffscreenRender@{createOffscreenRender}}
+\index{createOffscreenRender@{createOffscreenRender}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{createOffscreenRender()}{createOffscreenRender()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a7e6f36931d1c91240296a0d072074fe0} 
+void Astra\+::\+Renderer\+::create\+Offscreen\+Render (\begin{DoxyParamCaption}\item[{nvvk\+::\+Resource\+Allocator\+Dma \&}]{alloc}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00168}{168}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_renderer_a0405bce64b917865045058c460f26873}\index{Astra::Renderer@{Astra::Renderer}!createPostDescriptorSet@{createPostDescriptorSet}}
+\index{createPostDescriptorSet@{createPostDescriptorSet}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{createPostDescriptorSet()}{createPostDescriptorSet()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a0405bce64b917865045058c460f26873} 
+void Astra\+::\+Renderer\+::create\+Post\+Descriptor\+Set (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00080}{80}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_renderer_a343e2a902fbd2b94afe33fda4e6d8d15}\index{Astra::Renderer@{Astra::Renderer}!createPostPipeline@{createPostPipeline}}
+\index{createPostPipeline@{createPostPipeline}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{createPostPipeline()}{createPostPipeline()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a343e2a902fbd2b94afe33fda4e6d8d15} 
+void Astra\+::\+Renderer\+::create\+Post\+Pipeline (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00282}{282}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_renderer_af55683872a908d60a42f6b6fa8231b51}\index{Astra::Renderer@{Astra::Renderer}!createRenderPass@{createRenderPass}}
+\index{createRenderPass@{createRenderPass}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{createRenderPass()}{createRenderPass()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_af55683872a908d60a42f6b6fa8231b51} 
+void Astra\+::\+Renderer\+::create\+Render\+Pass (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00232}{232}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_renderer_a7109b93b1add9c4ded1e26d8ca95a458}\index{Astra::Renderer@{Astra::Renderer}!createSwapchain@{createSwapchain}}
+\index{createSwapchain@{createSwapchain}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{createSwapchain()}{createSwapchain()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a7109b93b1add9c4ded1e26d8ca95a458} 
+void Astra\+::\+Renderer\+::create\+Swapchain (\begin{DoxyParamCaption}\item[{const Vk\+Surface\+KHR \&}]{surface}{, }\item[{uint32\+\_\+t}]{width}{, }\item[{uint32\+\_\+t}]{height}{, }\item[{Vk\+Format}]{color\+Format}{ = {\ttfamily VK\+\_\+FORMAT\+\_\+B8G8R8A8\+\_\+UNORM}, }\item[{Vk\+Format}]{depth\+Format}{ = {\ttfamily VK\+\_\+FORMAT\+\_\+UNDEFINED}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00103}{103}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_renderer_a9cc281d20178384d1a56a17888356399}\index{Astra::Renderer@{Astra::Renderer}!destroy@{destroy}}
+\index{destroy@{destroy}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{destroy()}{destroy()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a9cc281d20178384d1a56a17888356399} 
+void Astra\+::\+Renderer\+::destroy (\begin{DoxyParamCaption}\item[{nvvk\+::\+Resource\+Allocator \texorpdfstring{$\ast$}{*}}]{alloc}{}\end{DoxyParamCaption})}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00551}{551}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_renderer_a6dd0f6fcbe9636ab7a948178bdf34643}\index{Astra::Renderer@{Astra::Renderer}!endFrame@{endFrame}}
+\index{endFrame@{endFrame}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{endFrame()}{endFrame()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a6dd0f6fcbe9636ab7a948178bdf34643} 
+void Astra\+::\+Renderer\+::end\+Frame (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}} \&}]{cmd\+List}{}\end{DoxyParamCaption})}
+
+
+
+Finaliza el renderizado del frame. 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em cmd\+List} & el objeto command\+List que devuelve el \doxylink{class_astra_1_1_renderer_af0a8dc21941fd6b86eea52c7bdd4bd1e}{begin\+Frame()}; \\
+\hline
+\end{DoxyParams}
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00460}{460}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_renderer_addd8eb0c471c7c44308a5defd6814280}\index{Astra::Renderer@{Astra::Renderer}!endPost@{endPost}}
+\index{endPost@{endPost}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{endPost()}{endPost()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_addd8eb0c471c7c44308a5defd6814280} 
+void Astra\+::\+Renderer\+::end\+Post (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}} \&}]{cmd\+Buf}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00524}{524}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_renderer_aba955fd748f0290e84175af8a7006474}\index{Astra::Renderer@{Astra::Renderer}!getClearColor@{getClearColor}}
+\index{getClearColor@{getClearColor}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{getClearColor()}{getClearColor()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_aba955fd748f0290e84175af8a7006474} 
+glm\+::vec4 Astra\+::\+Renderer\+::get\+Clear\+Color (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00604}{604}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_renderer_ac40f45f6d9db163fd3b3f4b8e613d1a5}\index{Astra::Renderer@{Astra::Renderer}!getClearColorRef@{getClearColorRef}}
+\index{getClearColorRef@{getClearColorRef}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{getClearColorRef()}{getClearColorRef()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_ac40f45f6d9db163fd3b3f4b8e613d1a5} 
+glm\+::vec4 \& Astra\+::\+Renderer\+::get\+Clear\+Color\+Ref (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00599}{599}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_renderer_a3649ee6381177ddb7e7446fa7cf06b6b}\index{Astra::Renderer@{Astra::Renderer}!getGuiControllerInfo@{getGuiControllerInfo}}
+\index{getGuiControllerInfo@{getGuiControllerInfo}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{getGuiControllerInfo()}{getGuiControllerInfo()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a3649ee6381177ddb7e7446fa7cf06b6b} 
+void Astra\+::\+Renderer\+::get\+Gui\+Controller\+Info (\begin{DoxyParamCaption}\item[{Vk\+Render\+Pass \&}]{renderpass}{, }\item[{int \&}]{image\+Count}{, }\item[{Vk\+Format \&}]{color\+Format}{, }\item[{Vk\+Format \&}]{depth\+Format}{}\end{DoxyParamCaption})}
+
+
+
+Devuelve los atributos necesarios para configurar la interfaz de imgui. Modifica la referencia que recibe. 
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00287}{287}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_renderer_abc84666dfc659fc07be647506afcc8a1}\index{Astra::Renderer@{Astra::Renderer}!getMaxDepth@{getMaxDepth}}
+\index{getMaxDepth@{getMaxDepth}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{getMaxDepth()}{getMaxDepth()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_abc84666dfc659fc07be647506afcc8a1} 
+int Astra\+::\+Renderer\+::get\+Max\+Depth (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00300}{300}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_renderer_aaba2e14e9fd6706e23a7d768e7b97046}\index{Astra::Renderer@{Astra::Renderer}!getMaxDepthRef@{getMaxDepthRef}}
+\index{getMaxDepthRef@{getMaxDepthRef}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{getMaxDepthRef()}{getMaxDepthRef()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_aaba2e14e9fd6706e23a7d768e7b97046} 
+int \& Astra\+::\+Renderer\+::get\+Max\+Depth\+Ref (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00295}{295}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_renderer_aa64153f4d5f9ef1e59374b7dc5d1f5c2}\index{Astra::Renderer@{Astra::Renderer}!getOffscreenColor@{getOffscreenColor}}
+\index{getOffscreenColor@{getOffscreenColor}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{getOffscreenColor()}{getOffscreenColor()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_aa64153f4d5f9ef1e59374b7dc5d1f5c2} 
+const nvvk\+::\+Texture \& Astra\+::\+Renderer\+::get\+Offscreen\+Color (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00613}{613}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_renderer_aec96a83dcc18d65fb1a28e5122613e38}\index{Astra::Renderer@{Astra::Renderer}!getOffscreenRenderPass@{getOffscreenRenderPass}}
+\index{getOffscreenRenderPass@{getOffscreenRenderPass}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{getOffscreenRenderPass()}{getOffscreenRenderPass()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_aec96a83dcc18d65fb1a28e5122613e38} 
+Vk\+Render\+Pass Astra\+::\+Renderer\+::get\+Offscreen\+Render\+Pass (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00617}{617}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_renderer_a44915ed5cc166cec22cea4af7b1e7274}\index{Astra::Renderer@{Astra::Renderer}!init@{init}}
+\index{init@{init}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a44915ed5cc166cec22cea4af7b1e7274} 
+void Astra\+::\+Renderer\+::init (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_astra_1_1_app}{App}} \texorpdfstring{$\ast$}{*}}]{app}{, }\item[{nvvk\+::\+Resource\+Allocator\+Dma \&}]{alloc}{}\end{DoxyParamCaption})}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00529}{529}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_renderer_a8a12c92441b80079c2bb6c6a8857ba38}\index{Astra::Renderer@{Astra::Renderer}!linkApp@{linkApp}}
+\index{linkApp@{linkApp}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{linkApp()}{linkApp()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a8a12c92441b80079c2bb6c6a8857ba38} 
+void Astra\+::\+Renderer\+::link\+App (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_astra_1_1_app}{App}} \texorpdfstring{$\ast$}{*}}]{app}{}\end{DoxyParamCaption})}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00546}{546}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_renderer_a8db7f08c5821f3c66309a549f2aa23ce}\index{Astra::Renderer@{Astra::Renderer}!prepareFrame@{prepareFrame}}
+\index{prepareFrame@{prepareFrame}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{prepareFrame()}{prepareFrame()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a8db7f08c5821f3c66309a549f2aa23ce} 
+void Astra\+::\+Renderer\+::prepare\+Frame (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00412}{412}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_renderer_a1cdf31b67b3a35d3c1023c364b1646c4}\index{Astra::Renderer@{Astra::Renderer}!render@{render}}
+\index{render@{render}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a1cdf31b67b3a35d3c1023c364b1646c4} 
+void Astra\+::\+Renderer\+::render (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}} \&}]{cmd\+List}{, }\item[{\mbox{\hyperlink{class_astra_1_1_scene}{Scene}} \texorpdfstring{$\ast$}{*}}]{scene}{, }\item[{\mbox{\hyperlink{class_astra_1_1_pipeline}{Pipeline}} \texorpdfstring{$\ast$}{*}}]{pipeline}{, }\item[{const std\+::vector$<$ Vk\+Descriptor\+Set $>$ \&}]{desc\+Sets}{, }\item[{\mbox{\hyperlink{class_astra_1_1_gui_controller}{Astra\+::\+Gui\+Controller}} \texorpdfstring{$\ast$}{*}}]{gui}{ = {\ttfamily nullptr}}\end{DoxyParamCaption})}
+
+
+
+Renderiza la escena, raster o trazado de rayos según el tipo de pipeline que se le pase. También hace el dibujo de la interfaz y el postprocesado. 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em cmd\+List} & el objeto command\+List que devuelve el \doxylink{class_astra_1_1_renderer_af0a8dc21941fd6b86eea52c7bdd4bd1e}{begin\+Frame()}; \\
+\hline
+\end{DoxyParams}
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00575}{575}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_renderer_abb1e8309320027bd7ee64d889c9a062f}\index{Astra::Renderer@{Astra::Renderer}!renderPost@{renderPost}}
+\index{renderPost@{renderPost}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{renderPost()}{renderPost()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_abb1e8309320027bd7ee64d889c9a062f} 
+void Astra\+::\+Renderer\+::render\+Post (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}} \&}]{cmd\+Buf}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00012}{12}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_renderer_a70572d85101e450facecbdff489d35ea}\index{Astra::Renderer@{Astra::Renderer}!renderRaster@{renderRaster}}
+\index{renderRaster@{renderRaster}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{renderRaster()}{renderRaster()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a70572d85101e450facecbdff489d35ea} 
+void Astra\+::\+Renderer\+::render\+Raster (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}} \&}]{cmd\+Buf}{, }\item[{\mbox{\hyperlink{class_astra_1_1_scene}{Scene}} \texorpdfstring{$\ast$}{*}}]{scene}{, }\item[{\mbox{\hyperlink{class_astra_1_1_raster_pipeline}{Raster\+Pipeline}} \texorpdfstring{$\ast$}{*}}]{pipeline}{, }\item[{const std\+::vector$<$ Vk\+Descriptor\+Set $>$ \&}]{desc\+Sets}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00021}{21}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_renderer_aa9e65896a7e6f1ead0c7fb20cdaec69e}\index{Astra::Renderer@{Astra::Renderer}!renderRaytrace@{renderRaytrace}}
+\index{renderRaytrace@{renderRaytrace}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{renderRaytrace()}{renderRaytrace()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_aa9e65896a7e6f1ead0c7fb20cdaec69e} 
+void Astra\+::\+Renderer\+::render\+Raytrace (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}} \&}]{cmd\+Buf}{, }\item[{\mbox{\hyperlink{class_astra_1_1_scene_r_t}{Scene\+RT}} \texorpdfstring{$\ast$}{*}}]{scene}{, }\item[{\mbox{\hyperlink{class_astra_1_1_ray_tracing_pipeline}{Ray\+Tracing\+Pipeline}} \texorpdfstring{$\ast$}{*}}]{pipeline}{, }\item[{const std\+::vector$<$ Vk\+Descriptor\+Set $>$ \&}]{desc\+Sets}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00061}{61}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_renderer_a82980b116b620a95f30e0a309999b0b1}\index{Astra::Renderer@{Astra::Renderer}!requestSwapchainImage@{requestSwapchainImage}}
+\index{requestSwapchainImage@{requestSwapchainImage}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{requestSwapchainImage()}{requestSwapchainImage()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a82980b116b620a95f30e0a309999b0b1} 
+void Astra\+::\+Renderer\+::request\+Swapchain\+Image (\begin{DoxyParamCaption}\item[{int}]{w}{, }\item[{int}]{h}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00447}{447}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_renderer_a4c69c95e488bad0c440c2634105aec5c}\index{Astra::Renderer@{Astra::Renderer}!resize@{resize}}
+\index{resize@{resize}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{resize()}{resize()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a4c69c95e488bad0c440c2634105aec5c} 
+void Astra\+::\+Renderer\+::resize (\begin{DoxyParamCaption}\item[{int}]{w}{, }\item[{int}]{h}{, }\item[{nvvk\+::\+Resource\+Allocator\+Dma \&}]{alloc}{}\end{DoxyParamCaption})}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00403}{403}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_renderer_a63174edcbe98bfccf8530bea6ce506f0}\index{Astra::Renderer@{Astra::Renderer}!setClearColor@{setClearColor}}
+\index{setClearColor@{setClearColor}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{setClearColor()}{setClearColor()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a63174edcbe98bfccf8530bea6ce506f0} 
+void Astra\+::\+Renderer\+::set\+Clear\+Color (\begin{DoxyParamCaption}\item[{const glm\+::vec4 \&}]{color}{}\end{DoxyParamCaption})}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00609}{609}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_renderer_a95e0b6dd5173f85280c18d360d23323d}\index{Astra::Renderer@{Astra::Renderer}!setMaxDepth@{setMaxDepth}}
+\index{setMaxDepth@{setMaxDepth}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{setMaxDepth()}{setMaxDepth()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a95e0b6dd5173f85280c18d360d23323d} 
+void Astra\+::\+Renderer\+::set\+Max\+Depth (\begin{DoxyParamCaption}\item[{int}]{depth}{}\end{DoxyParamCaption})}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00305}{305}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_renderer_a53b5ee84d52a70cf36ad3cddc2137f6b}\index{Astra::Renderer@{Astra::Renderer}!setViewport@{setViewport}}
+\index{setViewport@{setViewport}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{setViewport()}{setViewport()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a53b5ee84d52a70cf36ad3cddc2137f6b} 
+void Astra\+::\+Renderer\+::set\+Viewport (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}} \&}]{cmd\+Buf}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00094}{94}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_renderer_a42f1463f80d7661a2c73fff1f1cca868}\index{Astra::Renderer@{Astra::Renderer}!updatePostDescriptorSet@{updatePostDescriptorSet}}
+\index{updatePostDescriptorSet@{updatePostDescriptorSet}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{updatePostDescriptorSet()}{updatePostDescriptorSet()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a42f1463f80d7661a2c73fff1f1cca868} 
+void Astra\+::\+Renderer\+::update\+Post\+Descriptor\+Set (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8cpp_source_l00088}{88}} del archivo \mbox{\hyperlink{_renderer_8cpp_source}{Renderer.\+cpp}}.
+
+
+
+\doxysubsection{Documentación de datos miembro}
+\Hypertarget{class_astra_1_1_renderer_a83f1b836bccbd2838acda4fd8a816008}\index{Astra::Renderer@{Astra::Renderer}!\_app@{\_app}}
+\index{\_app@{\_app}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{\_app}{\_app}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a83f1b836bccbd2838acda4fd8a816008} 
+\mbox{\hyperlink{class_astra_1_1_app}{App}}\texorpdfstring{$\ast$}{*} Astra\+::\+Renderer\+::\+\_\+app\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8h_source_l00061}{61}} del archivo \mbox{\hyperlink{_renderer_8h_source}{Renderer.\+h}}.
+
+\Hypertarget{class_astra_1_1_renderer_aa4a481836c1f50a01e439eaa2b48b537}\index{Astra::Renderer@{Astra::Renderer}!\_clearColor@{\_clearColor}}
+\index{\_clearColor@{\_clearColor}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{\_clearColor}{\_clearColor}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_aa4a481836c1f50a01e439eaa2b48b537} 
+glm\+::vec4 Astra\+::\+Renderer\+::\+\_\+clear\+Color\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8h_source_l00062}{62}} del archivo \mbox{\hyperlink{_renderer_8h_source}{Renderer.\+h}}.
+
+\Hypertarget{class_astra_1_1_renderer_a6863308493311c1c530cdef44a00cd68}\index{Astra::Renderer@{Astra::Renderer}!\_colorFormat@{\_colorFormat}}
+\index{\_colorFormat@{\_colorFormat}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{\_colorFormat}{\_colorFormat}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a6863308493311c1c530cdef44a00cd68} 
+Vk\+Format Astra\+::\+Renderer\+::\+\_\+color\+Format \{VK\+\_\+\+FORMAT\+\_\+\+B8\+G8\+R8\+A8\+\_\+\+UNORM\}\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8h_source_l00045}{45}} del archivo \mbox{\hyperlink{_renderer_8h_source}{Renderer.\+h}}.
+
+\Hypertarget{class_astra_1_1_renderer_a32aaf327fc8fac0e874e5c1859336b04}\index{Astra::Renderer@{Astra::Renderer}!\_commandLists@{\_commandLists}}
+\index{\_commandLists@{\_commandLists}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{\_commandLists}{\_commandLists}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a32aaf327fc8fac0e874e5c1859336b04} 
+std\+::vector$<$\mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}}$>$ Astra\+::\+Renderer\+::\+\_\+command\+Lists\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8h_source_l00054}{54}} del archivo \mbox{\hyperlink{_renderer_8h_source}{Renderer.\+h}}.
+
+\Hypertarget{class_astra_1_1_renderer_a269bb7d191f4f433f32fc4af1298b8d7}\index{Astra::Renderer@{Astra::Renderer}!\_depthFormat@{\_depthFormat}}
+\index{\_depthFormat@{\_depthFormat}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{\_depthFormat}{\_depthFormat}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a269bb7d191f4f433f32fc4af1298b8d7} 
+Vk\+Format Astra\+::\+Renderer\+::\+\_\+depth\+Format \{VK\+\_\+\+FORMAT\+\_\+\+UNDEFINED\}\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8h_source_l00046}{46}} del archivo \mbox{\hyperlink{_renderer_8h_source}{Renderer.\+h}}.
+
+\Hypertarget{class_astra_1_1_renderer_a45c49c40397ade0b781578faad9bc260}\index{Astra::Renderer@{Astra::Renderer}!\_depthImage@{\_depthImage}}
+\index{\_depthImage@{\_depthImage}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{\_depthImage}{\_depthImage}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a45c49c40397ade0b781578faad9bc260} 
+Vk\+Image Astra\+::\+Renderer\+::\+\_\+depth\+Image\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8h_source_l00056}{56}} del archivo \mbox{\hyperlink{_renderer_8h_source}{Renderer.\+h}}.
+
+\Hypertarget{class_astra_1_1_renderer_a2a911b75f8ddaf0fc1ee20a06324068d}\index{Astra::Renderer@{Astra::Renderer}!\_depthMemory@{\_depthMemory}}
+\index{\_depthMemory@{\_depthMemory}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{\_depthMemory}{\_depthMemory}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a2a911b75f8ddaf0fc1ee20a06324068d} 
+Vk\+Device\+Memory Astra\+::\+Renderer\+::\+\_\+depth\+Memory\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8h_source_l00057}{57}} del archivo \mbox{\hyperlink{_renderer_8h_source}{Renderer.\+h}}.
+
+\Hypertarget{class_astra_1_1_renderer_ae201212b6772cfb2b63c8088dee95d48}\index{Astra::Renderer@{Astra::Renderer}!\_depthView@{\_depthView}}
+\index{\_depthView@{\_depthView}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{\_depthView}{\_depthView}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_ae201212b6772cfb2b63c8088dee95d48} 
+Vk\+Image\+View Astra\+::\+Renderer\+::\+\_\+depth\+View\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8h_source_l00058}{58}} del archivo \mbox{\hyperlink{_renderer_8h_source}{Renderer.\+h}}.
+
+\Hypertarget{class_astra_1_1_renderer_ab450158ae4cff57b3ac064123d7805b5}\index{Astra::Renderer@{Astra::Renderer}!\_fences@{\_fences}}
+\index{\_fences@{\_fences}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{\_fences}{\_fences}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_ab450158ae4cff57b3ac064123d7805b5} 
+std\+::vector$<$Vk\+Fence$>$ Astra\+::\+Renderer\+::\+\_\+fences\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8h_source_l00055}{55}} del archivo \mbox{\hyperlink{_renderer_8h_source}{Renderer.\+h}}.
+
+\Hypertarget{class_astra_1_1_renderer_a2e77d6d396d6d01cfdaf223421820e03}\index{Astra::Renderer@{Astra::Renderer}!\_framebuffers@{\_framebuffers}}
+\index{\_framebuffers@{\_framebuffers}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{\_framebuffers}{\_framebuffers}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a2e77d6d396d6d01cfdaf223421820e03} 
+std\+::vector$<$Vk\+Framebuffer$>$ Astra\+::\+Renderer\+::\+\_\+framebuffers\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8h_source_l00053}{53}} del archivo \mbox{\hyperlink{_renderer_8h_source}{Renderer.\+h}}.
+
+\Hypertarget{class_astra_1_1_renderer_ae0495571100bf2304c19757d8dbd0daa}\index{Astra::Renderer@{Astra::Renderer}!\_maxDepth@{\_maxDepth}}
+\index{\_maxDepth@{\_maxDepth}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{\_maxDepth}{\_maxDepth}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_ae0495571100bf2304c19757d8dbd0daa} 
+int Astra\+::\+Renderer\+::\+\_\+max\+Depth \{10\}\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8h_source_l00063}{63}} del archivo \mbox{\hyperlink{_renderer_8h_source}{Renderer.\+h}}.
+
+\Hypertarget{class_astra_1_1_renderer_a6de3a5ab79972d61e752a71ec4b84986}\index{Astra::Renderer@{Astra::Renderer}!\_offscreenColor@{\_offscreenColor}}
+\index{\_offscreenColor@{\_offscreenColor}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{\_offscreenColor}{\_offscreenColor}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a6de3a5ab79972d61e752a71ec4b84986} 
+nvvk\+::\+Texture Astra\+::\+Renderer\+::\+\_\+offscreen\+Color\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8h_source_l00037}{37}} del archivo \mbox{\hyperlink{_renderer_8h_source}{Renderer.\+h}}.
+
+\Hypertarget{class_astra_1_1_renderer_a5860242a8ace7538dc951082dd329341}\index{Astra::Renderer@{Astra::Renderer}!\_offscreenColorFormat@{\_offscreenColorFormat}}
+\index{\_offscreenColorFormat@{\_offscreenColorFormat}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{\_offscreenColorFormat}{\_offscreenColorFormat}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a5860242a8ace7538dc951082dd329341} 
+Vk\+Format Astra\+::\+Renderer\+::\+\_\+offscreen\+Color\+Format \{VK\+\_\+\+FORMAT\+\_\+\+R32\+G32\+B32\+A32\+\_\+\+SFLOAT\}\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8h_source_l00039}{39}} del archivo \mbox{\hyperlink{_renderer_8h_source}{Renderer.\+h}}.
+
+\Hypertarget{class_astra_1_1_renderer_a3dcce31a018ac5ea993c88831256dc3e}\index{Astra::Renderer@{Astra::Renderer}!\_offscreenDepth@{\_offscreenDepth}}
+\index{\_offscreenDepth@{\_offscreenDepth}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{\_offscreenDepth}{\_offscreenDepth}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a3dcce31a018ac5ea993c88831256dc3e} 
+nvvk\+::\+Texture Astra\+::\+Renderer\+::\+\_\+offscreen\+Depth\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8h_source_l00038}{38}} del archivo \mbox{\hyperlink{_renderer_8h_source}{Renderer.\+h}}.
+
+\Hypertarget{class_astra_1_1_renderer_a77395ba6c83bbdbd87713b902d76c6f4}\index{Astra::Renderer@{Astra::Renderer}!\_offscreenDepthFormat@{\_offscreenDepthFormat}}
+\index{\_offscreenDepthFormat@{\_offscreenDepthFormat}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{\_offscreenDepthFormat}{\_offscreenDepthFormat}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a77395ba6c83bbdbd87713b902d76c6f4} 
+Vk\+Format Astra\+::\+Renderer\+::\+\_\+offscreen\+Depth\+Format \{VK\+\_\+\+FORMAT\+\_\+\+X8\+\_\+\+D24\+\_\+\+UNORM\+\_\+\+PACK32\}\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8h_source_l00040}{40}} del archivo \mbox{\hyperlink{_renderer_8h_source}{Renderer.\+h}}.
+
+\Hypertarget{class_astra_1_1_renderer_a8ca10e4dac7c21c691e9ed6be31774f7}\index{Astra::Renderer@{Astra::Renderer}!\_offscreenFb@{\_offscreenFb}}
+\index{\_offscreenFb@{\_offscreenFb}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{\_offscreenFb}{\_offscreenFb}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a8ca10e4dac7c21c691e9ed6be31774f7} 
+Vk\+Framebuffer Astra\+::\+Renderer\+::\+\_\+offscreen\+Fb\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8h_source_l00036}{36}} del archivo \mbox{\hyperlink{_renderer_8h_source}{Renderer.\+h}}.
+
+\Hypertarget{class_astra_1_1_renderer_a6a9d4b84a619190bad7afcd9e0626e00}\index{Astra::Renderer@{Astra::Renderer}!\_offscreenRenderPass@{\_offscreenRenderPass}}
+\index{\_offscreenRenderPass@{\_offscreenRenderPass}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{\_offscreenRenderPass}{\_offscreenRenderPass}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a6a9d4b84a619190bad7afcd9e0626e00} 
+Vk\+Render\+Pass Astra\+::\+Renderer\+::\+\_\+offscreen\+Render\+Pass\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8h_source_l00035}{35}} del archivo \mbox{\hyperlink{_renderer_8h_source}{Renderer.\+h}}.
+
+\Hypertarget{class_astra_1_1_renderer_a931c77f74a8ae912d7616f9f0f001778}\index{Astra::Renderer@{Astra::Renderer}!\_postDescPool@{\_postDescPool}}
+\index{\_postDescPool@{\_postDescPool}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{\_postDescPool}{\_postDescPool}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a931c77f74a8ae912d7616f9f0f001778} 
+Vk\+Descriptor\+Pool Astra\+::\+Renderer\+::\+\_\+post\+Desc\+Pool \{VK\+\_\+\+NULL\+\_\+\+HANDLE\}\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8h_source_l00048}{48}} del archivo \mbox{\hyperlink{_renderer_8h_source}{Renderer.\+h}}.
+
+\Hypertarget{class_astra_1_1_renderer_ad02c44d021620d8698c9037356a60d56}\index{Astra::Renderer@{Astra::Renderer}!\_postDescSet@{\_postDescSet}}
+\index{\_postDescSet@{\_postDescSet}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{\_postDescSet}{\_postDescSet}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_ad02c44d021620d8698c9037356a60d56} 
+Vk\+Descriptor\+Set Astra\+::\+Renderer\+::\+\_\+post\+Desc\+Set \{VK\+\_\+\+NULL\+\_\+\+HANDLE\}\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8h_source_l00050}{50}} del archivo \mbox{\hyperlink{_renderer_8h_source}{Renderer.\+h}}.
+
+\Hypertarget{class_astra_1_1_renderer_a1baddd0090e3915ba7305fb7146bc03f}\index{Astra::Renderer@{Astra::Renderer}!\_postDescSetLayout@{\_postDescSetLayout}}
+\index{\_postDescSetLayout@{\_postDescSetLayout}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{\_postDescSetLayout}{\_postDescSetLayout}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a1baddd0090e3915ba7305fb7146bc03f} 
+Vk\+Descriptor\+Set\+Layout Astra\+::\+Renderer\+::\+\_\+post\+Desc\+Set\+Layout \{VK\+\_\+\+NULL\+\_\+\+HANDLE\}\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8h_source_l00049}{49}} del archivo \mbox{\hyperlink{_renderer_8h_source}{Renderer.\+h}}.
+
+\Hypertarget{class_astra_1_1_renderer_a1ee0900fcc9d945acd02ac27020ae881}\index{Astra::Renderer@{Astra::Renderer}!\_postDescSetLayoutBind@{\_postDescSetLayoutBind}}
+\index{\_postDescSetLayoutBind@{\_postDescSetLayoutBind}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{\_postDescSetLayoutBind}{\_postDescSetLayoutBind}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a1ee0900fcc9d945acd02ac27020ae881} 
+nvvk\+::\+Descriptor\+Set\+Bindings Astra\+::\+Renderer\+::\+\_\+post\+Desc\+Set\+Layout\+Bind\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8h_source_l00047}{47}} del archivo \mbox{\hyperlink{_renderer_8h_source}{Renderer.\+h}}.
+
+\Hypertarget{class_astra_1_1_renderer_a80a6749b0dcde398bf68965bd931519d}\index{Astra::Renderer@{Astra::Renderer}!\_postPipeline@{\_postPipeline}}
+\index{\_postPipeline@{\_postPipeline}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{\_postPipeline}{\_postPipeline}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a80a6749b0dcde398bf68965bd931519d} 
+\mbox{\hyperlink{class_astra_1_1_post_pipeline}{Post\+Pipeline}} Astra\+::\+Renderer\+::\+\_\+post\+Pipeline\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8h_source_l00043}{43}} del archivo \mbox{\hyperlink{_renderer_8h_source}{Renderer.\+h}}.
+
+\Hypertarget{class_astra_1_1_renderer_ad16578d1b36de2cf125b2ee39ec06f11}\index{Astra::Renderer@{Astra::Renderer}!\_postRenderPass@{\_postRenderPass}}
+\index{\_postRenderPass@{\_postRenderPass}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{\_postRenderPass}{\_postRenderPass}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_ad16578d1b36de2cf125b2ee39ec06f11} 
+Vk\+Render\+Pass Astra\+::\+Renderer\+::\+\_\+post\+Render\+Pass\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8h_source_l00044}{44}} del archivo \mbox{\hyperlink{_renderer_8h_source}{Renderer.\+h}}.
+
+\Hypertarget{class_astra_1_1_renderer_a69c5b4e697a27991610d5c1a9cca1a19}\index{Astra::Renderer@{Astra::Renderer}!\_size@{\_size}}
+\index{\_size@{\_size}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{\_size}{\_size}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_a69c5b4e697a27991610d5c1a9cca1a19} 
+Vk\+Extent2D Astra\+::\+Renderer\+::\+\_\+size \{0, 0\}\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8h_source_l00059}{59}} del archivo \mbox{\hyperlink{_renderer_8h_source}{Renderer.\+h}}.
+
+\Hypertarget{class_astra_1_1_renderer_ab111e22288aae4d0db6a633215a075c2}\index{Astra::Renderer@{Astra::Renderer}!\_swapchain@{\_swapchain}}
+\index{\_swapchain@{\_swapchain}!Astra::Renderer@{Astra::Renderer}}
+\doxysubsubsection{\texorpdfstring{\_swapchain}{\_swapchain}}
+{\footnotesize\ttfamily \label{class_astra_1_1_renderer_ab111e22288aae4d0db6a633215a075c2} 
+nvvk\+::\+Swap\+Chain Astra\+::\+Renderer\+::\+\_\+swapchain\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_renderer_8h_source_l00052}{52}} del archivo \mbox{\hyperlink{_renderer_8h_source}{Renderer.\+h}}.
+
+
+
+La documentación de esta clase está generada de los siguientes archivos\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{_renderer_8h}{Renderer.\+h}}\item 
+src/\mbox{\hyperlink{_renderer_8cpp}{Renderer.\+cpp}}\end{DoxyCompactItemize}

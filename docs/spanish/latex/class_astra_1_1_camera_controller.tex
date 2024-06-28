@@ -1,0 +1,412 @@
+\doxysection{Referencia de la clase Astra\+::Camera\+Controller}
+\hypertarget{class_astra_1_1_camera_controller}{}\label{class_astra_1_1_camera_controller}\index{Astra::CameraController@{Astra::CameraController}}
+
+
+Manipula la cámara según el comportamiento definido en el método update de las clases que lo implementen.  
+
+
+
+
+{\ttfamily \#include $<$Camera.\+h$>$}
+
+Diagrama de herencia de Astra\+::Camera\+Controller\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_astra_1_1_camera_controller}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Métodos públicos}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_astra_1_1_camera_controller_a8d2915583e8caf3e2cab9c94976df158}{Camera\+Controller}} (\mbox{\hyperlink{struct_astra_1_1_camera}{Camera}} \&cam)
+\item 
+void \mbox{\hyperlink{class_astra_1_1_camera_controller_a104ca3d7ec5177028dcfc170c44483d5}{set\+Sens}} (float s)
+\item 
+float \mbox{\hyperlink{class_astra_1_1_camera_controller_a3a1f1a2b8aee88db38bc3d31d1c2a854}{get\+Sens}} () const
+\item 
+void \mbox{\hyperlink{class_astra_1_1_camera_controller_a1463c208a27e62744b80f793f52b138c}{set\+Window\+Size}} (uint32\+\_\+t w, uint32\+\_\+t h)
+\item 
+const glm\+::mat4 \& \mbox{\hyperlink{class_astra_1_1_camera_controller_a885e8808f36153cdc2d3dc6b2c424750}{get\+View\+Matrix}} () const
+\item 
+glm\+::mat4 \mbox{\hyperlink{class_astra_1_1_camera_controller_ad14dba33ee496de0f94aeeb6a9bc2b8a}{get\+Projection\+Matrix}} () const
+\item 
+void \mbox{\hyperlink{class_astra_1_1_camera_controller_a0c30433490a968e8ad8587accf06cb51}{set\+Look\+At}} (const glm\+::vec3 \&eye, const glm\+::vec3 \&center, const glm\+::vec3 \&up)
+\item 
+float \mbox{\hyperlink{class_astra_1_1_camera_controller_aace151f583ca45de0f29c8653a938981}{get\+Near}} () const
+\item 
+float \mbox{\hyperlink{class_astra_1_1_camera_controller_a4fa648f2bbd2b67296c4dcaf10942b49}{fet\+Far}} () const
+\item 
+float \mbox{\hyperlink{class_astra_1_1_camera_controller_a5cf4e9d3f0de82f8369177181e6cfa5c}{get\+Fov}} () const
+\item 
+const glm\+::vec3 \& \mbox{\hyperlink{class_astra_1_1_camera_controller_add88ec4dbf57b4fb886440d22133c68d}{get\+Eye}} () const
+\item 
+const glm\+::vec3 \& \mbox{\hyperlink{class_astra_1_1_camera_controller_a072161e481786564325277b7362496b5}{get\+Up}} () const
+\item 
+const glm\+::vec3 \& \mbox{\hyperlink{class_astra_1_1_camera_controller_a8416185d80453bbac2e450350206546e}{get\+Centre}} () const
+\item 
+\mbox{\hyperlink{struct_astra_1_1_camera}{Camera}} \mbox{\hyperlink{class_astra_1_1_camera_controller_a6842a9c1a762378294953985835eae23}{get\+Camera}} () const
+\item 
+float \& \mbox{\hyperlink{class_astra_1_1_camera_controller_a8997257c16f2980b9df6e081c9a66105}{get\+Near\+Ref}} ()
+\item 
+float \& \mbox{\hyperlink{class_astra_1_1_camera_controller_a2c80c474afb9c93db0ccc996b843e208}{fet\+Far\+Ref}} ()
+\item 
+float \& \mbox{\hyperlink{class_astra_1_1_camera_controller_ad678b0788336521dc54810745753feba}{get\+Fov\+Ref}} ()
+\item 
+glm\+::vec3 \& \mbox{\hyperlink{class_astra_1_1_camera_controller_a916a248648d178bca169296813e06b0a}{get\+Eye\+Ref}} ()
+\item 
+glm\+::vec3 \& \mbox{\hyperlink{class_astra_1_1_camera_controller_a7200e2fb96d45d6fefe8873c1ee8c347}{get\+Up\+Ref}} ()
+\item 
+glm\+::vec3 \& \mbox{\hyperlink{class_astra_1_1_camera_controller_a14ffc377f814b250b4c6728c45095130}{get\+Centre\+Ref}} ()
+\item 
+void \mbox{\hyperlink{class_astra_1_1_camera_controller_ae6bd816e36590cbab2280c1784825170}{set\+Near}} (float n)
+\item 
+void \mbox{\hyperlink{class_astra_1_1_camera_controller_a8d621e6d80334e18d60f30937e7d15c2}{set\+Far}} (float f)
+\item 
+void \mbox{\hyperlink{class_astra_1_1_camera_controller_a583599b415faa1111f6f83d25734e578}{set\+Fov}} (float f)
+\item 
+virtual bool \mbox{\hyperlink{class_astra_1_1_camera_controller_a1b6e87f810c996df92ed5712d720623f}{update}} ()
+\item 
+\mbox{\hyperlink{struct_camera_uniform}{Camera\+Uniform}} \mbox{\hyperlink{class_astra_1_1_camera_controller_a56dff81dc4fb87e1fb0f513bbfd8df0d}{get\+Camera\+Uniform}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Métodos protegidos}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_astra_1_1_camera_controller_ab5958523ed020771b541bae3b3111883}{update\+Camera}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Atributos protegidos}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_astra_1_1_camera}{Camera}} \& \mbox{\hyperlink{class_astra_1_1_camera_controller_a9588a24a4475c71c00b8cc9ae842bc4e}{\+\_\+camera}}
+\item 
+float \mbox{\hyperlink{class_astra_1_1_camera_controller_ab4202d36b896492645aae2d8b8476284}{\+\_\+sens}} = 0.\+01f
+\item 
+uint32\+\_\+t \mbox{\hyperlink{class_astra_1_1_camera_controller_a52a9a6da00594f26f9d9a3743782b31e}{\+\_\+width}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{class_astra_1_1_camera_controller_a9b5b920135ec52c7dffc13a342f40127}{\+\_\+height}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Manipula la cámara según el comportamiento definido en el método update de las clases que lo implementen. 
+
+Definición en la línea \mbox{\hyperlink{_camera_8h_source_l00031}{31}} del archivo \mbox{\hyperlink{_camera_8h_source}{Camera.\+h}}.
+
+
+
+\doxysubsection{Documentación de constructores y destructores}
+\Hypertarget{class_astra_1_1_camera_controller_a8d2915583e8caf3e2cab9c94976df158}\index{Astra::CameraController@{Astra::CameraController}!CameraController@{CameraController}}
+\index{CameraController@{CameraController}!Astra::CameraController@{Astra::CameraController}}
+\doxysubsubsection{\texorpdfstring{CameraController()}{CameraController()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_camera_controller_a8d2915583e8caf3e2cab9c94976df158} 
+Astra\+::\+Camera\+Controller\+::\+Camera\+Controller (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_astra_1_1_camera}{Camera}} \&}]{cam}{}\end{DoxyParamCaption})}
+
+
+
+Definición en la línea \mbox{\hyperlink{_camera_8cpp_source_l00009}{9}} del archivo \mbox{\hyperlink{_camera_8cpp_source}{Camera.\+cpp}}.
+
+
+
+\doxysubsection{Documentación de funciones miembro}
+\Hypertarget{class_astra_1_1_camera_controller_a4fa648f2bbd2b67296c4dcaf10942b49}\index{Astra::CameraController@{Astra::CameraController}!fetFar@{fetFar}}
+\index{fetFar@{fetFar}!Astra::CameraController@{Astra::CameraController}}
+\doxysubsubsection{\texorpdfstring{fetFar()}{fetFar()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_camera_controller_a4fa648f2bbd2b67296c4dcaf10942b49} 
+float Astra\+::\+Camera\+Controller\+::fet\+Far (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Definición en la línea \mbox{\hyperlink{_camera_8cpp_source_l00046}{46}} del archivo \mbox{\hyperlink{_camera_8cpp_source}{Camera.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_camera_controller_a2c80c474afb9c93db0ccc996b843e208}\index{Astra::CameraController@{Astra::CameraController}!fetFarRef@{fetFarRef}}
+\index{fetFarRef@{fetFarRef}!Astra::CameraController@{Astra::CameraController}}
+\doxysubsubsection{\texorpdfstring{fetFarRef()}{fetFarRef()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_camera_controller_a2c80c474afb9c93db0ccc996b843e208} 
+float \& Astra\+::\+Camera\+Controller\+::fet\+Far\+Ref (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Definición en la línea \mbox{\hyperlink{_camera_8cpp_source_l00081}{81}} del archivo \mbox{\hyperlink{_camera_8cpp_source}{Camera.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_camera_controller_a6842a9c1a762378294953985835eae23}\index{Astra::CameraController@{Astra::CameraController}!getCamera@{getCamera}}
+\index{getCamera@{getCamera}!Astra::CameraController@{Astra::CameraController}}
+\doxysubsubsection{\texorpdfstring{getCamera()}{getCamera()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_camera_controller_a6842a9c1a762378294953985835eae23} 
+\mbox{\hyperlink{struct_astra_1_1_camera}{Astra\+::\+Camera}} Astra\+::\+Camera\+Controller\+::get\+Camera (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Definición en la línea \mbox{\hyperlink{_camera_8cpp_source_l00071}{71}} del archivo \mbox{\hyperlink{_camera_8cpp_source}{Camera.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_camera_controller_a56dff81dc4fb87e1fb0f513bbfd8df0d}\index{Astra::CameraController@{Astra::CameraController}!getCameraUniform@{getCameraUniform}}
+\index{getCameraUniform@{getCameraUniform}!Astra::CameraController@{Astra::CameraController}}
+\doxysubsubsection{\texorpdfstring{getCameraUniform()}{getCameraUniform()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_camera_controller_a56dff81dc4fb87e1fb0f513bbfd8df0d} 
+\mbox{\hyperlink{struct_camera_uniform}{Camera\+Uniform}} Astra\+::\+Camera\+Controller\+::get\+Camera\+Uniform (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Definición en la línea \mbox{\hyperlink{_camera_8cpp_source_l00128}{128}} del archivo \mbox{\hyperlink{_camera_8cpp_source}{Camera.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_camera_controller_a8416185d80453bbac2e450350206546e}\index{Astra::CameraController@{Astra::CameraController}!getCentre@{getCentre}}
+\index{getCentre@{getCentre}!Astra::CameraController@{Astra::CameraController}}
+\doxysubsubsection{\texorpdfstring{getCentre()}{getCentre()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_camera_controller_a8416185d80453bbac2e450350206546e} 
+const glm\+::vec3 \& Astra\+::\+Camera\+Controller\+::get\+Centre (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Definición en la línea \mbox{\hyperlink{_camera_8cpp_source_l00066}{66}} del archivo \mbox{\hyperlink{_camera_8cpp_source}{Camera.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_camera_controller_a14ffc377f814b250b4c6728c45095130}\index{Astra::CameraController@{Astra::CameraController}!getCentreRef@{getCentreRef}}
+\index{getCentreRef@{getCentreRef}!Astra::CameraController@{Astra::CameraController}}
+\doxysubsubsection{\texorpdfstring{getCentreRef()}{getCentreRef()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_camera_controller_a14ffc377f814b250b4c6728c45095130} 
+glm\+::vec3 \& Astra\+::\+Camera\+Controller\+::get\+Centre\+Ref (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Definición en la línea \mbox{\hyperlink{_camera_8cpp_source_l00101}{101}} del archivo \mbox{\hyperlink{_camera_8cpp_source}{Camera.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_camera_controller_add88ec4dbf57b4fb886440d22133c68d}\index{Astra::CameraController@{Astra::CameraController}!getEye@{getEye}}
+\index{getEye@{getEye}!Astra::CameraController@{Astra::CameraController}}
+\doxysubsubsection{\texorpdfstring{getEye()}{getEye()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_camera_controller_add88ec4dbf57b4fb886440d22133c68d} 
+const glm\+::vec3 \& Astra\+::\+Camera\+Controller\+::get\+Eye (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Definición en la línea \mbox{\hyperlink{_camera_8cpp_source_l00056}{56}} del archivo \mbox{\hyperlink{_camera_8cpp_source}{Camera.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_camera_controller_a916a248648d178bca169296813e06b0a}\index{Astra::CameraController@{Astra::CameraController}!getEyeRef@{getEyeRef}}
+\index{getEyeRef@{getEyeRef}!Astra::CameraController@{Astra::CameraController}}
+\doxysubsubsection{\texorpdfstring{getEyeRef()}{getEyeRef()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_camera_controller_a916a248648d178bca169296813e06b0a} 
+glm\+::vec3 \& Astra\+::\+Camera\+Controller\+::get\+Eye\+Ref (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Definición en la línea \mbox{\hyperlink{_camera_8cpp_source_l00091}{91}} del archivo \mbox{\hyperlink{_camera_8cpp_source}{Camera.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_camera_controller_a5cf4e9d3f0de82f8369177181e6cfa5c}\index{Astra::CameraController@{Astra::CameraController}!getFov@{getFov}}
+\index{getFov@{getFov}!Astra::CameraController@{Astra::CameraController}}
+\doxysubsubsection{\texorpdfstring{getFov()}{getFov()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_camera_controller_a5cf4e9d3f0de82f8369177181e6cfa5c} 
+float Astra\+::\+Camera\+Controller\+::get\+Fov (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Definición en la línea \mbox{\hyperlink{_camera_8cpp_source_l00051}{51}} del archivo \mbox{\hyperlink{_camera_8cpp_source}{Camera.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_camera_controller_ad678b0788336521dc54810745753feba}\index{Astra::CameraController@{Astra::CameraController}!getFovRef@{getFovRef}}
+\index{getFovRef@{getFovRef}!Astra::CameraController@{Astra::CameraController}}
+\doxysubsubsection{\texorpdfstring{getFovRef()}{getFovRef()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_camera_controller_ad678b0788336521dc54810745753feba} 
+float \& Astra\+::\+Camera\+Controller\+::get\+Fov\+Ref (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Definición en la línea \mbox{\hyperlink{_camera_8cpp_source_l00086}{86}} del archivo \mbox{\hyperlink{_camera_8cpp_source}{Camera.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_camera_controller_aace151f583ca45de0f29c8653a938981}\index{Astra::CameraController@{Astra::CameraController}!getNear@{getNear}}
+\index{getNear@{getNear}!Astra::CameraController@{Astra::CameraController}}
+\doxysubsubsection{\texorpdfstring{getNear()}{getNear()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_camera_controller_aace151f583ca45de0f29c8653a938981} 
+float Astra\+::\+Camera\+Controller\+::get\+Near (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Definición en la línea \mbox{\hyperlink{_camera_8cpp_source_l00041}{41}} del archivo \mbox{\hyperlink{_camera_8cpp_source}{Camera.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_camera_controller_a8997257c16f2980b9df6e081c9a66105}\index{Astra::CameraController@{Astra::CameraController}!getNearRef@{getNearRef}}
+\index{getNearRef@{getNearRef}!Astra::CameraController@{Astra::CameraController}}
+\doxysubsubsection{\texorpdfstring{getNearRef()}{getNearRef()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_camera_controller_a8997257c16f2980b9df6e081c9a66105} 
+float \& Astra\+::\+Camera\+Controller\+::get\+Near\+Ref (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Definición en la línea \mbox{\hyperlink{_camera_8cpp_source_l00076}{76}} del archivo \mbox{\hyperlink{_camera_8cpp_source}{Camera.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_camera_controller_ad14dba33ee496de0f94aeeb6a9bc2b8a}\index{Astra::CameraController@{Astra::CameraController}!getProjectionMatrix@{getProjectionMatrix}}
+\index{getProjectionMatrix@{getProjectionMatrix}!Astra::CameraController@{Astra::CameraController}}
+\doxysubsubsection{\texorpdfstring{getProjectionMatrix()}{getProjectionMatrix()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_camera_controller_ad14dba33ee496de0f94aeeb6a9bc2b8a} 
+glm\+::mat4 Astra\+::\+Camera\+Controller\+::get\+Projection\+Matrix (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Definición en la línea \mbox{\hyperlink{_camera_8cpp_source_l00024}{24}} del archivo \mbox{\hyperlink{_camera_8cpp_source}{Camera.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_camera_controller_a3a1f1a2b8aee88db38bc3d31d1c2a854}\index{Astra::CameraController@{Astra::CameraController}!getSens@{getSens}}
+\index{getSens@{getSens}!Astra::CameraController@{Astra::CameraController}}
+\doxysubsubsection{\texorpdfstring{getSens()}{getSens()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_camera_controller_a3a1f1a2b8aee88db38bc3d31d1c2a854} 
+float Astra\+::\+Camera\+Controller\+::get\+Sens (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_camera_8h_source_l00042}{42}} del archivo \mbox{\hyperlink{_camera_8h_source}{Camera.\+h}}.
+
+\Hypertarget{class_astra_1_1_camera_controller_a072161e481786564325277b7362496b5}\index{Astra::CameraController@{Astra::CameraController}!getUp@{getUp}}
+\index{getUp@{getUp}!Astra::CameraController@{Astra::CameraController}}
+\doxysubsubsection{\texorpdfstring{getUp()}{getUp()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_camera_controller_a072161e481786564325277b7362496b5} 
+const glm\+::vec3 \& Astra\+::\+Camera\+Controller\+::get\+Up (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Definición en la línea \mbox{\hyperlink{_camera_8cpp_source_l00061}{61}} del archivo \mbox{\hyperlink{_camera_8cpp_source}{Camera.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_camera_controller_a7200e2fb96d45d6fefe8873c1ee8c347}\index{Astra::CameraController@{Astra::CameraController}!getUpRef@{getUpRef}}
+\index{getUpRef@{getUpRef}!Astra::CameraController@{Astra::CameraController}}
+\doxysubsubsection{\texorpdfstring{getUpRef()}{getUpRef()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_camera_controller_a7200e2fb96d45d6fefe8873c1ee8c347} 
+glm\+::vec3 \& Astra\+::\+Camera\+Controller\+::get\+Up\+Ref (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Definición en la línea \mbox{\hyperlink{_camera_8cpp_source_l00096}{96}} del archivo \mbox{\hyperlink{_camera_8cpp_source}{Camera.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_camera_controller_a885e8808f36153cdc2d3dc6b2c424750}\index{Astra::CameraController@{Astra::CameraController}!getViewMatrix@{getViewMatrix}}
+\index{getViewMatrix@{getViewMatrix}!Astra::CameraController@{Astra::CameraController}}
+\doxysubsubsection{\texorpdfstring{getViewMatrix()}{getViewMatrix()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_camera_controller_a885e8808f36153cdc2d3dc6b2c424750} 
+const glm\+::mat4 \& Astra\+::\+Camera\+Controller\+::get\+View\+Matrix (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Definición en la línea \mbox{\hyperlink{_camera_8cpp_source_l00019}{19}} del archivo \mbox{\hyperlink{_camera_8cpp_source}{Camera.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_camera_controller_a8d621e6d80334e18d60f30937e7d15c2}\index{Astra::CameraController@{Astra::CameraController}!setFar@{setFar}}
+\index{setFar@{setFar}!Astra::CameraController@{Astra::CameraController}}
+\doxysubsubsection{\texorpdfstring{setFar()}{setFar()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_camera_controller_a8d621e6d80334e18d60f30937e7d15c2} 
+void Astra\+::\+Camera\+Controller\+::set\+Far (\begin{DoxyParamCaption}\item[{float}]{f}{}\end{DoxyParamCaption})}
+
+
+
+Definición en la línea \mbox{\hyperlink{_camera_8cpp_source_l00111}{111}} del archivo \mbox{\hyperlink{_camera_8cpp_source}{Camera.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_camera_controller_a583599b415faa1111f6f83d25734e578}\index{Astra::CameraController@{Astra::CameraController}!setFov@{setFov}}
+\index{setFov@{setFov}!Astra::CameraController@{Astra::CameraController}}
+\doxysubsubsection{\texorpdfstring{setFov()}{setFov()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_camera_controller_a583599b415faa1111f6f83d25734e578} 
+void Astra\+::\+Camera\+Controller\+::set\+Fov (\begin{DoxyParamCaption}\item[{float}]{f}{}\end{DoxyParamCaption})}
+
+
+
+Definición en la línea \mbox{\hyperlink{_camera_8cpp_source_l00116}{116}} del archivo \mbox{\hyperlink{_camera_8cpp_source}{Camera.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_camera_controller_a0c30433490a968e8ad8587accf06cb51}\index{Astra::CameraController@{Astra::CameraController}!setLookAt@{setLookAt}}
+\index{setLookAt@{setLookAt}!Astra::CameraController@{Astra::CameraController}}
+\doxysubsubsection{\texorpdfstring{setLookAt()}{setLookAt()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_camera_controller_a0c30433490a968e8ad8587accf06cb51} 
+void Astra\+::\+Camera\+Controller\+::set\+Look\+At (\begin{DoxyParamCaption}\item[{const glm\+::vec3 \&}]{eye}{, }\item[{const glm\+::vec3 \&}]{center}{, }\item[{const glm\+::vec3 \&}]{up}{}\end{DoxyParamCaption})}
+
+
+
+Definición en la línea \mbox{\hyperlink{_camera_8cpp_source_l00033}{33}} del archivo \mbox{\hyperlink{_camera_8cpp_source}{Camera.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_camera_controller_ae6bd816e36590cbab2280c1784825170}\index{Astra::CameraController@{Astra::CameraController}!setNear@{setNear}}
+\index{setNear@{setNear}!Astra::CameraController@{Astra::CameraController}}
+\doxysubsubsection{\texorpdfstring{setNear()}{setNear()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_camera_controller_ae6bd816e36590cbab2280c1784825170} 
+void Astra\+::\+Camera\+Controller\+::set\+Near (\begin{DoxyParamCaption}\item[{float}]{n}{}\end{DoxyParamCaption})}
+
+
+
+Definición en la línea \mbox{\hyperlink{_camera_8cpp_source_l00106}{106}} del archivo \mbox{\hyperlink{_camera_8cpp_source}{Camera.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_camera_controller_a104ca3d7ec5177028dcfc170c44483d5}\index{Astra::CameraController@{Astra::CameraController}!setSens@{setSens}}
+\index{setSens@{setSens}!Astra::CameraController@{Astra::CameraController}}
+\doxysubsubsection{\texorpdfstring{setSens()}{setSens()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_camera_controller_a104ca3d7ec5177028dcfc170c44483d5} 
+void Astra\+::\+Camera\+Controller\+::set\+Sens (\begin{DoxyParamCaption}\item[{float}]{s}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_camera_8h_source_l00041}{41}} del archivo \mbox{\hyperlink{_camera_8h_source}{Camera.\+h}}.
+
+\Hypertarget{class_astra_1_1_camera_controller_a1463c208a27e62744b80f793f52b138c}\index{Astra::CameraController@{Astra::CameraController}!setWindowSize@{setWindowSize}}
+\index{setWindowSize@{setWindowSize}!Astra::CameraController@{Astra::CameraController}}
+\doxysubsubsection{\texorpdfstring{setWindowSize()}{setWindowSize()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_camera_controller_a1463c208a27e62744b80f793f52b138c} 
+void Astra\+::\+Camera\+Controller\+::set\+Window\+Size (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{w}{, }\item[{uint32\+\_\+t}]{h}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_camera_8h_source_l00043}{43}} del archivo \mbox{\hyperlink{_camera_8h_source}{Camera.\+h}}.
+
+\Hypertarget{class_astra_1_1_camera_controller_a1b6e87f810c996df92ed5712d720623f}\index{Astra::CameraController@{Astra::CameraController}!update@{update}}
+\index{update@{update}!Astra::CameraController@{Astra::CameraController}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_camera_controller_a1b6e87f810c996df92ed5712d720623f} 
+bool Astra\+::\+Camera\+Controller\+::update (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Reimplementado en \mbox{\hyperlink{class_astra_1_1_free_camera_controller_a33a1930a1c31eeaded9c22a75d2e17b0}{Astra\+::\+Free\+Camera\+Controller}} y \mbox{\hyperlink{class_astra_1_1_orbit_camera_controller_a142a6cf6673a6b434cfd4a43018fc58d}{Astra\+::\+Orbit\+Camera\+Controller}}.
+
+
+
+Definición en la línea \mbox{\hyperlink{_camera_8cpp_source_l00121}{121}} del archivo \mbox{\hyperlink{_camera_8cpp_source}{Camera.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_camera_controller_ab5958523ed020771b541bae3b3111883}\index{Astra::CameraController@{Astra::CameraController}!updateCamera@{updateCamera}}
+\index{updateCamera@{updateCamera}!Astra::CameraController@{Astra::CameraController}}
+\doxysubsubsection{\texorpdfstring{updateCamera()}{updateCamera()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_camera_controller_ab5958523ed020771b541bae3b3111883} 
+void Astra\+::\+Camera\+Controller\+::update\+Camera (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_camera_8cpp_source_l00014}{14}} del archivo \mbox{\hyperlink{_camera_8cpp_source}{Camera.\+cpp}}.
+
+
+
+\doxysubsection{Documentación de datos miembro}
+\Hypertarget{class_astra_1_1_camera_controller_a9588a24a4475c71c00b8cc9ae842bc4e}\index{Astra::CameraController@{Astra::CameraController}!\_camera@{\_camera}}
+\index{\_camera@{\_camera}!Astra::CameraController@{Astra::CameraController}}
+\doxysubsubsection{\texorpdfstring{\_camera}{\_camera}}
+{\footnotesize\ttfamily \label{class_astra_1_1_camera_controller_a9588a24a4475c71c00b8cc9ae842bc4e} 
+\mbox{\hyperlink{struct_astra_1_1_camera}{Camera}}\& Astra\+::\+Camera\+Controller\+::\+\_\+camera\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_camera_8h_source_l00034}{34}} del archivo \mbox{\hyperlink{_camera_8h_source}{Camera.\+h}}.
+
+\Hypertarget{class_astra_1_1_camera_controller_a9b5b920135ec52c7dffc13a342f40127}\index{Astra::CameraController@{Astra::CameraController}!\_height@{\_height}}
+\index{\_height@{\_height}!Astra::CameraController@{Astra::CameraController}}
+\doxysubsubsection{\texorpdfstring{\_height}{\_height}}
+{\footnotesize\ttfamily \label{class_astra_1_1_camera_controller_a9b5b920135ec52c7dffc13a342f40127} 
+uint32\+\_\+t Astra\+::\+Camera\+Controller\+::\+\_\+height\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_camera_8h_source_l00036}{36}} del archivo \mbox{\hyperlink{_camera_8h_source}{Camera.\+h}}.
+
+\Hypertarget{class_astra_1_1_camera_controller_ab4202d36b896492645aae2d8b8476284}\index{Astra::CameraController@{Astra::CameraController}!\_sens@{\_sens}}
+\index{\_sens@{\_sens}!Astra::CameraController@{Astra::CameraController}}
+\doxysubsubsection{\texorpdfstring{\_sens}{\_sens}}
+{\footnotesize\ttfamily \label{class_astra_1_1_camera_controller_ab4202d36b896492645aae2d8b8476284} 
+float Astra\+::\+Camera\+Controller\+::\+\_\+sens = 0.\+01f\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_camera_8h_source_l00035}{35}} del archivo \mbox{\hyperlink{_camera_8h_source}{Camera.\+h}}.
+
+\Hypertarget{class_astra_1_1_camera_controller_a52a9a6da00594f26f9d9a3743782b31e}\index{Astra::CameraController@{Astra::CameraController}!\_width@{\_width}}
+\index{\_width@{\_width}!Astra::CameraController@{Astra::CameraController}}
+\doxysubsubsection{\texorpdfstring{\_width}{\_width}}
+{\footnotesize\ttfamily \label{class_astra_1_1_camera_controller_a52a9a6da00594f26f9d9a3743782b31e} 
+uint32\+\_\+t Astra\+::\+Camera\+Controller\+::\+\_\+width\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_camera_8h_source_l00036}{36}} del archivo \mbox{\hyperlink{_camera_8h_source}{Camera.\+h}}.
+
+
+
+La documentación de esta clase está generada de los siguientes archivos\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{_camera_8h}{Camera.\+h}}\item 
+src/\mbox{\hyperlink{_camera_8cpp}{Camera.\+cpp}}\end{DoxyCompactItemize}

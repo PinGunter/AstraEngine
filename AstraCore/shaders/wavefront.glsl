@@ -7,7 +7,7 @@ vec3 computeDiffuse(WaveFrontMaterial mat, vec3 lightDir, vec3 lightColor, vec3 
 	float dotNL = max(dot(normal, lightDir), 0.0);
 	vec3  c = mat.diffuse * dotNL * lightColor;
 	//if (mat.illum >= 1)
-	//	c += mat.ambient;
+	//	c += mat.ambient * 0.05;
 	return c;
 }
 

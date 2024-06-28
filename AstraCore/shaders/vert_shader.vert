@@ -26,9 +26,9 @@
 
 #include "wavefront.glsl"
 
-layout(binding = 0) uniform _GlobalUniforms
+layout(binding = eCamera) uniform _CameraUniform
 {
-  GlobalUniforms uni;
+  CameraUniform uni;
 };
 
 layout(push_constant) uniform _PushConstantRaster

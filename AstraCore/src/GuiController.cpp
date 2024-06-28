@@ -6,8 +6,7 @@
 #include <Device.h>
 #include <glm/gtc/type_ptr.hpp>
 
-
-void Astra::GuiController::init(GLFWwindow* window, Astra::Renderer* renderer)
+void Astra::GuiController::init(GLFWwindow *window, Astra::Renderer *renderer)
 {
 	VkRenderPass renderpass;
 	VkFormat color, depth;
@@ -15,18 +14,17 @@ void Astra::GuiController::init(GLFWwindow* window, Astra::Renderer* renderer)
 	renderer->getGuiControllerInfo(renderpass, imageCount, color, depth);
 
 	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO();
-	//io.IniFilename = nullptr;  // Avoiding the INI file
+	ImGuiIO &io = ImGui::GetIO();
+	// io.IniFilename = nullptr;  // Avoiding the INI file
 	io.LogFilename = nullptr;
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;      // Enable Docking
-	//io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;    // Enable Multi-Viewport / Platform Windows
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;	  // Enable Docking
 
-	//ImGuiH::setStyle();
-	//ImGuiH::setFonts();
+	// ImGuiH::setStyle();
+	// ImGuiH::setFonts();
 
-	std::vector<VkDescriptorPoolSize> poolSize{ {VK_DESCRIPTOR_TYPE_SAMPLER, 1}, {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1} };
-	VkDescriptorPoolCreateInfo poolInfo{ VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO };
+	std::vector<VkDescriptorPoolSize> poolSize{{VK_DESCRIPTOR_TYPE_SAMPLER, 1}, {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1}};
+	VkDescriptorPoolCreateInfo poolInfo{VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO};
 	poolInfo.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
 	poolInfo.maxSets = 1000;
 	poolInfo.poolSizeCount = 2;
@@ -46,7 +44,7 @@ void Astra::GuiController::init(GLFWwindow* window, Astra::Renderer* renderer)
 	init_info.Subpass = 0;
 	init_info.MinImageCount = 2;
 	init_info.ImageCount = imageCount;
-	init_info.MSAASamples = VK_SAMPLE_COUNT_1_BIT;  // <--- need argument?
+	init_info.MSAASamples = VK_SAMPLE_COUNT_1_BIT; // <--- need argument?
 	init_info.CheckVkResultFn = nullptr;
 	init_info.Allocator = nullptr;
 
@@ -72,7 +70,7 @@ void Astra::GuiController::startFrame()
 	ImGuizmo::BeginFrame();
 }
 
-void Astra::GuiController::endFrame(const Astra::CommandList& cmdList)
+void Astra::GuiController::endFrame(const Astra::CommandList &cmdList)
 {
 	ImGui::Render();
 	ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), cmdList.getCommandBuffer());
@@ -85,4 +83,3 @@ void Astra::GuiController::destroy()
 	ImGui::DestroyContext();
 	vkDestroyDescriptorPool(AstraDevice.getVkDevice(), _imguiDescPool, nullptr);
 }
-

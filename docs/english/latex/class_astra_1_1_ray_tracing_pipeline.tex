@@ -1,0 +1,233 @@
+\doxysection{Astra\+::Ray\+Tracing\+Pipeline Class Reference}
+\hypertarget{class_astra_1_1_ray_tracing_pipeline}{}\label{class_astra_1_1_ray_tracing_pipeline}\index{Astra::RayTracingPipeline@{Astra::RayTracingPipeline}}
+
+
+Ray\+Tracing pipeline. Complete implementation. Ready for use.  
+
+
+
+
+{\ttfamily \#include $<$Pipeline.\+h$>$}
+
+Inheritance diagram for Astra\+::Ray\+Tracing\+Pipeline\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_astra_1_1_ray_tracing_pipeline}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_astra_1_1_ray_tracing_pipeline_aa16a411249e33177d9d90fec7ac44eeb}{bind}} (const \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}} \&cmd\+List, const std\+::vector$<$ Vk\+Descriptor\+Set $>$ \&descsets) override
+\begin{DoxyCompactList}\small\item\em Binds the pipeline to the render pass. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_astra_1_1_ray_tracing_pipeline_ac610b942564a0e31e7ed3e1b532d818a}{create}} (Vk\+Device vkdev, const std\+::vector$<$ Vk\+Descriptor\+Set\+Layout $>$ \&descsets\+Layouts, nvvk\+::\+Resource\+Allocator\+Dma \&alloc)
+\item 
+bool \mbox{\hyperlink{class_astra_1_1_ray_tracing_pipeline_a214b2e3efbddc7df2a09801b7aeef2cb}{does\+Ray\+Tracing}} () override
+\item 
+std\+::array$<$ Vk\+Strided\+Device\+Address\+Region\+KHR, 4 $>$ \mbox{\hyperlink{class_astra_1_1_ray_tracing_pipeline_ae645143b433c26a9c8f715cebaff61b6}{get\+SBTRegions}} ()
+\item 
+void \mbox{\hyperlink{class_astra_1_1_ray_tracing_pipeline_a43b5d611bf8ce65c0990ef3bdb627273}{destroy}} (nvvk\+::\+Resource\+Allocator \texorpdfstring{$\ast$}{*}alloc) override
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_astra_1_1_pipeline}{Astra\+::\+Pipeline}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_astra_1_1_pipeline_a8515be541dc58ba430e605c7c95a970c}{push\+Constants}} (const \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}} \&cmd\+List, uint32\+\_\+t shader\+Stages, uint32\+\_\+t size, void \texorpdfstring{$\ast$}{*}data)
+\begin{DoxyCompactList}\small\item\em Pushes push constants to the GPU. \end{DoxyCompactList}\item 
+Vk\+Pipeline \mbox{\hyperlink{class_astra_1_1_pipeline_a1c9854f4c8be4e1c56bd787a695f5db7}{get\+Pipeline}} () const
+\item 
+Vk\+Pipeline\+Layout \mbox{\hyperlink{class_astra_1_1_pipeline_a958467cd915b9aa421f1f0f6624197bb}{get\+Layout}} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_astra_1_1_ray_tracing_pipeline_a1522ae81c8a70bb52ccb8af036178f0f}{create\+SBT}} (nvvk\+::\+Resource\+Allocator\+Dma \&alloc, const Vk\+Physical\+Device\+Ray\+Tracing\+Pipeline\+Properties\+KHR \&rt\+Properties)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Vk\+Strided\+Device\+Address\+Region\+KHR \mbox{\hyperlink{class_astra_1_1_ray_tracing_pipeline_a120fea50a9c7d7d2f6af232065446c91}{\+\_\+rgen\+Region}} \{\}
+\item 
+Vk\+Strided\+Device\+Address\+Region\+KHR \mbox{\hyperlink{class_astra_1_1_ray_tracing_pipeline_ae0947f7403bcb83c10fb0d827ff839cc}{\+\_\+miss\+Region}} \{\}
+\item 
+Vk\+Strided\+Device\+Address\+Region\+KHR \mbox{\hyperlink{class_astra_1_1_ray_tracing_pipeline_afb865c65541be4477dca9d8137163a0b}{\+\_\+hit\+Region}} \{\}
+\item 
+Vk\+Strided\+Device\+Address\+Region\+KHR \mbox{\hyperlink{class_astra_1_1_ray_tracing_pipeline_abed89e86170a3496bb874b618a8de9b1}{\+\_\+call\+Region}} \{\}
+\item 
+nvvk\+::\+Buffer \mbox{\hyperlink{class_astra_1_1_ray_tracing_pipeline_a5c22ebea35af0ec392cf9cdd6b74b7d8}{\+\_\+rt\+SBTBuffer}}
+\item 
+nvvk\+::\+Descriptor\+Set\+Bindings \mbox{\hyperlink{class_astra_1_1_ray_tracing_pipeline_a8b14e106b05fbc9595324607a762afd5}{\+\_\+rt\+Desc\+Set\+Layout\+Bind}}
+\item 
+std\+::vector$<$ Vk\+Ray\+Tracing\+Shader\+Group\+Create\+Info\+KHR $>$ \mbox{\hyperlink{class_astra_1_1_ray_tracing_pipeline_a1e6dc5eb12b4b8029001183bba1cc5f0}{\+\_\+rt\+Shader\+Groups}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_astra_1_1_pipeline}{Astra\+::\+Pipeline}}}
+\begin{DoxyCompactItemize}
+\item 
+Vk\+Pipeline\+Layout \mbox{\hyperlink{class_astra_1_1_pipeline_a91eee050a7e48f5eed88f375e99348b3}{\+\_\+layout}}
+\item 
+Vk\+Pipeline \mbox{\hyperlink{class_astra_1_1_pipeline_a5ce2b0f85964c6e531e66cb26c28d5d9}{\+\_\+pipeline}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Ray\+Tracing pipeline. Complete implementation. Ready for use. 
+
+Definition at line \mbox{\hyperlink{_pipeline_8h_source_l00057}{57}} of file \mbox{\hyperlink{_pipeline_8h_source}{Pipeline.\+h}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_astra_1_1_ray_tracing_pipeline_aa16a411249e33177d9d90fec7ac44eeb}\index{Astra::RayTracingPipeline@{Astra::RayTracingPipeline}!bind@{bind}}
+\index{bind@{bind}!Astra::RayTracingPipeline@{Astra::RayTracingPipeline}}
+\doxysubsubsection{\texorpdfstring{bind()}{bind()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_ray_tracing_pipeline_aa16a411249e33177d9d90fec7ac44eeb} 
+void Astra\+::\+Ray\+Tracing\+Pipeline\+::bind (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}} \&}]{cmd\+List}{, }\item[{const std\+::vector$<$ Vk\+Descriptor\+Set $>$ \&}]{descsets}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Binds the pipeline to the render pass. 
+
+
+
+Reimplemented from \mbox{\hyperlink{class_astra_1_1_pipeline_ad56780f344b4864e302ce0d156ca430e}{Astra\+::\+Pipeline}}.
+
+
+
+Definition at line \mbox{\hyperlink{_pipeline_8cpp_source_l00249}{249}} of file \mbox{\hyperlink{_pipeline_8cpp_source}{Pipeline.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_ray_tracing_pipeline_ac610b942564a0e31e7ed3e1b532d818a}\index{Astra::RayTracingPipeline@{Astra::RayTracingPipeline}!create@{create}}
+\index{create@{create}!Astra::RayTracingPipeline@{Astra::RayTracingPipeline}}
+\doxysubsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_ray_tracing_pipeline_ac610b942564a0e31e7ed3e1b532d818a} 
+void Astra\+::\+Ray\+Tracing\+Pipeline\+::create (\begin{DoxyParamCaption}\item[{Vk\+Device}]{vkdev}{, }\item[{const std\+::vector$<$ Vk\+Descriptor\+Set\+Layout $>$ \&}]{descsets\+Layouts}{, }\item[{nvvk\+::\+Resource\+Allocator\+Dma \&}]{alloc}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_pipeline_8cpp_source_l00041}{41}} of file \mbox{\hyperlink{_pipeline_8cpp_source}{Pipeline.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_ray_tracing_pipeline_a1522ae81c8a70bb52ccb8af036178f0f}\index{Astra::RayTracingPipeline@{Astra::RayTracingPipeline}!createSBT@{createSBT}}
+\index{createSBT@{createSBT}!Astra::RayTracingPipeline@{Astra::RayTracingPipeline}}
+\doxysubsubsection{\texorpdfstring{createSBT()}{createSBT()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_ray_tracing_pipeline_a1522ae81c8a70bb52ccb8af036178f0f} 
+void Astra\+::\+Ray\+Tracing\+Pipeline\+::create\+SBT (\begin{DoxyParamCaption}\item[{nvvk\+::\+Resource\+Allocator\+Dma \&}]{alloc}{, }\item[{const Vk\+Physical\+Device\+Ray\+Tracing\+Pipeline\+Properties\+KHR \&}]{rt\+Properties}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{_pipeline_8cpp_source_l00180}{180}} of file \mbox{\hyperlink{_pipeline_8cpp_source}{Pipeline.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_ray_tracing_pipeline_a43b5d611bf8ce65c0990ef3bdb627273}\index{Astra::RayTracingPipeline@{Astra::RayTracingPipeline}!destroy@{destroy}}
+\index{destroy@{destroy}!Astra::RayTracingPipeline@{Astra::RayTracingPipeline}}
+\doxysubsubsection{\texorpdfstring{destroy()}{destroy()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_ray_tracing_pipeline_a43b5d611bf8ce65c0990ef3bdb627273} 
+void Astra\+::\+Ray\+Tracing\+Pipeline\+::destroy (\begin{DoxyParamCaption}\item[{nvvk\+::\+Resource\+Allocator \texorpdfstring{$\ast$}{*}}]{alloc}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_astra_1_1_pipeline_a10f5a40a8dd3fe819337bd32308d7090}{Astra\+::\+Pipeline}}.
+
+
+
+Definition at line \mbox{\hyperlink{_pipeline_8cpp_source_l00174}{174}} of file \mbox{\hyperlink{_pipeline_8cpp_source}{Pipeline.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_ray_tracing_pipeline_a214b2e3efbddc7df2a09801b7aeef2cb}\index{Astra::RayTracingPipeline@{Astra::RayTracingPipeline}!doesRayTracing@{doesRayTracing}}
+\index{doesRayTracing@{doesRayTracing}!Astra::RayTracingPipeline@{Astra::RayTracingPipeline}}
+\doxysubsubsection{\texorpdfstring{doesRayTracing()}{doesRayTracing()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_ray_tracing_pipeline_a214b2e3efbddc7df2a09801b7aeef2cb} 
+bool Astra\+::\+Ray\+Tracing\+Pipeline\+::does\+Ray\+Tracing (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_astra_1_1_pipeline_ab830986181ee4bc8533d0c2ab575188e}{Astra\+::\+Pipeline}}.
+
+
+
+Definition at line \mbox{\hyperlink{_pipeline_8h_source_l00073}{73}} of file \mbox{\hyperlink{_pipeline_8h_source}{Pipeline.\+h}}.
+
+\Hypertarget{class_astra_1_1_ray_tracing_pipeline_ae645143b433c26a9c8f715cebaff61b6}\index{Astra::RayTracingPipeline@{Astra::RayTracingPipeline}!getSBTRegions@{getSBTRegions}}
+\index{getSBTRegions@{getSBTRegions}!Astra::RayTracingPipeline@{Astra::RayTracingPipeline}}
+\doxysubsubsection{\texorpdfstring{getSBTRegions()}{getSBTRegions()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_ray_tracing_pipeline_ae645143b433c26a9c8f715cebaff61b6} 
+std\+::array$<$ Vk\+Strided\+Device\+Address\+Region\+KHR, 4 $>$ Astra\+::\+Ray\+Tracing\+Pipeline\+::get\+SBTRegions (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_pipeline_8cpp_source_l00169}{169}} of file \mbox{\hyperlink{_pipeline_8cpp_source}{Pipeline.\+cpp}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_astra_1_1_ray_tracing_pipeline_abed89e86170a3496bb874b618a8de9b1}\index{Astra::RayTracingPipeline@{Astra::RayTracingPipeline}!\_callRegion@{\_callRegion}}
+\index{\_callRegion@{\_callRegion}!Astra::RayTracingPipeline@{Astra::RayTracingPipeline}}
+\doxysubsubsection{\texorpdfstring{\_callRegion}{\_callRegion}}
+{\footnotesize\ttfamily \label{class_astra_1_1_ray_tracing_pipeline_abed89e86170a3496bb874b618a8de9b1} 
+Vk\+Strided\+Device\+Address\+Region\+KHR Astra\+::\+Ray\+Tracing\+Pipeline\+::\+\_\+call\+Region \{\}\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{_pipeline_8h_source_l00063}{63}} of file \mbox{\hyperlink{_pipeline_8h_source}{Pipeline.\+h}}.
+
+\Hypertarget{class_astra_1_1_ray_tracing_pipeline_afb865c65541be4477dca9d8137163a0b}\index{Astra::RayTracingPipeline@{Astra::RayTracingPipeline}!\_hitRegion@{\_hitRegion}}
+\index{\_hitRegion@{\_hitRegion}!Astra::RayTracingPipeline@{Astra::RayTracingPipeline}}
+\doxysubsubsection{\texorpdfstring{\_hitRegion}{\_hitRegion}}
+{\footnotesize\ttfamily \label{class_astra_1_1_ray_tracing_pipeline_afb865c65541be4477dca9d8137163a0b} 
+Vk\+Strided\+Device\+Address\+Region\+KHR Astra\+::\+Ray\+Tracing\+Pipeline\+::\+\_\+hit\+Region \{\}\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{_pipeline_8h_source_l00062}{62}} of file \mbox{\hyperlink{_pipeline_8h_source}{Pipeline.\+h}}.
+
+\Hypertarget{class_astra_1_1_ray_tracing_pipeline_ae0947f7403bcb83c10fb0d827ff839cc}\index{Astra::RayTracingPipeline@{Astra::RayTracingPipeline}!\_missRegion@{\_missRegion}}
+\index{\_missRegion@{\_missRegion}!Astra::RayTracingPipeline@{Astra::RayTracingPipeline}}
+\doxysubsubsection{\texorpdfstring{\_missRegion}{\_missRegion}}
+{\footnotesize\ttfamily \label{class_astra_1_1_ray_tracing_pipeline_ae0947f7403bcb83c10fb0d827ff839cc} 
+Vk\+Strided\+Device\+Address\+Region\+KHR Astra\+::\+Ray\+Tracing\+Pipeline\+::\+\_\+miss\+Region \{\}\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{_pipeline_8h_source_l00061}{61}} of file \mbox{\hyperlink{_pipeline_8h_source}{Pipeline.\+h}}.
+
+\Hypertarget{class_astra_1_1_ray_tracing_pipeline_a120fea50a9c7d7d2f6af232065446c91}\index{Astra::RayTracingPipeline@{Astra::RayTracingPipeline}!\_rgenRegion@{\_rgenRegion}}
+\index{\_rgenRegion@{\_rgenRegion}!Astra::RayTracingPipeline@{Astra::RayTracingPipeline}}
+\doxysubsubsection{\texorpdfstring{\_rgenRegion}{\_rgenRegion}}
+{\footnotesize\ttfamily \label{class_astra_1_1_ray_tracing_pipeline_a120fea50a9c7d7d2f6af232065446c91} 
+Vk\+Strided\+Device\+Address\+Region\+KHR Astra\+::\+Ray\+Tracing\+Pipeline\+::\+\_\+rgen\+Region \{\}\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{_pipeline_8h_source_l00060}{60}} of file \mbox{\hyperlink{_pipeline_8h_source}{Pipeline.\+h}}.
+
+\Hypertarget{class_astra_1_1_ray_tracing_pipeline_a8b14e106b05fbc9595324607a762afd5}\index{Astra::RayTracingPipeline@{Astra::RayTracingPipeline}!\_rtDescSetLayoutBind@{\_rtDescSetLayoutBind}}
+\index{\_rtDescSetLayoutBind@{\_rtDescSetLayoutBind}!Astra::RayTracingPipeline@{Astra::RayTracingPipeline}}
+\doxysubsubsection{\texorpdfstring{\_rtDescSetLayoutBind}{\_rtDescSetLayoutBind}}
+{\footnotesize\ttfamily \label{class_astra_1_1_ray_tracing_pipeline_a8b14e106b05fbc9595324607a762afd5} 
+nvvk\+::\+Descriptor\+Set\+Bindings Astra\+::\+Ray\+Tracing\+Pipeline\+::\+\_\+rt\+Desc\+Set\+Layout\+Bind\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{_pipeline_8h_source_l00066}{66}} of file \mbox{\hyperlink{_pipeline_8h_source}{Pipeline.\+h}}.
+
+\Hypertarget{class_astra_1_1_ray_tracing_pipeline_a5c22ebea35af0ec392cf9cdd6b74b7d8}\index{Astra::RayTracingPipeline@{Astra::RayTracingPipeline}!\_rtSBTBuffer@{\_rtSBTBuffer}}
+\index{\_rtSBTBuffer@{\_rtSBTBuffer}!Astra::RayTracingPipeline@{Astra::RayTracingPipeline}}
+\doxysubsubsection{\texorpdfstring{\_rtSBTBuffer}{\_rtSBTBuffer}}
+{\footnotesize\ttfamily \label{class_astra_1_1_ray_tracing_pipeline_a5c22ebea35af0ec392cf9cdd6b74b7d8} 
+nvvk\+::\+Buffer Astra\+::\+Ray\+Tracing\+Pipeline\+::\+\_\+rt\+SBTBuffer\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{_pipeline_8h_source_l00064}{64}} of file \mbox{\hyperlink{_pipeline_8h_source}{Pipeline.\+h}}.
+
+\Hypertarget{class_astra_1_1_ray_tracing_pipeline_a1e6dc5eb12b4b8029001183bba1cc5f0}\index{Astra::RayTracingPipeline@{Astra::RayTracingPipeline}!\_rtShaderGroups@{\_rtShaderGroups}}
+\index{\_rtShaderGroups@{\_rtShaderGroups}!Astra::RayTracingPipeline@{Astra::RayTracingPipeline}}
+\doxysubsubsection{\texorpdfstring{\_rtShaderGroups}{\_rtShaderGroups}}
+{\footnotesize\ttfamily \label{class_astra_1_1_ray_tracing_pipeline_a1e6dc5eb12b4b8029001183bba1cc5f0} 
+std\+::vector$<$Vk\+Ray\+Tracing\+Shader\+Group\+Create\+Info\+KHR$>$ Astra\+::\+Ray\+Tracing\+Pipeline\+::\+\_\+rt\+Shader\+Groups\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{_pipeline_8h_source_l00067}{67}} of file \mbox{\hyperlink{_pipeline_8h_source}{Pipeline.\+h}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{_pipeline_8h}{Pipeline.\+h}}\item 
+src/\mbox{\hyperlink{_pipeline_8cpp}{Pipeline.\+cpp}}\end{DoxyCompactItemize}

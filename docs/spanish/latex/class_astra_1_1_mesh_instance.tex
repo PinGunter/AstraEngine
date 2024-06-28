@@ -1,0 +1,278 @@
+\doxysection{Referencia de la clase Astra\+::Mesh\+Instance}
+\hypertarget{class_astra_1_1_mesh_instance}{}\label{class_astra_1_1_mesh_instance}\index{Astra::MeshInstance@{Astra::MeshInstance}}
+
+
+Clase que representa una instancia de una malla en una escena.  
+
+
+
+
+{\ttfamily \#include $<$Mesh.\+h$>$}
+
+Diagrama de herencia de Astra\+::Mesh\+Instance\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_astra_1_1_mesh_instance}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Métodos públicos}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_astra_1_1_mesh_instance_ad04d0aca9999bf43b30478e5722087b8}{Mesh\+Instance}} (uint32\+\_\+t mesh, const glm\+::mat4 \&transform=glm\+::mat4(1.\+0f), const std\+::string \&name="{}"{})
+\item 
+\mbox{\hyperlink{class_astra_1_1_mesh_instance}{Mesh\+Instance}} \& \mbox{\hyperlink{class_astra_1_1_mesh_instance_aa512b694932c742acaf05ecb0598f86d}{operator=}} (const \mbox{\hyperlink{class_astra_1_1_mesh_instance}{Mesh\+Instance}} \&other)
+\item 
+void \mbox{\hyperlink{class_astra_1_1_mesh_instance_ad16da64467f3cf063beb8f2bf8f7b688}{set\+Visible}} (bool v)
+\item 
+bool \mbox{\hyperlink{class_astra_1_1_mesh_instance_a6b7f006f5bee54b24295f913129b2718}{get\+Visible}} () const
+\item 
+bool \& \mbox{\hyperlink{class_astra_1_1_mesh_instance_a8e66ec135655353f5adb80ccfdf09658}{get\+Visible\+Ref}} ()
+\item 
+uint32\+\_\+t \mbox{\hyperlink{class_astra_1_1_mesh_instance_affa9a3f5ae7ddcd2f94981ec31282fe7}{get\+Mesh\+Index}} () const
+\item 
+bool \mbox{\hyperlink{class_astra_1_1_mesh_instance_a97add7be626089009b303ef3d1c56069}{update}} () override
+\begin{DoxyCompactList}\small\item\em Método que se llama en cada iteración del bucle de la aplicación. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_astra_1_1_mesh_instance_a998db56708d18c0f700c42a33961ed9b}{destroy}} () override
+\item 
+void \mbox{\hyperlink{class_astra_1_1_mesh_instance_a8886b4bb39ad99ae9a741451271aeb7d}{update\+Push\+Constant\+Raster}} (\mbox{\hyperlink{struct_push_constant_raster}{Push\+Constant\+Raster}} \&pc) const override
+\begin{DoxyCompactList}\small\item\em Método para actualizar la push constant de rasterización. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_astra_1_1_mesh_instance_a9ea0a85a3faf240b5f8e19239aeb5725}{update\+Push\+Constant\+RT}} (\mbox{\hyperlink{struct_push_constant_ray}{Push\+Constant\+Ray}} \&pc) const override
+\begin{DoxyCompactList}\small\item\em Método para actualizar la push constant de ray-\/tracing. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Métodos públicos heredados de \mbox{\hyperlink{class_astra_1_1_node3_d}{Astra\+::\+Node3D}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_astra_1_1_node3_d_a3b48ae464f50048ccfc974171958d606}{Node3D}} (const glm\+::mat4 \&transform=glm\+::mat4(1.\+0f), const std\+::string \&name="{}"{})
+\item 
+bool \mbox{\hyperlink{class_astra_1_1_node3_d_a786417d244594c602e153ab0ec105d4b}{operator==}} (const \mbox{\hyperlink{class_astra_1_1_node3_d}{Node3D}} \&other)
+\item 
+virtual void \mbox{\hyperlink{class_astra_1_1_node3_d_a0bf8e1597841a4ffed8df6a602d44a58}{add\+Child}} (\mbox{\hyperlink{class_astra_1_1_node3_d}{Node3D}} \texorpdfstring{$\ast$}{*}child)
+\item 
+virtual void \mbox{\hyperlink{class_astra_1_1_node3_d_a077fb296fe077d55dc4c256aea2a6f97}{remove\+Child}} (const \mbox{\hyperlink{class_astra_1_1_node3_d}{Node3D}} \&child)
+\item 
+virtual void \mbox{\hyperlink{class_astra_1_1_node3_d_a546031f4ceabb3a2d38f6d7eeb16c9c6}{rotate}} (const glm\+::vec3 \&axis, const float \&angle)
+\item 
+virtual void \mbox{\hyperlink{class_astra_1_1_node3_d_a62536798c9a4d02e60119b98d79f8b7a}{scale}} (const glm\+::vec3 \&scaling)
+\item 
+virtual void \mbox{\hyperlink{class_astra_1_1_node3_d_a846b75e2ce3b844ea428ad0401a1a5ef}{translate}} (const glm\+::vec3 \&position)
+\item 
+virtual glm\+::vec3 \mbox{\hyperlink{class_astra_1_1_node3_d_a8d7b9aabaf915d4e3748a260529bd900}{get\+Position}} () const
+\item 
+virtual glm\+::vec3 \mbox{\hyperlink{class_astra_1_1_node3_d_aee17f0a570da3f3571f865d05f76ff3f}{get\+Rotation}} () const
+\item 
+virtual glm\+::vec3 \mbox{\hyperlink{class_astra_1_1_node3_d_a98710aad404be9c8e2d4a35083092c9e}{get\+Scale}} () const
+\item 
+glm\+::mat4 \& \mbox{\hyperlink{class_astra_1_1_node3_d_a51ae640c177d0339a8df8ccee39338af}{get\+Transform\+Ref}} ()
+\item 
+const glm\+::mat4 \& \mbox{\hyperlink{class_astra_1_1_node3_d_a9348a344b09742837426353889391da2}{get\+Transform}} () const
+\item 
+std\+::vector$<$ \mbox{\hyperlink{class_astra_1_1_node3_d}{Node3D}} \texorpdfstring{$\ast$}{*} $>$ \& \mbox{\hyperlink{class_astra_1_1_node3_d_af936e9ebcd420068a5c064809dbc3514}{get\+Children}} ()
+\item 
+std\+::string \& \mbox{\hyperlink{class_astra_1_1_node3_d_ac40d03c56bb5d049325a6351367c13b1}{get\+Name\+Ref}} ()
+\item 
+std\+::string \mbox{\hyperlink{class_astra_1_1_node3_d_ae5c0483b6c8e7fad4df446daa3a8f541}{get\+Name}} () const
+\item 
+uint32\+\_\+t \mbox{\hyperlink{class_astra_1_1_node3_d_a26ceddfab38b142ffde715413c8816d1}{get\+ID}} () const
+\item 
+void \mbox{\hyperlink{class_astra_1_1_node3_d_a0f6f83ee7837fc764d82c549934c1d11}{set\+Name}} (const std\+::string \&n)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Atributos protegidos}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{class_astra_1_1_mesh_instance_ae2f38cc52b6b60a3ac2dd33fd16c6877}{\+\_\+visible}} \{true\}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{class_astra_1_1_mesh_instance_a54bfd0956551cced31ac5d1dde8aae68}{\+\_\+mesh}}
+\begin{DoxyCompactList}\small\item\em Id de la malla que representa. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Atributos protegidos heredados de \mbox{\hyperlink{class_astra_1_1_node3_d}{Astra\+::\+Node3D}}}
+\begin{DoxyCompactItemize}
+\item 
+glm\+::mat4 \mbox{\hyperlink{class_astra_1_1_node3_d_ac3fc8c9959d2c1eaac876a3ccd6cf0dc}{\+\_\+transform}}
+\item 
+std\+::vector$<$ \mbox{\hyperlink{class_astra_1_1_node3_d}{Node3D}} \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{class_astra_1_1_node3_d_a202652b6f4455eb4d7c679b26e146b68}{\+\_\+children}}
+\item 
+std\+::string \mbox{\hyperlink{class_astra_1_1_node3_d_a48307dedbeb3506f904e75150bfbc7f0}{\+\_\+name}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{class_astra_1_1_node3_d_aab151ec6499dce5ac1076a521cb04663}{\+\_\+id}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Otros miembros heredados}
+\doxysubsection*{Atributos estáticos protegidos heredados de \mbox{\hyperlink{class_astra_1_1_node3_d}{Astra\+::\+Node3D}}}
+\begin{DoxyCompactItemize}
+\item 
+static uint32\+\_\+t \mbox{\hyperlink{class_astra_1_1_node3_d_a5b62476ec6a0f9967ee49a4d1fea82b5}{Node\+Count}} = 0
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Clase que representa una instancia de una malla en una escena. 
+
+Definición en la línea \mbox{\hyperlink{_mesh_8h_source_l00111}{111}} del archivo \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
+
+
+
+\doxysubsection{Documentación de constructores y destructores}
+\Hypertarget{class_astra_1_1_mesh_instance_ad04d0aca9999bf43b30478e5722087b8}\index{Astra::MeshInstance@{Astra::MeshInstance}!MeshInstance@{MeshInstance}}
+\index{MeshInstance@{MeshInstance}!Astra::MeshInstance@{Astra::MeshInstance}}
+\doxysubsubsection{\texorpdfstring{MeshInstance()}{MeshInstance()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_mesh_instance_ad04d0aca9999bf43b30478e5722087b8} 
+Astra\+::\+Mesh\+Instance\+::\+Mesh\+Instance (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{mesh}{, }\item[{const glm\+::mat4 \&}]{transform}{ = {\ttfamily glm\+:\+:mat4(1.0f)}, }\item[{const std\+::string \&}]{name}{ = {\ttfamily "{}"{}}}\end{DoxyParamCaption})}
+
+
+
+Definición en la línea \mbox{\hyperlink{_mesh_8cpp_source_l00008}{8}} del archivo \mbox{\hyperlink{_mesh_8cpp_source}{Mesh.\+cpp}}.
+
+
+
+\doxysubsection{Documentación de funciones miembro}
+\Hypertarget{class_astra_1_1_mesh_instance_a998db56708d18c0f700c42a33961ed9b}\index{Astra::MeshInstance@{Astra::MeshInstance}!destroy@{destroy}}
+\index{destroy@{destroy}!Astra::MeshInstance@{Astra::MeshInstance}}
+\doxysubsubsection{\texorpdfstring{destroy()}{destroy()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_mesh_instance_a998db56708d18c0f700c42a33961ed9b} 
+void Astra\+::\+Mesh\+Instance\+::destroy (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplementado de \mbox{\hyperlink{class_astra_1_1_node3_d_a926e3386b624f3978ba42d622441cb11}{Astra\+::\+Node3D}}.
+
+
+
+Definición en la línea \mbox{\hyperlink{_mesh_8cpp_source_l00051}{51}} del archivo \mbox{\hyperlink{_mesh_8cpp_source}{Mesh.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_mesh_instance_affa9a3f5ae7ddcd2f94981ec31282fe7}\index{Astra::MeshInstance@{Astra::MeshInstance}!getMeshIndex@{getMeshIndex}}
+\index{getMeshIndex@{getMeshIndex}!Astra::MeshInstance@{Astra::MeshInstance}}
+\doxysubsubsection{\texorpdfstring{getMeshIndex()}{getMeshIndex()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_mesh_instance_affa9a3f5ae7ddcd2f94981ec31282fe7} 
+uint32\+\_\+t Astra\+::\+Mesh\+Instance\+::get\+Mesh\+Index (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Definición en la línea \mbox{\hyperlink{_mesh_8cpp_source_l00041}{41}} del archivo \mbox{\hyperlink{_mesh_8cpp_source}{Mesh.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_mesh_instance_a6b7f006f5bee54b24295f913129b2718}\index{Astra::MeshInstance@{Astra::MeshInstance}!getVisible@{getVisible}}
+\index{getVisible@{getVisible}!Astra::MeshInstance@{Astra::MeshInstance}}
+\doxysubsubsection{\texorpdfstring{getVisible()}{getVisible()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_mesh_instance_a6b7f006f5bee54b24295f913129b2718} 
+bool Astra\+::\+Mesh\+Instance\+::get\+Visible (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Definición en la línea \mbox{\hyperlink{_mesh_8cpp_source_l00031}{31}} del archivo \mbox{\hyperlink{_mesh_8cpp_source}{Mesh.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_mesh_instance_a8e66ec135655353f5adb80ccfdf09658}\index{Astra::MeshInstance@{Astra::MeshInstance}!getVisibleRef@{getVisibleRef}}
+\index{getVisibleRef@{getVisibleRef}!Astra::MeshInstance@{Astra::MeshInstance}}
+\doxysubsubsection{\texorpdfstring{getVisibleRef()}{getVisibleRef()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_mesh_instance_a8e66ec135655353f5adb80ccfdf09658} 
+bool \& Astra\+::\+Mesh\+Instance\+::get\+Visible\+Ref (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Definición en la línea \mbox{\hyperlink{_mesh_8cpp_source_l00036}{36}} del archivo \mbox{\hyperlink{_mesh_8cpp_source}{Mesh.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_mesh_instance_aa512b694932c742acaf05ecb0598f86d}\index{Astra::MeshInstance@{Astra::MeshInstance}!operator=@{operator=}}
+\index{operator=@{operator=}!Astra::MeshInstance@{Astra::MeshInstance}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_mesh_instance_aa512b694932c742acaf05ecb0598f86d} 
+\mbox{\hyperlink{class_astra_1_1_mesh_instance}{Astra\+::\+Mesh\+Instance}} \& Astra\+::\+Mesh\+Instance\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_astra_1_1_mesh_instance}{Mesh\+Instance}} \&}]{other}{}\end{DoxyParamCaption})}
+
+
+
+Definición en la línea \mbox{\hyperlink{_mesh_8cpp_source_l00016}{16}} del archivo \mbox{\hyperlink{_mesh_8cpp_source}{Mesh.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_mesh_instance_ad16da64467f3cf063beb8f2bf8f7b688}\index{Astra::MeshInstance@{Astra::MeshInstance}!setVisible@{setVisible}}
+\index{setVisible@{setVisible}!Astra::MeshInstance@{Astra::MeshInstance}}
+\doxysubsubsection{\texorpdfstring{setVisible()}{setVisible()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_mesh_instance_ad16da64467f3cf063beb8f2bf8f7b688} 
+void Astra\+::\+Mesh\+Instance\+::set\+Visible (\begin{DoxyParamCaption}\item[{bool}]{v}{}\end{DoxyParamCaption})}
+
+
+
+Definición en la línea \mbox{\hyperlink{_mesh_8cpp_source_l00026}{26}} del archivo \mbox{\hyperlink{_mesh_8cpp_source}{Mesh.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_mesh_instance_a97add7be626089009b303ef3d1c56069}\index{Astra::MeshInstance@{Astra::MeshInstance}!update@{update}}
+\index{update@{update}!Astra::MeshInstance@{Astra::MeshInstance}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_mesh_instance_a97add7be626089009b303ef3d1c56069} 
+bool Astra\+::\+Mesh\+Instance\+::update (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Método que se llama en cada iteración del bucle de la aplicación. 
+
+\begin{DoxyReturn}{Devuelve}
+Debe devolver true si se ha modificado algo del objeto o no. Útil para reconstruir estructuras de aceleración. 
+\end{DoxyReturn}
+
+
+Reimplementado de \mbox{\hyperlink{class_astra_1_1_node3_d_ae93ca254ff0610db3ed3a51e1f87b2f7}{Astra\+::\+Node3D}}.
+
+
+
+Definición en la línea \mbox{\hyperlink{_mesh_8cpp_source_l00046}{46}} del archivo \mbox{\hyperlink{_mesh_8cpp_source}{Mesh.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_mesh_instance_a8886b4bb39ad99ae9a741451271aeb7d}\index{Astra::MeshInstance@{Astra::MeshInstance}!updatePushConstantRaster@{updatePushConstantRaster}}
+\index{updatePushConstantRaster@{updatePushConstantRaster}!Astra::MeshInstance@{Astra::MeshInstance}}
+\doxysubsubsection{\texorpdfstring{updatePushConstantRaster()}{updatePushConstantRaster()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_mesh_instance_a8886b4bb39ad99ae9a741451271aeb7d} 
+void Astra\+::\+Mesh\+Instance\+::update\+Push\+Constant\+Raster (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_push_constant_raster}{Push\+Constant\+Raster}} \&}]{pc}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Método para actualizar la push constant de rasterización. 
+
+
+
+Reimplementado de \mbox{\hyperlink{class_astra_1_1_node3_d_a2dcc90a52b2155a505346673e19d85cf}{Astra\+::\+Node3D}}.
+
+
+
+Definición en la línea \mbox{\hyperlink{_mesh_8cpp_source_l00055}{55}} del archivo \mbox{\hyperlink{_mesh_8cpp_source}{Mesh.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_mesh_instance_a9ea0a85a3faf240b5f8e19239aeb5725}\index{Astra::MeshInstance@{Astra::MeshInstance}!updatePushConstantRT@{updatePushConstantRT}}
+\index{updatePushConstantRT@{updatePushConstantRT}!Astra::MeshInstance@{Astra::MeshInstance}}
+\doxysubsubsection{\texorpdfstring{updatePushConstantRT()}{updatePushConstantRT()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_mesh_instance_a9ea0a85a3faf240b5f8e19239aeb5725} 
+void Astra\+::\+Mesh\+Instance\+::update\+Push\+Constant\+RT (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_push_constant_ray}{Push\+Constant\+Ray}} \&}]{pc}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Método para actualizar la push constant de ray-\/tracing. 
+
+
+
+Reimplementado de \mbox{\hyperlink{class_astra_1_1_node3_d_a2f981ba31b2b5d7aed1b7b742bba5aaa}{Astra\+::\+Node3D}}.
+
+
+
+Definición en la línea \mbox{\hyperlink{_mesh_8cpp_source_l00061}{61}} del archivo \mbox{\hyperlink{_mesh_8cpp_source}{Mesh.\+cpp}}.
+
+
+
+\doxysubsection{Documentación de datos miembro}
+\Hypertarget{class_astra_1_1_mesh_instance_a54bfd0956551cced31ac5d1dde8aae68}\index{Astra::MeshInstance@{Astra::MeshInstance}!\_mesh@{\_mesh}}
+\index{\_mesh@{\_mesh}!Astra::MeshInstance@{Astra::MeshInstance}}
+\doxysubsubsection{\texorpdfstring{\_mesh}{\_mesh}}
+{\footnotesize\ttfamily \label{class_astra_1_1_mesh_instance_a54bfd0956551cced31ac5d1dde8aae68} 
+uint32\+\_\+t Astra\+::\+Mesh\+Instance\+::\+\_\+mesh\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Id de la malla que representa. 
+
+
+
+Definición en la línea \mbox{\hyperlink{_mesh_8h_source_l00119}{119}} del archivo \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
+
+\Hypertarget{class_astra_1_1_mesh_instance_ae2f38cc52b6b60a3ac2dd33fd16c6877}\index{Astra::MeshInstance@{Astra::MeshInstance}!\_visible@{\_visible}}
+\index{\_visible@{\_visible}!Astra::MeshInstance@{Astra::MeshInstance}}
+\doxysubsubsection{\texorpdfstring{\_visible}{\_visible}}
+{\footnotesize\ttfamily \label{class_astra_1_1_mesh_instance_ae2f38cc52b6b60a3ac2dd33fd16c6877} 
+bool Astra\+::\+Mesh\+Instance\+::\+\_\+visible \{true\}\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_mesh_8h_source_l00114}{114}} del archivo \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
+
+
+
+La documentación de esta clase está generada de los siguientes archivos\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{_mesh_8h}{Mesh.\+h}}\item 
+src/\mbox{\hyperlink{_mesh_8cpp}{Mesh.\+cpp}}\end{DoxyCompactItemize}

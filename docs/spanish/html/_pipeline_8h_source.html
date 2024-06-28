@@ -1,0 +1,226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.11.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>AstraCore: Archivo de código fuente include/Pipeline.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">AstraCore
+   </div>
+   <div id="projectbrief">Astra Core is a C++ library to develop visualization apps in Vulkan using rasterization or hardware-accelerated ray-tracing.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.11.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Buscar',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('_pipeline_8h_source.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Pipeline.h</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="_pipeline_8h.html">Ir a la documentación de este archivo.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#include &lt;vulkan/vulkan.h&gt;</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;nvvk/descriptorsets_vk.hpp&gt;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;<a class="code" href="_command_list_8h.html">CommandList.h</a>&gt;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespace_astra.html">Astra</a></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span>{</div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span>    <span class="keyword">class </span>CommandList;</div>
+<div class="foldopen" id="foldopen00013" data-start="{" data-end="};">
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="class_astra_1_1_pipeline.html">   13</a></span>    <span class="keyword">class </span><a class="code hl_class" href="class_astra_1_1_pipeline.html">Pipeline</a></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    {</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    <span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="class_astra_1_1_pipeline.html#a91eee050a7e48f5eed88f375e99348b3">   16</a></span>        VkPipelineLayout <a class="code hl_variable" href="class_astra_1_1_pipeline.html#a91eee050a7e48f5eed88f375e99348b3">_layout</a>;</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="class_astra_1_1_pipeline.html#a5ce2b0f85964c6e531e66cb26c28d5d9">   17</a></span>        VkPipeline <a class="code hl_variable" href="class_astra_1_1_pipeline.html#a5ce2b0f85964c6e531e66cb26c28d5d9">_pipeline</a>;</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_pipeline.html#a10f5a40a8dd3fe819337bd32308d7090">destroy</a>(nvvk::ResourceAllocator *alloc);</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="class_astra_1_1_pipeline.html#ab830986181ee4bc8533d0c2ab575188e">   21</a></span>        <span class="keyword">inline</span> <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="class_astra_1_1_pipeline.html#ab830986181ee4bc8533d0c2ab575188e">doesRayTracing</a>() = 0;</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_pipeline.html#ad56780f344b4864e302ce0d156ca430e">bind</a>(<span class="keyword">const</span> <a class="code hl_class" href="class_astra_1_1_command_list.html">CommandList</a> &amp;cmdList, <span class="keyword">const</span> std::vector&lt;VkDescriptorSet&gt; &amp;descsets);</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_pipeline.html#a8515be541dc58ba430e605c7c95a970c">pushConstants</a>(<span class="keyword">const</span> <a class="code hl_class" href="class_astra_1_1_command_list.html">CommandList</a> &amp;cmdList, uint32_t shaderStages, uint32_t size, <span class="keywordtype">void</span> *data);</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>        VkPipeline <a class="code hl_function" href="class_astra_1_1_pipeline.html#a1c9854f4c8be4e1c56bd787a695f5db7">getPipeline</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>        VkPipelineLayout <a class="code hl_function" href="class_astra_1_1_pipeline.html#a958467cd915b9aa421f1f0f6624197bb">getLayout</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    };</div>
+</div>
+<div class="foldopen" id="foldopen00039" data-start="{" data-end="};">
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="class_astra_1_1_raster_pipeline.html">   39</a></span>    <span class="keyword">class </span><a class="code hl_class" href="class_astra_1_1_raster_pipeline.html">RasterPipeline</a> : <span class="keyword">public</span> <a class="code hl_class" href="class_astra_1_1_pipeline.html">Pipeline</a></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    {</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="class_astra_1_1_raster_pipeline.html#a366bd3f749ae1058fffdcd29a4ffd960">   47</a></span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_raster_pipeline.html#a366bd3f749ae1058fffdcd29a4ffd960">create</a>(VkDevice vkdev, <span class="keyword">const</span> std::vector&lt;VkDescriptorSetLayout&gt; &amp;descsetsLayouts, VkRenderPass rp) = 0;</div>
+<div class="foldopen" id="foldopen00048" data-start="{" data-end="}">
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno"><a class="line" href="class_astra_1_1_raster_pipeline.html#a9787abd24089c3fe06ef01886e2e901a">   48</a></span>        <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="class_astra_1_1_raster_pipeline.html#a9787abd24089c3fe06ef01886e2e901a">doesRayTracing</a>()<span class="keyword"> override</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="keyword">        </span>{</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        };</div>
+</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    };</div>
+</div>
+<div class="foldopen" id="foldopen00057" data-start="{" data-end="};">
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno"><a class="line" href="class_astra_1_1_ray_tracing_pipeline.html">   57</a></span>    <span class="keyword">class </span><a class="code hl_class" href="class_astra_1_1_ray_tracing_pipeline.html">RayTracingPipeline</a> : <span class="keyword">public</span> <a class="code hl_class" href="class_astra_1_1_pipeline.html">Pipeline</a></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    {</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    <span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno"><a class="line" href="class_astra_1_1_ray_tracing_pipeline.html#a120fea50a9c7d7d2f6af232065446c91">   60</a></span>        VkStridedDeviceAddressRegionKHR <a class="code hl_variable" href="class_astra_1_1_ray_tracing_pipeline.html#a120fea50a9c7d7d2f6af232065446c91">_rgenRegion</a>{};</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="class_astra_1_1_ray_tracing_pipeline.html#ae0947f7403bcb83c10fb0d827ff839cc">   61</a></span>        VkStridedDeviceAddressRegionKHR <a class="code hl_variable" href="class_astra_1_1_ray_tracing_pipeline.html#ae0947f7403bcb83c10fb0d827ff839cc">_missRegion</a>{};</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="class_astra_1_1_ray_tracing_pipeline.html#afb865c65541be4477dca9d8137163a0b">   62</a></span>        VkStridedDeviceAddressRegionKHR <a class="code hl_variable" href="class_astra_1_1_ray_tracing_pipeline.html#afb865c65541be4477dca9d8137163a0b">_hitRegion</a>{};</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno"><a class="line" href="class_astra_1_1_ray_tracing_pipeline.html#abed89e86170a3496bb874b618a8de9b1">   63</a></span>        VkStridedDeviceAddressRegionKHR <a class="code hl_variable" href="class_astra_1_1_ray_tracing_pipeline.html#abed89e86170a3496bb874b618a8de9b1">_callRegion</a>{};</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno"><a class="line" href="class_astra_1_1_ray_tracing_pipeline.html#a5c22ebea35af0ec392cf9cdd6b74b7d8">   64</a></span>        nvvk::Buffer <a class="code hl_variable" href="class_astra_1_1_ray_tracing_pipeline.html#a5c22ebea35af0ec392cf9cdd6b74b7d8">_rtSBTBuffer</a>;</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno"><a class="line" href="class_astra_1_1_ray_tracing_pipeline.html#a8b14e106b05fbc9595324607a762afd5">   66</a></span>        nvvk::DescriptorSetBindings <a class="code hl_variable" href="class_astra_1_1_ray_tracing_pipeline.html#a8b14e106b05fbc9595324607a762afd5">_rtDescSetLayoutBind</a>;</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno"><a class="line" href="class_astra_1_1_ray_tracing_pipeline.html#a1e6dc5eb12b4b8029001183bba1cc5f0">   67</a></span>        std::vector&lt;VkRayTracingShaderGroupCreateInfoKHR&gt; <a class="code hl_variable" href="class_astra_1_1_ray_tracing_pipeline.html#a1e6dc5eb12b4b8029001183bba1cc5f0">_rtShaderGroups</a>;</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_ray_tracing_pipeline.html#a1522ae81c8a70bb52ccb8af036178f0f">createSBT</a>(nvvk::ResourceAllocatorDma &amp;alloc, <span class="keyword">const</span> VkPhysicalDeviceRayTracingPipelinePropertiesKHR &amp;rtProperties);</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_ray_tracing_pipeline.html#aa16a411249e33177d9d90fec7ac44eeb">bind</a>(<span class="keyword">const</span> <a class="code hl_class" href="class_astra_1_1_command_list.html">CommandList</a> &amp;cmdList, <span class="keyword">const</span> std::vector&lt;VkDescriptorSet&gt; &amp;descsets) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_ray_tracing_pipeline.html#ac610b942564a0e31e7ed3e1b532d818a">create</a>(VkDevice vkdev, <span class="keyword">const</span> std::vector&lt;VkDescriptorSetLayout&gt; &amp;descsetsLayouts, nvvk::ResourceAllocatorDma &amp;alloc);</div>
+<div class="foldopen" id="foldopen00073" data-start="{" data-end="}">
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno"><a class="line" href="class_astra_1_1_ray_tracing_pipeline.html#a214b2e3efbddc7df2a09801b7aeef2cb">   73</a></span>        <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="class_astra_1_1_ray_tracing_pipeline.html#a214b2e3efbddc7df2a09801b7aeef2cb">doesRayTracing</a>()<span class="keyword"> override</span></div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="keyword">        </span>{</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>        };</div>
+</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>        std::array&lt;VkStridedDeviceAddressRegionKHR, 4&gt; <a class="code hl_function" href="class_astra_1_1_ray_tracing_pipeline.html#ae645143b433c26a9c8f715cebaff61b6">getSBTRegions</a>();</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_ray_tracing_pipeline.html#a43b5d611bf8ce65c0990ef3bdb627273">destroy</a>(nvvk::ResourceAllocator *alloc) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    };</div>
+</div>
+<div class="foldopen" id="foldopen00084" data-start="{" data-end="};">
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno"><a class="line" href="class_astra_1_1_offscreen_raster.html">   84</a></span>    <span class="keyword">class </span><a class="code hl_class" href="class_astra_1_1_offscreen_raster.html">OffscreenRaster</a> : <span class="keyword">public</span> <a class="code hl_class" href="class_astra_1_1_raster_pipeline.html">RasterPipeline</a></div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    {</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_offscreen_raster.html#a2f561937a8d12c90a75c8c83f5f196c2">create</a>(VkDevice vkdev, <span class="keyword">const</span> std::vector&lt;VkDescriptorSetLayout&gt; &amp;descsetsLayouts, VkRenderPass rp) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>    };</div>
+</div>
+<div class="foldopen" id="foldopen00093" data-start="{" data-end="};">
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno"><a class="line" href="class_astra_1_1_post_pipeline.html">   93</a></span>    <span class="keyword">class </span><a class="code hl_class" href="class_astra_1_1_post_pipeline.html">PostPipeline</a> : <span class="keyword">public</span> <a class="code hl_class" href="class_astra_1_1_raster_pipeline.html">RasterPipeline</a></div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    {</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_post_pipeline.html#a067a8ac25bf646354fcfd1507cebca3b">create</a>(VkDevice vkdev, <span class="keyword">const</span> std::vector&lt;VkDescriptorSetLayout&gt; &amp;descsetsLayouts, VkRenderPass rp) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    };</div>
+</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>}</div>
+<div class="ttc" id="a_command_list_8h_html"><div class="ttname"><a href="_command_list_8h.html">CommandList.h</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_command_list_html"><div class="ttname"><a href="class_astra_1_1_command_list.html">Astra::CommandList</a></div><div class="ttdoc">Clase que representa un objeto VkCommandBuffer de Vulkan. Proporciona métodos para realizar las funci...</div><div class="ttdef"><b>Definition</b> <a href="_command_list_8h_source.html#l00016">CommandList.h:17</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_offscreen_raster_html"><div class="ttname"><a href="class_astra_1_1_offscreen_raster.html">Astra::OffscreenRaster</a></div><div class="ttdoc">Pipeline de rasterización de ejemplo para dibujar escenas en el offscreen framebuffer....</div><div class="ttdef"><b>Definition</b> <a href="#l00084">Pipeline.h:85</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_offscreen_raster_html_a2f561937a8d12c90a75c8c83f5f196c2"><div class="ttname"><a href="class_astra_1_1_offscreen_raster.html#a2f561937a8d12c90a75c8c83f5f196c2">Astra::OffscreenRaster::create</a></div><div class="ttdeci">void create(VkDevice vkdev, const std::vector&lt; VkDescriptorSetLayout &gt; &amp;descsetsLayouts, VkRenderPass rp) override</div><div class="ttdoc">Se tiene que sobreescribir. Provee la lista de parámetros y generalización.</div><div class="ttdef"><b>Definition</b> <a href="_pipeline_8cpp_source.html#l00255">Pipeline.cpp:255</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_pipeline_html"><div class="ttname"><a href="class_astra_1_1_pipeline.html">Astra::Pipeline</a></div><div class="ttdoc">Clase abstracta que representa una pipeline de Vulkan.</div><div class="ttdef"><b>Definition</b> <a href="#l00013">Pipeline.h:14</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_pipeline_html_a10f5a40a8dd3fe819337bd32308d7090"><div class="ttname"><a href="class_astra_1_1_pipeline.html#a10f5a40a8dd3fe819337bd32308d7090">Astra::Pipeline::destroy</a></div><div class="ttdeci">virtual void destroy(nvvk::ResourceAllocator *alloc)</div><div class="ttdef"><b>Definition</b> <a href="_pipeline_8cpp_source.html#l00012">Pipeline.cpp:12</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_pipeline_html_a1c9854f4c8be4e1c56bd787a695f5db7"><div class="ttname"><a href="class_astra_1_1_pipeline.html#a1c9854f4c8be4e1c56bd787a695f5db7">Astra::Pipeline::getPipeline</a></div><div class="ttdeci">VkPipeline getPipeline() const</div><div class="ttdef"><b>Definition</b> <a href="_pipeline_8cpp_source.html#l00031">Pipeline.cpp:31</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_pipeline_html_a5ce2b0f85964c6e531e66cb26c28d5d9"><div class="ttname"><a href="class_astra_1_1_pipeline.html#a5ce2b0f85964c6e531e66cb26c28d5d9">Astra::Pipeline::_pipeline</a></div><div class="ttdeci">VkPipeline _pipeline</div><div class="ttdef"><b>Definition</b> <a href="#l00017">Pipeline.h:17</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_pipeline_html_a8515be541dc58ba430e605c7c95a970c"><div class="ttname"><a href="class_astra_1_1_pipeline.html#a8515be541dc58ba430e605c7c95a970c">Astra::Pipeline::pushConstants</a></div><div class="ttdeci">virtual void pushConstants(const CommandList &amp;cmdList, uint32_t shaderStages, uint32_t size, void *data)</div><div class="ttdoc">Sube las push constants a la GPU.</div><div class="ttdef"><b>Definition</b> <a href="_pipeline_8cpp_source.html#l00026">Pipeline.cpp:26</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_pipeline_html_a91eee050a7e48f5eed88f375e99348b3"><div class="ttname"><a href="class_astra_1_1_pipeline.html#a91eee050a7e48f5eed88f375e99348b3">Astra::Pipeline::_layout</a></div><div class="ttdeci">VkPipelineLayout _layout</div><div class="ttdef"><b>Definition</b> <a href="#l00016">Pipeline.h:16</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_pipeline_html_a958467cd915b9aa421f1f0f6624197bb"><div class="ttname"><a href="class_astra_1_1_pipeline.html#a958467cd915b9aa421f1f0f6624197bb">Astra::Pipeline::getLayout</a></div><div class="ttdeci">VkPipelineLayout getLayout() const</div><div class="ttdef"><b>Definition</b> <a href="_pipeline_8cpp_source.html#l00036">Pipeline.cpp:36</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_pipeline_html_ab830986181ee4bc8533d0c2ab575188e"><div class="ttname"><a href="class_astra_1_1_pipeline.html#ab830986181ee4bc8533d0c2ab575188e">Astra::Pipeline::doesRayTracing</a></div><div class="ttdeci">virtual bool doesRayTracing()=0</div></div>
+<div class="ttc" id="aclass_astra_1_1_pipeline_html_ad56780f344b4864e302ce0d156ca430e"><div class="ttname"><a href="class_astra_1_1_pipeline.html#ad56780f344b4864e302ce0d156ca430e">Astra::Pipeline::bind</a></div><div class="ttdeci">virtual void bind(const CommandList &amp;cmdList, const std::vector&lt; VkDescriptorSet &gt; &amp;descsets)</div><div class="ttdoc">Método para activar la pipeline durante el renderizado.</div><div class="ttdef"><b>Definition</b> <a href="_pipeline_8cpp_source.html#l00020">Pipeline.cpp:20</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_post_pipeline_html"><div class="ttname"><a href="class_astra_1_1_post_pipeline.html">Astra::PostPipeline</a></div><div class="ttdoc">Pipeline que dibuja la textura resultante del offscreen render en pantalla. Aplica postprocesado tamb...</div><div class="ttdef"><b>Definition</b> <a href="#l00093">Pipeline.h:94</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_post_pipeline_html_a067a8ac25bf646354fcfd1507cebca3b"><div class="ttname"><a href="class_astra_1_1_post_pipeline.html#a067a8ac25bf646354fcfd1507cebca3b">Astra::PostPipeline::create</a></div><div class="ttdeci">void create(VkDevice vkdev, const std::vector&lt; VkDescriptorSetLayout &gt; &amp;descsetsLayouts, VkRenderPass rp) override</div><div class="ttdoc">Se tiene que sobreescribir. Provee la lista de parámetros y generalización.</div><div class="ttdef"><b>Definition</b> <a href="_pipeline_8cpp_source.html#l00289">Pipeline.cpp:289</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_raster_pipeline_html"><div class="ttname"><a href="class_astra_1_1_raster_pipeline.html">Astra::RasterPipeline</a></div><div class="ttdoc">Clase abstracta para pipelines de rasterización. Declara el método de crear para ser sobreescrito por...</div><div class="ttdef"><b>Definition</b> <a href="#l00039">Pipeline.h:40</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_raster_pipeline_html_a366bd3f749ae1058fffdcd29a4ffd960"><div class="ttname"><a href="class_astra_1_1_raster_pipeline.html#a366bd3f749ae1058fffdcd29a4ffd960">Astra::RasterPipeline::create</a></div><div class="ttdeci">virtual void create(VkDevice vkdev, const std::vector&lt; VkDescriptorSetLayout &gt; &amp;descsetsLayouts, VkRenderPass rp)=0</div><div class="ttdoc">Se tiene que sobreescribir. Provee la lista de parámetros y generalización.</div></div>
+<div class="ttc" id="aclass_astra_1_1_raster_pipeline_html_a9787abd24089c3fe06ef01886e2e901a"><div class="ttname"><a href="class_astra_1_1_raster_pipeline.html#a9787abd24089c3fe06ef01886e2e901a">Astra::RasterPipeline::doesRayTracing</a></div><div class="ttdeci">bool doesRayTracing() override</div><div class="ttdef"><b>Definition</b> <a href="#l00048">Pipeline.h:48</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_ray_tracing_pipeline_html"><div class="ttname"><a href="class_astra_1_1_ray_tracing_pipeline.html">Astra::RayTracingPipeline</a></div><div class="ttdoc">Clase de pipeline de trazado de rayos. Está completamente implementada para usarse.</div><div class="ttdef"><b>Definition</b> <a href="#l00057">Pipeline.h:58</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_ray_tracing_pipeline_html_a120fea50a9c7d7d2f6af232065446c91"><div class="ttname"><a href="class_astra_1_1_ray_tracing_pipeline.html#a120fea50a9c7d7d2f6af232065446c91">Astra::RayTracingPipeline::_rgenRegion</a></div><div class="ttdeci">VkStridedDeviceAddressRegionKHR _rgenRegion</div><div class="ttdef"><b>Definition</b> <a href="#l00060">Pipeline.h:60</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_ray_tracing_pipeline_html_a1522ae81c8a70bb52ccb8af036178f0f"><div class="ttname"><a href="class_astra_1_1_ray_tracing_pipeline.html#a1522ae81c8a70bb52ccb8af036178f0f">Astra::RayTracingPipeline::createSBT</a></div><div class="ttdeci">void createSBT(nvvk::ResourceAllocatorDma &amp;alloc, const VkPhysicalDeviceRayTracingPipelinePropertiesKHR &amp;rtProperties)</div><div class="ttdef"><b>Definition</b> <a href="_pipeline_8cpp_source.html#l00180">Pipeline.cpp:180</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_ray_tracing_pipeline_html_a1e6dc5eb12b4b8029001183bba1cc5f0"><div class="ttname"><a href="class_astra_1_1_ray_tracing_pipeline.html#a1e6dc5eb12b4b8029001183bba1cc5f0">Astra::RayTracingPipeline::_rtShaderGroups</a></div><div class="ttdeci">std::vector&lt; VkRayTracingShaderGroupCreateInfoKHR &gt; _rtShaderGroups</div><div class="ttdef"><b>Definition</b> <a href="#l00067">Pipeline.h:67</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_ray_tracing_pipeline_html_a214b2e3efbddc7df2a09801b7aeef2cb"><div class="ttname"><a href="class_astra_1_1_ray_tracing_pipeline.html#a214b2e3efbddc7df2a09801b7aeef2cb">Astra::RayTracingPipeline::doesRayTracing</a></div><div class="ttdeci">bool doesRayTracing() override</div><div class="ttdef"><b>Definition</b> <a href="#l00073">Pipeline.h:73</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_ray_tracing_pipeline_html_a43b5d611bf8ce65c0990ef3bdb627273"><div class="ttname"><a href="class_astra_1_1_ray_tracing_pipeline.html#a43b5d611bf8ce65c0990ef3bdb627273">Astra::RayTracingPipeline::destroy</a></div><div class="ttdeci">void destroy(nvvk::ResourceAllocator *alloc) override</div><div class="ttdef"><b>Definition</b> <a href="_pipeline_8cpp_source.html#l00174">Pipeline.cpp:174</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_ray_tracing_pipeline_html_a5c22ebea35af0ec392cf9cdd6b74b7d8"><div class="ttname"><a href="class_astra_1_1_ray_tracing_pipeline.html#a5c22ebea35af0ec392cf9cdd6b74b7d8">Astra::RayTracingPipeline::_rtSBTBuffer</a></div><div class="ttdeci">nvvk::Buffer _rtSBTBuffer</div><div class="ttdef"><b>Definition</b> <a href="#l00064">Pipeline.h:64</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_ray_tracing_pipeline_html_a8b14e106b05fbc9595324607a762afd5"><div class="ttname"><a href="class_astra_1_1_ray_tracing_pipeline.html#a8b14e106b05fbc9595324607a762afd5">Astra::RayTracingPipeline::_rtDescSetLayoutBind</a></div><div class="ttdeci">nvvk::DescriptorSetBindings _rtDescSetLayoutBind</div><div class="ttdef"><b>Definition</b> <a href="#l00066">Pipeline.h:66</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_ray_tracing_pipeline_html_aa16a411249e33177d9d90fec7ac44eeb"><div class="ttname"><a href="class_astra_1_1_ray_tracing_pipeline.html#aa16a411249e33177d9d90fec7ac44eeb">Astra::RayTracingPipeline::bind</a></div><div class="ttdeci">void bind(const CommandList &amp;cmdList, const std::vector&lt; VkDescriptorSet &gt; &amp;descsets) override</div><div class="ttdoc">Método para activar la pipeline durante el renderizado.</div><div class="ttdef"><b>Definition</b> <a href="_pipeline_8cpp_source.html#l00249">Pipeline.cpp:249</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_ray_tracing_pipeline_html_abed89e86170a3496bb874b618a8de9b1"><div class="ttname"><a href="class_astra_1_1_ray_tracing_pipeline.html#abed89e86170a3496bb874b618a8de9b1">Astra::RayTracingPipeline::_callRegion</a></div><div class="ttdeci">VkStridedDeviceAddressRegionKHR _callRegion</div><div class="ttdef"><b>Definition</b> <a href="#l00063">Pipeline.h:63</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_ray_tracing_pipeline_html_ac610b942564a0e31e7ed3e1b532d818a"><div class="ttname"><a href="class_astra_1_1_ray_tracing_pipeline.html#ac610b942564a0e31e7ed3e1b532d818a">Astra::RayTracingPipeline::create</a></div><div class="ttdeci">void create(VkDevice vkdev, const std::vector&lt; VkDescriptorSetLayout &gt; &amp;descsetsLayouts, nvvk::ResourceAllocatorDma &amp;alloc)</div><div class="ttdef"><b>Definition</b> <a href="_pipeline_8cpp_source.html#l00041">Pipeline.cpp:41</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_ray_tracing_pipeline_html_ae0947f7403bcb83c10fb0d827ff839cc"><div class="ttname"><a href="class_astra_1_1_ray_tracing_pipeline.html#ae0947f7403bcb83c10fb0d827ff839cc">Astra::RayTracingPipeline::_missRegion</a></div><div class="ttdeci">VkStridedDeviceAddressRegionKHR _missRegion</div><div class="ttdef"><b>Definition</b> <a href="#l00061">Pipeline.h:61</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_ray_tracing_pipeline_html_ae645143b433c26a9c8f715cebaff61b6"><div class="ttname"><a href="class_astra_1_1_ray_tracing_pipeline.html#ae645143b433c26a9c8f715cebaff61b6">Astra::RayTracingPipeline::getSBTRegions</a></div><div class="ttdeci">std::array&lt; VkStridedDeviceAddressRegionKHR, 4 &gt; getSBTRegions()</div><div class="ttdef"><b>Definition</b> <a href="_pipeline_8cpp_source.html#l00169">Pipeline.cpp:169</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_ray_tracing_pipeline_html_afb865c65541be4477dca9d8137163a0b"><div class="ttname"><a href="class_astra_1_1_ray_tracing_pipeline.html#afb865c65541be4477dca9d8137163a0b">Astra::RayTracingPipeline::_hitRegion</a></div><div class="ttdeci">VkStridedDeviceAddressRegionKHR _hitRegion</div><div class="ttdef"><b>Definition</b> <a href="#l00062">Pipeline.h:62</a></div></div>
+<div class="ttc" id="anamespace_astra_html"><div class="ttname"><a href="namespace_astra.html">Astra</a></div><div class="ttdef"><b>Definition</b> <a href="_app_8h_source.html#l00010">App.h:11</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="_pipeline_8h.html">Pipeline.h</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.11.0 </li>
+  </ul>
+</div>
+</body>
+</html>

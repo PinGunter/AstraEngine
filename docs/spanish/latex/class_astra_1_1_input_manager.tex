@@ -1,0 +1,257 @@
+\doxysection{Referencia de la clase Astra\+::Input\+Manager}
+\hypertarget{class_astra_1_1_input_manager}{}\label{class_astra_1_1_input_manager}\index{Astra::InputManager@{Astra::InputManager}}
+
+
+Singleton. Clase que maneja todos los eventos del usuario y provee acceso global a estos. Llama a los métodos que gestionan eventos de la aplicación.  
+
+
+
+
+{\ttfamily \#include $<$Input\+Manager.\+h$>$}
+
+\doxysubsubsection*{Métodos públicos}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_astra_1_1_input_manager_aebcd961ac66f9dabe60e227cd2d02b1e}{Input\+Manager}} (const \mbox{\hyperlink{class_astra_1_1_input_manager}{Input\+Manager}} \&)=delete
+\item 
+\mbox{\hyperlink{class_astra_1_1_input_manager}{Input\+Manager}} \& \mbox{\hyperlink{class_astra_1_1_input_manager_ae01a13daab5f8a93f7c5373a3b1119bd}{operator=}} (const \mbox{\hyperlink{class_astra_1_1_input_manager}{Input\+Manager}} \&)=delete
+\item 
+void \mbox{\hyperlink{class_astra_1_1_input_manager_a7fdeaf6e8d18cf1908097b01cee23799}{init}} (GLFWwindow \texorpdfstring{$\ast$}{*}window, \mbox{\hyperlink{class_astra_1_1_app}{App}} \texorpdfstring{$\ast$}{*}app)
+\begin{DoxyCompactList}\small\item\em Inicializa los callbacks. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_astra_1_1_input_manager_abc724ac812a008fb4720936dec5d5ad6}{poll\+Events}} ()
+\begin{DoxyCompactList}\small\item\em Consulta los eventos de GLFW. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_astra_1_1_input_manager_a617cdb0361015a6456d023f8c9dc57f4}{hide\+Mouse}} () const
+\begin{DoxyCompactList}\small\item\em Oculta el cursor del ratón. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_astra_1_1_input_manager_ac847352c40ba35ce513dc913acc390a5}{capture\+Mouse}} () const
+\begin{DoxyCompactList}\small\item\em Esconde y captura el cursor del ratón. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_astra_1_1_input_manager_adee3887fadc930370f6f6c9c3b99d5b7}{free\+Mouse}} () const
+\begin{DoxyCompactList}\small\item\em Libera el ratón a su estado original. \end{DoxyCompactList}\item 
+glm\+::ivec2 \mbox{\hyperlink{class_astra_1_1_input_manager_a2c06ae94b2fe874c83ae6cf00c2b9333}{get\+Mouse\+Pos}} () const
+\begin{DoxyCompactList}\small\item\em Devuelve la posición del ratón. \end{DoxyCompactList}\item 
+glm\+::ivec2 \mbox{\hyperlink{class_astra_1_1_input_manager_a1ccec6fcd93a3e05ce522b97238381cd}{get\+Mouse\+Delta}} () const
+\begin{DoxyCompactList}\small\item\em Devuelve la diferencia entre la posición actual y la anterior del ratón. \end{DoxyCompactList}\item 
+glm\+::ivec2 \mbox{\hyperlink{class_astra_1_1_input_manager_aea22f9765793359fe4bd511537f4651c}{get\+Mouse\+Wheel}} () const
+\begin{DoxyCompactList}\small\item\em Devuelve el estado de la rueda del ratón. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_astra_1_1_input_manager_a8c144176e80197ef74723968d415318b}{mouse\+Click}} (\mbox{\hyperlink{namespace_astra_a943ae035e017b5fd68ab4824a97b9f62}{Mouse\+Buttons}} button) const
+\begin{DoxyCompactList}\small\item\em Consulta el estado del click del mouse. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_astra_1_1_input_manager_a79810b6a5cad89044a12beacc6489234}{key\+Pressed}} (\mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8}{Keys}} key) const
+\begin{DoxyCompactList}\small\item\em Devuelve el estado de una tecla que se le pasa como parámetro. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_astra_1_1_input_manager_a2bd3a4b7922d03ef6ff38155fd635bdc}{window\+Should\+Close}} () const
+\begin{DoxyCompactList}\small\item\em Devuelve si la ventana se debería cerrar o no. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Métodos públicos estáticos}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{class_astra_1_1_input_manager}{Input\+Manager}} \& \mbox{\hyperlink{class_astra_1_1_input_manager_acf4e1c6f2ec32eefe61d82dfc780d32f}{get\+Instance}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Singleton. Clase que maneja todos los eventos del usuario y provee acceso global a estos. Llama a los métodos que gestionan eventos de la aplicación. 
+
+Definición en la línea \mbox{\hyperlink{_input_manager_8h_source_l00017}{17}} del archivo \mbox{\hyperlink{_input_manager_8h_source}{Input\+Manager.\+h}}.
+
+
+
+\doxysubsection{Documentación de constructores y destructores}
+\Hypertarget{class_astra_1_1_input_manager_aebcd961ac66f9dabe60e227cd2d02b1e}\index{Astra::InputManager@{Astra::InputManager}!InputManager@{InputManager}}
+\index{InputManager@{InputManager}!Astra::InputManager@{Astra::InputManager}}
+\doxysubsubsection{\texorpdfstring{InputManager()}{InputManager()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_input_manager_aebcd961ac66f9dabe60e227cd2d02b1e} 
+Astra\+::\+Input\+Manager\+::\+Input\+Manager (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_astra_1_1_input_manager}{Input\+Manager}} \&}]{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+
+
+\doxysubsection{Documentación de funciones miembro}
+\Hypertarget{class_astra_1_1_input_manager_ac847352c40ba35ce513dc913acc390a5}\index{Astra::InputManager@{Astra::InputManager}!captureMouse@{captureMouse}}
+\index{captureMouse@{captureMouse}!Astra::InputManager@{Astra::InputManager}}
+\doxysubsubsection{\texorpdfstring{captureMouse()}{captureMouse()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_input_manager_ac847352c40ba35ce513dc913acc390a5} 
+void Astra\+::\+Input\+Manager\+::capture\+Mouse (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Esconde y captura el cursor del ratón. 
+
+
+
+Definición en la línea \mbox{\hyperlink{_input_manager_8cpp_source_l00111}{111}} del archivo \mbox{\hyperlink{_input_manager_8cpp_source}{Input\+Manager.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_input_manager_adee3887fadc930370f6f6c9c3b99d5b7}\index{Astra::InputManager@{Astra::InputManager}!freeMouse@{freeMouse}}
+\index{freeMouse@{freeMouse}!Astra::InputManager@{Astra::InputManager}}
+\doxysubsubsection{\texorpdfstring{freeMouse()}{freeMouse()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_input_manager_adee3887fadc930370f6f6c9c3b99d5b7} 
+void Astra\+::\+Input\+Manager\+::free\+Mouse (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Libera el ratón a su estado original. 
+
+
+
+Definición en la línea \mbox{\hyperlink{_input_manager_8cpp_source_l00116}{116}} del archivo \mbox{\hyperlink{_input_manager_8cpp_source}{Input\+Manager.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_input_manager_acf4e1c6f2ec32eefe61d82dfc780d32f}\index{Astra::InputManager@{Astra::InputManager}!getInstance@{getInstance}}
+\index{getInstance@{getInstance}!Astra::InputManager@{Astra::InputManager}}
+\doxysubsubsection{\texorpdfstring{getInstance()}{getInstance()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_input_manager_acf4e1c6f2ec32eefe61d82dfc780d32f} 
+static \mbox{\hyperlink{class_astra_1_1_input_manager}{Input\+Manager}} \& Astra\+::\+Input\+Manager\+::get\+Instance (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_input_manager_8h_source_l00046}{46}} del archivo \mbox{\hyperlink{_input_manager_8h_source}{Input\+Manager.\+h}}.
+
+\Hypertarget{class_astra_1_1_input_manager_a1ccec6fcd93a3e05ce522b97238381cd}\index{Astra::InputManager@{Astra::InputManager}!getMouseDelta@{getMouseDelta}}
+\index{getMouseDelta@{getMouseDelta}!Astra::InputManager@{Astra::InputManager}}
+\doxysubsubsection{\texorpdfstring{getMouseDelta()}{getMouseDelta()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_input_manager_a1ccec6fcd93a3e05ce522b97238381cd} 
+glm\+::ivec2 Astra\+::\+Input\+Manager\+::get\+Mouse\+Delta (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Devuelve la diferencia entre la posición actual y la anterior del ratón. 
+
+
+
+Definición en la línea \mbox{\hyperlink{_input_manager_8cpp_source_l00126}{126}} del archivo \mbox{\hyperlink{_input_manager_8cpp_source}{Input\+Manager.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_input_manager_a2c06ae94b2fe874c83ae6cf00c2b9333}\index{Astra::InputManager@{Astra::InputManager}!getMousePos@{getMousePos}}
+\index{getMousePos@{getMousePos}!Astra::InputManager@{Astra::InputManager}}
+\doxysubsubsection{\texorpdfstring{getMousePos()}{getMousePos()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_input_manager_a2c06ae94b2fe874c83ae6cf00c2b9333} 
+glm\+::ivec2 Astra\+::\+Input\+Manager\+::get\+Mouse\+Pos (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Devuelve la posición del ratón. 
+
+
+
+Definición en la línea \mbox{\hyperlink{_input_manager_8cpp_source_l00121}{121}} del archivo \mbox{\hyperlink{_input_manager_8cpp_source}{Input\+Manager.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_input_manager_aea22f9765793359fe4bd511537f4651c}\index{Astra::InputManager@{Astra::InputManager}!getMouseWheel@{getMouseWheel}}
+\index{getMouseWheel@{getMouseWheel}!Astra::InputManager@{Astra::InputManager}}
+\doxysubsubsection{\texorpdfstring{getMouseWheel()}{getMouseWheel()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_input_manager_aea22f9765793359fe4bd511537f4651c} 
+glm\+::ivec2 Astra\+::\+Input\+Manager\+::get\+Mouse\+Wheel (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Devuelve el estado de la rueda del ratón. 
+
+
+
+Definición en la línea \mbox{\hyperlink{_input_manager_8cpp_source_l00131}{131}} del archivo \mbox{\hyperlink{_input_manager_8cpp_source}{Input\+Manager.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_input_manager_a617cdb0361015a6456d023f8c9dc57f4}\index{Astra::InputManager@{Astra::InputManager}!hideMouse@{hideMouse}}
+\index{hideMouse@{hideMouse}!Astra::InputManager@{Astra::InputManager}}
+\doxysubsubsection{\texorpdfstring{hideMouse()}{hideMouse()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_input_manager_a617cdb0361015a6456d023f8c9dc57f4} 
+void Astra\+::\+Input\+Manager\+::hide\+Mouse (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Oculta el cursor del ratón. 
+
+
+
+Definición en la línea \mbox{\hyperlink{_input_manager_8cpp_source_l00106}{106}} del archivo \mbox{\hyperlink{_input_manager_8cpp_source}{Input\+Manager.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_input_manager_a7fdeaf6e8d18cf1908097b01cee23799}\index{Astra::InputManager@{Astra::InputManager}!init@{init}}
+\index{init@{init}!Astra::InputManager@{Astra::InputManager}}
+\doxysubsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_input_manager_a7fdeaf6e8d18cf1908097b01cee23799} 
+void Astra\+::\+Input\+Manager\+::init (\begin{DoxyParamCaption}\item[{GLFWwindow \texorpdfstring{$\ast$}{*}}]{window}{, }\item[{\mbox{\hyperlink{class_astra_1_1_app}{App}} \texorpdfstring{$\ast$}{*}}]{app}{}\end{DoxyParamCaption})}
+
+
+
+Inicializa los callbacks. 
+
+
+
+Definición en la línea \mbox{\hyperlink{_input_manager_8cpp_source_l00092}{92}} del archivo \mbox{\hyperlink{_input_manager_8cpp_source}{Input\+Manager.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_input_manager_a79810b6a5cad89044a12beacc6489234}\index{Astra::InputManager@{Astra::InputManager}!keyPressed@{keyPressed}}
+\index{keyPressed@{keyPressed}!Astra::InputManager@{Astra::InputManager}}
+\doxysubsubsection{\texorpdfstring{keyPressed()}{keyPressed()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_input_manager_a79810b6a5cad89044a12beacc6489234} 
+bool Astra\+::\+Input\+Manager\+::key\+Pressed (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8}{Keys}}}]{key}{}\end{DoxyParamCaption}) const}
+
+
+
+Devuelve el estado de una tecla que se le pasa como parámetro. 
+
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em true} & si está pulsada \\
+\hline
+{\em false} & si no está pulsada \\
+\hline
+\end{DoxyRetVals}
+
+
+Definición en la línea \mbox{\hyperlink{_input_manager_8cpp_source_l00141}{141}} del archivo \mbox{\hyperlink{_input_manager_8cpp_source}{Input\+Manager.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_input_manager_a8c144176e80197ef74723968d415318b}\index{Astra::InputManager@{Astra::InputManager}!mouseClick@{mouseClick}}
+\index{mouseClick@{mouseClick}!Astra::InputManager@{Astra::InputManager}}
+\doxysubsubsection{\texorpdfstring{mouseClick()}{mouseClick()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_input_manager_a8c144176e80197ef74723968d415318b} 
+bool Astra\+::\+Input\+Manager\+::mouse\+Click (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_astra_a943ae035e017b5fd68ab4824a97b9f62}{Mouse\+Buttons}}}]{button}{}\end{DoxyParamCaption}) const}
+
+
+
+Consulta el estado del click del mouse. 
+
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em true} & si esta pulsado ese botón en ese momento \\
+\hline
+{\em false} & en caso contrario. \\
+\hline
+\end{DoxyRetVals}
+
+
+Definición en la línea \mbox{\hyperlink{_input_manager_8cpp_source_l00136}{136}} del archivo \mbox{\hyperlink{_input_manager_8cpp_source}{Input\+Manager.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_input_manager_ae01a13daab5f8a93f7c5373a3b1119bd}\index{Astra::InputManager@{Astra::InputManager}!operator=@{operator=}}
+\index{operator=@{operator=}!Astra::InputManager@{Astra::InputManager}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_input_manager_ae01a13daab5f8a93f7c5373a3b1119bd} 
+\mbox{\hyperlink{class_astra_1_1_input_manager}{Input\+Manager}} \& Astra\+::\+Input\+Manager\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_astra_1_1_input_manager}{Input\+Manager}} \&}]{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+\Hypertarget{class_astra_1_1_input_manager_abc724ac812a008fb4720936dec5d5ad6}\index{Astra::InputManager@{Astra::InputManager}!pollEvents@{pollEvents}}
+\index{pollEvents@{pollEvents}!Astra::InputManager@{Astra::InputManager}}
+\doxysubsubsection{\texorpdfstring{pollEvents()}{pollEvents()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_input_manager_abc724ac812a008fb4720936dec5d5ad6} 
+void Astra\+::\+Input\+Manager\+::poll\+Events (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Consulta los eventos de GLFW. 
+
+\begin{DoxyWarning}{Atención}
+Este método se debe llamar al inicio de cada iteración del bucle de dibujado (método run()) de la aplicación! 
+\end{DoxyWarning}
+
+
+Definición en la línea \mbox{\hyperlink{_input_manager_8cpp_source_l00099}{99}} del archivo \mbox{\hyperlink{_input_manager_8cpp_source}{Input\+Manager.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_input_manager_a2bd3a4b7922d03ef6ff38155fd635bdc}\index{Astra::InputManager@{Astra::InputManager}!windowShouldClose@{windowShouldClose}}
+\index{windowShouldClose@{windowShouldClose}!Astra::InputManager@{Astra::InputManager}}
+\doxysubsubsection{\texorpdfstring{windowShouldClose()}{windowShouldClose()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_input_manager_a2bd3a4b7922d03ef6ff38155fd635bdc} 
+bool Astra\+::\+Input\+Manager\+::window\+Should\+Close (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Devuelve si la ventana se debería cerrar o no. 
+
+
+
+Definición en la línea \mbox{\hyperlink{_input_manager_8cpp_source_l00146}{146}} del archivo \mbox{\hyperlink{_input_manager_8cpp_source}{Input\+Manager.\+cpp}}.
+
+
+
+La documentación de esta clase está generada de los siguientes archivos\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{_input_manager_8h}{Input\+Manager.\+h}}\item 
+src/\mbox{\hyperlink{_input_manager_8cpp}{Input\+Manager.\+cpp}}\end{DoxyCompactItemize}

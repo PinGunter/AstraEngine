@@ -1,0 +1,24 @@
+\doxysection{Referencia del archivo include/\+Pipeline.h}
+\hypertarget{_pipeline_8h}{}\label{_pipeline_8h}\index{include/Pipeline.h@{include/Pipeline.h}}
+{\ttfamily \#include $<$vulkan/vulkan.\+h$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$nvvk/descriptorsets\+\_\+vk.\+hpp$>$}\newline
+{\ttfamily \#include $<$Command\+List.\+h$>$}\newline
+\doxysubsubsection*{Clases}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_astra_1_1_pipeline}{Astra\+::\+Pipeline}}
+\begin{DoxyCompactList}\small\item\em Clase abstracta que representa una pipeline de Vulkan. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_astra_1_1_raster_pipeline}{Astra\+::\+Raster\+Pipeline}}
+\begin{DoxyCompactList}\small\item\em Clase abstracta para pipelines de rasterización. Declara el método de crear para ser sobreescrito por sus hijas. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_astra_1_1_ray_tracing_pipeline}{Astra\+::\+Ray\+Tracing\+Pipeline}}
+\begin{DoxyCompactList}\small\item\em Clase de pipeline de trazado de rayos. Está completamente implementada para usarse. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_astra_1_1_offscreen_raster}{Astra\+::\+Offscreen\+Raster}}
+\begin{DoxyCompactList}\small\item\em \doxylink{class_astra_1_1_pipeline}{Pipeline} de rasterización de ejemplo para dibujar escenas en el offscreen framebuffer. Lista para usarse. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_astra_1_1_post_pipeline}{Astra\+::\+Post\+Pipeline}}
+\begin{DoxyCompactList}\small\item\em \doxylink{class_astra_1_1_pipeline}{Pipeline} que dibuja la textura resultante del offscreen render en pantalla. Aplica postprocesado también. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Espacios de nombres}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespace_astra}{Astra}}
+\end{DoxyCompactItemize}

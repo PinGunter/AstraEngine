@@ -11,7 +11,7 @@ It depends on the nvpro_core library. This dependency should be removed sometime
 
 This repository includes the core library wich is used as a dependency in projects that use it. To see some examples check out the [examples repository](https://github.com/PinGunter/AstraExamples).
 
-It currently supports ray-traced shadow, reflections and refraction.
+It currently supports ray-traced shadows, reflections and refraction.
 
 #### Screenshots
 
@@ -40,4 +40,4 @@ Aside from improving on the library itself (better quality code, improved Vulkan
 
 - [ ] FPS Camera
 
-- [ ] Multiple colored lights
+- [x] Multiple colored lights

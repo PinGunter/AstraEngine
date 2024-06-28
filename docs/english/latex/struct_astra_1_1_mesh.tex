@@ -1,0 +1,279 @@
+\doxysection{Astra\+::Mesh Struct Reference}
+\hypertarget{struct_astra_1_1_mesh}{}\label{struct_astra_1_1_mesh}\index{Astra::Mesh@{Astra::Mesh}}
+
+
+Represents a 3D model using a triangle mesh representation Contains all the necessary info for it to be accessed from both host and device.  
+
+
+
+
+{\ttfamily \#include $<$Mesh.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{struct_astra_1_1_mesh_a9a63d329adc88e7a3ac3dd6ae5edd8af}{draw}} (const \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}} \&cmd\+List) const
+\begin{DoxyCompactList}\small\item\em Draws the model. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{struct_astra_1_1_mesh_ac826d55fe2c397483683be7235abc4d2}{create}} (const \mbox{\hyperlink{class_astra_1_1_command_list}{Astra\+::\+Command\+List}} \&cmd\+List, nvvk\+::\+Resource\+Allocator\+Dma \texorpdfstring{$\ast$}{*}alloc, uint32\+\_\+t txt\+Offset)
+\begin{DoxyCompactList}\small\item\em Creates the buffers and stores the device buffer addresses. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{struct_astra_1_1_mesh_a6e7d0a63990bc715f056d301028391d3}{create\+Buffers}} (const \mbox{\hyperlink{class_astra_1_1_command_list}{Astra\+::\+Command\+List}} \&cmd\+List, nvvk\+::\+Resource\+Allocator\+Dma \texorpdfstring{$\ast$}{*}alloc)
+\begin{DoxyCompactList}\small\item\em Creates the buffers. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{struct_astra_1_1_mesh_abd19871244621d82e8ef487786a076e3}{load\+From\+File}} (const std\+::string \&path)
+\begin{DoxyCompactList}\small\item\em Loads an obj file and stores the data in the CPU vectors. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{struct_astra_1_1_mesh_aa68556f8d889afd1e2c80a9b961b6bb5}{mesh\+Id}} \{-\/1\}
+\begin{DoxyCompactList}\small\item\em \doxylink{class_astra_1_1_scene}{Scene} mesh id. \end{DoxyCompactList}\item 
+std\+::vector$<$ uint32\+\_\+t $>$ \mbox{\hyperlink{struct_astra_1_1_mesh_af407c90fd1619d0457e42d13dada6e30}{indices}}
+\begin{DoxyCompactList}\small\item\em Index vector on CPU. \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{struct_vertex}{Vertex}} $>$ \mbox{\hyperlink{struct_astra_1_1_mesh_acf7a4748c8c286a6fde381dd1c6c30c1}{vertices}}
+\begin{DoxyCompactList}\small\item\em \doxylink{struct_vertex}{Vertex} vector on CPU. \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{struct_wave_front_material}{Wave\+Front\+Material}} $>$ \mbox{\hyperlink{struct_astra_1_1_mesh_a337e4d6b2c85a8ee583b49a83b4c7d12}{materials}}
+\begin{DoxyCompactList}\small\item\em Materials vector on CPU. \end{DoxyCompactList}\item 
+std\+::vector$<$ int32\+\_\+t $>$ \mbox{\hyperlink{struct_astra_1_1_mesh_a64570fb8973d3150fbd2f9a3f1c20372}{material\+Indices}}
+\begin{DoxyCompactList}\small\item\em Material index vector on CPU. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{struct_astra_1_1_mesh_a2301c56624eefd89a2d282cdfa1975d8}{textures}}
+\begin{DoxyCompactList}\small\item\em Texture vector on CPU. \end{DoxyCompactList}\item 
+nvvk\+::\+Buffer \mbox{\hyperlink{struct_astra_1_1_mesh_ace229a779e302d71704a1e56a95d4d50}{vertex\+Buffer}}
+\begin{DoxyCompactList}\small\item\em \doxylink{struct_vertex}{Vertex} buffer on \doxylink{class_astra_1_1_device}{Device}. \end{DoxyCompactList}\item 
+nvvk\+::\+Buffer \mbox{\hyperlink{struct_astra_1_1_mesh_a6f9452d7726873e05d17684dc16bf088}{index\+Buffer}}
+\begin{DoxyCompactList}\small\item\em Index buffer on \doxylink{class_astra_1_1_device}{Device}. \end{DoxyCompactList}\item 
+nvvk\+::\+Buffer \mbox{\hyperlink{struct_astra_1_1_mesh_a0061f64cb3e9d0696cb9f7b05bf35e13}{mat\+Color\+Buffer}}
+\begin{DoxyCompactList}\small\item\em Materials buffer on \doxylink{class_astra_1_1_device}{Device}. \end{DoxyCompactList}\item 
+nvvk\+::\+Buffer \mbox{\hyperlink{struct_astra_1_1_mesh_a05db14d264e171b7e33fdfffb2dacb4e}{mat\+Index\+Buffer}}
+\begin{DoxyCompactList}\small\item\em Material index buffer on \doxylink{class_astra_1_1_device}{Device}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct_obj_desc}{Obj\+Desc}} \mbox{\hyperlink{struct_astra_1_1_mesh_a98668ea9a5c051f2644f3d4b45803557}{descriptor}} \{\}
+\begin{DoxyCompactList}\small\item\em Contains the GPU memory addresses for the buffers. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Represents a 3D model using a triangle mesh representation Contains all the necessary info for it to be accessed from both host and device. 
+
+Definition at line \mbox{\hyperlink{_mesh_8h_source_l00019}{19}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{struct_astra_1_1_mesh_ac826d55fe2c397483683be7235abc4d2}\index{Astra::Mesh@{Astra::Mesh}!create@{create}}
+\index{create@{create}!Astra::Mesh@{Astra::Mesh}}
+\doxysubsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily \label{struct_astra_1_1_mesh_ac826d55fe2c397483683be7235abc4d2} 
+void Astra\+::\+Mesh\+::create (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_astra_1_1_command_list}{Astra\+::\+Command\+List}} \&}]{cmd\+List}{, }\item[{nvvk\+::\+Resource\+Allocator\+Dma \texorpdfstring{$\ast$}{*}}]{alloc}{, }\item[{uint32\+\_\+t}]{txt\+Offset}{}\end{DoxyParamCaption})}
+
+
+
+Creates the buffers and stores the device buffer addresses. 
+
+
+
+Definition at line \mbox{\hyperlink{_mesh_8cpp_source_l00071}{71}} of file \mbox{\hyperlink{_mesh_8cpp_source}{Mesh.\+cpp}}.
+
+\Hypertarget{struct_astra_1_1_mesh_a6e7d0a63990bc715f056d301028391d3}\index{Astra::Mesh@{Astra::Mesh}!createBuffers@{createBuffers}}
+\index{createBuffers@{createBuffers}!Astra::Mesh@{Astra::Mesh}}
+\doxysubsubsection{\texorpdfstring{createBuffers()}{createBuffers()}}
+{\footnotesize\ttfamily \label{struct_astra_1_1_mesh_a6e7d0a63990bc715f056d301028391d3} 
+void Astra\+::\+Mesh\+::create\+Buffers (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_astra_1_1_command_list}{Astra\+::\+Command\+List}} \&}]{cmd\+List}{, }\item[{nvvk\+::\+Resource\+Allocator\+Dma \texorpdfstring{$\ast$}{*}}]{alloc}{}\end{DoxyParamCaption})}
+
+
+
+Creates the buffers. 
+
+
+
+Definition at line \mbox{\hyperlink{_mesh_8cpp_source_l00082}{82}} of file \mbox{\hyperlink{_mesh_8cpp_source}{Mesh.\+cpp}}.
+
+\Hypertarget{struct_astra_1_1_mesh_a9a63d329adc88e7a3ac3dd6ae5edd8af}\index{Astra::Mesh@{Astra::Mesh}!draw@{draw}}
+\index{draw@{draw}!Astra::Mesh@{Astra::Mesh}}
+\doxysubsubsection{\texorpdfstring{draw()}{draw()}}
+{\footnotesize\ttfamily \label{struct_astra_1_1_mesh_a9a63d329adc88e7a3ac3dd6ae5edd8af} 
+void Astra\+::\+Mesh\+::draw (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}} \&}]{cmd\+List}{}\end{DoxyParamCaption}) const}
+
+
+
+Draws the model. 
+
+
+
+Definition at line \mbox{\hyperlink{_mesh_8cpp_source_l00066}{66}} of file \mbox{\hyperlink{_mesh_8cpp_source}{Mesh.\+cpp}}.
+
+\Hypertarget{struct_astra_1_1_mesh_abd19871244621d82e8ef487786a076e3}\index{Astra::Mesh@{Astra::Mesh}!loadFromFile@{loadFromFile}}
+\index{loadFromFile@{loadFromFile}!Astra::Mesh@{Astra::Mesh}}
+\doxysubsubsection{\texorpdfstring{loadFromFile()}{loadFromFile()}}
+{\footnotesize\ttfamily \label{struct_astra_1_1_mesh_abd19871244621d82e8ef487786a076e3} 
+void Astra\+::\+Mesh\+::load\+From\+File (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path}{}\end{DoxyParamCaption})}
+
+
+
+Loads an obj file and stores the data in the CPU vectors. 
+
+
+
+Definition at line \mbox{\hyperlink{_mesh_8cpp_source_l00093}{93}} of file \mbox{\hyperlink{_mesh_8cpp_source}{Mesh.\+cpp}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{struct_astra_1_1_mesh_a98668ea9a5c051f2644f3d4b45803557}\index{Astra::Mesh@{Astra::Mesh}!descriptor@{descriptor}}
+\index{descriptor@{descriptor}!Astra::Mesh@{Astra::Mesh}}
+\doxysubsubsection{\texorpdfstring{descriptor}{descriptor}}
+{\footnotesize\ttfamily \label{struct_astra_1_1_mesh_a98668ea9a5c051f2644f3d4b45803557} 
+\mbox{\hyperlink{struct_obj_desc}{Obj\+Desc}} Astra\+::\+Mesh\+::descriptor \{\}}
+
+
+
+Contains the GPU memory addresses for the buffers. 
+
+
+
+Definition at line \mbox{\hyperlink{_mesh_8h_source_l00083}{83}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
+
+\Hypertarget{struct_astra_1_1_mesh_a6f9452d7726873e05d17684dc16bf088}\index{Astra::Mesh@{Astra::Mesh}!indexBuffer@{indexBuffer}}
+\index{indexBuffer@{indexBuffer}!Astra::Mesh@{Astra::Mesh}}
+\doxysubsubsection{\texorpdfstring{indexBuffer}{indexBuffer}}
+{\footnotesize\ttfamily \label{struct_astra_1_1_mesh_a6f9452d7726873e05d17684dc16bf088} 
+nvvk\+::\+Buffer Astra\+::\+Mesh\+::index\+Buffer}
+
+
+
+Index buffer on \doxylink{class_astra_1_1_device}{Device}. 
+
+
+
+Definition at line \mbox{\hyperlink{_mesh_8h_source_l00066}{66}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
+
+\Hypertarget{struct_astra_1_1_mesh_af407c90fd1619d0457e42d13dada6e30}\index{Astra::Mesh@{Astra::Mesh}!indices@{indices}}
+\index{indices@{indices}!Astra::Mesh@{Astra::Mesh}}
+\doxysubsubsection{\texorpdfstring{indices}{indices}}
+{\footnotesize\ttfamily \label{struct_astra_1_1_mesh_af407c90fd1619d0457e42d13dada6e30} 
+std\+::vector$<$uint32\+\_\+t$>$ Astra\+::\+Mesh\+::indices}
+
+
+
+Index vector on CPU. 
+
+
+
+Definition at line \mbox{\hyperlink{_mesh_8h_source_l00034}{34}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
+
+\Hypertarget{struct_astra_1_1_mesh_a0061f64cb3e9d0696cb9f7b05bf35e13}\index{Astra::Mesh@{Astra::Mesh}!matColorBuffer@{matColorBuffer}}
+\index{matColorBuffer@{matColorBuffer}!Astra::Mesh@{Astra::Mesh}}
+\doxysubsubsection{\texorpdfstring{matColorBuffer}{matColorBuffer}}
+{\footnotesize\ttfamily \label{struct_astra_1_1_mesh_a0061f64cb3e9d0696cb9f7b05bf35e13} 
+nvvk\+::\+Buffer Astra\+::\+Mesh\+::mat\+Color\+Buffer}
+
+
+
+Materials buffer on \doxylink{class_astra_1_1_device}{Device}. 
+
+
+
+Definition at line \mbox{\hyperlink{_mesh_8h_source_l00071}{71}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
+
+\Hypertarget{struct_astra_1_1_mesh_a64570fb8973d3150fbd2f9a3f1c20372}\index{Astra::Mesh@{Astra::Mesh}!materialIndices@{materialIndices}}
+\index{materialIndices@{materialIndices}!Astra::Mesh@{Astra::Mesh}}
+\doxysubsubsection{\texorpdfstring{materialIndices}{materialIndices}}
+{\footnotesize\ttfamily \label{struct_astra_1_1_mesh_a64570fb8973d3150fbd2f9a3f1c20372} 
+std\+::vector$<$int32\+\_\+t$>$ Astra\+::\+Mesh\+::material\+Indices}
+
+
+
+Material index vector on CPU. 
+
+
+
+Definition at line \mbox{\hyperlink{_mesh_8h_source_l00049}{49}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
+
+\Hypertarget{struct_astra_1_1_mesh_a337e4d6b2c85a8ee583b49a83b4c7d12}\index{Astra::Mesh@{Astra::Mesh}!materials@{materials}}
+\index{materials@{materials}!Astra::Mesh@{Astra::Mesh}}
+\doxysubsubsection{\texorpdfstring{materials}{materials}}
+{\footnotesize\ttfamily \label{struct_astra_1_1_mesh_a337e4d6b2c85a8ee583b49a83b4c7d12} 
+std\+::vector$<$\mbox{\hyperlink{struct_wave_front_material}{Wave\+Front\+Material}}$>$ Astra\+::\+Mesh\+::materials}
+
+
+
+Materials vector on CPU. 
+
+
+
+Definition at line \mbox{\hyperlink{_mesh_8h_source_l00044}{44}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
+
+\Hypertarget{struct_astra_1_1_mesh_a05db14d264e171b7e33fdfffb2dacb4e}\index{Astra::Mesh@{Astra::Mesh}!matIndexBuffer@{matIndexBuffer}}
+\index{matIndexBuffer@{matIndexBuffer}!Astra::Mesh@{Astra::Mesh}}
+\doxysubsubsection{\texorpdfstring{matIndexBuffer}{matIndexBuffer}}
+{\footnotesize\ttfamily \label{struct_astra_1_1_mesh_a05db14d264e171b7e33fdfffb2dacb4e} 
+nvvk\+::\+Buffer Astra\+::\+Mesh\+::mat\+Index\+Buffer}
+
+
+
+Material index buffer on \doxylink{class_astra_1_1_device}{Device}. 
+
+
+
+Definition at line \mbox{\hyperlink{_mesh_8h_source_l00076}{76}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
+
+\Hypertarget{struct_astra_1_1_mesh_aa68556f8d889afd1e2c80a9b961b6bb5}\index{Astra::Mesh@{Astra::Mesh}!meshId@{meshId}}
+\index{meshId@{meshId}!Astra::Mesh@{Astra::Mesh}}
+\doxysubsubsection{\texorpdfstring{meshId}{meshId}}
+{\footnotesize\ttfamily \label{struct_astra_1_1_mesh_aa68556f8d889afd1e2c80a9b961b6bb5} 
+int Astra\+::\+Mesh\+::mesh\+Id \{-\/1\}}
+
+
+
+\doxylink{class_astra_1_1_scene}{Scene} mesh id. 
+
+\begin{DoxyWarning}{Warning}
+This is must be unique in a scene basis and has to always be initialized. 
+\end{DoxyWarning}
+
+
+Definition at line \mbox{\hyperlink{_mesh_8h_source_l00027}{27}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
+
+\Hypertarget{struct_astra_1_1_mesh_a2301c56624eefd89a2d282cdfa1975d8}\index{Astra::Mesh@{Astra::Mesh}!textures@{textures}}
+\index{textures@{textures}!Astra::Mesh@{Astra::Mesh}}
+\doxysubsubsection{\texorpdfstring{textures}{textures}}
+{\footnotesize\ttfamily \label{struct_astra_1_1_mesh_a2301c56624eefd89a2d282cdfa1975d8} 
+std\+::vector$<$std\+::string$>$ Astra\+::\+Mesh\+::textures}
+
+
+
+Texture vector on CPU. 
+
+
+
+Definition at line \mbox{\hyperlink{_mesh_8h_source_l00054}{54}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
+
+\Hypertarget{struct_astra_1_1_mesh_ace229a779e302d71704a1e56a95d4d50}\index{Astra::Mesh@{Astra::Mesh}!vertexBuffer@{vertexBuffer}}
+\index{vertexBuffer@{vertexBuffer}!Astra::Mesh@{Astra::Mesh}}
+\doxysubsubsection{\texorpdfstring{vertexBuffer}{vertexBuffer}}
+{\footnotesize\ttfamily \label{struct_astra_1_1_mesh_ace229a779e302d71704a1e56a95d4d50} 
+nvvk\+::\+Buffer Astra\+::\+Mesh\+::vertex\+Buffer}
+
+
+
+\doxylink{struct_vertex}{Vertex} buffer on \doxylink{class_astra_1_1_device}{Device}. 
+
+
+
+Definition at line \mbox{\hyperlink{_mesh_8h_source_l00061}{61}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
+
+\Hypertarget{struct_astra_1_1_mesh_acf7a4748c8c286a6fde381dd1c6c30c1}\index{Astra::Mesh@{Astra::Mesh}!vertices@{vertices}}
+\index{vertices@{vertices}!Astra::Mesh@{Astra::Mesh}}
+\doxysubsubsection{\texorpdfstring{vertices}{vertices}}
+{\footnotesize\ttfamily \label{struct_astra_1_1_mesh_acf7a4748c8c286a6fde381dd1c6c30c1} 
+std\+::vector$<$\mbox{\hyperlink{struct_vertex}{Vertex}}$>$ Astra\+::\+Mesh\+::vertices}
+
+
+
+\doxylink{struct_vertex}{Vertex} vector on CPU. 
+
+
+
+Definition at line \mbox{\hyperlink{_mesh_8h_source_l00039}{39}} of file \mbox{\hyperlink{_mesh_8h_source}{Mesh.\+h}}.
+
+
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{_mesh_8h}{Mesh.\+h}}\item 
+src/\mbox{\hyperlink{_mesh_8cpp}{Mesh.\+cpp}}\end{DoxyCompactItemize}

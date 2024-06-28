@@ -1,0 +1,411 @@
+\doxysection{Scene.\+cpp}
+\hypertarget{_scene_8cpp_source}{}\label{_scene_8cpp_source}\index{src/Scene.cpp@{src/Scene.cpp}}
+\mbox{\hyperlink{_scene_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00001}00001\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_scene_8h}{Scene.h}}>}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00002}00002\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{host__device_8h}{host\_device.h}}>}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00003}00003\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_device_8h}{Device.h}}>}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <nvvk/buffers\_vk.hpp>}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_utils_8h}{Utils.h}}>}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00006}00006\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00007}\mbox{\hyperlink{class_astra_1_1_scene_a11555c3d45c0c1545eccbf645a8133eb}{00007}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_scene_a11555c3d45c0c1545eccbf645a8133eb}{Astra::Scene::createObjDescBuffer}}()}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00008}00008\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00009}00009\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{class_astra_1_1_scene_ad50612c5d19430bbbbd9b0e2b8dd9a72}{\_objDescBuffer}}.buffer\ !=\ VK\_NULL\_HANDLE)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00010}00010\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00011}00011\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_astra_1_1_scene_a802e3940b4f72ce487102ef3760395bc}{\_alloc}}-\/>destroy(\mbox{\hyperlink{class_astra_1_1_scene_ad50612c5d19430bbbbd9b0e2b8dd9a72}{\_objDescBuffer}});}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00012}00012\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00014}00014\ \ \ \ \ nvvk::CommandPool\ cmdGen(\mbox{\hyperlink{_device_8h_a2fba0ef1853e57846ae6bc3a5d30db39}{AstraDevice}}.getVkDevice(),\ \mbox{\hyperlink{_device_8h_a2fba0ef1853e57846ae6bc3a5d30db39}{AstraDevice}}.getGraphicsQueueIndex());}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00015}00015\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00016}00016\ \ \ \ \ \textcolor{keyword}{auto}\ cmdBuf\ =\ cmdGen.createCommandBuffer();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00017}00017\ \ \ \ \ std::vector<ObjDesc>\ objDescs;}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00018}00018\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&mesh\ :\ \mbox{\hyperlink{class_astra_1_1_scene_ae4eea6a690ea99685c1d09af9577c808}{\_objModels}})}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00019}00019\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00020}00020\ \ \ \ \ \ \ \ \ objDescs.push\_back(mesh.descriptor);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00021}00021\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00022}00022\ \ \ \ \ \textcolor{keywordflow}{if}\ (!objDescs.empty())}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00023}00023\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_astra_1_1_scene_ad50612c5d19430bbbbd9b0e2b8dd9a72}{\_objDescBuffer}}\ =\ \mbox{\hyperlink{class_astra_1_1_scene_a802e3940b4f72ce487102ef3760395bc}{\_alloc}}-\/>createBuffer(cmdBuf,\ objDescs,\ VK\_BUFFER\_USAGE\_STORAGE\_BUFFER\_BIT);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00024}00024\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00025}00025\ \ \ \ \ cmdGen.submitAndWait(cmdBuf);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00026}00026\ \ \ \ \ \mbox{\hyperlink{class_astra_1_1_scene_a802e3940b4f72ce487102ef3760395bc}{\_alloc}}-\/>finalizeAndReleaseStaging();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00027}00027\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00028}00028\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00029}\mbox{\hyperlink{class_astra_1_1_scene_a1dabe0ad5b25b17da98fa9f9104f36a8}{00029}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_scene_a1dabe0ad5b25b17da98fa9f9104f36a8}{Astra::Scene::createCameraUBO}}()}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00030}00030\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00031}00031\ \ \ \ \ \_cameraUBO\ =\ \mbox{\hyperlink{_device_8h_a2fba0ef1853e57846ae6bc3a5d30db39}{AstraDevice}}.createUBO<\mbox{\hyperlink{struct_camera_uniform}{CameraUniform}}>(\_alloc);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00032}00032\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00033}00033\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00034}\mbox{\hyperlink{class_astra_1_1_scene_abf237fb1632c47dfe594f970bae355c2}{00034}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_scene_abf237fb1632c47dfe594f970bae355c2}{Astra::Scene::updateCameraUBO}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_astra_1_1_command_list}{CommandList}}\ \&cmdList)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00035}00035\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00036}00036\ \ \ \ \ \mbox{\hyperlink{_device_8h_a2fba0ef1853e57846ae6bc3a5d30db39}{AstraDevice}}.updateUBO<\mbox{\hyperlink{struct_camera_uniform}{CameraUniform}}>(\_camera-\/>getCameraUniform(),\ \_cameraUBO,\ cmdList);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00037}00037\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00038}00038\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00039}\mbox{\hyperlink{class_astra_1_1_scene_afc4e71f51b9aadc2a41b4b2c8e102233}{00039}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_scene_afc4e71f51b9aadc2a41b4b2c8e102233}{Astra::Scene::createLightsUBO}}()}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00040}00040\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00041}00041\ \ \ \ \ \_lightsUBO\ =\ \mbox{\hyperlink{_device_8h_a2fba0ef1853e57846ae6bc3a5d30db39}{AstraDevice}}.createUBO<\mbox{\hyperlink{struct_lights_uniform}{LightsUniform}}>(\_alloc);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00042}00042\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00043}00043\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00044}\mbox{\hyperlink{class_astra_1_1_scene_abed2d19410f337b3f867a4811a89cc20}{00044}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_scene_abed2d19410f337b3f867a4811a89cc20}{Astra::Scene::updateLightsUBO}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_astra_1_1_command_list}{CommandList}}\ \&cmdList)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00045}00045\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00046}00046\ \ \ \ \ \mbox{\hyperlink{_device_8h_a2fba0ef1853e57846ae6bc3a5d30db39}{AstraDevice}}.updateUBO<\mbox{\hyperlink{struct_lights_uniform}{LightsUniform}}>(\_lightsUniform,\ \_lightsUBO,\ cmdList);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00047}00047\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00048}00048\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00049}\mbox{\hyperlink{class_astra_1_1_scene_a928ee433829dd7b0de80ecb2fcd7e58f}{00049}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_scene_a928ee433829dd7b0de80ecb2fcd7e58f}{Astra::Scene::loadModel}}(\textcolor{keyword}{const}\ std::string\ \&filename,\ \textcolor{keyword}{const}\ glm::mat4\ \&transform)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00050}00050\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00051}00051\ \ \ \ \ \textcolor{comment}{//\ we\ cant\ load\ models\ until\ we\ have\ access\ to\ the\ resource\ allocator}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00052}00052\ \ \ \ \ \textcolor{comment}{//\ if\ we\ have\ it,\ just\ create\ it}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00053}00053\ \ \ \ \ \textcolor{comment}{//\ if\ we\ dont,\ postpone\ the\ operation\ to\ the\ init\ stage}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00054}00054\ \ \ \ \ \textcolor{keywordflow}{if}\ (\_alloc)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00055}00055\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00056}00056\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ find\ the\ offset\ for\ this\ model}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00057}00057\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ txtOffset\ =\ \textcolor{keyword}{static\_cast<}uint32\_t\textcolor{keyword}{>}(getTextures().size());}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00058}00058\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ allocating\ cmdbuffers}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00059}00059\ \ \ \ \ \ \ \ \ nvvk::CommandPool\ cmdBufGet(\mbox{\hyperlink{_device_8h_a2fba0ef1853e57846ae6bc3a5d30db39}{AstraDevice}}.getVkDevice(),\ \mbox{\hyperlink{_device_8h_a2fba0ef1853e57846ae6bc3a5d30db39}{AstraDevice}}.getGraphicsQueueIndex());}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00060}00060\ \ \ \ \ \ \ \ \ VkCommandBuffer\ cmdBuf\ =\ cmdBufGet.createCommandBuffer();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00061}00061\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_astra_1_1_command_list}{Astra::CommandList}}\ cmdList(cmdBuf);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00062}00062\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00063}00063\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_astra_1_1_mesh}{Astra::Mesh}}\ mesh;}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00064}00064\ \ \ \ \ \ \ \ \ mesh.\mbox{\hyperlink{struct_astra_1_1_mesh_abd19871244621d82e8ef487786a076e3}{loadFromFile}}(filename);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00065}00065\ \ \ \ \ \ \ \ \ mesh.\mbox{\hyperlink{struct_astra_1_1_mesh_aa68556f8d889afd1e2c80a9b961b6bb5}{meshId}}\ =\ getModels().size();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00066}00066\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00067}00067\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ color\ space\ to\ linear}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00068}00068\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&m\ :\ mesh.\mbox{\hyperlink{struct_astra_1_1_mesh_a337e4d6b2c85a8ee583b49a83b4c7d12}{materials}})}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00069}00069\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00070}00070\ \ \ \ \ \ \ \ \ \ \ \ \ m.ambient\ =\ glm::pow(m.ambient,\ glm::vec3(2.2f));}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00071}00071\ \ \ \ \ \ \ \ \ \ \ \ \ m.diffuse\ =\ glm::pow(m.diffuse,\ glm::vec3(2.2f));}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00072}00072\ \ \ \ \ \ \ \ \ \ \ \ \ m.specular\ =\ glm::pow(m.specular,\ glm::vec3(2.2f));}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00073}00073\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00074}00074\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00075}00075\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ creates\ the\ buffers\ and\ descriptors\ neeeded}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00076}00076\ \ \ \ \ \ \ \ \ mesh.\mbox{\hyperlink{struct_astra_1_1_mesh_ac826d55fe2c397483683be7235abc4d2}{create}}(cmdList,\ \_alloc,\ txtOffset);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00077}00077\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00078}00078\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Creates\ all\ textures\ found}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00079}00079\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_device_8h_a2fba0ef1853e57846ae6bc3a5d30db39}{AstraDevice}}.createTextureImages(cmdBuf,\ mesh.\mbox{\hyperlink{struct_astra_1_1_mesh_a2301c56624eefd89a2d282cdfa1975d8}{textures}},\ getTextures(),\ *\_alloc);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00080}00080\ \ \ \ \ \ \ \ \ cmdBufGet.submitAndWait(cmdBuf);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00081}00081\ \ \ \ \ \ \ \ \ \_alloc-\/>finalizeAndReleaseStaging();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00082}00082\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00083}00083\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ adds\ the\ model\ to\ the\ scene}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00084}00084\ \ \ \ \ \ \ \ \ addModel(mesh);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00085}00085\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00086}00086\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ creates\ an\ instance\ of\ the\ model}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00087}00087\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_astra_1_1_mesh_instance}{Astra::MeshInstance}}\ instance(mesh.\mbox{\hyperlink{struct_astra_1_1_mesh_aa68556f8d889afd1e2c80a9b961b6bb5}{meshId}},\ transform);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00088}00088\ \ \ \ \ \ \ \ \ instance.\mbox{\hyperlink{class_astra_1_1_node3_d_a0f6f83ee7837fc764d82c549934c1d11}{setName}}(instance.\mbox{\hyperlink{class_astra_1_1_node3_d_ae5c0483b6c8e7fad4df446daa3a8f541}{getName}}()\ +\ \textcolor{stringliteral}{"{}\ ::\ "{}}\ +\ filename.substr(filename.size()\ -\/\ std::min(10,\ (\textcolor{keywordtype}{int})filename.size()\ /\ 2\ -\/\ 4),\ filename.size()));}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00089}00089\ \ \ \ \ \ \ \ \ addInstance(instance);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00090}00090\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00091}00091\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ creates\ the\ descriptor\ buffer}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00092}00092\ \ \ \ \ \ \ \ \ createObjDescBuffer();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00093}00093\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00094}00094\ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00095}00095\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00096}00096\ \ \ \ \ \ \ \ \ \_lazymodels.push\_back(std::make\_pair(filename,\ transform));}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00097}00097\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00098}00098\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00099}00099\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00100}\mbox{\hyperlink{class_astra_1_1_scene_ade431180c9dd89931860d9e52ad4351d}{00100}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_scene_ade431180c9dd89931860d9e52ad4351d}{Astra::Scene::init}}(nvvk::ResourceAllocator\ *alloc)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00101}00101\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00102}00102\ \ \ \ \ \_alloc\ =\ (nvvk::ResourceAllocatorDma\ *)alloc;}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00103}00103\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&p\ :\ \_lazymodels)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00104}00104\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00105}00105\ \ \ \ \ \ \ \ \ loadModel(p.first,\ p.second);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00106}00106\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00107}00107\ \ \ \ \ \_lazymodels.clear();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00108}00108\ \ \ \ \ createCameraUBO();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00109}00109\ \ \ \ \ createLightsUBO();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00110}00110\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00111}00111\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00112}\mbox{\hyperlink{class_astra_1_1_scene_a94e3c4bdf20302a240393748fcf4c392}{00112}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_scene_a94e3c4bdf20302a240393748fcf4c392}{Astra::Scene::destroy}}()}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00113}00113\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00114}00114\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00115}00115\ \ \ \ \ \_alloc-\/>destroy(\_objDescBuffer);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00116}00116\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00117}00117\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&m\ :\ \_objModels)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00118}00118\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00119}00119\ \ \ \ \ \ \ \ \ \_alloc-\/>destroy(m.vertexBuffer);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00120}00120\ \ \ \ \ \ \ \ \ \_alloc-\/>destroy(m.indexBuffer);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00121}00121\ \ \ \ \ \ \ \ \ \_alloc-\/>destroy(m.matColorBuffer);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00122}00122\ \ \ \ \ \ \ \ \ \_alloc-\/>destroy(m.matIndexBuffer);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00123}00123\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00124}00124\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00125}00125\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&t\ :\ \_textures)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00126}00126\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00127}00127\ \ \ \ \ \ \ \ \ \_alloc-\/>destroy(t);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00128}00128\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00129}00129\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00130}00130\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&m\ :\ \_instances)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00131}00131\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00132}00132\ \ \ \ \ \ \ \ \ m.destroy();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00133}00133\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00134}00134\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00135}00135\ \ \ \ \ \_alloc-\/>destroy(\_cameraUBO);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00136}00136\ \ \ \ \ \_alloc-\/>destroy(\_lightsUBO);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00137}00137\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00138}00138\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00139}\mbox{\hyperlink{class_astra_1_1_scene_a69f678f88b385038a034ccf1864444f9}{00139}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_scene_a69f678f88b385038a034ccf1864444f9}{Astra::Scene::addModel}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_astra_1_1_mesh}{Astra::Mesh}}\ \&model)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00140}00140\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00141}00141\ \ \ \ \ \_objModels.push\_back(model);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00142}00142\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00143}00143\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00144}\mbox{\hyperlink{class_astra_1_1_scene_a83d50eb66762c5dc21ebaaa3f00f0f76}{00144}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_scene_a83d50eb66762c5dc21ebaaa3f00f0f76}{Astra::Scene::addInstance}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_astra_1_1_mesh_instance}{MeshInstance}}\ \&instance)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00145}00145\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00146}00146\ \ \ \ \ \_instances.push\_back(instance);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00147}00147\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00148}00148\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00149}\mbox{\hyperlink{class_astra_1_1_scene_adde7d242f5c917514c91915d61290089}{00149}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_scene_adde7d242f5c917514c91915d61290089}{Astra::Scene::removeInstance}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_astra_1_1_mesh_instance}{MeshInstance}}\ \&n)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00150}00150\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00151}00151\ \ \ \ \ \textcolor{keyword}{auto}\ eraser\ =\ \_instances.begin();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00152}00152\ \ \ \ \ \textcolor{keywordtype}{bool}\ found\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00153}00153\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ it\ =\ \_instances.begin();\ it\ !=\ \_instances.end()\ \&\&\ !found;\ ++it)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00154}00154\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00155}00155\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((*it)\ ==\ n)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00156}00156\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00157}00157\ \ \ \ \ \ \ \ \ \ \ \ \ eraser\ =\ it;}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00158}00158\ \ \ \ \ \ \ \ \ \ \ \ \ found\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00159}00159\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00160}00160\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00161}00161\ \ \ \ \ \textcolor{keywordflow}{if}\ (found)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00162}00162\ \ \ \ \ \ \ \ \ \_instances.erase(eraser);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00163}00163\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00164}00164\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00165}\mbox{\hyperlink{class_astra_1_1_scene_acb1365bf739c8dfe2cc7c6ad3845fbe2}{00165}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_scene_acb1365bf739c8dfe2cc7c6ad3845fbe2}{Astra::Scene::addLight}}(\mbox{\hyperlink{class_astra_1_1_light}{Light}}\ *l)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00166}00166\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00167}00167\ \ \ \ \ \textcolor{keywordflow}{if}\ (\_lights.size()\ <\ \mbox{\hyperlink{host__device_8h_a737b417f16ea225cf15e8d4c23df53dc}{MAX\_LIGHTS}})}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00168}00168\ \ \ \ \ \ \ \ \ \_lights.push\_back(l);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00169}00169\ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00170}00170\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespace_astra_a23fa965926ceb1302291be18126414cc}{Astra::Log}}(\textcolor{stringliteral}{"{}The\ maximum\ number\ of\ lights\ is\ "{}}\ +\ std::to\_string(\mbox{\hyperlink{host__device_8h_a737b417f16ea225cf15e8d4c23df53dc}{MAX\_LIGHTS}})\ +\ \textcolor{stringliteral}{"{}!"{}},\ \mbox{\hyperlink{namespace_astra_acf6c5f0b748e38d6bf86ed31ba882e42a54ac4cb98c2efed361beeb8d3940ac75}{WARNING}});}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00171}00171\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00172}00172\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00173}\mbox{\hyperlink{class_astra_1_1_scene_ae489098fc2e76a3c9beb04d54ea5c8e6}{00173}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_scene_ae489098fc2e76a3c9beb04d54ea5c8e6}{Astra::Scene::removeLight}}(\mbox{\hyperlink{class_astra_1_1_light}{Light}}\ *l)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00174}00174\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00175}00175\ \ \ \ \ \textcolor{keyword}{auto}\ eraser\ =\ \_lights.begin();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00176}00176\ \ \ \ \ \textcolor{keywordtype}{bool}\ found\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00177}00177\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ it\ =\ \_lights.begin();\ it\ !=\ \_lights.end()\ \&\&\ !found;\ ++it)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00178}00178\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00179}00179\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (*(*it)\ ==\ *l)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00180}00180\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00181}00181\ \ \ \ \ \ \ \ \ \ \ \ \ eraser\ =\ it;}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00182}00182\ \ \ \ \ \ \ \ \ \ \ \ \ found\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00183}00183\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00184}00184\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00185}00185\ \ \ \ \ \textcolor{keywordflow}{if}\ (found)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00186}00186\ \ \ \ \ \ \ \ \ \_lights.erase(eraser);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00187}00187\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00188}00188\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00189}\mbox{\hyperlink{class_astra_1_1_scene_ad59cf474cb998ea803f4ea4db7921481}{00189}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_scene_ad59cf474cb998ea803f4ea4db7921481}{Astra::Scene::setCamera}}(\mbox{\hyperlink{class_astra_1_1_camera_controller}{CameraController}}\ *c)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00190}00190\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00191}00191\ \ \ \ \ \_camera\ =\ c;}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00192}00192\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00193}00193\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00194}\mbox{\hyperlink{class_astra_1_1_scene_ac14754b7b769246a494a22b8023be29b}{00194}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_scene_ac14754b7b769246a494a22b8023be29b}{Astra::Scene::update}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_astra_1_1_command_list}{CommandList}}\ \&cmdList)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00195}00195\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00196}00196\ \ \ \ \ \textcolor{comment}{//\ updating\ lights}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00197}00197\ \ \ \ \ \_lightsUniform\ =\ \{\};}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00198}00198\ \ \ \ \ \textcolor{comment}{//\_lightsUniform.nLights\ =\ \_lights.size();}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00199}00199\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ \_lights.size();\ i++)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00200}00200\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00201}00201\ \ \ \ \ \ \ \ \ \_lights[i]-\/>\mbox{\hyperlink{class_astra_1_1_camera_controller_a1b6e87f810c996df92ed5712d720623f}{update}}();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00202}00202\ \ \ \ \ \ \ \ \ \_lightsUniform.lights[i]\ =\ \_lights[i]-\/>getLightSource();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00203}00203\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00204}00204\ \ \ \ \ updateLightsUBO(cmdList);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00205}00205\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00206}00206\ \ \ \ \ \textcolor{comment}{//\ updating\ camera}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00207}00207\ \ \ \ \ \_camera-\/>update();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00208}00208\ \ \ \ \ updateCameraUBO(cmdList);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00209}00209\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00210}00210\ \ \ \ \ \textcolor{comment}{//\ updating\ instances}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00211}00211\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&i\ :\ \_instances)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00212}00212\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00213}00213\ \ \ \ \ \ \ \ \ i.update();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00214}00214\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00215}00215\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00216}00216\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00217}\mbox{\hyperlink{class_astra_1_1_scene_a179d8d41b7f790013b8d1d64f5ca4766}{00217}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_scene_a179d8d41b7f790013b8d1d64f5ca4766}{Astra::Scene::draw}}(\mbox{\hyperlink{struct_astra_1_1_render_context}{RenderContext<PushConstantRaster>}}\ \&renderContext)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00218}00218\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00219}00219\ \ \ \ \ renderContext.\mbox{\hyperlink{struct_astra_1_1_render_context_ad832d7af437ebec73c388823d2bef824}{pushConstant}}.nLights\ =\ \_lights.size();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00220}00220\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&inst\ :\ \_instances)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00221}00221\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00222}00222\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ skip\ invisibles}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00223}00223\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (inst.getVisible())}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00224}00224\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00225}00225\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ get\ model\ (with\ buffers)\ and\ update\ transform\ matrix}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00226}00226\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \&model\ =\ \_objModels[inst.getMeshIndex()];}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00227}00227\ \ \ \ \ \ \ \ \ \ \ \ \ inst.updatePushConstantRaster(renderContext.\mbox{\hyperlink{struct_astra_1_1_render_context_ad832d7af437ebec73c388823d2bef824}{pushConstant}});}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00228}00228\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00229}00229\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ send\ pc\ to\ gpu}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00230}00230\ \ \ \ \ \ \ \ \ \ \ \ \ renderContext.\mbox{\hyperlink{struct_astra_1_1_render_context_a312ea88689ec1857bd4762c9e4f2fb7e}{pushConstants}}();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00231}00231\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00232}00232\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ draw\ call}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00233}00233\ \ \ \ \ \ \ \ \ \ \ \ \ model.draw(renderContext.\mbox{\hyperlink{struct_astra_1_1_render_context_a5fe041e9a293c3a57e5dd2232668da52}{cmdList}});}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00234}00234\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00235}00235\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00236}00236\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00237}00237\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00238}\mbox{\hyperlink{class_astra_1_1_scene_r_t_aef022456055bc4f5ba0c93dbc52d7ff9}{00238}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_scene_r_t_aef022456055bc4f5ba0c93dbc52d7ff9}{Astra::SceneRT::draw}}(\mbox{\hyperlink{struct_astra_1_1_render_context}{RenderContext<PushConstantRay>}}\ \&renderContext)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00239}00239\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00240}00240\ \ \ \ \ renderContext.\mbox{\hyperlink{struct_astra_1_1_render_context_ad832d7af437ebec73c388823d2bef824}{pushConstant}}.nLights\ =\ \_lights.size();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00241}00241\ \ \ \ \ renderContext.\mbox{\hyperlink{struct_astra_1_1_render_context_a312ea88689ec1857bd4762c9e4f2fb7e}{pushConstants}}();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00242}00242\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00243}00243\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00244}\mbox{\hyperlink{class_astra_1_1_scene_a704de58d3243ad0155b97409980c7d5c}{00244}}\ \textcolor{keyword}{const}\ std::vector<Astra::Light\ *>\ \&\mbox{\hyperlink{class_astra_1_1_scene_a704de58d3243ad0155b97409980c7d5c}{Astra::Scene::getLights}}()\textcolor{keyword}{\ const}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00245}00245\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00246}00246\ \ \ \ \ \textcolor{keywordflow}{return}\ \_lights;}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00247}00247\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00248}00248\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00249}\mbox{\hyperlink{class_astra_1_1_scene_ae7611f87ac6a6e4edb49e90bac584a64}{00249}}\ \mbox{\hyperlink{class_astra_1_1_camera_controller}{Astra::CameraController}}\ *\mbox{\hyperlink{class_astra_1_1_scene_ae7611f87ac6a6e4edb49e90bac584a64}{Astra::Scene::getCamera}}()\textcolor{keyword}{\ const}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00250}00250\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00251}00251\ \ \ \ \ \textcolor{keywordflow}{return}\ \_camera;}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00252}00252\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00253}00253\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00254}\mbox{\hyperlink{class_astra_1_1_scene_ad6dc761e769768fd6b2262f9cdac3231}{00254}}\ std::vector<Astra::MeshInstance>\ \&\mbox{\hyperlink{class_astra_1_1_scene_ad6dc761e769768fd6b2262f9cdac3231}{Astra::Scene::getInstances}}()}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00255}00255\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00256}00256\ \ \ \ \ \textcolor{keywordflow}{return}\ \_instances;}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00257}00257\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00258}00258\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00259}\mbox{\hyperlink{class_astra_1_1_scene_a1787c5019bee3ac3bcf64372460049a3}{00259}}\ std::vector<Astra::Mesh>\ \&\mbox{\hyperlink{class_astra_1_1_scene_a1787c5019bee3ac3bcf64372460049a3}{Astra::Scene::getModels}}()}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00260}00260\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00261}00261\ \ \ \ \ \textcolor{keywordflow}{return}\ \_objModels;}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00262}00262\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00263}00263\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00264}\mbox{\hyperlink{class_astra_1_1_scene_a728053037aef63bdce2cf71b0882a9ea}{00264}}\ std::vector<nvvk::Texture>\ \&\mbox{\hyperlink{class_astra_1_1_scene_a728053037aef63bdce2cf71b0882a9ea}{Astra::Scene::getTextures}}()}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00265}00265\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00266}00266\ \ \ \ \ \textcolor{keywordflow}{return}\ \_textures;}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00267}00267\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00268}00268\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00269}\mbox{\hyperlink{class_astra_1_1_scene_a23d89d0e9df28e75cb04e3c0ac2f138d}{00269}}\ nvvk::Buffer\ \&\mbox{\hyperlink{class_astra_1_1_scene_a23d89d0e9df28e75cb04e3c0ac2f138d}{Astra::Scene::getObjDescBuff}}()}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00270}00270\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00271}00271\ \ \ \ \ \textcolor{keywordflow}{return}\ \_objDescBuffer;}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00272}00272\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00273}00273\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00274}\mbox{\hyperlink{class_astra_1_1_scene_a40192952d3c15d4c91acea8ab19a7b73}{00274}}\ nvvk::Buffer\ \&\mbox{\hyperlink{class_astra_1_1_scene_a40192952d3c15d4c91acea8ab19a7b73}{Astra::Scene::getCameraUBO}}()}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00275}00275\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00276}00276\ \ \ \ \ \textcolor{keywordflow}{return}\ \_cameraUBO;}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00277}00277\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00278}00278\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00279}\mbox{\hyperlink{class_astra_1_1_scene_a87650ad89a2ccfd40916b78bfd51d121}{00279}}\ nvvk::Buffer\ \&\mbox{\hyperlink{class_astra_1_1_scene_a87650ad89a2ccfd40916b78bfd51d121}{Astra::Scene::getLightsUBO}}()}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00280}00280\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00281}00281\ \ \ \ \ \textcolor{keywordflow}{return}\ \_lightsUBO;}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00282}00282\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00283}00283\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00284}\mbox{\hyperlink{class_astra_1_1_scene_a64b0f19c6142e3ae29185fcefb2d349d}{00284}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_scene_a64b0f19c6142e3ae29185fcefb2d349d}{Astra::Scene::reset}}()}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00285}00285\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00286}00286\ \ \ \ \ \textcolor{comment}{//\ default\ raster\ scenes\ dont\ have\ to\ do\ anything\ by\ default}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00287}00287\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00288}00288\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00289}\mbox{\hyperlink{class_astra_1_1_scene_a8bdddac889dab4cb319c57e4b1b15fe7}{00289}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_scene_a8bdddac889dab4cb319c57e4b1b15fe7}{Astra::Scene::updatePushConstantRaster}}(\mbox{\hyperlink{struct_push_constant_raster}{PushConstantRaster}}\ \&pc)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00290}00290\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00291}00291\ \ \ \ \ \textcolor{comment}{//\ TODO,\ futurure}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00292}00292\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00293}00293\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00294}\mbox{\hyperlink{class_astra_1_1_scene_aefa14838faa66384802d20e46541f375}{00294}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_scene_aefa14838faa66384802d20e46541f375}{Astra::Scene::updatePushConstant}}(\mbox{\hyperlink{struct_push_constant_ray}{PushConstantRay}}\ \&pc)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00295}00295\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00296}00296\ \ \ \ \ \textcolor{comment}{//\ TODO,\ futurure}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00297}00297\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00298}00298\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00299}00299\ \textcolor{comment}{//=====\ DEFAULT\ RT\ SCENE\ =====}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00300}00300\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00301}\mbox{\hyperlink{class_astra_1_1_scene_r_t_ab97856b9443916f030617b2424c49087}{00301}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_scene_r_t_ab97856b9443916f030617b2424c49087}{Astra::SceneRT::init}}(nvvk::ResourceAllocator\ *alloc)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00302}00302\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00303}00303\ \ \ \ \ \mbox{\hyperlink{class_astra_1_1_scene_ade431180c9dd89931860d9e52ad4351d}{Scene::init}}(alloc);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00304}00304\ \ \ \ \ \_rtBuilder.setup(\mbox{\hyperlink{_device_8h_a2fba0ef1853e57846ae6bc3a5d30db39}{AstraDevice}}.getVkDevice(),\ alloc,\ \mbox{\hyperlink{class_astra_1_1_device_ab627de02c6fe713f9b97021aeeccd49a}{Astra::Device::getInstance}}().\mbox{\hyperlink{class_astra_1_1_device_a0c726b52378b4cfacd6499a82efa9122}{getGraphicsQueueIndex}}());}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00305}00305\ \ \ \ \ createBottomLevelAS();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00306}00306\ \ \ \ \ createTopLevelAS();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00307}00307\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00308}00308\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00309}\mbox{\hyperlink{class_astra_1_1_scene_r_t_aeb506d52d6a609f8b8473d699b6604d7}{00309}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_scene_r_t_aeb506d52d6a609f8b8473d699b6604d7}{Astra::SceneRT::update}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_astra_1_1_command_list}{CommandList}}\ \&cmdList)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00310}00310\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00311}00311\ \ \ \ \ \mbox{\hyperlink{class_astra_1_1_scene_ac14754b7b769246a494a22b8023be29b}{Astra::Scene::update}}(cmdList);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00312}00312\ \ \ \ \ std::vector<int>\ asupdates;}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00313}00313\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ \_instances.size();\ i++)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00314}00314\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00315}00315\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_instances[i].update())}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00316}00316\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00317}00317\ \ \ \ \ \ \ \ \ \ \ \ \ asupdates.push\_back(i);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00318}00318\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00319}00319\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00320}00320\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00321}00321\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ :\ asupdates)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00322}00322\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00323}00323\ \ \ \ \ \ \ \ \ updateTopLevelAS(i);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00324}00324\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00325}00325\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00326}00326\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00327}\mbox{\hyperlink{class_astra_1_1_scene_r_t_abb4ed53c53b6ad69ffcffca8650f7e16}{00327}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_scene_r_t_abb4ed53c53b6ad69ffcffca8650f7e16}{Astra::SceneRT::createBottomLevelAS}}()}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00328}00328\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00329}00329\ \ \ \ \ \textcolor{keywordflow}{if}\ (getTLAS()\ !=\ VK\_NULL\_HANDLE)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00330}00330\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00331}00331\ \ \ \ \ \ \ \ \ \_rtBuilder.destroy();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00332}00332\ \ \ \ \ \ \ \ \ \_asInstances.clear();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00333}00333\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00334}00334\ \ \ \ \ std::vector<nvvk::RaytracingBuilderKHR::BlasInput>\ allBlas;}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00335}00335\ \ \ \ \ allBlas.reserve(\_objModels.size());}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00336}00336\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00337}00337\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&obj\ :\ \_objModels)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00338}00338\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00339}00339\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ blas\ =\ \mbox{\hyperlink{_device_8h_a2fba0ef1853e57846ae6bc3a5d30db39}{AstraDevice}}.objectToVkGeometry(obj);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00340}00340\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00341}00341\ \ \ \ \ \ \ \ \ allBlas.emplace\_back(blas);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00342}00342\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00343}00343\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00344}00344\ \ \ \ \ \_rtBuilder.buildBlas(allBlas,\ VK\_BUILD\_ACCELERATION\_STRUCTURE\_PREFER\_FAST\_TRACE\_BIT\_KHR);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00345}00345\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00346}00346\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00347}\mbox{\hyperlink{class_astra_1_1_scene_r_t_a1e7c970ed9090884ebc47efc155ffd1d}{00347}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_scene_r_t_a1e7c970ed9090884ebc47efc155ffd1d}{Astra::SceneRT::createTopLevelAS}}()}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00348}00348\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00349}00349\ \ \ \ \ \textcolor{keywordflow}{if}\ (getTLAS()\ !=\ VK\_NULL\_HANDLE)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00350}00350\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00351}00351\ \ \ \ \ \ \ \ \ \_rtBuilder.destroy();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00352}00352\ \ \ \ \ \ \ \ \ \_asInstances.clear();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00353}00353\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00354}00354\ \ \ \ \ \_asInstances.reserve(\_instances.size());}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00355}00355\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{class_astra_1_1_mesh_instance}{Astra::MeshInstance}}\ \&inst\ :\ \_instances)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00356}00356\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00357}00357\ \ \ \ \ \ \ \ \ VkAccelerationStructureInstanceKHR\ rayInst\{\};}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00358}00358\ \ \ \ \ \ \ \ \ rayInst.transform\ =\ nvvk::toTransformMatrixKHR(inst.getTransform());}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00359}00359\ \ \ \ \ \ \ \ \ rayInst.instanceCustomIndex\ =\ inst.getMeshIndex();\ \textcolor{comment}{//\ gl\_InstanceCustomIndexEXT}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00360}00360\ \ \ \ \ \ \ \ \ rayInst.accelerationStructureReference\ =\ \_rtBuilder.getBlasDeviceAddress(inst.getMeshIndex());}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00361}00361\ \ \ \ \ \ \ \ \ rayInst.flags\ =\ VK\_GEOMETRY\_INSTANCE\_TRIANGLE\_FRONT\_COUNTERCLOCKWISE\_BIT\_KHR;}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00362}00362\ \ \ \ \ \ \ \ \ rayInst.mask\ =\ inst.getVisible()\ ?\ 0xFF\ :\ 0x00;\ \ \ \ \ \textcolor{comment}{//\ only\ be\ hit\ if\ raymask\ \&\ instance.mask\ !=\ 0}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00363}00363\ \ \ \ \ \ \ \ \ rayInst.instanceShaderBindingTableRecordOffset\ =\ 0;\ \textcolor{comment}{//\ the\ same\ hit\ group\ for\ all\ objects}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00364}00364\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00365}00365\ \ \ \ \ \ \ \ \ \_asInstances.emplace\_back(rayInst);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00366}00366\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00367}00367\ \ \ \ \ \_rtBuilder.buildTlas(\_asInstances,\ VK\_BUILD\_ACCELERATION\_STRUCTURE\_ALLOW\_UPDATE\_BIT\_KHR\ |\ VK\_BUILD\_ACCELERATION\_STRUCTURE\_PREFER\_FAST\_TRACE\_BIT\_KHR);}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00368}00368\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00369}00369\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00370}\mbox{\hyperlink{class_astra_1_1_scene_r_t_a4585ac5347269d745d61e07e7e1f0dcd}{00370}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_scene_r_t_a4585ac5347269d745d61e07e7e1f0dcd}{Astra::SceneRT::updateTopLevelAS}}(\textcolor{keywordtype}{int}\ instance\_id)}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00371}00371\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00372}00372\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&inst\ =\ \_instances[instance\_id];}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00373}00373\ \ \ \ \ VkAccelerationStructureInstanceKHR\ rayInst\{\};}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00374}00374\ \ \ \ \ rayInst.transform\ =\ nvvk::toTransformMatrixKHR(inst.getTransform());}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00375}00375\ \ \ \ \ rayInst.instanceCustomIndex\ =\ inst.getMeshIndex();\ \textcolor{comment}{//\ gl\_InstanceCustomIndexEXT}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00376}00376\ \ \ \ \ rayInst.accelerationStructureReference\ =\ \_rtBuilder.getBlasDeviceAddress(inst.getMeshIndex());}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00377}00377\ \ \ \ \ rayInst.flags\ =\ VK\_GEOMETRY\_INSTANCE\_TRIANGLE\_FRONT\_COUNTERCLOCKWISE\_BIT\_KHR;}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00378}00378\ \ \ \ \ rayInst.mask\ =\ inst.getVisible()\ ?\ 0xFF\ :\ 0x00;\ \ \ \ \ \textcolor{comment}{//\ only\ be\ hit\ if\ raymask\ \&\ instance.mask\ !=\ 0}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00379}00379\ \ \ \ \ rayInst.instanceShaderBindingTableRecordOffset\ =\ 0;\ \textcolor{comment}{//\ the\ same\ hit\ group\ for\ all\ objects}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00380}00380\ \ \ \ \ \_asInstances[instance\_id]\ =\ rayInst;}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00381}00381\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00382}00382\ \ \ \ \ \_rtBuilder.buildTlas(\_asInstances,\ VK\_BUILD\_ACCELERATION\_STRUCTURE\_ALLOW\_UPDATE\_BIT\_KHR\ |\ VK\_BUILD\_ACCELERATION\_STRUCTURE\_PREFER\_FAST\_TRACE\_BIT\_KHR,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00383}00383\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00384}00384\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00385}\mbox{\hyperlink{class_astra_1_1_scene_r_t_a6b0f6c926a1e91716812ae33e2cebe8b}{00385}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_scene_r_t_a6b0f6c926a1e91716812ae33e2cebe8b}{Astra::SceneRT::rebuildAS}}()}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00386}00386\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00387}00387\ \ \ \ \ createBottomLevelAS();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00388}00388\ \ \ \ \ createTopLevelAS();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00389}00389\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00390}00390\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00391}\mbox{\hyperlink{class_astra_1_1_scene_r_t_a7e3645a0d6e7795c650976f275f3b330}{00391}}\ VkAccelerationStructureKHR\ \mbox{\hyperlink{class_astra_1_1_scene_r_t_a7e3645a0d6e7795c650976f275f3b330}{Astra::SceneRT::getTLAS}}()\textcolor{keyword}{\ const}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00392}00392\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00393}00393\ \ \ \ \ \textcolor{keywordflow}{return}\ \_rtBuilder.getAccelerationStructure();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00394}00394\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00395}00395\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00396}\mbox{\hyperlink{class_astra_1_1_scene_r_t_a77607df5b16c6f7028b199d2c3785d2f}{00396}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_scene_r_t_a77607df5b16c6f7028b199d2c3785d2f}{Astra::SceneRT::destroy}}()}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00397}00397\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00398}00398\ \ \ \ \ \mbox{\hyperlink{class_astra_1_1_scene_a94e3c4bdf20302a240393748fcf4c392}{Scene::destroy}}();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00399}00399\ \ \ \ \ \_rtBuilder.destroy();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00400}00400\ \}}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00401}00401\ }
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00402}\mbox{\hyperlink{class_astra_1_1_scene_r_t_a0e34f2f00e401218eabb3371e9e280f2}{00402}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_scene_r_t_a0e34f2f00e401218eabb3371e9e280f2}{Astra::SceneRT::reset}}()}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00403}00403\ \{}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00404}00404\ \ \ \ \ rebuildAS();}
+\DoxyCodeLine{\Hypertarget{_scene_8cpp_source_l00405}00405\ \}}
+
+\end{DoxyCode}

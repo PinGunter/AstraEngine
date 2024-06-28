@@ -1,0 +1,740 @@
+\doxysection{Referencia del espacio de nombres Astra}
+\hypertarget{namespace_astra}{}\label{namespace_astra}\index{Astra@{Astra}}
+\doxysubsubsection*{Clases}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_astra_1_1_app}{App}}
+\begin{DoxyCompactList}\small\item\em Clase base para todas las aplicaciones que utilicen la biblioteca. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_astra_1_1_app_r_t}{App\+RT}}
+\begin{DoxyCompactList}\small\item\em Clase que deriva de \doxylink{class_astra_1_1_app}{App} para agregar los datos y métodos necesarios para usar trazado de rayos. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{struct_astra_1_1_camera}{Camera}}
+\begin{DoxyCompactList}\small\item\em Contiene la información básica de la cámara. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_astra_1_1_camera_controller}{Camera\+Controller}}
+\begin{DoxyCompactList}\small\item\em Manipula la cámara según el comportamiento definido en el método update de las clases que lo implementen. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}}
+\begin{DoxyCompactList}\small\item\em Clase que representa un objeto Vk\+Command\+Buffer de Vulkan. Proporciona métodos para realizar las funciones que se han necesitado del command\+Buffer. Cada método lo que su nombre indica, solo envuelve la llamada de Vulkan. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_astra_1_1_device}{Device}}
+\begin{DoxyCompactList}\small\item\em Singleton. Contiene los datos de más bajo nivel de Vulkan. Proporciona métodos para inicializar, crear shaders, texturas, UBOs, etc. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{struct_astra_1_1_device_create_info}{Device\+Create\+Info}}
+\begin{DoxyCompactList}\small\item\em Contiene los parámetros necesarios para configurar el dispositivo (GPU). Por defecto utiliza ray-\/tracing ~\newline
+Las extensiones se configuran por defecto con las necesarias para mostrar resultados por la pantalla y par el ray-\/tracing. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_astra_1_1_directional_light}{Directional\+Light}}
+\begin{DoxyCompactList}\small\item\em Implementa la clase \doxylink{class_astra_1_1_light}{Light} y la especializa en una luz direccional. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_astra_1_1_free_camera_controller}{Free\+Camera\+Controller}}
+\begin{DoxyCompactList}\small\item\em Proporciona controles de cámara libre. Se controla con WASD, para movimiento, QE para altura, CTRL para aumentar la velocidad y el ratón (con el click derecho) para girar. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_astra_1_1_gui_controller}{Gui\+Controller}}
+\begin{DoxyCompactList}\small\item\em Clase sencilla que contiene métodos para dibujar una interfaz de Im\+Gui. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_astra_1_1_input_manager}{Input\+Manager}}
+\begin{DoxyCompactList}\small\item\em Singleton. Clase que maneja todos los eventos del usuario y provee acceso global a estos. Llama a los métodos que gestionan eventos de la aplicación. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_astra_1_1_light}{Light}}
+\begin{DoxyCompactList}\small\item\em Clase abstracta que representa una luz en una escena. Hereda de \doxylink{class_astra_1_1_node3_d}{Node3D}. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{struct_astra_1_1_mesh}{Mesh}}
+\begin{DoxyCompactList}\small\item\em Representa un modelo 3D como una malla de vértices y triángulos Contiene la información necesaria para acceder tanto desde la CPU como GPU. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_astra_1_1_mesh_instance}{Mesh\+Instance}}
+\begin{DoxyCompactList}\small\item\em Clase que representa una instancia de una malla en una escena. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_astra_1_1_node3_d}{Node3D}}
+\begin{DoxyCompactList}\small\item\em Clase abstracta que representa cualquier objeto 3D en una escena. Todos los métodos son simples y hacen lo que dice el nombre de este. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_astra_1_1_offscreen_raster}{Offscreen\+Raster}}
+\begin{DoxyCompactList}\small\item\em \doxylink{class_astra_1_1_pipeline}{Pipeline} de rasterización de ejemplo para dibujar escenas en el offscreen framebuffer. Lista para usarse. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_astra_1_1_orbit_camera_controller}{Orbit\+Camera\+Controller}}
+\begin{DoxyCompactList}\small\item\em Orbita alrededor de un punto con el click derecho. Zoom con la rueda. Se puede desplazar el punto al que mira con el botón de la rueda del ratón. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_astra_1_1_pipeline}{Pipeline}}
+\begin{DoxyCompactList}\small\item\em Clase abstracta que representa una pipeline de Vulkan. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_astra_1_1_point_light}{Point\+Light}}
+\begin{DoxyCompactList}\small\item\em Implementa la clase \doxylink{class_astra_1_1_light}{Light} y la especializa en una luz puntual. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_astra_1_1_post_pipeline}{Post\+Pipeline}}
+\begin{DoxyCompactList}\small\item\em \doxylink{class_astra_1_1_pipeline}{Pipeline} que dibuja la textura resultante del offscreen render en pantalla. Aplica postprocesado también. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_astra_1_1_raster_pipeline}{Raster\+Pipeline}}
+\begin{DoxyCompactList}\small\item\em Clase abstracta para pipelines de rasterización. Declara el método de crear para ser sobreescrito por sus hijas. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_astra_1_1_ray_tracing_pipeline}{Ray\+Tracing\+Pipeline}}
+\begin{DoxyCompactList}\small\item\em Clase de pipeline de trazado de rayos. Está completamente implementada para usarse. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{struct_astra_1_1_render_context}{Render\+Context}}
+\begin{DoxyCompactList}\small\item\em Struct con plantilla para admitir los distintos tipos de push constant. Contiene la información necesaria para pasar a la escena. El objetivo de esta estructura es abstraer la llamada a push\+Constants desde fuera del renderer. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_astra_1_1_renderer}{Renderer}}
+\begin{DoxyCompactList}\small\item\em Clase renderer. Contiene todo lo necesario para renderizar la escena. Se encarga de todo el proceso de dibujado. Contiene también los descriptor sets y pipeline de post procesado. Es una clase que interactua con vulkan a bajo nivel y no está pensada para ser sobreescrita. ~\newline
+La forma en la que funciona el renderer es con dos render pass. El primero rasteriza o traza con rayos la escena y guarda el resultado en una textura. Esa textura luego se utiliza en el segundo render pass para mostrarse en pantalla junto con la interfaz de Im\+Gui. De esta forma podemos combinar el trazado de rayos para modelos de la escena con la rasterización para fuentes y elementos gráficos de la interfaz. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_astra_1_1_scene}{Scene}}
+\begin{DoxyCompactList}\small\item\em Clase Escena. Contiene las mallas, instancias, luces y cámara. Esta es para rasterización. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_astra_1_1_scene_r_t}{Scene\+RT}}
+\begin{DoxyCompactList}\small\item\em Clase que agrega los elementos necesarios para el raytracing a una escena. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumeraciones}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{namespace_astra_a2eda595e6d7ac55b99d18920609b3a30}{Pipeline\+Bind\+Points}} \{ \mbox{\hyperlink{namespace_astra_a2eda595e6d7ac55b99d18920609b3a30ab119632cb06998344bd1843e9690872e}{Graphics}} = VK\+\_\+\+PIPELINE\+\_\+\+BIND\+\_\+\+POINT\+\_\+\+GRAPHICS
+, \mbox{\hyperlink{namespace_astra_a2eda595e6d7ac55b99d18920609b3a30a13f65527aabfa92a4b2f83d903b9c3a7}{Compute}} = VK\+\_\+\+PIPELINE\+\_\+\+BIND\+\_\+\+POINT\+\_\+\+COMPUTE
+, \mbox{\hyperlink{namespace_astra_a2eda595e6d7ac55b99d18920609b3a30a3cd9a416ef1f47bb831871895150cc95}{Ray\+Tracing}} = VK\+\_\+\+PIPELINE\+\_\+\+BIND\+\_\+\+POINT\+\_\+\+RAY\+\_\+\+TRACING\+\_\+\+KHR
+ \}
+\item 
+enum \mbox{\hyperlink{namespace_astra_a8ff9af1a6f3d820347e90c1876815ac7}{App\+Status}} \{ \mbox{\hyperlink{namespace_astra_a8ff9af1a6f3d820347e90c1876815ac7ae17d0f826f2eec26934c3863daa5643f}{Created}}
+, \mbox{\hyperlink{namespace_astra_a8ff9af1a6f3d820347e90c1876815ac7a55230868c30328a387be8f3aa76fe585}{Running}}
+, \mbox{\hyperlink{namespace_astra_a8ff9af1a6f3d820347e90c1876815ac7a90fb25b74af9e5d5c053a9eaf2c9ea8f}{Destroyed}}
+ \}
+\item 
+enum \mbox{\hyperlink{namespace_astra_a943ae035e017b5fd68ab4824a97b9f62}{Mouse\+Buttons}} \{ \mbox{\hyperlink{namespace_astra_a943ae035e017b5fd68ab4824a97b9f62a5c056785e32b3a83869c35d5721978b9}{Left}} = GLFW\+\_\+\+MOUSE\+\_\+\+BUTTON\+\_\+1
+, \mbox{\hyperlink{namespace_astra_a943ae035e017b5fd68ab4824a97b9f62a5a799807ac594ab6791c188529b218d4}{Right}} = GLFW\+\_\+\+MOUSE\+\_\+\+BUTTON\+\_\+2
+, \mbox{\hyperlink{namespace_astra_a943ae035e017b5fd68ab4824a97b9f62a7f1dffc82045a2ae64d8b5861eda5e7d}{Middle}} = GLFW\+\_\+\+MOUSE\+\_\+\+BUTTON\+\_\+3
+, \mbox{\hyperlink{namespace_astra_a943ae035e017b5fd68ab4824a97b9f62a96bcf2b235886f7af63e6e2437c67cb9}{SIZE\+\_\+\+MOUSEBUTTONS}}
+ \}
+\item 
+enum \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8}{Keys}} \{ \newline
+\mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a6fc4211c4198db43839e5ff4051b2c90}{Key\+\_\+\+Space}} = GLFW\+\_\+\+KEY\+\_\+\+SPACE
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8aa3fc6e314b595cac18aac5b5567ab5c0}{Key\+\_\+\+Apostrophe}} = GLFW\+\_\+\+KEY\+\_\+\+APOSTROPHE
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a178cbac6577442f30492c417dc98e97e}{Key\+\_\+\+Comma}} = GLFW\+\_\+\+KEY\+\_\+\+COMMA
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a1fddcaae50bde2be457966a6f35aecc6}{Key\+\_\+\+Minus}} = GLFW\+\_\+\+KEY\+\_\+\+MINUS
+, \newline
+\mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a763e4e3ea4ca0d3ab66640ba263a1146}{Key\+\_\+\+Period}} = GLFW\+\_\+\+KEY\+\_\+\+PERIOD
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8aeb6972613d3160b85674d0313cae31c5}{Key\+\_\+\+Slash}} = GLFW\+\_\+\+KEY\+\_\+\+SLASH
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a926404b6acea754b5852f3fdd6da735b}{Key\+\_\+0}} = GLFW\+\_\+\+KEY\+\_\+0
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a96a61df1bda5863ec230190341b7441c}{Key\+\_\+1}} = GLFW\+\_\+\+KEY\+\_\+1
+, \newline
+\mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ac23e2fec0fa5f900f1c622103bdf12fc}{Key\+\_\+2}} = GLFW\+\_\+\+KEY\+\_\+2
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8aad0a41e14d72eaf6faff611959d92e7a}{Key\+\_\+3}} = GLFW\+\_\+\+KEY\+\_\+3
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a1fe3425ef27c8e2eaa707ce34f38dd3c}{Key\+\_\+4}} = GLFW\+\_\+\+KEY\+\_\+4
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a1eafed0da9189a5b3111ceeeb7fff9e6}{Key\+\_\+5}} = GLFW\+\_\+\+KEY\+\_\+5
+, \newline
+\mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8af37fb35b6607ff1e96b5ba1365139de0}{Key\+\_\+6}} = GLFW\+\_\+\+KEY\+\_\+6
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ad3ea201b87c9787c9f4018d6e109c00b}{Key\+\_\+7}} = GLFW\+\_\+\+KEY\+\_\+7
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ac16354861f2ce3595569c07813cd3784}{Key\+\_\+8}} = GLFW\+\_\+\+KEY\+\_\+8
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8af4cd9d7bba996a0994b166776ff3ac1a}{Key\+\_\+9}} = GLFW\+\_\+\+KEY\+\_\+9
+, \newline
+\mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a0c5f78a1db60de3950742badb64be10e}{Key\+\_\+\+Semicolon}} = GLFW\+\_\+\+KEY\+\_\+\+SEMICOLON
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8abb52995d613d60de32b90a5cbb101f0f}{Key\+\_\+\+Equal}} = GLFW\+\_\+\+KEY\+\_\+\+EQUAL
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a2c18b60d5016dce42b0b19439b9b3865}{Key\+\_\+A}} = GLFW\+\_\+\+KEY\+\_\+A
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a05d88325fd84791c11bc4b1ed9059fb2}{Key\+\_\+B}} = GLFW\+\_\+\+KEY\+\_\+B
+, \newline
+\mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8afc479043ed1fc36800ad5d177df6311f}{Key\+\_\+C}} = GLFW\+\_\+\+KEY\+\_\+C
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a59168fd85bca768b835dfaba78d33796}{Key\+\_\+D}} = GLFW\+\_\+\+KEY\+\_\+D
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a48623eaef510d272273b8c5760eea4eb}{Key\+\_\+E}} = GLFW\+\_\+\+KEY\+\_\+E
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8aca6aa1e209de5dd3900a12309af516ac}{Key\+\_\+F}} = GLFW\+\_\+\+KEY\+\_\+F
+, \newline
+\mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a90edc86689b6934b94946bb9719b037c}{Key\+\_\+G}} = GLFW\+\_\+\+KEY\+\_\+G
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a0f0013ca0e44c9bdce1f668891903cfb}{Key\+\_\+H}} = GLFW\+\_\+\+KEY\+\_\+H
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a9c7d6d1ebfc301e54103c7e4f7bb4cc2}{Key\+\_\+I}} = GLFW\+\_\+\+KEY\+\_\+I
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a1efb5446363946e39f419f91dfc981e1}{Key\+\_\+J}} = GLFW\+\_\+\+KEY\+\_\+J
+, \newline
+\mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a0a2b8d74f9c3be878aa764958b5b2b6b}{Key\+\_\+K}} = GLFW\+\_\+\+KEY\+\_\+K
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a86040578690e54157eaca074c5855a97}{Key\+\_\+L}} = GLFW\+\_\+\+KEY\+\_\+L
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a07417a0b03335e99dc9206206452ca3b}{Key\+\_\+M}} = GLFW\+\_\+\+KEY\+\_\+M
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ad14a2d362f19a01d62e4c366749c57ce}{Key\+\_\+N}} = GLFW\+\_\+\+KEY\+\_\+N
+, \newline
+\mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a669c6c087aa86cb079a03f63943be1ff}{Key\+\_\+O}} = GLFW\+\_\+\+KEY\+\_\+O
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a1ac92755c2e64f63909e10b4ce951763}{Key\+\_\+P}} = GLFW\+\_\+\+KEY\+\_\+P
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a4e983c5e511477b82f8c15f7f97f5d20}{Key\+\_\+Q}} = GLFW\+\_\+\+KEY\+\_\+Q
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8aae5f1a514fa506616e9c36d3d2eaf2a8}{Key\+\_\+R}} = GLFW\+\_\+\+KEY\+\_\+R
+, \newline
+\mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ac19f9e54bcaece85652f52f28d155671}{Key\+\_\+S}} = GLFW\+\_\+\+KEY\+\_\+S
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a9d0974acd19ceb76c6eb2da5cd6d1d02}{Key\+\_\+T}} = GLFW\+\_\+\+KEY\+\_\+T
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a7824da2e9075545bcb4524a27a4e9763}{Key\+\_\+U}} = GLFW\+\_\+\+KEY\+\_\+U
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a35eac966472b5609e9ce7fc8900b8270}{Key\+\_\+V}} = GLFW\+\_\+\+KEY\+\_\+V
+, \newline
+\mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a753e335313ca7af19c9189916231d646}{Key\+\_\+W}} = GLFW\+\_\+\+KEY\+\_\+W
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a58f97b14f302f6f1d2cc17c1a204342e}{Key\+\_\+X}} = GLFW\+\_\+\+KEY\+\_\+X
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8aca5b732ae77b62b83051c351607b6010}{Key\+\_\+Y}} = GLFW\+\_\+\+KEY\+\_\+Y
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a7b3e6b6bfa3b5f7c26bc42bed843f11b}{Key\+\_\+Z}} = GLFW\+\_\+\+KEY\+\_\+Z
+, \newline
+\mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ae8ecd89e9c574f5f4cac3f6f218d13d5}{Key\+\_\+\+Left\+Bracket}} = GLFW\+\_\+\+KEY\+\_\+\+LEFT\+\_\+\+BRACKET
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a0bee8150c9e12746c3ab5d7d1fc2b7f2}{Key\+\_\+\+Key\+Backslash}} = GLFW\+\_\+\+KEY\+\_\+\+BACKSLASH
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a3ddfb970e935160abf64de698d07cedf}{Key\+\_\+\+Right\+Bracket}} = GLFW\+\_\+\+KEY\+\_\+\+RIGHT\+\_\+\+BRACKET
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8afe59645782d0cbff19b2c8a34adcca60}{Key\+\_\+\+Grave\+Accent}} = GLFW\+\_\+\+KEY\+\_\+\+GRAVE\+\_\+\+ACCENT
+, \newline
+\mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a4047ffdcdd2a55b55386657941410c29}{Key\+\_\+\+Escape}} = GLFW\+\_\+\+KEY\+\_\+\+ESCAPE
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a628fcc53fd1321060d900643a839dd7a}{Key\+\_\+\+Enter}} = GLFW\+\_\+\+KEY\+\_\+\+ENTER
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8aa3d58cadf93d204ceeccd27ae330715b}{Key\+\_\+\+Tab}} = GLFW\+\_\+\+KEY\+\_\+\+TAB
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ae0841dee5efa210bda11cc24b8482b39}{Key\+\_\+\+Backspace}} = GLFW\+\_\+\+KEY\+\_\+\+BACKSPACE
+, \newline
+\mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a86099cea4be687581b5cfc6c56c65361}{Key\+\_\+\+Insert}} = GLFW\+\_\+\+KEY\+\_\+\+INSERT
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8afe4a3afca527babd14b2441639f10c37}{Key\+\_\+\+Delete}} = GLFW\+\_\+\+KEY\+\_\+\+DELETE
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ae66dd7d503e23c16a9c4eb8e812b5854}{Key\+\_\+\+Right}} = GLFW\+\_\+\+KEY\+\_\+\+RIGHT
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a7edbe66d98e909dcf247dace98e92fbe}{Key\+\_\+\+Left}} = GLFW\+\_\+\+KEY\+\_\+\+LEFT
+, \newline
+\mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ac8f7f58f7ad1812bd0e4ceedf7d05149}{Key\+\_\+\+Down}} = GLFW\+\_\+\+KEY\+\_\+\+DOWN
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8affc66171eda47b437a965ac7ef41cd15}{Key\+\_\+\+Up}} = GLFW\+\_\+\+KEY\+\_\+\+UP
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a5a42f16e94f9b70b9a206fe0fba9916c}{Key\+\_\+\+Page\+Up}} = GLFW\+\_\+\+KEY\+\_\+\+PAGE\+\_\+\+UP
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a2ae3bdcd75f50db5700077b85c372b32}{Key\+\_\+\+Page\+Down}} = GLFW\+\_\+\+KEY\+\_\+\+PAGE\+\_\+\+DOWN
+, \newline
+\mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a48a8c0a1ed5e289ef3bbd83cb393a93a}{Key\+\_\+\+Home}} = GLFW\+\_\+\+KEY\+\_\+\+HOME
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8add23dbb0e07e8b745f1f4b02f0e47935}{Key\+\_\+\+End}} = GLFW\+\_\+\+KEY\+\_\+\+END
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ad365bf84e102467c30ad76fd556779e2}{Key\+\_\+\+Caps\+Lock}} = GLFW\+\_\+\+KEY\+\_\+\+CAPS\+\_\+\+LOCK
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ad1ac242cf9b45520c0aea47d3e4f0546}{Key\+\_\+\+Scroll\+Lock}} = GLFW\+\_\+\+KEY\+\_\+\+SCROLL\+\_\+\+LOCK
+, \newline
+\mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ab9171de5e3b5e79cfa9bfe47965433bc}{Key\+\_\+\+Num\+Lock}} = GLFW\+\_\+\+KEY\+\_\+\+NUM\+\_\+\+LOCK
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a036648c0deb9d0a732359711d10adaee}{Key\+\_\+\+Prnt\+Scrn}} = GLFW\+\_\+\+KEY\+\_\+\+PRINT\+\_\+\+SCREEN
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a90ccffdc19737ddb9daf3e0b33c5d7dc}{Key\+\_\+\+Pause}} = GLFW\+\_\+\+KEY\+\_\+\+PAUSE
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ae7b2b96693e0dc373881dea9b849d12d}{Key\+\_\+\+F1}} = GLFW\+\_\+\+KEY\+\_\+\+F1
+, \newline
+\mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ac1db15201a3e734635a6c9a1ba9a6c7f}{Key\+\_\+\+F2}} = GLFW\+\_\+\+KEY\+\_\+\+F2
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a36779903e9301ff150441a8fd52ebee0}{Key\+\_\+\+F3}} = GLFW\+\_\+\+KEY\+\_\+\+F3
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a9ee71c06a694b799b1236e71f54c8c45}{Key\+\_\+\+F4}} = GLFW\+\_\+\+KEY\+\_\+\+F4
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ace6a1c71ca2ebc9d285c3d0aea7cfda6}{Key\+\_\+\+F5}} = GLFW\+\_\+\+KEY\+\_\+\+F5
+, \newline
+\mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a1ee1047c23615f28a957c98062e5a354}{Key\+\_\+\+F6}} = GLFW\+\_\+\+KEY\+\_\+\+F6
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a9dbeb3c02901439c97d884e36e584e91}{Key\+\_\+\+F7}} = GLFW\+\_\+\+KEY\+\_\+\+F7
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a596c149280d2aceefad54f82b15770e3}{Key\+\_\+\+F8}} = GLFW\+\_\+\+KEY\+\_\+\+F8
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ae59ec8f3e9c8327f77e4040026d08d72}{Key\+\_\+\+F9}} = GLFW\+\_\+\+KEY\+\_\+\+F9
+, \newline
+\mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a14872aa801ff90a0390678c88e8438a6}{Key\+\_\+\+F10}} = GLFW\+\_\+\+KEY\+\_\+\+F10
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a42d978e5a4574ec2046ed4cbda58ee5f}{Key\+\_\+\+F11}} = GLFW\+\_\+\+KEY\+\_\+\+F11
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a459e2783588037abe8bcb46ca2da99f9}{Key\+\_\+\+F12}} = GLFW\+\_\+\+KEY\+\_\+\+F12
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a983b4eb855144448e94dca49de4a95dc}{Key\+\_\+\+Left\+Shift}} = GLFW\+\_\+\+KEY\+\_\+\+LEFT\+\_\+\+SHIFT
+, \newline
+\mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a04ad07f66b1a6d704c47a76dbef2e9f5}{Key\+\_\+\+Left\+Control}} = GLFW\+\_\+\+KEY\+\_\+\+LEFT\+\_\+\+CONTROL
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a246b2c2a352c72e4709cbccab9c30bc3}{Key\+\_\+\+Left\+Alt}} = GLFW\+\_\+\+KEY\+\_\+\+LEFT\+\_\+\+ALT
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ae569ed1c27826a97e9efd4615b5c87eb}{Key\+\_\+\+Left\+Super}} = GLFW\+\_\+\+KEY\+\_\+\+LEFT\+\_\+\+SUPER
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8aff3289bf33add59c1edd30b1479fddeb}{Key\+\_\+\+Right\+Shift}} = GLFW\+\_\+\+KEY\+\_\+\+RIGHT\+\_\+\+SHIFT
+, \newline
+\mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ace91e58b99e1b1f42c8d2e70e72ecd7d}{Key\+\_\+\+Right\+Control}} = GLFW\+\_\+\+KEY\+\_\+\+RIGHT\+\_\+\+CONTROL
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a601c7cdf6979dc8879691ac5c4b03e0b}{Key\+\_\+\+Right\+Alt}} = GLFW\+\_\+\+KEY\+\_\+\+RIGHT\+\_\+\+ALT
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8aa69aafcb3e8b902306b8904b5fb27b34}{Key\+\_\+\+Right\+Super}} = GLFW\+\_\+\+KEY\+\_\+\+RIGHT\+\_\+\+SUPER
+, \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a73872c18838e5403d393cc729c5b7cf4}{SIZE\+\_\+\+KEYMAP}}
+ \}
+\item 
+enum \mbox{\hyperlink{namespace_astra_a53d6d9f45822a9dd4fbc07d9fc05e1f2}{Light\+Type}} \{ \mbox{\hyperlink{namespace_astra_a53d6d9f45822a9dd4fbc07d9fc05e1f2a297c0ba5536ec9c218ffb6a273086f90}{POINT}} = 0
+, \mbox{\hyperlink{namespace_astra_a53d6d9f45822a9dd4fbc07d9fc05e1f2a5412ff89274f7b89360ebbb615e7b693}{DIRECTIONAL}} = 1
+ \}
+\item 
+enum \mbox{\hyperlink{namespace_astra_acf6c5f0b748e38d6bf86ed31ba882e42}{LOG\+\_\+\+LEVELS}} \{ \mbox{\hyperlink{namespace_astra_acf6c5f0b748e38d6bf86ed31ba882e42af8a02e11787ab2ba10d470de8b59773e}{INFO}}
+, \mbox{\hyperlink{namespace_astra_acf6c5f0b748e38d6bf86ed31ba882e42a54ac4cb98c2efed361beeb8d3940ac75}{WARNING}}
+, \mbox{\hyperlink{namespace_astra_acf6c5f0b748e38d6bf86ed31ba882e42a4a391556bfef679eb6aff6ac52c50f20}{ERR}}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ char $>$ \mbox{\hyperlink{namespace_astra_abae1bd25c22a1903f82f6546e78b9bc3}{read\+File}} (const std\+::string \&filename, bool binary)
+\item 
+void \mbox{\hyperlink{namespace_astra_a23fa965926ceb1302291be18126414cc}{Log}} (const std\+::string \&s, \mbox{\hyperlink{namespace_astra_acf6c5f0b748e38d6bf86ed31ba882e42}{LOG\+\_\+\+LEVELS}} level=\mbox{\hyperlink{namespace_astra_acf6c5f0b748e38d6bf86ed31ba882e42af8a02e11787ab2ba10d470de8b59773e}{INFO}})
+\item 
+void \mbox{\hyperlink{namespace_astra_a3e7124e123ff15bdcce9552317d9b321}{Log}} (const std\+::string \&name, const glm\+::vec3 \&s, \mbox{\hyperlink{namespace_astra_acf6c5f0b748e38d6bf86ed31ba882e42}{LOG\+\_\+\+LEVELS}} level=\mbox{\hyperlink{namespace_astra_acf6c5f0b748e38d6bf86ed31ba882e42af8a02e11787ab2ba10d470de8b59773e}{INFO}})
+\item 
+void \mbox{\hyperlink{namespace_astra_a072a256a7d784deb7a63ed828237d72c}{Log}} (const std\+::string \&name, const glm\+::vec4 \&s, \mbox{\hyperlink{namespace_astra_acf6c5f0b748e38d6bf86ed31ba882e42}{LOG\+\_\+\+LEVELS}} level=\mbox{\hyperlink{namespace_astra_acf6c5f0b748e38d6bf86ed31ba882e42af8a02e11787ab2ba10d470de8b59773e}{INFO}})
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Documentación de enumeraciones}
+\Hypertarget{namespace_astra_a8ff9af1a6f3d820347e90c1876815ac7}\index{Astra@{Astra}!AppStatus@{AppStatus}}
+\index{AppStatus@{AppStatus}!Astra@{Astra}}
+\doxysubsubsection{\texorpdfstring{AppStatus}{AppStatus}}
+{\footnotesize\ttfamily \label{namespace_astra_a8ff9af1a6f3d820347e90c1876815ac7} 
+enum \mbox{\hyperlink{namespace_astra_a8ff9af1a6f3d820347e90c1876815ac7}{Astra\+::\+App\+Status}}}
+
+\begin{DoxyEnumFields}{Valores de enumeraciones}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Created@{Created}!Astra@{Astra}}\index{Astra@{Astra}!Created@{Created}}}\Hypertarget{namespace_astra_a8ff9af1a6f3d820347e90c1876815ac7ae17d0f826f2eec26934c3863daa5643f}\label{namespace_astra_a8ff9af1a6f3d820347e90c1876815ac7} 
+Created&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Running@{Running}!Astra@{Astra}}\index{Astra@{Astra}!Running@{Running}}}\Hypertarget{namespace_astra_a8ff9af1a6f3d820347e90c1876815ac7a55230868c30328a387be8f3aa76fe585}\label{namespace_astra_a8ff9af1a6f3d820347e90c1876815ac7} 
+Running&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Destroyed@{Destroyed}!Astra@{Astra}}\index{Astra@{Astra}!Destroyed@{Destroyed}}}\Hypertarget{namespace_astra_a8ff9af1a6f3d820347e90c1876815ac7a90fb25b74af9e5d5c053a9eaf2c9ea8f}\label{namespace_astra_a8ff9af1a6f3d820347e90c1876815ac7} 
+Destroyed&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+Definición en la línea \mbox{\hyperlink{_globals_8h_source_l00013}{13}} del archivo \mbox{\hyperlink{_globals_8h_source}{Globals.\+h}}.
+
+\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8}\index{Astra@{Astra}!Keys@{Keys}}
+\index{Keys@{Keys}!Astra@{Astra}}
+\doxysubsubsection{\texorpdfstring{Keys}{Keys}}
+{\footnotesize\ttfamily \label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+enum \mbox{\hyperlink{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8}{Astra\+::\+Keys}}}
+
+\begin{DoxyEnumFields}{Valores de enumeraciones}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_Space@{Key\_Space}!Astra@{Astra}}\index{Astra@{Astra}!Key\_Space@{Key\_Space}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a6fc4211c4198db43839e5ff4051b2c90}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Space&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_Apostrophe@{Key\_Apostrophe}!Astra@{Astra}}\index{Astra@{Astra}!Key\_Apostrophe@{Key\_Apostrophe}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8aa3fc6e314b595cac18aac5b5567ab5c0}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Apostrophe&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_Comma@{Key\_Comma}!Astra@{Astra}}\index{Astra@{Astra}!Key\_Comma@{Key\_Comma}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a178cbac6577442f30492c417dc98e97e}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Comma&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_Minus@{Key\_Minus}!Astra@{Astra}}\index{Astra@{Astra}!Key\_Minus@{Key\_Minus}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a1fddcaae50bde2be457966a6f35aecc6}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Minus&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_Period@{Key\_Period}!Astra@{Astra}}\index{Astra@{Astra}!Key\_Period@{Key\_Period}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a763e4e3ea4ca0d3ab66640ba263a1146}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Period&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_Slash@{Key\_Slash}!Astra@{Astra}}\index{Astra@{Astra}!Key\_Slash@{Key\_Slash}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8aeb6972613d3160b85674d0313cae31c5}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Slash&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_0@{Key\_0}!Astra@{Astra}}\index{Astra@{Astra}!Key\_0@{Key\_0}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a926404b6acea754b5852f3fdd6da735b}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+0&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_1@{Key\_1}!Astra@{Astra}}\index{Astra@{Astra}!Key\_1@{Key\_1}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a96a61df1bda5863ec230190341b7441c}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+1&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_2@{Key\_2}!Astra@{Astra}}\index{Astra@{Astra}!Key\_2@{Key\_2}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ac23e2fec0fa5f900f1c622103bdf12fc}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+2&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_3@{Key\_3}!Astra@{Astra}}\index{Astra@{Astra}!Key\_3@{Key\_3}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8aad0a41e14d72eaf6faff611959d92e7a}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+3&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_4@{Key\_4}!Astra@{Astra}}\index{Astra@{Astra}!Key\_4@{Key\_4}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a1fe3425ef27c8e2eaa707ce34f38dd3c}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+4&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_5@{Key\_5}!Astra@{Astra}}\index{Astra@{Astra}!Key\_5@{Key\_5}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a1eafed0da9189a5b3111ceeeb7fff9e6}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+5&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_6@{Key\_6}!Astra@{Astra}}\index{Astra@{Astra}!Key\_6@{Key\_6}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8af37fb35b6607ff1e96b5ba1365139de0}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+6&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_7@{Key\_7}!Astra@{Astra}}\index{Astra@{Astra}!Key\_7@{Key\_7}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ad3ea201b87c9787c9f4018d6e109c00b}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+7&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_8@{Key\_8}!Astra@{Astra}}\index{Astra@{Astra}!Key\_8@{Key\_8}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ac16354861f2ce3595569c07813cd3784}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+8&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_9@{Key\_9}!Astra@{Astra}}\index{Astra@{Astra}!Key\_9@{Key\_9}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8af4cd9d7bba996a0994b166776ff3ac1a}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+9&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_Semicolon@{Key\_Semicolon}!Astra@{Astra}}\index{Astra@{Astra}!Key\_Semicolon@{Key\_Semicolon}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a0c5f78a1db60de3950742badb64be10e}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Semicolon&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_Equal@{Key\_Equal}!Astra@{Astra}}\index{Astra@{Astra}!Key\_Equal@{Key\_Equal}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8abb52995d613d60de32b90a5cbb101f0f}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Equal&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_A@{Key\_A}!Astra@{Astra}}\index{Astra@{Astra}!Key\_A@{Key\_A}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a2c18b60d5016dce42b0b19439b9b3865}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+A&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_B@{Key\_B}!Astra@{Astra}}\index{Astra@{Astra}!Key\_B@{Key\_B}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a05d88325fd84791c11bc4b1ed9059fb2}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+B&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_C@{Key\_C}!Astra@{Astra}}\index{Astra@{Astra}!Key\_C@{Key\_C}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8afc479043ed1fc36800ad5d177df6311f}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+C&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_D@{Key\_D}!Astra@{Astra}}\index{Astra@{Astra}!Key\_D@{Key\_D}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a59168fd85bca768b835dfaba78d33796}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+D&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_E@{Key\_E}!Astra@{Astra}}\index{Astra@{Astra}!Key\_E@{Key\_E}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a48623eaef510d272273b8c5760eea4eb}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+E&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_F@{Key\_F}!Astra@{Astra}}\index{Astra@{Astra}!Key\_F@{Key\_F}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8aca6aa1e209de5dd3900a12309af516ac}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+F&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_G@{Key\_G}!Astra@{Astra}}\index{Astra@{Astra}!Key\_G@{Key\_G}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a90edc86689b6934b94946bb9719b037c}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+G&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_H@{Key\_H}!Astra@{Astra}}\index{Astra@{Astra}!Key\_H@{Key\_H}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a0f0013ca0e44c9bdce1f668891903cfb}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+H&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_I@{Key\_I}!Astra@{Astra}}\index{Astra@{Astra}!Key\_I@{Key\_I}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a9c7d6d1ebfc301e54103c7e4f7bb4cc2}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+I&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_J@{Key\_J}!Astra@{Astra}}\index{Astra@{Astra}!Key\_J@{Key\_J}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a1efb5446363946e39f419f91dfc981e1}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+J&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_K@{Key\_K}!Astra@{Astra}}\index{Astra@{Astra}!Key\_K@{Key\_K}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a0a2b8d74f9c3be878aa764958b5b2b6b}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+K&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_L@{Key\_L}!Astra@{Astra}}\index{Astra@{Astra}!Key\_L@{Key\_L}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a86040578690e54157eaca074c5855a97}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+L&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_M@{Key\_M}!Astra@{Astra}}\index{Astra@{Astra}!Key\_M@{Key\_M}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a07417a0b03335e99dc9206206452ca3b}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+M&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_N@{Key\_N}!Astra@{Astra}}\index{Astra@{Astra}!Key\_N@{Key\_N}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ad14a2d362f19a01d62e4c366749c57ce}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+N&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_O@{Key\_O}!Astra@{Astra}}\index{Astra@{Astra}!Key\_O@{Key\_O}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a669c6c087aa86cb079a03f63943be1ff}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+O&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_P@{Key\_P}!Astra@{Astra}}\index{Astra@{Astra}!Key\_P@{Key\_P}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a1ac92755c2e64f63909e10b4ce951763}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+P&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_Q@{Key\_Q}!Astra@{Astra}}\index{Astra@{Astra}!Key\_Q@{Key\_Q}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a4e983c5e511477b82f8c15f7f97f5d20}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+Q&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_R@{Key\_R}!Astra@{Astra}}\index{Astra@{Astra}!Key\_R@{Key\_R}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8aae5f1a514fa506616e9c36d3d2eaf2a8}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+R&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_S@{Key\_S}!Astra@{Astra}}\index{Astra@{Astra}!Key\_S@{Key\_S}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ac19f9e54bcaece85652f52f28d155671}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+S&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_T@{Key\_T}!Astra@{Astra}}\index{Astra@{Astra}!Key\_T@{Key\_T}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a9d0974acd19ceb76c6eb2da5cd6d1d02}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+T&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_U@{Key\_U}!Astra@{Astra}}\index{Astra@{Astra}!Key\_U@{Key\_U}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a7824da2e9075545bcb4524a27a4e9763}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+U&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_V@{Key\_V}!Astra@{Astra}}\index{Astra@{Astra}!Key\_V@{Key\_V}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a35eac966472b5609e9ce7fc8900b8270}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+V&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_W@{Key\_W}!Astra@{Astra}}\index{Astra@{Astra}!Key\_W@{Key\_W}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a753e335313ca7af19c9189916231d646}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+W&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_X@{Key\_X}!Astra@{Astra}}\index{Astra@{Astra}!Key\_X@{Key\_X}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a58f97b14f302f6f1d2cc17c1a204342e}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+X&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_Y@{Key\_Y}!Astra@{Astra}}\index{Astra@{Astra}!Key\_Y@{Key\_Y}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8aca5b732ae77b62b83051c351607b6010}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+Y&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_Z@{Key\_Z}!Astra@{Astra}}\index{Astra@{Astra}!Key\_Z@{Key\_Z}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a7b3e6b6bfa3b5f7c26bc42bed843f11b}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+Z&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_LeftBracket@{Key\_LeftBracket}!Astra@{Astra}}\index{Astra@{Astra}!Key\_LeftBracket@{Key\_LeftBracket}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ae8ecd89e9c574f5f4cac3f6f218d13d5}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Left\+Bracket&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_KeyBackslash@{Key\_KeyBackslash}!Astra@{Astra}}\index{Astra@{Astra}!Key\_KeyBackslash@{Key\_KeyBackslash}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a0bee8150c9e12746c3ab5d7d1fc2b7f2}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Key\+Backslash&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_RightBracket@{Key\_RightBracket}!Astra@{Astra}}\index{Astra@{Astra}!Key\_RightBracket@{Key\_RightBracket}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a3ddfb970e935160abf64de698d07cedf}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Right\+Bracket&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_GraveAccent@{Key\_GraveAccent}!Astra@{Astra}}\index{Astra@{Astra}!Key\_GraveAccent@{Key\_GraveAccent}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8afe59645782d0cbff19b2c8a34adcca60}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Grave\+Accent&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_Escape@{Key\_Escape}!Astra@{Astra}}\index{Astra@{Astra}!Key\_Escape@{Key\_Escape}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a4047ffdcdd2a55b55386657941410c29}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Escape&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_Enter@{Key\_Enter}!Astra@{Astra}}\index{Astra@{Astra}!Key\_Enter@{Key\_Enter}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a628fcc53fd1321060d900643a839dd7a}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Enter&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_Tab@{Key\_Tab}!Astra@{Astra}}\index{Astra@{Astra}!Key\_Tab@{Key\_Tab}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8aa3d58cadf93d204ceeccd27ae330715b}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Tab&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_Backspace@{Key\_Backspace}!Astra@{Astra}}\index{Astra@{Astra}!Key\_Backspace@{Key\_Backspace}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ae0841dee5efa210bda11cc24b8482b39}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Backspace&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_Insert@{Key\_Insert}!Astra@{Astra}}\index{Astra@{Astra}!Key\_Insert@{Key\_Insert}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a86099cea4be687581b5cfc6c56c65361}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Insert&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_Delete@{Key\_Delete}!Astra@{Astra}}\index{Astra@{Astra}!Key\_Delete@{Key\_Delete}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8afe4a3afca527babd14b2441639f10c37}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Delete&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_Right@{Key\_Right}!Astra@{Astra}}\index{Astra@{Astra}!Key\_Right@{Key\_Right}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ae66dd7d503e23c16a9c4eb8e812b5854}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Right&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_Left@{Key\_Left}!Astra@{Astra}}\index{Astra@{Astra}!Key\_Left@{Key\_Left}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a7edbe66d98e909dcf247dace98e92fbe}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Left&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_Down@{Key\_Down}!Astra@{Astra}}\index{Astra@{Astra}!Key\_Down@{Key\_Down}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ac8f7f58f7ad1812bd0e4ceedf7d05149}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Down&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_Up@{Key\_Up}!Astra@{Astra}}\index{Astra@{Astra}!Key\_Up@{Key\_Up}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8affc66171eda47b437a965ac7ef41cd15}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Up&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_PageUp@{Key\_PageUp}!Astra@{Astra}}\index{Astra@{Astra}!Key\_PageUp@{Key\_PageUp}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a5a42f16e94f9b70b9a206fe0fba9916c}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Page\+Up&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_PageDown@{Key\_PageDown}!Astra@{Astra}}\index{Astra@{Astra}!Key\_PageDown@{Key\_PageDown}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a2ae3bdcd75f50db5700077b85c372b32}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Page\+Down&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_Home@{Key\_Home}!Astra@{Astra}}\index{Astra@{Astra}!Key\_Home@{Key\_Home}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a48a8c0a1ed5e289ef3bbd83cb393a93a}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Home&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_End@{Key\_End}!Astra@{Astra}}\index{Astra@{Astra}!Key\_End@{Key\_End}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8add23dbb0e07e8b745f1f4b02f0e47935}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+End&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_CapsLock@{Key\_CapsLock}!Astra@{Astra}}\index{Astra@{Astra}!Key\_CapsLock@{Key\_CapsLock}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ad365bf84e102467c30ad76fd556779e2}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Caps\+Lock&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_ScrollLock@{Key\_ScrollLock}!Astra@{Astra}}\index{Astra@{Astra}!Key\_ScrollLock@{Key\_ScrollLock}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ad1ac242cf9b45520c0aea47d3e4f0546}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Scroll\+Lock&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_NumLock@{Key\_NumLock}!Astra@{Astra}}\index{Astra@{Astra}!Key\_NumLock@{Key\_NumLock}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ab9171de5e3b5e79cfa9bfe47965433bc}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Num\+Lock&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_PrntScrn@{Key\_PrntScrn}!Astra@{Astra}}\index{Astra@{Astra}!Key\_PrntScrn@{Key\_PrntScrn}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a036648c0deb9d0a732359711d10adaee}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Prnt\+Scrn&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_Pause@{Key\_Pause}!Astra@{Astra}}\index{Astra@{Astra}!Key\_Pause@{Key\_Pause}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a90ccffdc19737ddb9daf3e0b33c5d7dc}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Pause&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_F1@{Key\_F1}!Astra@{Astra}}\index{Astra@{Astra}!Key\_F1@{Key\_F1}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ae7b2b96693e0dc373881dea9b849d12d}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+F1&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_F2@{Key\_F2}!Astra@{Astra}}\index{Astra@{Astra}!Key\_F2@{Key\_F2}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ac1db15201a3e734635a6c9a1ba9a6c7f}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+F2&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_F3@{Key\_F3}!Astra@{Astra}}\index{Astra@{Astra}!Key\_F3@{Key\_F3}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a36779903e9301ff150441a8fd52ebee0}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+F3&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_F4@{Key\_F4}!Astra@{Astra}}\index{Astra@{Astra}!Key\_F4@{Key\_F4}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a9ee71c06a694b799b1236e71f54c8c45}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+F4&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_F5@{Key\_F5}!Astra@{Astra}}\index{Astra@{Astra}!Key\_F5@{Key\_F5}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ace6a1c71ca2ebc9d285c3d0aea7cfda6}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+F5&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_F6@{Key\_F6}!Astra@{Astra}}\index{Astra@{Astra}!Key\_F6@{Key\_F6}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a1ee1047c23615f28a957c98062e5a354}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+F6&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_F7@{Key\_F7}!Astra@{Astra}}\index{Astra@{Astra}!Key\_F7@{Key\_F7}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a9dbeb3c02901439c97d884e36e584e91}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+F7&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_F8@{Key\_F8}!Astra@{Astra}}\index{Astra@{Astra}!Key\_F8@{Key\_F8}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a596c149280d2aceefad54f82b15770e3}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+F8&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_F9@{Key\_F9}!Astra@{Astra}}\index{Astra@{Astra}!Key\_F9@{Key\_F9}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ae59ec8f3e9c8327f77e4040026d08d72}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+F9&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_F10@{Key\_F10}!Astra@{Astra}}\index{Astra@{Astra}!Key\_F10@{Key\_F10}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a14872aa801ff90a0390678c88e8438a6}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+F10&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_F11@{Key\_F11}!Astra@{Astra}}\index{Astra@{Astra}!Key\_F11@{Key\_F11}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a42d978e5a4574ec2046ed4cbda58ee5f}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+F11&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_F12@{Key\_F12}!Astra@{Astra}}\index{Astra@{Astra}!Key\_F12@{Key\_F12}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a459e2783588037abe8bcb46ca2da99f9}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+F12&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_LeftShift@{Key\_LeftShift}!Astra@{Astra}}\index{Astra@{Astra}!Key\_LeftShift@{Key\_LeftShift}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a983b4eb855144448e94dca49de4a95dc}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Left\+Shift&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_LeftControl@{Key\_LeftControl}!Astra@{Astra}}\index{Astra@{Astra}!Key\_LeftControl@{Key\_LeftControl}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a04ad07f66b1a6d704c47a76dbef2e9f5}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Left\+Control&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_LeftAlt@{Key\_LeftAlt}!Astra@{Astra}}\index{Astra@{Astra}!Key\_LeftAlt@{Key\_LeftAlt}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a246b2c2a352c72e4709cbccab9c30bc3}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Left\+Alt&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_LeftSuper@{Key\_LeftSuper}!Astra@{Astra}}\index{Astra@{Astra}!Key\_LeftSuper@{Key\_LeftSuper}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ae569ed1c27826a97e9efd4615b5c87eb}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Left\+Super&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_RightShift@{Key\_RightShift}!Astra@{Astra}}\index{Astra@{Astra}!Key\_RightShift@{Key\_RightShift}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8aff3289bf33add59c1edd30b1479fddeb}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Right\+Shift&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_RightControl@{Key\_RightControl}!Astra@{Astra}}\index{Astra@{Astra}!Key\_RightControl@{Key\_RightControl}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8ace91e58b99e1b1f42c8d2e70e72ecd7d}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Right\+Control&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_RightAlt@{Key\_RightAlt}!Astra@{Astra}}\index{Astra@{Astra}!Key\_RightAlt@{Key\_RightAlt}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a601c7cdf6979dc8879691ac5c4b03e0b}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Right\+Alt&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Key\_RightSuper@{Key\_RightSuper}!Astra@{Astra}}\index{Astra@{Astra}!Key\_RightSuper@{Key\_RightSuper}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8aa69aafcb3e8b902306b8904b5fb27b34}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+Key\+\_\+\+Right\+Super&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{SIZE\_KEYMAP@{SIZE\_KEYMAP}!Astra@{Astra}}\index{Astra@{Astra}!SIZE\_KEYMAP@{SIZE\_KEYMAP}}}\Hypertarget{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8a73872c18838e5403d393cc729c5b7cf4}\label{namespace_astra_a3d72d58e22aab0e2bf4433841dd9efc8} 
+SIZE\+\_\+\+KEYMAP&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+Definición en la línea \mbox{\hyperlink{_globals_8h_source_l00028}{28}} del archivo \mbox{\hyperlink{_globals_8h_source}{Globals.\+h}}.
+
+\Hypertarget{namespace_astra_a53d6d9f45822a9dd4fbc07d9fc05e1f2}\index{Astra@{Astra}!LightType@{LightType}}
+\index{LightType@{LightType}!Astra@{Astra}}
+\doxysubsubsection{\texorpdfstring{LightType}{LightType}}
+{\footnotesize\ttfamily \label{namespace_astra_a53d6d9f45822a9dd4fbc07d9fc05e1f2} 
+enum \mbox{\hyperlink{namespace_astra_a53d6d9f45822a9dd4fbc07d9fc05e1f2}{Astra\+::\+Light\+Type}}}
+
+\begin{DoxyEnumFields}{Valores de enumeraciones}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{POINT@{POINT}!Astra@{Astra}}\index{Astra@{Astra}!POINT@{POINT}}}\Hypertarget{namespace_astra_a53d6d9f45822a9dd4fbc07d9fc05e1f2a297c0ba5536ec9c218ffb6a273086f90}\label{namespace_astra_a53d6d9f45822a9dd4fbc07d9fc05e1f2} 
+POINT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{DIRECTIONAL@{DIRECTIONAL}!Astra@{Astra}}\index{Astra@{Astra}!DIRECTIONAL@{DIRECTIONAL}}}\Hypertarget{namespace_astra_a53d6d9f45822a9dd4fbc07d9fc05e1f2a5412ff89274f7b89360ebbb615e7b693}\label{namespace_astra_a53d6d9f45822a9dd4fbc07d9fc05e1f2} 
+DIRECTIONAL&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+Definición en la línea \mbox{\hyperlink{_light_8h_source_l00006}{6}} del archivo \mbox{\hyperlink{_light_8h_source}{Light.\+h}}.
+
+\Hypertarget{namespace_astra_acf6c5f0b748e38d6bf86ed31ba882e42}\index{Astra@{Astra}!LOG\_LEVELS@{LOG\_LEVELS}}
+\index{LOG\_LEVELS@{LOG\_LEVELS}!Astra@{Astra}}
+\doxysubsubsection{\texorpdfstring{LOG\_LEVELS}{LOG\_LEVELS}}
+{\footnotesize\ttfamily \label{namespace_astra_acf6c5f0b748e38d6bf86ed31ba882e42} 
+enum \mbox{\hyperlink{namespace_astra_acf6c5f0b748e38d6bf86ed31ba882e42}{Astra\+::\+LOG\+\_\+\+LEVELS}}}
+
+\begin{DoxyEnumFields}{Valores de enumeraciones}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{INFO@{INFO}!Astra@{Astra}}\index{Astra@{Astra}!INFO@{INFO}}}\Hypertarget{namespace_astra_acf6c5f0b748e38d6bf86ed31ba882e42af8a02e11787ab2ba10d470de8b59773e}\label{namespace_astra_acf6c5f0b748e38d6bf86ed31ba882e42} 
+INFO&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WARNING@{WARNING}!Astra@{Astra}}\index{Astra@{Astra}!WARNING@{WARNING}}}\Hypertarget{namespace_astra_acf6c5f0b748e38d6bf86ed31ba882e42a54ac4cb98c2efed361beeb8d3940ac75}\label{namespace_astra_acf6c5f0b748e38d6bf86ed31ba882e42} 
+WARNING&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ERR@{ERR}!Astra@{Astra}}\index{Astra@{Astra}!ERR@{ERR}}}\Hypertarget{namespace_astra_acf6c5f0b748e38d6bf86ed31ba882e42a4a391556bfef679eb6aff6ac52c50f20}\label{namespace_astra_acf6c5f0b748e38d6bf86ed31ba882e42} 
+ERR&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+Definición en la línea \mbox{\hyperlink{_utils_8h_source_l00008}{8}} del archivo \mbox{\hyperlink{_utils_8h_source}{Utils.\+h}}.
+
+\Hypertarget{namespace_astra_a943ae035e017b5fd68ab4824a97b9f62}\index{Astra@{Astra}!MouseButtons@{MouseButtons}}
+\index{MouseButtons@{MouseButtons}!Astra@{Astra}}
+\doxysubsubsection{\texorpdfstring{MouseButtons}{MouseButtons}}
+{\footnotesize\ttfamily \label{namespace_astra_a943ae035e017b5fd68ab4824a97b9f62} 
+enum \mbox{\hyperlink{namespace_astra_a943ae035e017b5fd68ab4824a97b9f62}{Astra\+::\+Mouse\+Buttons}}}
+
+\begin{DoxyEnumFields}{Valores de enumeraciones}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Left@{Left}!Astra@{Astra}}\index{Astra@{Astra}!Left@{Left}}}\Hypertarget{namespace_astra_a943ae035e017b5fd68ab4824a97b9f62a5c056785e32b3a83869c35d5721978b9}\label{namespace_astra_a943ae035e017b5fd68ab4824a97b9f62} 
+Left&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Right@{Right}!Astra@{Astra}}\index{Astra@{Astra}!Right@{Right}}}\Hypertarget{namespace_astra_a943ae035e017b5fd68ab4824a97b9f62a5a799807ac594ab6791c188529b218d4}\label{namespace_astra_a943ae035e017b5fd68ab4824a97b9f62} 
+Right&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Middle@{Middle}!Astra@{Astra}}\index{Astra@{Astra}!Middle@{Middle}}}\Hypertarget{namespace_astra_a943ae035e017b5fd68ab4824a97b9f62a7f1dffc82045a2ae64d8b5861eda5e7d}\label{namespace_astra_a943ae035e017b5fd68ab4824a97b9f62} 
+Middle&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{SIZE\_MOUSEBUTTONS@{SIZE\_MOUSEBUTTONS}!Astra@{Astra}}\index{Astra@{Astra}!SIZE\_MOUSEBUTTONS@{SIZE\_MOUSEBUTTONS}}}\Hypertarget{namespace_astra_a943ae035e017b5fd68ab4824a97b9f62a96bcf2b235886f7af63e6e2437c67cb9}\label{namespace_astra_a943ae035e017b5fd68ab4824a97b9f62} 
+SIZE\+\_\+\+MOUSEBUTTONS&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+Definición en la línea \mbox{\hyperlink{_globals_8h_source_l00020}{20}} del archivo \mbox{\hyperlink{_globals_8h_source}{Globals.\+h}}.
+
+\Hypertarget{namespace_astra_a2eda595e6d7ac55b99d18920609b3a30}\index{Astra@{Astra}!PipelineBindPoints@{PipelineBindPoints}}
+\index{PipelineBindPoints@{PipelineBindPoints}!Astra@{Astra}}
+\doxysubsubsection{\texorpdfstring{PipelineBindPoints}{PipelineBindPoints}}
+{\footnotesize\ttfamily \label{namespace_astra_a2eda595e6d7ac55b99d18920609b3a30} 
+enum \mbox{\hyperlink{namespace_astra_a2eda595e6d7ac55b99d18920609b3a30}{Astra\+::\+Pipeline\+Bind\+Points}}}
+
+\begin{DoxyEnumFields}{Valores de enumeraciones}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Graphics@{Graphics}!Astra@{Astra}}\index{Astra@{Astra}!Graphics@{Graphics}}}\Hypertarget{namespace_astra_a2eda595e6d7ac55b99d18920609b3a30ab119632cb06998344bd1843e9690872e}\label{namespace_astra_a2eda595e6d7ac55b99d18920609b3a30} 
+Graphics&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Compute@{Compute}!Astra@{Astra}}\index{Astra@{Astra}!Compute@{Compute}}}\Hypertarget{namespace_astra_a2eda595e6d7ac55b99d18920609b3a30a13f65527aabfa92a4b2f83d903b9c3a7}\label{namespace_astra_a2eda595e6d7ac55b99d18920609b3a30} 
+Compute&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{RayTracing@{RayTracing}!Astra@{Astra}}\index{Astra@{Astra}!RayTracing@{RayTracing}}}\Hypertarget{namespace_astra_a2eda595e6d7ac55b99d18920609b3a30a3cd9a416ef1f47bb831871895150cc95}\label{namespace_astra_a2eda595e6d7ac55b99d18920609b3a30} 
+Ray\+Tracing&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+Definición en la línea \mbox{\hyperlink{_globals_8h_source_l00007}{7}} del archivo \mbox{\hyperlink{_globals_8h_source}{Globals.\+h}}.
+
+
+
+\doxysubsection{Documentación de funciones}
+\Hypertarget{namespace_astra_a3e7124e123ff15bdcce9552317d9b321}\index{Astra@{Astra}!Log@{Log}}
+\index{Log@{Log}!Astra@{Astra}}
+\doxysubsubsection{\texorpdfstring{Log()}{Log()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \label{namespace_astra_a3e7124e123ff15bdcce9552317d9b321} 
+void Astra\+::\+Log (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name}{, }\item[{const glm\+::vec3 \&}]{s}{, }\item[{\mbox{\hyperlink{namespace_astra_acf6c5f0b748e38d6bf86ed31ba882e42}{LOG\+\_\+\+LEVELS}}}]{level}{ = {\ttfamily \mbox{\hyperlink{namespace_astra_acf6c5f0b748e38d6bf86ed31ba882e42af8a02e11787ab2ba10d470de8b59773e}{INFO}}}}\end{DoxyParamCaption})}
+
+
+
+Definición en la línea \mbox{\hyperlink{_utils_8cpp_source_l00038}{38}} del archivo \mbox{\hyperlink{_utils_8cpp_source}{Utils.\+cpp}}.
+
+\Hypertarget{namespace_astra_a072a256a7d784deb7a63ed828237d72c}\index{Astra@{Astra}!Log@{Log}}
+\index{Log@{Log}!Astra@{Astra}}
+\doxysubsubsection{\texorpdfstring{Log()}{Log()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily \label{namespace_astra_a072a256a7d784deb7a63ed828237d72c} 
+void Astra\+::\+Log (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name}{, }\item[{const glm\+::vec4 \&}]{s}{, }\item[{\mbox{\hyperlink{namespace_astra_acf6c5f0b748e38d6bf86ed31ba882e42}{LOG\+\_\+\+LEVELS}}}]{level}{ = {\ttfamily \mbox{\hyperlink{namespace_astra_acf6c5f0b748e38d6bf86ed31ba882e42af8a02e11787ab2ba10d470de8b59773e}{INFO}}}}\end{DoxyParamCaption})}
+
+
+
+Definición en la línea \mbox{\hyperlink{_utils_8cpp_source_l00047}{47}} del archivo \mbox{\hyperlink{_utils_8cpp_source}{Utils.\+cpp}}.
+
+\Hypertarget{namespace_astra_a23fa965926ceb1302291be18126414cc}\index{Astra@{Astra}!Log@{Log}}
+\index{Log@{Log}!Astra@{Astra}}
+\doxysubsubsection{\texorpdfstring{Log()}{Log()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily \label{namespace_astra_a23fa965926ceb1302291be18126414cc} 
+void Astra\+::\+Log (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{s}{, }\item[{\mbox{\hyperlink{namespace_astra_acf6c5f0b748e38d6bf86ed31ba882e42}{LOG\+\_\+\+LEVELS}}}]{level}{ = {\ttfamily \mbox{\hyperlink{namespace_astra_acf6c5f0b748e38d6bf86ed31ba882e42af8a02e11787ab2ba10d470de8b59773e}{INFO}}}}\end{DoxyParamCaption})}
+
+
+
+Definición en la línea \mbox{\hyperlink{_utils_8cpp_source_l00021}{21}} del archivo \mbox{\hyperlink{_utils_8cpp_source}{Utils.\+cpp}}.
+
+\Hypertarget{namespace_astra_abae1bd25c22a1903f82f6546e78b9bc3}\index{Astra@{Astra}!readFile@{readFile}}
+\index{readFile@{readFile}!Astra@{Astra}}
+\doxysubsubsection{\texorpdfstring{readFile()}{readFile()}}
+{\footnotesize\ttfamily \label{namespace_astra_abae1bd25c22a1903f82f6546e78b9bc3} 
+std\+::vector$<$ char $>$ Astra\+::read\+File (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{filename}{, }\item[{bool}]{binary}{}\end{DoxyParamCaption})}
+
+
+
+Definición en la línea \mbox{\hyperlink{_utils_8cpp_source_l00005}{5}} del archivo \mbox{\hyperlink{_utils_8cpp_source}{Utils.\+cpp}}.
+

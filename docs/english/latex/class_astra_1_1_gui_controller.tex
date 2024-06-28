@@ -1,0 +1,142 @@
+\doxysection{Astra\+::Gui\+Controller Class Reference}
+\hypertarget{class_astra_1_1_gui_controller}{}\label{class_astra_1_1_gui_controller}\index{Astra::GuiController@{Astra::GuiController}}
+
+
+Simple class to draw Im\+Gui GUI over the app.  
+
+
+
+
+{\ttfamily \#include $<$Gui\+Controller.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_astra_1_1_gui_controller_a91b3466feea43511f47bacc9fca9a09c}{init}} (GLFWwindow \texorpdfstring{$\ast$}{*}window, \mbox{\hyperlink{class_astra_1_1_renderer}{Renderer}} \texorpdfstring{$\ast$}{*}renderer)
+\begin{DoxyCompactList}\small\item\em Inits Im\+Gui\textquotesingle{}s backend. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_astra_1_1_gui_controller_a6fd069e4878a003d2fcb3be52dbcbdef}{start\+Frame}} ()
+\begin{DoxyCompactList}\small\item\em Begins the GUI frame. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_astra_1_1_gui_controller_a5aaee6286d83ce7c859f5ecbb9a911f9}{end\+Frame}} (const \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}} \&cmd\+List)
+\begin{DoxyCompactList}\small\item\em Ends the GUI frame. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_astra_1_1_gui_controller_a706128cf04d3bf0482afbcc7be3ca3d2}{destroy}} ()
+\begin{DoxyCompactList}\small\item\em Destroys resources. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_astra_1_1_gui_controller_a9402ad3f857e31e32b2d770bca6f7096}{draw}} (\mbox{\hyperlink{class_astra_1_1_app}{App}} \texorpdfstring{$\ast$}{*}app)=0
+\begin{DoxyCompactList}\small\item\em This virtual method has to be overridden by its derived classes. This method\textquotesingle{}s implementation should include every Im\+Gui instruccion for drawing a GUI. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Vk\+Descriptor\+Pool \mbox{\hyperlink{class_astra_1_1_gui_controller_a00b5ceb14c9647c4ecc8795aa3abc478}{\+\_\+imgui\+Desc\+Pool}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_astra_1_1_gui_controller_a70538530bc36e033e360880ef311df61}{Renderer}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Simple class to draw Im\+Gui GUI over the app. 
+
+Definition at line \mbox{\hyperlink{_gui_controller_8h_source_l00018}{18}} of file \mbox{\hyperlink{_gui_controller_8h_source}{Gui\+Controller.\+h}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_astra_1_1_gui_controller_a706128cf04d3bf0482afbcc7be3ca3d2}\index{Astra::GuiController@{Astra::GuiController}!destroy@{destroy}}
+\index{destroy@{destroy}!Astra::GuiController@{Astra::GuiController}}
+\doxysubsubsection{\texorpdfstring{destroy()}{destroy()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_gui_controller_a706128cf04d3bf0482afbcc7be3ca3d2} 
+void Astra\+::\+Gui\+Controller\+::destroy (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Destroys resources. 
+
+
+
+Definition at line \mbox{\hyperlink{_gui_controller_8cpp_source_l00079}{79}} of file \mbox{\hyperlink{_gui_controller_8cpp_source}{Gui\+Controller.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_gui_controller_a9402ad3f857e31e32b2d770bca6f7096}\index{Astra::GuiController@{Astra::GuiController}!draw@{draw}}
+\index{draw@{draw}!Astra::GuiController@{Astra::GuiController}}
+\doxysubsubsection{\texorpdfstring{draw()}{draw()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_gui_controller_a9402ad3f857e31e32b2d770bca6f7096} 
+virtual void Astra\+::\+Gui\+Controller\+::draw (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_astra_1_1_app}{App}} \texorpdfstring{$\ast$}{*}}]{app}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+This virtual method has to be overridden by its derived classes. This method\textquotesingle{}s implementation should include every Im\+Gui instruccion for drawing a GUI. 
+
+\Hypertarget{class_astra_1_1_gui_controller_a5aaee6286d83ce7c859f5ecbb9a911f9}\index{Astra::GuiController@{Astra::GuiController}!endFrame@{endFrame}}
+\index{endFrame@{endFrame}!Astra::GuiController@{Astra::GuiController}}
+\doxysubsubsection{\texorpdfstring{endFrame()}{endFrame()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_gui_controller_a5aaee6286d83ce7c859f5ecbb9a911f9} 
+void Astra\+::\+Gui\+Controller\+::end\+Frame (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}} \&}]{cmd\+List}{}\end{DoxyParamCaption})}
+
+
+
+Ends the GUI frame. 
+
+
+
+Definition at line \mbox{\hyperlink{_gui_controller_8cpp_source_l00073}{73}} of file \mbox{\hyperlink{_gui_controller_8cpp_source}{Gui\+Controller.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_gui_controller_a91b3466feea43511f47bacc9fca9a09c}\index{Astra::GuiController@{Astra::GuiController}!init@{init}}
+\index{init@{init}!Astra::GuiController@{Astra::GuiController}}
+\doxysubsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_gui_controller_a91b3466feea43511f47bacc9fca9a09c} 
+void Astra\+::\+Gui\+Controller\+::init (\begin{DoxyParamCaption}\item[{GLFWwindow \texorpdfstring{$\ast$}{*}}]{window}{, }\item[{\mbox{\hyperlink{class_astra_1_1_renderer}{Astra\+::\+Renderer}} \texorpdfstring{$\ast$}{*}}]{renderer}{}\end{DoxyParamCaption})}
+
+
+
+Inits Im\+Gui\textquotesingle{}s backend. 
+
+
+
+Definition at line \mbox{\hyperlink{_gui_controller_8cpp_source_l00009}{9}} of file \mbox{\hyperlink{_gui_controller_8cpp_source}{Gui\+Controller.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_gui_controller_a6fd069e4878a003d2fcb3be52dbcbdef}\index{Astra::GuiController@{Astra::GuiController}!startFrame@{startFrame}}
+\index{startFrame@{startFrame}!Astra::GuiController@{Astra::GuiController}}
+\doxysubsubsection{\texorpdfstring{startFrame()}{startFrame()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_gui_controller_a6fd069e4878a003d2fcb3be52dbcbdef} 
+void Astra\+::\+Gui\+Controller\+::start\+Frame (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Begins the GUI frame. 
+
+
+
+Definition at line \mbox{\hyperlink{_gui_controller_8cpp_source_l00066}{66}} of file \mbox{\hyperlink{_gui_controller_8cpp_source}{Gui\+Controller.\+cpp}}.
+
+
+
+\doxysubsection{Friends And Related Symbol Documentation}
+\Hypertarget{class_astra_1_1_gui_controller_a70538530bc36e033e360880ef311df61}\index{Astra::GuiController@{Astra::GuiController}!Renderer@{Renderer}}
+\index{Renderer@{Renderer}!Astra::GuiController@{Astra::GuiController}}
+\doxysubsubsection{\texorpdfstring{Renderer}{Renderer}}
+{\footnotesize\ttfamily \label{class_astra_1_1_gui_controller_a70538530bc36e033e360880ef311df61} 
+friend class \mbox{\hyperlink{class_astra_1_1_renderer}{Renderer}}\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+Definition at line \mbox{\hyperlink{_gui_controller_8h_source_l00020}{20}} of file \mbox{\hyperlink{_gui_controller_8h_source}{Gui\+Controller.\+h}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_astra_1_1_gui_controller_a00b5ceb14c9647c4ecc8795aa3abc478}\index{Astra::GuiController@{Astra::GuiController}!\_imguiDescPool@{\_imguiDescPool}}
+\index{\_imguiDescPool@{\_imguiDescPool}!Astra::GuiController@{Astra::GuiController}}
+\doxysubsubsection{\texorpdfstring{\_imguiDescPool}{\_imguiDescPool}}
+{\footnotesize\ttfamily \label{class_astra_1_1_gui_controller_a00b5ceb14c9647c4ecc8795aa3abc478} 
+Vk\+Descriptor\+Pool Astra\+::\+Gui\+Controller\+::\+\_\+imgui\+Desc\+Pool\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{_gui_controller_8h_source_l00023}{23}} of file \mbox{\hyperlink{_gui_controller_8h_source}{Gui\+Controller.\+h}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{_gui_controller_8h}{Gui\+Controller.\+h}}\item 
+src/\mbox{\hyperlink{_gui_controller_8cpp}{Gui\+Controller.\+cpp}}\end{DoxyCompactItemize}

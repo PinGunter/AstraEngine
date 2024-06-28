@@ -1,0 +1,64 @@
+\doxysection{App\+RT.\+cpp}
+\hypertarget{_app_r_t_8cpp_source}{}\label{_app_r_t_8cpp_source}\index{src/AppRT.cpp@{src/AppRT.cpp}}
+\mbox{\hyperlink{_app_r_t_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00001}00001\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_app_r_t_8h}{AppRT.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00002}00002\ }
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00003}\mbox{\hyperlink{class_astra_1_1_app_r_t_ab303283d3fd7073a64255f37b67e5cea}{00003}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_app_r_t_ab303283d3fd7073a64255f37b67e5cea}{Astra::AppRT::init}}(\textcolor{keyword}{const}\ std::vector<Scene\ *>\ \&scenes,\ \mbox{\hyperlink{class_astra_1_1_renderer}{Renderer}}\ *renderer,\ \mbox{\hyperlink{class_astra_1_1_gui_controller}{GuiController}}\ *gui)}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00004}00004\ \{}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00005}00005\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{_device_8h_a2fba0ef1853e57846ae6bc3a5d30db39}{AstraDevice}}.getRtEnabled())}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00006}00006\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00007}00007\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Raytracing\ has\ to\ be\ enabled!"{}});}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00008}00008\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00009}00009\ \ \ \ \ \mbox{\hyperlink{class_astra_1_1_app_ab8c72b29f8b10069a05fba2bcddc8cee}{Astra::App::init}}(scenes,\ renderer,\ gui);}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00010}00010\ \ \ \ \ \mbox{\hyperlink{class_astra_1_1_app_r_t_af602f65c27fca89456f838e276066b5e}{createRtDescriptorSetLayout}}();}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00011}00011\ \ \ \ \ \mbox{\hyperlink{class_astra_1_1_app_r_t_a7d907ad2db460288f88b1ef01f38a7f3}{updateRtDescriptorSet}}();}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00012}00012\ \}}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00014}\mbox{\hyperlink{class_astra_1_1_app_r_t_a9cb1b581d6cd4145dc93bc6ed095bf7a}{00014}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_app_r_t_a9cb1b581d6cd4145dc93bc6ed095bf7a}{Astra::AppRT::destroy}}()}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00015}00015\ \{}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00016}00016\ \ \ \ \ \textcolor{keywordflow}{if}\ (\_status\ ==\ \mbox{\hyperlink{namespace_astra_a8ff9af1a6f3d820347e90c1876815ac7a55230868c30328a387be8f3aa76fe585}{Astra::Running}})}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00017}00017\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00018}00018\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_astra_1_1_app_a861860c493edbeeff457ef21fbecaf88}{App::destroy}}();}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00019}00019\ \ \ \ \ \ \ \ \ vkDestroyDescriptorSetLayout(\mbox{\hyperlink{_device_8h_a2fba0ef1853e57846ae6bc3a5d30db39}{AstraDevice}}.getVkDevice(),\ \_rtDescSetLayout,\ \textcolor{keyword}{nullptr});}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00020}00020\ \ \ \ \ \ \ \ \ vkDestroyDescriptorPool(\mbox{\hyperlink{_device_8h_a2fba0ef1853e57846ae6bc3a5d30db39}{AstraDevice}}.getVkDevice(),\ \_rtDescPool,\ \textcolor{keyword}{nullptr});}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00021}00021\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00022}00022\ \}}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00023}00023\ }
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00024}\mbox{\hyperlink{class_astra_1_1_app_r_t_af602f65c27fca89456f838e276066b5e}{00024}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_app_r_t_af602f65c27fca89456f838e276066b5e}{Astra::AppRT::createRtDescriptorSetLayout}}()}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00025}00025\ \{}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00026}00026\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&device\ =\ \mbox{\hyperlink{_device_8h_a2fba0ef1853e57846ae6bc3a5d30db39}{AstraDevice}}.getVkDevice();}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00027}00027\ \ \ \ \ \_rtDescSetLayoutBind.addBinding(RtxBindings::eTlas,\ VK\_DESCRIPTOR\_TYPE\_ACCELERATION\_STRUCTURE\_KHR,\ 1,\ VK\_SHADER\_STAGE\_RAYGEN\_BIT\_KHR\ |\ VK\_SHADER\_STAGE\_CLOSEST\_HIT\_BIT\_KHR);}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00028}00028\ \ \ \ \ \_rtDescSetLayoutBind.addBinding(RtxBindings::eOutImage,\ VK\_DESCRIPTOR\_TYPE\_STORAGE\_IMAGE,\ 1,\ VK\_SHADER\_STAGE\_RAYGEN\_BIT\_KHR);}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00029}00029\ }
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00030}00030\ \ \ \ \ \_rtDescPool\ =\ \_rtDescSetLayoutBind.createPool(device);}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00031}00031\ \ \ \ \ \_rtDescSetLayout\ =\ \_rtDescSetLayoutBind.createLayout(device);}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00032}00032\ }
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00033}00033\ \ \ \ \ VkDescriptorSetAllocateInfo\ allocateInfo\{VK\_STRUCTURE\_TYPE\_DESCRIPTOR\_SET\_ALLOCATE\_INFO\};}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00034}00034\ \ \ \ \ allocateInfo.descriptorPool\ =\ \_rtDescPool;}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00035}00035\ \ \ \ \ allocateInfo.descriptorSetCount\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00036}00036\ \ \ \ \ allocateInfo.pSetLayouts\ =\ \&\_rtDescSetLayout;}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00037}00037\ \ \ \ \ vkAllocateDescriptorSets(device,\ \&allocateInfo,\ \&\_rtDescSet);}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00038}00038\ \}}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00039}00039\ }
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00040}\mbox{\hyperlink{class_astra_1_1_app_r_t_a7d907ad2db460288f88b1ef01f38a7f3}{00040}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_app_r_t_a7d907ad2db460288f88b1ef01f38a7f3}{Astra::AppRT::updateRtDescriptorSet}}()}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00041}00041\ \{}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00042}00042\ \ \ \ \ VkAccelerationStructureKHR\ tlas\ =\ ((\mbox{\hyperlink{class_astra_1_1_scene_r_t}{SceneRT}}\ *)\_scenes[\_currentScene])-\/>getTLAS();}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00043}00043\ \ \ \ \ VkWriteDescriptorSetAccelerationStructureKHR\ descASInfo\{VK\_STRUCTURE\_TYPE\_WRITE\_DESCRIPTOR\_SET\_ACCELERATION\_STRUCTURE\_KHR\};}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00044}00044\ \ \ \ \ descASInfo.accelerationStructureCount\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00045}00045\ \ \ \ \ descASInfo.pAccelerationStructures\ =\ \&tlas;}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00046}00046\ \ \ \ \ VkDescriptorImageInfo\ imageInfo\{\{\},\ \_renderer-\/>getOffscreenColor().descriptor.imageView,\ VK\_IMAGE\_LAYOUT\_GENERAL\};}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00047}00047\ }
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00048}00048\ \ \ \ \ std::vector<VkWriteDescriptorSet>\ writes;}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00049}00049\ \ \ \ \ writes.emplace\_back(\_rtDescSetLayoutBind.makeWrite(\_rtDescSet,\ RtxBindings::eTlas,\ \&descASInfo));}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00050}00050\ \ \ \ \ writes.emplace\_back(\_rtDescSetLayoutBind.makeWrite(\_rtDescSet,\ RtxBindings::eOutImage,\ \&imageInfo));}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00051}00051\ \ \ \ \ vkUpdateDescriptorSets(\mbox{\hyperlink{_device_8h_a2fba0ef1853e57846ae6bc3a5d30db39}{AstraDevice}}.getVkDevice(),\ \textcolor{keyword}{static\_cast<}uint32\_t\textcolor{keyword}{>}(writes.size()),\ writes.data(),\ 0,\ \textcolor{keyword}{nullptr});}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00052}00052\ \}}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00053}00053\ }
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00054}\mbox{\hyperlink{class_astra_1_1_app_r_t_a1352d5b8316383433029475d7373edf0}{00054}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_app_r_t_a1352d5b8316383433029475d7373edf0}{Astra::AppRT::onResize}}(\textcolor{keywordtype}{int}\ w,\ \textcolor{keywordtype}{int}\ h)}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00055}00055\ \{}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00056}00056\ \ \ \ \ \mbox{\hyperlink{class_astra_1_1_app_af3eaf9278ff688d5e8c65f56313fc04e}{Astra::App::onResize}}(w,\ h);}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00057}00057\ \ \ \ \ updateRtDescriptorSet();}
+\DoxyCodeLine{\Hypertarget{_app_r_t_8cpp_source_l00058}00058\ \}}
+
+\end{DoxyCode}

@@ -3,30 +3,20 @@
 #include <glm/gtx/euler_angles.hpp>
 #include <iostream>
 #include <Globals.h>
+#include <Utils.h>
+#include <InputManager.h>
 
-Astra::CameraController::CameraController(Camera& cam) : _camera(cam)
+Astra::CameraController::CameraController(Camera &cam) : _camera(cam)
 {
 	updateCamera();
 }
 
-void Astra::CameraController::updateCamera(bool from_transform)
+void Astra::CameraController::updateCamera()
 {
-	// we can update the cam params either from the transform matrix or the cam attributes
-	// made this way so that it can be a compatible node3d and be nested within other nodes
-	if (from_transform) {
-		_camera._eye.x = _transform[3][0];
-		_camera._eye.y = _transform[3][1];
-		_camera._eye.z = _transform[3][2];
-	}
-	else {
-		_transform[3][0] = _camera._eye.x;
-		_transform[3][1] = _camera._eye.y;
-		_transform[3][2] = _camera._eye.z;
-	}
-	_camera.viewMatrix = glm::lookAt(_camera._eye, _camera._centre, _camera._up);
+	_camera.viewMatrix = glm::lookAt(_camera.eye, _camera.centre, _camera.up);
 }
 
-const glm::mat4& Astra::CameraController::getViewMatrix() const
+const glm::mat4 &Astra::CameraController::getViewMatrix() const
 {
 	return _camera.viewMatrix;
 }
@@ -35,106 +25,109 @@ glm::mat4 Astra::CameraController::getProjectionMatrix() const
 {
 	assert(_height != 0.0 && _width != 0.0);
 	float aspectRatio = _width / static_cast<float>(_height);
-	glm::mat4 proj = glm::perspectiveRH_ZO(glm::radians(_camera._fov), aspectRatio, _camera._near, _camera._far);
+	glm::mat4 proj = glm::perspectiveRH_ZO(glm::radians(_camera.fov), aspectRatio, _camera.nearPlane, _camera.farPlane);
 	proj[1][1] *= -1; // vulkan shenanigans ;)
 	return proj;
 }
 
-void Astra::CameraController::setLookAt(const glm::vec3& eye, const glm::vec3& center, const glm::vec3& up)
+void Astra::CameraController::setLookAt(const glm::vec3 &eye, const glm::vec3 &center, const glm::vec3 &up)
 {
-	_camera._eye = eye;
-	_camera._centre = center;
-	_camera._up = up;
-	_transform = glm::translate(glm::mat4(1.0f), eye);
+	_camera.eye = eye;
+	_camera.centre = center;
+	_camera.up = up;
 	updateCamera();
 }
 
 float Astra::CameraController::getNear() const
 {
-	return _camera._near;
+	return _camera.nearPlane;
 }
 
 float Astra::CameraController::fetFar() const
 {
-	return _camera._far;
+	return _camera.farPlane;
 }
 
 float Astra::CameraController::getFov() const
 {
-	return _camera._fov;
+	return _camera.fov;
 }
 
-const glm::vec3& Astra::CameraController::getEye() const
+const glm::vec3 &Astra::CameraController::getEye() const
 {
-	return _camera._eye;
+	return _camera.eye;
 }
 
-const glm::vec3& Astra::CameraController::getUp() const
+const glm::vec3 &Astra::CameraController::getUp() const
 {
-	return _camera._up;
+	return _camera.up;
 }
 
-const glm::vec3& Astra::CameraController::getCentre() const
+const glm::vec3 &Astra::CameraController::getCentre() const
 {
-	return _camera._centre;
+	return _camera.centre;
 }
 
-float& Astra::CameraController::getNearRef()
+Astra::Camera Astra::CameraController::getCamera() const
 {
-	return _camera._near;
+	return _camera;
 }
 
-float& Astra::CameraController::fetFarRef()
+float &Astra::CameraController::getNearRef()
 {
-	return _camera._far;
+	return _camera.nearPlane;
 }
 
-float& Astra::CameraController::getFovRef()
+float &Astra::CameraController::fetFarRef()
 {
-	return _camera._fov;
+	return _camera.farPlane;
 }
 
-glm::vec3& Astra::CameraController::getEyeRef()
+float &Astra::CameraController::getFovRef()
 {
-	return _camera._eye;
+	return _camera.fov;
 }
 
-glm::vec3& Astra::CameraController::getUpRef()
+glm::vec3 &Astra::CameraController::getEyeRef()
 {
-	return _camera._up;
+	return _camera.eye;
 }
 
-glm::vec3& Astra::CameraController::getCentreRef()
+glm::vec3 &Astra::CameraController::getUpRef()
 {
-	return _camera._centre;
+	return _camera.up;
+}
+
+glm::vec3 &Astra::CameraController::getCentreRef()
+{
+	return _camera.centre;
 }
 
 void Astra::CameraController::setNear(float n)
 {
-	_camera._near = n;
+	_camera.nearPlane = n;
 }
 
 void Astra::CameraController::setFar(float f)
 {
-	_camera._far = f;
+	_camera.farPlane = f;
 }
 
 void Astra::CameraController::setFov(float f)
 {
-	_camera._fov = f;
+	_camera.fov = f;
 }
 
 bool Astra::CameraController::update()
 {
-	// update camera params 
+	// update camera params
 	updateCamera();
 	return true;
 }
 
-GlobalUniforms Astra::CameraController::getUpdatedGlobals()
+CameraUniform Astra::CameraController::getCameraUniform()
 {
-	updateCamera();
-	GlobalUniforms hostUBO = {};
+	CameraUniform hostUBO = {};
 	hostUBO.viewProj = getProjectionMatrix() * getViewMatrix();
 	hostUBO.viewInverse = glm::inverse(getViewMatrix());
 	hostUBO.projInverse = glm::inverse(getProjectionMatrix());
@@ -142,54 +135,152 @@ GlobalUniforms Astra::CameraController::getUpdatedGlobals()
 	return hostUBO;
 }
 
-void Astra::CameraController::updatePushConstantRaster(PushConstantRaster& pc) const
+Astra::FreeCameraController::FreeCameraController(Camera &cam) : CameraController(cam)
 {
-	// pass
+	_sens = 0.005f;
 }
 
-void Astra::CameraController::updatePushConstantRT(PushConstantRay& pc) const
+bool Astra::FreeCameraController::update()
 {
-	// pass
-}
+	CameraController::update();
 
-void Astra::CameraController::handleMouseInput(bool buttons[3], int movement[2], float wheel, int mods)
-{
-}
+	move(
+		Input.keyPressed(Key_W),
+		Input.keyPressed(Key_S),
+		Input.keyPressed(Key_D),
+		Input.keyPressed(Key_A),
+		Input.keyPressed(Key_Q),
+		Input.keyPressed(Key_E),
+		(Input.keyPressed(Key_LeftControl) ? _speed * 10 : _speed));
 
+	if (Input.mouseClick(Right))
+	{
+		Input.captureMouse();
 
-Astra::FPSCameraController::FPSCameraController(Camera& cam) : CameraController(cam)
-{
-}
-
-void Astra::FPSCameraController::mouseMovement(float x, float y)
-{
-	// we are only going to allow moving the camera while the user right clicks
-
-}
-
-void Astra::FPSCameraController::move(float qty)
-{
-}
-
-Astra::OrbitCameraController::OrbitCameraController(Camera& cam) : CameraController(cam)
-{
-}
-
-void Astra::OrbitCameraController::handleMouseInput(bool buttons[3], int movement[2], float wheel, int mods)
-{
-	if (buttons[MouseButtons::Right]) { // right click
-		if (mods & InputMods::Control) {
-			zoom(movement[1]);
-		}
-		else {
-			orbit(movement[0], movement[1]);
-		}
+		glm::ivec2 delta = Input.getMouseDelta();
+		float dx = delta.x * _sens;
+		float dy = delta.y * _sens;
+		rotate(dx, dy);
 	}
-	else if (buttons[MouseButtons::Middle]) { // middle click
-		pan(movement[0], movement[1]);
+	else
+	{
+		Input.freeMouse();
 	}
 
-	zoom(wheel);
+	updateCamera();
+	return true;
+}
+
+void Astra::FreeCameraController::move(bool front, bool back, bool right, bool left, bool up, bool down, float speed)
+{
+	glm::vec3 frontBack = _camera.centre - _camera.eye;
+	float length = glm::length(frontBack);
+	glm::vec3 direction = glm::normalize(_camera.centre - _camera.eye);
+	glm::vec3 rightLeft = glm::normalize(glm::cross(frontBack, _camera.up));
+
+	float zSpeed = 0, xSpeed = 0, ySpeed = 0;
+
+	/*
+		The following sequence of ifs could be refactored to this:
+
+		xSpeed = right ? speed : left ? -speed : 0;
+		ySpeed = up ? speed : down ? -speed : 0;
+		zSpeed = front ? speed : back ? -speed : 0;
+
+		However, this sequence is left instead of nesting ternary operators
+		so that it is easier to read
+	*/
+	if (front)
+	{
+		zSpeed += speed;
+	}
+	if (back)
+	{
+		zSpeed -= speed;
+	}
+	if (right)
+	{
+		xSpeed += speed;
+	}
+	if (left)
+	{
+		xSpeed -= speed;
+	}
+	if (up)
+	{
+		ySpeed += speed;
+	}
+	if (down)
+	{
+		ySpeed -= speed;
+	}
+
+	_camera.eye = _camera.eye + direction * zSpeed + rightLeft * xSpeed + _camera.up * ySpeed;
+	_camera.centre = _camera.eye + direction * length;
+}
+
+void Astra::FreeCameraController::rotate(float dx, float dy)
+{
+
+	// Get the length of sight
+	glm::vec3 eyeToCenter(_camera.centre - _camera.eye);
+	float radius = glm::length(eyeToCenter);
+	eyeToCenter = glm::normalize(eyeToCenter);
+	glm::vec3 direction = eyeToCenter;
+
+	// Find the rotation around the UP axis (Y)
+	glm::mat4 rot_y = glm::rotate(glm::mat4(1), -dx, _camera.up);
+
+	// Apply the (Y) rotation to the eye-center vector
+	eyeToCenter = rot_y * glm::vec4(eyeToCenter, 0);
+
+	// Find the rotation around the X vector: cross between eye-center and up (X)
+	glm::vec3 axe_x = glm::normalize(glm::cross(_camera.up, direction));
+	glm::mat4 rot_x = glm::rotate(glm::mat4(1), dy, axe_x);
+
+	// Apply the (X) rotation to the eye-center vector
+	glm::vec3 vect_rot = rot_x * glm::vec4(eyeToCenter, 0);
+
+	if (glm::sign(vect_rot.x) == glm::sign(eyeToCenter.x))
+		eyeToCenter = vect_rot;
+
+	// Make the vector as long as it was originally
+	eyeToCenter *= radius;
+
+	// Finding the new position
+	glm::vec3 newCentre = eyeToCenter + _camera.eye;
+
+	_camera.centre = newCentre;
+}
+
+Astra::OrbitCameraController::OrbitCameraController(Camera &cam) : CameraController(cam)
+{
+}
+
+bool Astra::OrbitCameraController::update()
+{
+	glm::vec2 delta = Input.getMouseDelta();
+	float wheel = Input.getMouseWheel().y;
+	if (Input.mouseClick(Right))
+	{
+		if (Input.keyPressed(Key_LeftControl))
+		{
+			zoom(delta.y);
+		}
+		else
+		{
+			orbit(delta.x, delta.y);
+		}
+	}
+	else if (Input.mouseClick(Middle))
+	{
+		pan(delta.x, delta.y);
+	}
+
+	zoom(wheel * 10.0f);
+
+	updateCamera();
+	return true;
 }
 
 void Astra::OrbitCameraController::orbit(float dx, float dy)
@@ -202,19 +293,19 @@ void Astra::OrbitCameraController::orbit(float dx, float dy)
 	dy *= _sens;
 
 	// Get the length of sight
-	glm::vec3 centerToEye(_camera._eye - _camera._centre);
-	float     radius = glm::length(centerToEye);
+	glm::vec3 centerToEye(_camera.eye - _camera.centre);
+	float radius = glm::length(centerToEye);
 	centerToEye = glm::normalize(centerToEye);
 	glm::vec3 direction = centerToEye;
 
 	// Find the rotation around the UP axis (Y)
-	glm::mat4 rot_y = glm::rotate(glm::mat4(1), -dx, _camera._up);
+	glm::mat4 rot_y = glm::rotate(glm::mat4(1), -dx, _camera.up);
 
 	// Apply the (Y) rotation to the eye-center vector
 	centerToEye = rot_y * glm::vec4(centerToEye, 0);
 
 	// Find the rotation around the X vector: cross between eye-center and up (X)
-	glm::vec3 axe_x = glm::normalize(glm::cross(_camera._up, direction));
+	glm::vec3 axe_x = glm::normalize(glm::cross(_camera.up, direction));
 	glm::mat4 rot_x = glm::rotate(glm::mat4(1), -dy, axe_x);
 
 	// Apply the (X) rotation to the eye-center vector
@@ -227,29 +318,23 @@ void Astra::OrbitCameraController::orbit(float dx, float dy)
 	centerToEye *= radius;
 
 	// Finding the new position
-	glm::vec3 newPosition = centerToEye + _camera._centre;
+	glm::vec3 newPosition = centerToEye + _camera.centre;
 
-	_camera._eye = newPosition;
-
-	updateCamera(false);
-
-
-}
-
-void Astra::OrbitCameraController::zoom(float increment)
-{
-	_camera._fov = glm::clamp(_camera._fov + increment * 0.1f, 10.0f, 120.0f);
+	_camera.eye = newPosition;
 }
 
 void Astra::OrbitCameraController::pan(float dx, float dy)
 {
-	glm::vec3 direction = glm::normalize(_camera._eye - _camera._centre);
-	glm::vec3 horizontal = glm::normalize(glm::cross(_camera._up, direction));
+	glm::vec3 direction = glm::normalize(_camera.eye - _camera.centre);
+	glm::vec3 horizontal = glm::normalize(glm::cross(_camera.up, direction));
 	glm::vec3 vertical = glm::normalize(glm::cross(direction, horizontal));
 
 	glm::vec3 panVector = (_sens * (-dx * horizontal + dy * vertical));
-	_camera._eye += panVector;
-	_camera._centre += panVector;
+	_camera.eye += panVector;
+	_camera.centre += panVector;
+}
 
-	updateCamera(false);
+void Astra::OrbitCameraController::zoom(float increment)
+{
+	_camera.fov = glm::clamp(_camera.fov + increment * 0.1f, 10.0f, 120.0f);
 }
