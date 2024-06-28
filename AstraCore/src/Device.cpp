@@ -303,8 +303,7 @@ namespace Astra
 		return input;
 	}
 
-	// TODO maybe rework so that it builds a single image and then from app keep track of all those.
-	void Device::createTextureImages(const Astra::CommandList& cmdList, const std::vector<std::string>& new_textures, std::vector<nvvk::Texture>& textures, nvvk::ResourceAllocatorDma& alloc)
+	nvvk::Texture Device::createTextureImage(const Astra::CommandList& cmdList, const std::string& path, nvvk::ResourceAllocatorDma& alloc, bool dummy)
 	{
 		VkSamplerCreateInfo samplerCreateInfo{ VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO };
 		samplerCreateInfo.minFilter = VK_FILTER_LINEAR;
@@ -316,7 +315,7 @@ namespace Astra
 		const auto& cmdBuf = cmdList.getCommandBuffer();
 
 		// If no textures are present, create a dummy one to accommodate the pipeline layout
-		if (new_textures.empty() && textures.empty())
+		if (dummy)
 		{
 			nvvk::Texture texture;
 
@@ -332,52 +331,38 @@ namespace Astra
 
 			// The image format must be in VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			nvvk::cmdBarrierImageLayout(cmdBuf, texture.image, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-			textures.push_back(texture);
+			return texture;
 		}
 		else
 		{
-			// Uploading all images
-			for (const auto& texture : new_textures)
+			int texWidth, texHeight, texChannels;
+
+			stbi_uc* stbi_pixels = stbi_load(path.c_str(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+
+			std::array<stbi_uc, 4> color{ 255u, 0u, 255u, 255u };
+
+			stbi_uc* pixels = stbi_pixels;
+			// Handle failure
+			if (!stbi_pixels)
 			{
-				std::vector<std::string> defaultSearchPaths = {
-					NVPSystem::exePath() + PROJECT_RELDIRECTORY,
-					NVPSystem::exePath() + PROJECT_RELDIRECTORY "..",
-					std::string(PROJECT_NAME),
-				};
-
-				std::stringstream o;
-				int texWidth, texHeight, texChannels;
-				o << "media/textures/" << texture;
-				std::string txtFile = nvh::findFile(o.str(), defaultSearchPaths, true);
-
-				stbi_uc* stbi_pixels = stbi_load(txtFile.c_str(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
-
-				std::array<stbi_uc, 4> color{ 255u, 0u, 255u, 255u };
-
-				stbi_uc* pixels = stbi_pixels;
-				// Handle failure
-				if (!stbi_pixels)
-				{
-					texWidth = texHeight = 1;
-					texChannels = 4;
-					pixels = reinterpret_cast<stbi_uc*>(color.data());
-				}
-
-				VkDeviceSize bufferSize = static_cast<uint64_t>(texWidth) * texHeight * sizeof(uint8_t) * 4;
-				auto imgSize = VkExtent2D{ (uint32_t)texWidth, (uint32_t)texHeight };
-				auto imageCreateInfo = nvvk::makeImage2DCreateInfo(imgSize, format, VK_IMAGE_USAGE_SAMPLED_BIT, true);
-
-				{
-					nvvk::Image image = alloc.createImage(cmdBuf, bufferSize, pixels, imageCreateInfo);
-					nvvk::cmdGenerateMipmaps(cmdBuf, image.image, format, imgSize, imageCreateInfo.mipLevels);
-					VkImageViewCreateInfo ivInfo = nvvk::makeImageViewCreateInfo(image.image, imageCreateInfo);
-					nvvk::Texture texture = alloc.createTexture(image, ivInfo, samplerCreateInfo);
-
-					textures.push_back(texture);
-				}
-
-				stbi_image_free(stbi_pixels);
+				texWidth = texHeight = 1;
+				texChannels = 4;
+				pixels = reinterpret_cast<stbi_uc*>(color.data());
 			}
+
+			VkDeviceSize bufferSize = static_cast<uint64_t>(texWidth) * texHeight * sizeof(uint8_t) * 4;
+			auto imgSize = VkExtent2D{ (uint32_t)texWidth, (uint32_t)texHeight };
+			auto imageCreateInfo = nvvk::makeImage2DCreateInfo(imgSize, format, VK_IMAGE_USAGE_SAMPLED_BIT, true);
+
+
+			nvvk::Image image = alloc.createImage(cmdBuf, bufferSize, pixels, imageCreateInfo);
+			nvvk::cmdGenerateMipmaps(cmdBuf, image.image, format, imgSize, imageCreateInfo.mipLevels);
+			VkImageViewCreateInfo ivInfo = nvvk::makeImageViewCreateInfo(image.image, imageCreateInfo);
+			nvvk::Texture texture = alloc.createTexture(image, ivInfo, samplerCreateInfo);
+
+			stbi_image_free(stbi_pixels);
+
+			return texture;
 		}
 	}
 

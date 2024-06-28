@@ -99,10 +99,11 @@ namespace Astra
 		VkShaderModule createShaderModule(const std::vector<char>& file);
 		VkShaderModule createShaderModule(const std::string& file);
 		/**
-		 * \~spanish @brief Añade al vector de textures @p textures las nuevas texturas indicadas por el vector @p new_textures .
-		 * \~english @brief Adds to the @p textures vector the textured included in the @p new_textures vector.
+		 * \~spanish @brief Crea una textura segun el fichero que se le pasa. Si @p dummy es true se crea una textura para mantener el layout del descriptor set
+		 * \~english @brief Creates a texture of the file. If @p dummy is true it creates a dummy texture to keep the descriptor set layout
 		 */
-		void createTextureImages(const Astra::CommandList& cmdList, const std::vector<std::string>& new_textures, std::vector<nvvk::Texture>& textures, nvvk::ResourceAllocatorDma& alloc);
+		nvvk::Texture createTextureImage(const Astra::CommandList& cmdList, const std::string& path, nvvk::ResourceAllocatorDma& alloc, bool dummy = false);
+
 		/**
 		 * \~spanish @brief Convierte un Mesh a un objeto apropiado para la construcción de estructuras de aceleración.
 		 * \~english @brief Transforms the Mesh object into an appropiate format for building the acceleration structure
