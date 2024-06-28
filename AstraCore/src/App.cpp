@@ -105,7 +105,6 @@ void Astra::App::onResize(int w, int h)
 
 void Astra::App::init(const std::vector<Scene*>& scenes, Renderer* renderer, GuiController* gui)
 {
-	_status = Running;
 	_window = AstraDevice.getWindow();
 
 	Input.init(_window, this);
@@ -126,6 +125,8 @@ void Astra::App::init(const std::vector<Scene*>& scenes, Renderer* renderer, Gui
 	updateDescriptorSet();
 	if (_gui != nullptr)
 		_gui->init(_window, _renderer);
+
+	_status = Running;
 }
 
 void Astra::App::addScene(Scene* s)
