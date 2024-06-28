@@ -1,0 +1,154 @@
+\doxysection{Astra\+::Pipeline Class Reference}
+\hypertarget{class_astra_1_1_pipeline}{}\label{class_astra_1_1_pipeline}\index{Astra::Pipeline@{Astra::Pipeline}}
+
+
+Abstract class that represents a Vulkan pipeline.  
+
+
+
+
+{\ttfamily \#include $<$Pipeline.\+h$>$}
+
+Inheritance diagram for Astra\+::Pipeline\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_astra_1_1_pipeline}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_astra_1_1_pipeline_a10f5a40a8dd3fe819337bd32308d7090}{destroy}} (nvvk\+::\+Resource\+Allocator \texorpdfstring{$\ast$}{*}alloc)
+\item 
+virtual bool \mbox{\hyperlink{class_astra_1_1_pipeline_ab830986181ee4bc8533d0c2ab575188e}{does\+Ray\+Tracing}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_astra_1_1_pipeline_ad56780f344b4864e302ce0d156ca430e}{bind}} (const \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}} \&cmd\+List, const std\+::vector$<$ Vk\+Descriptor\+Set $>$ \&descsets)
+\begin{DoxyCompactList}\small\item\em Binds the pipeline to the render pass. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_astra_1_1_pipeline_a8515be541dc58ba430e605c7c95a970c}{push\+Constants}} (const \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}} \&cmd\+List, uint32\+\_\+t shader\+Stages, uint32\+\_\+t size, void \texorpdfstring{$\ast$}{*}data)
+\begin{DoxyCompactList}\small\item\em Pushes push constants to the GPU. \end{DoxyCompactList}\item 
+Vk\+Pipeline \mbox{\hyperlink{class_astra_1_1_pipeline_a1c9854f4c8be4e1c56bd787a695f5db7}{get\+Pipeline}} () const
+\item 
+Vk\+Pipeline\+Layout \mbox{\hyperlink{class_astra_1_1_pipeline_a958467cd915b9aa421f1f0f6624197bb}{get\+Layout}} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Vk\+Pipeline\+Layout \mbox{\hyperlink{class_astra_1_1_pipeline_a91eee050a7e48f5eed88f375e99348b3}{\+\_\+layout}}
+\item 
+Vk\+Pipeline \mbox{\hyperlink{class_astra_1_1_pipeline_a5ce2b0f85964c6e531e66cb26c28d5d9}{\+\_\+pipeline}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Abstract class that represents a Vulkan pipeline. 
+
+Definition at line \mbox{\hyperlink{_pipeline_8h_source_l00013}{13}} of file \mbox{\hyperlink{_pipeline_8h_source}{Pipeline.\+h}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_astra_1_1_pipeline_ad56780f344b4864e302ce0d156ca430e}\index{Astra::Pipeline@{Astra::Pipeline}!bind@{bind}}
+\index{bind@{bind}!Astra::Pipeline@{Astra::Pipeline}}
+\doxysubsubsection{\texorpdfstring{bind()}{bind()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_pipeline_ad56780f344b4864e302ce0d156ca430e} 
+void Astra\+::\+Pipeline\+::bind (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}} \&}]{cmd\+List}{, }\item[{const std\+::vector$<$ Vk\+Descriptor\+Set $>$ \&}]{descsets}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Binds the pipeline to the render pass. 
+
+
+
+Reimplemented in \mbox{\hyperlink{class_astra_1_1_ray_tracing_pipeline_aa16a411249e33177d9d90fec7ac44eeb}{Astra\+::\+Ray\+Tracing\+Pipeline}}.
+
+
+
+Definition at line \mbox{\hyperlink{_pipeline_8cpp_source_l00020}{20}} of file \mbox{\hyperlink{_pipeline_8cpp_source}{Pipeline.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_pipeline_a10f5a40a8dd3fe819337bd32308d7090}\index{Astra::Pipeline@{Astra::Pipeline}!destroy@{destroy}}
+\index{destroy@{destroy}!Astra::Pipeline@{Astra::Pipeline}}
+\doxysubsubsection{\texorpdfstring{destroy()}{destroy()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_pipeline_a10f5a40a8dd3fe819337bd32308d7090} 
+void Astra\+::\+Pipeline\+::destroy (\begin{DoxyParamCaption}\item[{nvvk\+::\+Resource\+Allocator \texorpdfstring{$\ast$}{*}}]{alloc}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Reimplemented in \mbox{\hyperlink{class_astra_1_1_ray_tracing_pipeline_a43b5d611bf8ce65c0990ef3bdb627273}{Astra\+::\+Ray\+Tracing\+Pipeline}}.
+
+
+
+Definition at line \mbox{\hyperlink{_pipeline_8cpp_source_l00012}{12}} of file \mbox{\hyperlink{_pipeline_8cpp_source}{Pipeline.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_pipeline_ab830986181ee4bc8533d0c2ab575188e}\index{Astra::Pipeline@{Astra::Pipeline}!doesRayTracing@{doesRayTracing}}
+\index{doesRayTracing@{doesRayTracing}!Astra::Pipeline@{Astra::Pipeline}}
+\doxysubsubsection{\texorpdfstring{doesRayTracing()}{doesRayTracing()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_pipeline_ab830986181ee4bc8533d0c2ab575188e} 
+virtual bool Astra\+::\+Pipeline\+::does\+Ray\+Tracing (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{class_astra_1_1_raster_pipeline_a9787abd24089c3fe06ef01886e2e901a}{Astra\+::\+Raster\+Pipeline}}, and \mbox{\hyperlink{class_astra_1_1_ray_tracing_pipeline_a214b2e3efbddc7df2a09801b7aeef2cb}{Astra\+::\+Ray\+Tracing\+Pipeline}}.
+
+\Hypertarget{class_astra_1_1_pipeline_a958467cd915b9aa421f1f0f6624197bb}\index{Astra::Pipeline@{Astra::Pipeline}!getLayout@{getLayout}}
+\index{getLayout@{getLayout}!Astra::Pipeline@{Astra::Pipeline}}
+\doxysubsubsection{\texorpdfstring{getLayout()}{getLayout()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_pipeline_a958467cd915b9aa421f1f0f6624197bb} 
+Vk\+Pipeline\+Layout Astra\+::\+Pipeline\+::get\+Layout (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{_pipeline_8cpp_source_l00036}{36}} of file \mbox{\hyperlink{_pipeline_8cpp_source}{Pipeline.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_pipeline_a1c9854f4c8be4e1c56bd787a695f5db7}\index{Astra::Pipeline@{Astra::Pipeline}!getPipeline@{getPipeline}}
+\index{getPipeline@{getPipeline}!Astra::Pipeline@{Astra::Pipeline}}
+\doxysubsubsection{\texorpdfstring{getPipeline()}{getPipeline()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_pipeline_a1c9854f4c8be4e1c56bd787a695f5db7} 
+Vk\+Pipeline Astra\+::\+Pipeline\+::get\+Pipeline (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{_pipeline_8cpp_source_l00031}{31}} of file \mbox{\hyperlink{_pipeline_8cpp_source}{Pipeline.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_pipeline_a8515be541dc58ba430e605c7c95a970c}\index{Astra::Pipeline@{Astra::Pipeline}!pushConstants@{pushConstants}}
+\index{pushConstants@{pushConstants}!Astra::Pipeline@{Astra::Pipeline}}
+\doxysubsubsection{\texorpdfstring{pushConstants()}{pushConstants()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_pipeline_a8515be541dc58ba430e605c7c95a970c} 
+void Astra\+::\+Pipeline\+::push\+Constants (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}} \&}]{cmd\+List}{, }\item[{uint32\+\_\+t}]{shader\+Stages}{, }\item[{uint32\+\_\+t}]{size}{, }\item[{void \texorpdfstring{$\ast$}{*}}]{data}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Pushes push constants to the GPU. 
+
+
+
+Definition at line \mbox{\hyperlink{_pipeline_8cpp_source_l00026}{26}} of file \mbox{\hyperlink{_pipeline_8cpp_source}{Pipeline.\+cpp}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_astra_1_1_pipeline_a91eee050a7e48f5eed88f375e99348b3}\index{Astra::Pipeline@{Astra::Pipeline}!\_layout@{\_layout}}
+\index{\_layout@{\_layout}!Astra::Pipeline@{Astra::Pipeline}}
+\doxysubsubsection{\texorpdfstring{\_layout}{\_layout}}
+{\footnotesize\ttfamily \label{class_astra_1_1_pipeline_a91eee050a7e48f5eed88f375e99348b3} 
+Vk\+Pipeline\+Layout Astra\+::\+Pipeline\+::\+\_\+layout\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{_pipeline_8h_source_l00016}{16}} of file \mbox{\hyperlink{_pipeline_8h_source}{Pipeline.\+h}}.
+
+\Hypertarget{class_astra_1_1_pipeline_a5ce2b0f85964c6e531e66cb26c28d5d9}\index{Astra::Pipeline@{Astra::Pipeline}!\_pipeline@{\_pipeline}}
+\index{\_pipeline@{\_pipeline}!Astra::Pipeline@{Astra::Pipeline}}
+\doxysubsubsection{\texorpdfstring{\_pipeline}{\_pipeline}}
+{\footnotesize\ttfamily \label{class_astra_1_1_pipeline_a5ce2b0f85964c6e531e66cb26c28d5d9} 
+Vk\+Pipeline Astra\+::\+Pipeline\+::\+\_\+pipeline\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{_pipeline_8h_source_l00017}{17}} of file \mbox{\hyperlink{_pipeline_8h_source}{Pipeline.\+h}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{_pipeline_8h}{Pipeline.\+h}}\item 
+src/\mbox{\hyperlink{_pipeline_8cpp}{Pipeline.\+cpp}}\end{DoxyCompactItemize}

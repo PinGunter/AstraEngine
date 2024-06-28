@@ -1,0 +1,91 @@
+\doxysection{Gui\+Controller.\+cpp}
+\hypertarget{_gui_controller_8cpp_source}{}\label{_gui_controller_8cpp_source}\index{src/GuiController.cpp@{src/GuiController.cpp}}
+\mbox{\hyperlink{_gui_controller_8cpp}{Ir a la documentación de este archivo.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00001}00001\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_gui_controller_8h}{GuiController.h}}>}}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00002}00002\ \textcolor{preprocessor}{\#include\ <imgui.h>}}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00003}00003\ \textcolor{preprocessor}{\#include\ <backends/imgui\_impl\_glfw.h>}}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <backends/imgui\_impl\_vulkan.h>}}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00006}00006\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_device_8h}{Device.h}}>}}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00007}00007\ \textcolor{preprocessor}{\#include\ <glm/gtc/type\_ptr.hpp>}}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00008}00008\ }
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00009}\mbox{\hyperlink{class_astra_1_1_gui_controller_a91b3466feea43511f47bacc9fca9a09c}{00009}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_gui_controller_a91b3466feea43511f47bacc9fca9a09c}{Astra::GuiController::init}}(GLFWwindow\ *window,\ \mbox{\hyperlink{class_astra_1_1_renderer}{Astra::Renderer}}\ *renderer)}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00010}00010\ \{}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00011}00011\ \ \ \ \ VkRenderPass\ renderpass;}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00012}00012\ \ \ \ \ VkFormat\ color,\ depth;}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00013}00013\ \ \ \ \ \textcolor{keywordtype}{int}\ imageCount;}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00014}00014\ \ \ \ \ renderer-\/>\mbox{\hyperlink{class_astra_1_1_renderer_a3649ee6381177ddb7e7446fa7cf06b6b}{getGuiControllerInfo}}(renderpass,\ imageCount,\ color,\ depth);}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00015}00015\ }
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00016}00016\ \ \ \ \ ImGui::CreateContext();}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00017}00017\ \ \ \ \ ImGuiIO\ \&io\ =\ ImGui::GetIO();}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00018}00018\ \ \ \ \ \textcolor{comment}{//\ io.IniFilename\ =\ nullptr;\ \ //\ Avoiding\ the\ INI\ file}}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00019}00019\ \ \ \ \ io.LogFilename\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00020}00020\ \ \ \ \ io.ConfigFlags\ |=\ ImGuiConfigFlags\_NavEnableKeyboard;\ \textcolor{comment}{//\ Enable\ Keyboard\ Controls}}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00021}00021\ \ \ \ \ io.ConfigFlags\ |=\ ImGuiConfigFlags\_DockingEnable;\ \ \ \ \ \textcolor{comment}{//\ Enable\ Docking}}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00022}00022\ }
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00023}00023\ \ \ \ \ \textcolor{comment}{//\ ImGuiH::setStyle();}}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00024}00024\ \ \ \ \ \textcolor{comment}{//\ ImGuiH::setFonts();}}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00025}00025\ }
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00026}00026\ \ \ \ \ std::vector<VkDescriptorPoolSize>\ poolSize\{\{VK\_DESCRIPTOR\_TYPE\_SAMPLER,\ 1\},\ \{VK\_DESCRIPTOR\_TYPE\_COMBINED\_IMAGE\_SAMPLER,\ 1\}\};}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00027}00027\ \ \ \ \ VkDescriptorPoolCreateInfo\ poolInfo\{VK\_STRUCTURE\_TYPE\_DESCRIPTOR\_POOL\_CREATE\_INFO\};}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00028}00028\ \ \ \ \ poolInfo.flags\ =\ VK\_DESCRIPTOR\_POOL\_CREATE\_FREE\_DESCRIPTOR\_SET\_BIT;}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00029}00029\ \ \ \ \ poolInfo.maxSets\ =\ 1000;}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00030}00030\ \ \ \ \ poolInfo.poolSizeCount\ =\ 2;}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00031}00031\ \ \ \ \ poolInfo.pPoolSizes\ =\ poolSize.data();}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00032}00032\ \ \ \ \ vkCreateDescriptorPool(\mbox{\hyperlink{_device_8h_a2fba0ef1853e57846ae6bc3a5d30db39}{AstraDevice}}.getVkDevice(),\ \&poolInfo,\ \textcolor{keyword}{nullptr},\ \&\mbox{\hyperlink{class_astra_1_1_gui_controller_a00b5ceb14c9647c4ecc8795aa3abc478}{\_imguiDescPool}});}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00033}00033\ }
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00034}00034\ \ \ \ \ \textcolor{comment}{//\ Setup\ Platform/Renderer\ back\ ends}}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00035}00035\ \ \ \ \ ImGui\_ImplVulkan\_InitInfo\ init\_info\ =\ \{\};}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00036}00036\ \ \ \ \ init\_info.Instance\ =\ \mbox{\hyperlink{_device_8h_a2fba0ef1853e57846ae6bc3a5d30db39}{AstraDevice}}.getVkInstance();}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00037}00037\ \ \ \ \ init\_info.PhysicalDevice\ =\ \mbox{\hyperlink{_device_8h_a2fba0ef1853e57846ae6bc3a5d30db39}{AstraDevice}}.getPhysicalDevice();}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00038}00038\ \ \ \ \ init\_info.Device\ =\ \mbox{\hyperlink{_device_8h_a2fba0ef1853e57846ae6bc3a5d30db39}{AstraDevice}}.getVkDevice();}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00039}00039\ \ \ \ \ init\_info.QueueFamily\ =\ \mbox{\hyperlink{_device_8h_a2fba0ef1853e57846ae6bc3a5d30db39}{AstraDevice}}.getGraphicsQueueIndex();}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00040}00040\ \ \ \ \ init\_info.Queue\ =\ \mbox{\hyperlink{_device_8h_a2fba0ef1853e57846ae6bc3a5d30db39}{AstraDevice}}.getQueue();}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00041}00041\ \ \ \ \ init\_info.PipelineCache\ =\ VK\_NULL\_HANDLE;}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00042}00042\ \ \ \ \ init\_info.DescriptorPool\ =\ \mbox{\hyperlink{class_astra_1_1_gui_controller_a00b5ceb14c9647c4ecc8795aa3abc478}{\_imguiDescPool}};}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00043}00043\ \ \ \ \ init\_info.RenderPass\ =\ renderpass;}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00044}00044\ \ \ \ \ init\_info.Subpass\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00045}00045\ \ \ \ \ init\_info.MinImageCount\ =\ 2;}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00046}00046\ \ \ \ \ init\_info.ImageCount\ =\ imageCount;}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00047}00047\ \ \ \ \ init\_info.MSAASamples\ =\ VK\_SAMPLE\_COUNT\_1\_BIT;\ \textcolor{comment}{//\ <-\/-\/-\/\ need\ argument?}}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00048}00048\ \ \ \ \ init\_info.CheckVkResultFn\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00049}00049\ \ \ \ \ init\_info.Allocator\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00050}00050\ }
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00051}00051\ \ \ \ \ init\_info.UseDynamicRendering\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00052}00052\ \ \ \ \ init\_info.PipelineRenderingCreateInfo.sType\ =\ VK\_STRUCTURE\_TYPE\_PIPELINE\_RENDERING\_CREATE\_INFO\_KHR;}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00053}00053\ \ \ \ \ init\_info.PipelineRenderingCreateInfo.colorAttachmentCount\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00054}00054\ \ \ \ \ init\_info.PipelineRenderingCreateInfo.pColorAttachmentFormats\ =\ \&color;}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00055}00055\ \ \ \ \ init\_info.PipelineRenderingCreateInfo.depthAttachmentFormat\ =\ depth;}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00056}00056\ }
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00057}00057\ \ \ \ \ ImGui\_ImplVulkan\_Init(\&init\_info);}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00058}00058\ }
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00059}00059\ \ \ \ \ \textcolor{comment}{//\ Upload\ Fonts}}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00060}00060\ \ \ \ \ ImGui\_ImplVulkan\_CreateFontsTexture();}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00061}00061\ }
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00062}00062\ \ \ \ \ \textcolor{comment}{//\ link\ with\ glfw}}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00063}00063\ \ \ \ \ ImGui\_ImplGlfw\_InitForVulkan(window,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00064}00064\ \}}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00065}00065\ }
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00066}\mbox{\hyperlink{class_astra_1_1_gui_controller_a6fd069e4878a003d2fcb3be52dbcbdef}{00066}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_gui_controller_a6fd069e4878a003d2fcb3be52dbcbdef}{Astra::GuiController::startFrame}}()}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00067}00067\ \{}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00068}00068\ \ \ \ \ ImGui\_ImplGlfw\_NewFrame();}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00069}00069\ \ \ \ \ ImGui::NewFrame();}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00070}00070\ \ \ \ \ ImGuizmo::BeginFrame();}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00071}00071\ \}}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00072}00072\ }
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00073}\mbox{\hyperlink{class_astra_1_1_gui_controller_a5aaee6286d83ce7c859f5ecbb9a911f9}{00073}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_gui_controller_a5aaee6286d83ce7c859f5ecbb9a911f9}{Astra::GuiController::endFrame}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_astra_1_1_command_list}{Astra::CommandList}}\ \&cmdList)}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00074}00074\ \{}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00075}00075\ \ \ \ \ ImGui::Render();}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00076}00076\ \ \ \ \ ImGui\_ImplVulkan\_RenderDrawData(ImGui::GetDrawData(),\ cmdList.\mbox{\hyperlink{class_astra_1_1_command_list_ae781847dd06017408a4fcc716c3b6d24}{getCommandBuffer}}());}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00077}00077\ \}}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00078}00078\ }
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00079}\mbox{\hyperlink{class_astra_1_1_gui_controller_a706128cf04d3bf0482afbcc7be3ca3d2}{00079}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_gui_controller_a706128cf04d3bf0482afbcc7be3ca3d2}{Astra::GuiController::destroy}}()}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00080}00080\ \{}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00081}00081\ \ \ \ \ ImGui\_ImplVulkan\_Shutdown();}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00082}00082\ \ \ \ \ ImGui\_ImplGlfw\_Shutdown();}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00083}00083\ \ \ \ \ ImGui::DestroyContext();}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00084}00084\ \ \ \ \ vkDestroyDescriptorPool(\mbox{\hyperlink{_device_8h_a2fba0ef1853e57846ae6bc3a5d30db39}{AstraDevice}}.getVkDevice(),\ \_imguiDescPool,\ \textcolor{keyword}{nullptr});}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8cpp_source_l00085}00085\ \}}
+
+\end{DoxyCode}

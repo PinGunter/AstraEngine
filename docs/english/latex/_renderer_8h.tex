@@ -1,0 +1,19 @@
+\doxysection{include/\+Renderer.h File Reference}
+\hypertarget{_renderer_8h}{}\label{_renderer_8h}\index{include/Renderer.h@{include/Renderer.h}}
+{\ttfamily \#include $<$Pipeline.\+h$>$}\newline
+{\ttfamily \#include $<$Scene.\+h$>$}\newline
+{\ttfamily \#include $<$App.\+h$>$}\newline
+{\ttfamily \#include $<$nvvk/swapchain\+\_\+vk.\+hpp$>$}\newline
+{\ttfamily \#include $<$GLFW/glfw3.\+h$>$}\newline
+{\ttfamily \#include $<$Command\+List.\+h$>$}\newline
+{\ttfamily \#include $<$Gui\+Controller.\+h$>$}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_astra_1_1_renderer}{Astra\+::\+Renderer}}
+\begin{DoxyCompactList}\small\item\em \doxylink{class_astra_1_1_renderer}{Renderer} class. Contains all the neccessary info to render the scene, low-\/level kind. It manages the rendering process. Also contains the post processing descriptor sets and pipeline. This is an advance class and it\textquotesingle{}s not meant to be overriden. The way the renderer works is with two render passes. The first rasterizes or ray traces the scene and saves the result in a texture. That texture is then used in the second rendering pass to be displayed on the screen along with the Im\+Gui interface. This way we can combine both ray-\/tracing (for the scene) and rasterization (for fonts and graphical elements). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespace_astra}{Astra}}
+\end{DoxyCompactItemize}

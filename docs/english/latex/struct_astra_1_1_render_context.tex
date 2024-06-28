@@ -1,0 +1,118 @@
+\doxysection{Astra\+::Render\+Context\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Struct Template Reference}
+\hypertarget{struct_astra_1_1_render_context}{}\label{struct_astra_1_1_render_context}\index{Astra::RenderContext$<$ T $>$@{Astra::RenderContext$<$ T $>$}}
+
+
+Template struct to support different push constant types. Contains the rendering information for the scene. The main goal of this struct is to wrap the push\+Constants call.  
+
+
+
+
+{\ttfamily \#include $<$Render\+Context.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_astra_1_1_render_context_a1c4ad81d6f9e3c7e8be269b32b53c2c1}{Render\+Context}} (\mbox{\hyperlink{class_astra_1_1_pipeline}{Pipeline}} \texorpdfstring{$\ast$}{*}pl, T \&pc, const \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}} \&cl, uint32\+\_\+t ss)
+\item 
+void \mbox{\hyperlink{struct_astra_1_1_render_context_a312ea88689ec1857bd4762c9e4f2fb7e}{push\+Constants}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_astra_1_1_pipeline}{Pipeline}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{struct_astra_1_1_render_context_af8d18476704a3ddd7ad0149f5dd1e935}{pipeline}}
+\item 
+T \& \mbox{\hyperlink{struct_astra_1_1_render_context_ad832d7af437ebec73c388823d2bef824}{push\+Constant}}
+\item 
+const \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}} \& \mbox{\hyperlink{struct_astra_1_1_render_context_a5fe041e9a293c3a57e5dd2232668da52}{cmd\+List}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{struct_astra_1_1_render_context_a8acb77f7da23b7298539869716b65b74}{shader\+Stages}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename T$>$\newline
+struct Astra\+::\+Render\+Context$<$ T $>$}
+Template struct to support different push constant types. Contains the rendering information for the scene. The main goal of this struct is to wrap the push\+Constants call. 
+
+Definition at line \mbox{\hyperlink{_render_context_8h_source_l00013}{13}} of file \mbox{\hyperlink{_render_context_8h_source}{Render\+Context.\+h}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{struct_astra_1_1_render_context_a1c4ad81d6f9e3c7e8be269b32b53c2c1}\index{Astra::RenderContext$<$ T $>$@{Astra::RenderContext$<$ T $>$}!RenderContext@{RenderContext}}
+\index{RenderContext@{RenderContext}!Astra::RenderContext$<$ T $>$@{Astra::RenderContext$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{RenderContext()}{RenderContext()}}
+{\footnotesize\ttfamily \label{struct_astra_1_1_render_context_a1c4ad81d6f9e3c7e8be269b32b53c2c1} 
+template$<$typename T $>$ \\
+\mbox{\hyperlink{struct_astra_1_1_render_context}{Astra\+::\+Render\+Context}}$<$ T $>$\+::\+Render\+Context (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_astra_1_1_pipeline}{Pipeline}} \texorpdfstring{$\ast$}{*}}]{pl}{, }\item[{T \&}]{pc}{, }\item[{const \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}} \&}]{cl}{, }\item[{uint32\+\_\+t}]{ss}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{_render_context_8h_source_l00020}{20}} of file \mbox{\hyperlink{_render_context_8h_source}{Render\+Context.\+h}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{struct_astra_1_1_render_context_a312ea88689ec1857bd4762c9e4f2fb7e}\index{Astra::RenderContext$<$ T $>$@{Astra::RenderContext$<$ T $>$}!pushConstants@{pushConstants}}
+\index{pushConstants@{pushConstants}!Astra::RenderContext$<$ T $>$@{Astra::RenderContext$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{pushConstants()}{pushConstants()}}
+{\footnotesize\ttfamily \label{struct_astra_1_1_render_context_a312ea88689ec1857bd4762c9e4f2fb7e} 
+template$<$typename T $>$ \\
+void \mbox{\hyperlink{struct_astra_1_1_render_context}{Astra\+::\+Render\+Context}}$<$ T $>$\+::push\+Constants (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{_render_context_8h_source_l00022}{22}} of file \mbox{\hyperlink{_render_context_8h_source}{Render\+Context.\+h}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{struct_astra_1_1_render_context_a5fe041e9a293c3a57e5dd2232668da52}\index{Astra::RenderContext$<$ T $>$@{Astra::RenderContext$<$ T $>$}!cmdList@{cmdList}}
+\index{cmdList@{cmdList}!Astra::RenderContext$<$ T $>$@{Astra::RenderContext$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{cmdList}{cmdList}}
+{\footnotesize\ttfamily \label{struct_astra_1_1_render_context_a5fe041e9a293c3a57e5dd2232668da52} 
+template$<$typename T $>$ \\
+const \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}}\& \mbox{\hyperlink{struct_astra_1_1_render_context}{Astra\+::\+Render\+Context}}$<$ T $>$\+::cmd\+List}
+
+
+
+Definition at line \mbox{\hyperlink{_render_context_8h_source_l00017}{17}} of file \mbox{\hyperlink{_render_context_8h_source}{Render\+Context.\+h}}.
+
+\Hypertarget{struct_astra_1_1_render_context_af8d18476704a3ddd7ad0149f5dd1e935}\index{Astra::RenderContext$<$ T $>$@{Astra::RenderContext$<$ T $>$}!pipeline@{pipeline}}
+\index{pipeline@{pipeline}!Astra::RenderContext$<$ T $>$@{Astra::RenderContext$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{pipeline}{pipeline}}
+{\footnotesize\ttfamily \label{struct_astra_1_1_render_context_af8d18476704a3ddd7ad0149f5dd1e935} 
+template$<$typename T $>$ \\
+\mbox{\hyperlink{class_astra_1_1_pipeline}{Pipeline}}\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{struct_astra_1_1_render_context}{Astra\+::\+Render\+Context}}$<$ T $>$\+::pipeline}
+
+
+
+Definition at line \mbox{\hyperlink{_render_context_8h_source_l00015}{15}} of file \mbox{\hyperlink{_render_context_8h_source}{Render\+Context.\+h}}.
+
+\Hypertarget{struct_astra_1_1_render_context_ad832d7af437ebec73c388823d2bef824}\index{Astra::RenderContext$<$ T $>$@{Astra::RenderContext$<$ T $>$}!pushConstant@{pushConstant}}
+\index{pushConstant@{pushConstant}!Astra::RenderContext$<$ T $>$@{Astra::RenderContext$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{pushConstant}{pushConstant}}
+{\footnotesize\ttfamily \label{struct_astra_1_1_render_context_ad832d7af437ebec73c388823d2bef824} 
+template$<$typename T $>$ \\
+T\& \mbox{\hyperlink{struct_astra_1_1_render_context}{Astra\+::\+Render\+Context}}$<$ T $>$\+::push\+Constant}
+
+
+
+Definition at line \mbox{\hyperlink{_render_context_8h_source_l00016}{16}} of file \mbox{\hyperlink{_render_context_8h_source}{Render\+Context.\+h}}.
+
+\Hypertarget{struct_astra_1_1_render_context_a8acb77f7da23b7298539869716b65b74}\index{Astra::RenderContext$<$ T $>$@{Astra::RenderContext$<$ T $>$}!shaderStages@{shaderStages}}
+\index{shaderStages@{shaderStages}!Astra::RenderContext$<$ T $>$@{Astra::RenderContext$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{shaderStages}{shaderStages}}
+{\footnotesize\ttfamily \label{struct_astra_1_1_render_context_a8acb77f7da23b7298539869716b65b74} 
+template$<$typename T $>$ \\
+uint32\+\_\+t \mbox{\hyperlink{struct_astra_1_1_render_context}{Astra\+::\+Render\+Context}}$<$ T $>$\+::shader\+Stages}
+
+
+
+Definition at line \mbox{\hyperlink{_render_context_8h_source_l00018}{18}} of file \mbox{\hyperlink{_render_context_8h_source}{Render\+Context.\+h}}.
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{_render_context_8h}{Render\+Context.\+h}}\end{DoxyCompactItemize}

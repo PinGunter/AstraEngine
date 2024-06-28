@@ -6,7 +6,7 @@
 #include <Utils.h>
 #include <InputManager.h>
 
-Astra::CameraController::CameraController(Camera& cam) : _camera(cam)
+Astra::CameraController::CameraController(Camera &cam) : _camera(cam)
 {
 	updateCamera();
 }
@@ -16,7 +16,7 @@ void Astra::CameraController::updateCamera()
 	_camera.viewMatrix = glm::lookAt(_camera.eye, _camera.centre, _camera.up);
 }
 
-const glm::mat4& Astra::CameraController::getViewMatrix() const
+const glm::mat4 &Astra::CameraController::getViewMatrix() const
 {
 	return _camera.viewMatrix;
 }
@@ -30,7 +30,7 @@ glm::mat4 Astra::CameraController::getProjectionMatrix() const
 	return proj;
 }
 
-void Astra::CameraController::setLookAt(const glm::vec3& eye, const glm::vec3& center, const glm::vec3& up)
+void Astra::CameraController::setLookAt(const glm::vec3 &eye, const glm::vec3 &center, const glm::vec3 &up)
 {
 	_camera.eye = eye;
 	_camera.centre = center;
@@ -53,17 +53,17 @@ float Astra::CameraController::getFov() const
 	return _camera.fov;
 }
 
-const glm::vec3& Astra::CameraController::getEye() const
+const glm::vec3 &Astra::CameraController::getEye() const
 {
 	return _camera.eye;
 }
 
-const glm::vec3& Astra::CameraController::getUp() const
+const glm::vec3 &Astra::CameraController::getUp() const
 {
 	return _camera.up;
 }
 
-const glm::vec3& Astra::CameraController::getCentre() const
+const glm::vec3 &Astra::CameraController::getCentre() const
 {
 	return _camera.centre;
 }
@@ -73,32 +73,32 @@ Astra::Camera Astra::CameraController::getCamera() const
 	return _camera;
 }
 
-float& Astra::CameraController::getNearRef()
+float &Astra::CameraController::getNearRef()
 {
 	return _camera.nearPlane;
 }
 
-float& Astra::CameraController::fetFarRef()
+float &Astra::CameraController::fetFarRef()
 {
 	return _camera.farPlane;
 }
 
-float& Astra::CameraController::getFovRef()
+float &Astra::CameraController::getFovRef()
 {
 	return _camera.fov;
 }
 
-glm::vec3& Astra::CameraController::getEyeRef()
+glm::vec3 &Astra::CameraController::getEyeRef()
 {
 	return _camera.eye;
 }
 
-glm::vec3& Astra::CameraController::getUpRef()
+glm::vec3 &Astra::CameraController::getUpRef()
 {
 	return _camera.up;
 }
 
-glm::vec3& Astra::CameraController::getCentreRef()
+glm::vec3 &Astra::CameraController::getCentreRef()
 {
 	return _camera.centre;
 }
@@ -120,7 +120,7 @@ void Astra::CameraController::setFov(float f)
 
 bool Astra::CameraController::update()
 {
-	// update camera params 
+	// update camera params
 	updateCamera();
 	return true;
 }
@@ -135,8 +135,7 @@ CameraUniform Astra::CameraController::getCameraUniform()
 	return hostUBO;
 }
 
-
-Astra::FreeCameraController::FreeCameraController(Camera& cam) : CameraController(cam)
+Astra::FreeCameraController::FreeCameraController(Camera &cam) : CameraController(cam)
 {
 	_sens = 0.005f;
 }
@@ -152,11 +151,10 @@ bool Astra::FreeCameraController::update()
 		Input.keyPressed(Key_A),
 		Input.keyPressed(Key_Q),
 		Input.keyPressed(Key_E),
-		(Input.keyPressed(Key_LeftControl) ? _speed * 10 : _speed)
-	);
+		(Input.keyPressed(Key_LeftControl) ? _speed * 10 : _speed));
 
-
-	if (Input.mouseClick(Right)) {
+	if (Input.mouseClick(Right))
+	{
 		Input.captureMouse();
 
 		glm::ivec2 delta = Input.getMouseDelta();
@@ -164,7 +162,8 @@ bool Astra::FreeCameraController::update()
 		float dy = delta.y * _sens;
 		rotate(dx, dy);
 	}
-	else {
+	else
+	{
 		Input.freeMouse();
 	}
 
@@ -191,22 +190,28 @@ void Astra::FreeCameraController::move(bool front, bool back, bool right, bool l
 		However, this sequence is left instead of nesting ternary operators
 		so that it is easier to read
 	*/
-	if (front) {
+	if (front)
+	{
 		zSpeed += speed;
 	}
-	if (back) {
+	if (back)
+	{
 		zSpeed -= speed;
 	}
-	if (right) {
+	if (right)
+	{
 		xSpeed += speed;
 	}
-	if (left) {
+	if (left)
+	{
 		xSpeed -= speed;
 	}
-	if (up) {
+	if (up)
+	{
 		ySpeed += speed;
 	}
-	if (down) {
+	if (down)
+	{
 		ySpeed -= speed;
 	}
 
@@ -219,7 +224,7 @@ void Astra::FreeCameraController::rotate(float dx, float dy)
 
 	// Get the length of sight
 	glm::vec3 eyeToCenter(_camera.centre - _camera.eye);
-	float     radius = glm::length(eyeToCenter);
+	float radius = glm::length(eyeToCenter);
 	eyeToCenter = glm::normalize(eyeToCenter);
 	glm::vec3 direction = eyeToCenter;
 
@@ -248,8 +253,7 @@ void Astra::FreeCameraController::rotate(float dx, float dy)
 	_camera.centre = newCentre;
 }
 
-
-Astra::OrbitCameraController::OrbitCameraController(Camera& cam) : CameraController(cam)
+Astra::OrbitCameraController::OrbitCameraController(Camera &cam) : CameraController(cam)
 {
 }
 
@@ -257,15 +261,19 @@ bool Astra::OrbitCameraController::update()
 {
 	glm::vec2 delta = Input.getMouseDelta();
 	float wheel = Input.getMouseWheel().y;
-	if (Input.mouseClick(Right)) {
-		if (Input.keyPressed(Key_LeftControl)) {
+	if (Input.mouseClick(Right))
+	{
+		if (Input.keyPressed(Key_LeftControl))
+		{
 			zoom(delta.y);
 		}
-		else {
+		else
+		{
 			orbit(delta.x, delta.y);
 		}
 	}
-	else if (Input.mouseClick(Middle)) {
+	else if (Input.mouseClick(Middle))
+	{
 		pan(delta.x, delta.y);
 	}
 
@@ -286,7 +294,7 @@ void Astra::OrbitCameraController::orbit(float dx, float dy)
 
 	// Get the length of sight
 	glm::vec3 centerToEye(_camera.eye - _camera.centre);
-	float     radius = glm::length(centerToEye);
+	float radius = glm::length(centerToEye);
 	centerToEye = glm::normalize(centerToEye);
 	glm::vec3 direction = centerToEye;
 
@@ -329,5 +337,4 @@ void Astra::OrbitCameraController::pan(float dx, float dy)
 void Astra::OrbitCameraController::zoom(float increment)
 {
 	_camera.fov = glm::clamp(_camera.fov + increment * 0.1f, 10.0f, 120.0f);
-
 }

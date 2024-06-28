@@ -1,0 +1,118 @@
+\doxysection{Astra\+::Device\+Create\+Info Struct Reference}
+\hypertarget{struct_astra_1_1_device_create_info}{}\label{struct_astra_1_1_device_create_info}\index{Astra::DeviceCreateInfo@{Astra::DeviceCreateInfo}}
+
+
+Contains the parameters to set up the device (GPU). Ray-\/\+Tracing is the default. Extensions are set up by default, extensions include the swapchain, present and ray-\/tracing ones.  
+
+
+
+
+{\ttfamily \#include $<$Device.\+h$>$}
+
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{struct_astra_1_1_device_create_info_a9a9482204d9f3ec2281f33b1438724b5}{debug}} \{true\}
+\item 
+bool \mbox{\hyperlink{struct_astra_1_1_device_create_info_a678d449aab55a7a790494c8354b6bc89}{use\+RT}} \{true\}
+\item 
+std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{struct_astra_1_1_device_create_info_a62e9a1422c8d57c914ae4656fd50afac}{instance\+Layers}}
+\item 
+std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{struct_astra_1_1_device_create_info_ad72c75f71da8ffc26af01b68102db729}{instance\+Extensions}}
+\item 
+std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{struct_astra_1_1_device_create_info_a08d13ec6b6f9fbd4bb3651e3c494ea5d}{device\+Extensions}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{struct_astra_1_1_device_create_info_a50048b4336662448fd6a80d3e54731ac}{vk\+Version\+Major}} \{1\}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{struct_astra_1_1_device_create_info_a36f1bbc57d9e904ca2586990e03e2f15}{vk\+Version\+Minor}} \{3\}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Contains the parameters to set up the device (GPU). Ray-\/\+Tracing is the default. Extensions are set up by default, extensions include the swapchain, present and ray-\/tracing ones. 
+
+\begin{DoxyWarning}{Warning}
+If the instance\+Layers, instance\+Extensions or device\+Extensions vectors are empty the user is assumed to be an {\itshape expert}. This means that this user would also need to add all the extensions needed that are added by default. This means the GLFW extensions, the swapchain extensions, etc. 
+\end{DoxyWarning}
+
+
+Definition at line \mbox{\hyperlink{_device_8h_source_l00029}{29}} of file \mbox{\hyperlink{_device_8h_source}{Device.\+h}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{struct_astra_1_1_device_create_info_a9a9482204d9f3ec2281f33b1438724b5}\index{Astra::DeviceCreateInfo@{Astra::DeviceCreateInfo}!debug@{debug}}
+\index{debug@{debug}!Astra::DeviceCreateInfo@{Astra::DeviceCreateInfo}}
+\doxysubsubsection{\texorpdfstring{debug}{debug}}
+{\footnotesize\ttfamily \label{struct_astra_1_1_device_create_info_a9a9482204d9f3ec2281f33b1438724b5} 
+bool Astra\+::\+Device\+Create\+Info\+::debug \{true\}}
+
+
+
+Definition at line \mbox{\hyperlink{_device_8h_source_l00031}{31}} of file \mbox{\hyperlink{_device_8h_source}{Device.\+h}}.
+
+\Hypertarget{struct_astra_1_1_device_create_info_a08d13ec6b6f9fbd4bb3651e3c494ea5d}\index{Astra::DeviceCreateInfo@{Astra::DeviceCreateInfo}!deviceExtensions@{deviceExtensions}}
+\index{deviceExtensions@{deviceExtensions}!Astra::DeviceCreateInfo@{Astra::DeviceCreateInfo}}
+\doxysubsubsection{\texorpdfstring{deviceExtensions}{deviceExtensions}}
+{\footnotesize\ttfamily \label{struct_astra_1_1_device_create_info_a08d13ec6b6f9fbd4bb3651e3c494ea5d} 
+std\+::vector$<$std\+::string$>$ Astra\+::\+Device\+Create\+Info\+::device\+Extensions}
+
+
+
+Definition at line \mbox{\hyperlink{_device_8h_source_l00036}{36}} of file \mbox{\hyperlink{_device_8h_source}{Device.\+h}}.
+
+\Hypertarget{struct_astra_1_1_device_create_info_ad72c75f71da8ffc26af01b68102db729}\index{Astra::DeviceCreateInfo@{Astra::DeviceCreateInfo}!instanceExtensions@{instanceExtensions}}
+\index{instanceExtensions@{instanceExtensions}!Astra::DeviceCreateInfo@{Astra::DeviceCreateInfo}}
+\doxysubsubsection{\texorpdfstring{instanceExtensions}{instanceExtensions}}
+{\footnotesize\ttfamily \label{struct_astra_1_1_device_create_info_ad72c75f71da8ffc26af01b68102db729} 
+std\+::vector$<$std\+::string$>$ Astra\+::\+Device\+Create\+Info\+::instance\+Extensions}
+
+
+
+Definition at line \mbox{\hyperlink{_device_8h_source_l00035}{35}} of file \mbox{\hyperlink{_device_8h_source}{Device.\+h}}.
+
+\Hypertarget{struct_astra_1_1_device_create_info_a62e9a1422c8d57c914ae4656fd50afac}\index{Astra::DeviceCreateInfo@{Astra::DeviceCreateInfo}!instanceLayers@{instanceLayers}}
+\index{instanceLayers@{instanceLayers}!Astra::DeviceCreateInfo@{Astra::DeviceCreateInfo}}
+\doxysubsubsection{\texorpdfstring{instanceLayers}{instanceLayers}}
+{\footnotesize\ttfamily \label{struct_astra_1_1_device_create_info_a62e9a1422c8d57c914ae4656fd50afac} 
+std\+::vector$<$std\+::string$>$ Astra\+::\+Device\+Create\+Info\+::instance\+Layers}
+
+
+
+Definition at line \mbox{\hyperlink{_device_8h_source_l00034}{34}} of file \mbox{\hyperlink{_device_8h_source}{Device.\+h}}.
+
+\Hypertarget{struct_astra_1_1_device_create_info_a678d449aab55a7a790494c8354b6bc89}\index{Astra::DeviceCreateInfo@{Astra::DeviceCreateInfo}!useRT@{useRT}}
+\index{useRT@{useRT}!Astra::DeviceCreateInfo@{Astra::DeviceCreateInfo}}
+\doxysubsubsection{\texorpdfstring{useRT}{useRT}}
+{\footnotesize\ttfamily \label{struct_astra_1_1_device_create_info_a678d449aab55a7a790494c8354b6bc89} 
+bool Astra\+::\+Device\+Create\+Info\+::use\+RT \{true\}}
+
+
+
+Definition at line \mbox{\hyperlink{_device_8h_source_l00032}{32}} of file \mbox{\hyperlink{_device_8h_source}{Device.\+h}}.
+
+\Hypertarget{struct_astra_1_1_device_create_info_a50048b4336662448fd6a80d3e54731ac}\index{Astra::DeviceCreateInfo@{Astra::DeviceCreateInfo}!vkVersionMajor@{vkVersionMajor}}
+\index{vkVersionMajor@{vkVersionMajor}!Astra::DeviceCreateInfo@{Astra::DeviceCreateInfo}}
+\doxysubsubsection{\texorpdfstring{vkVersionMajor}{vkVersionMajor}}
+{\footnotesize\ttfamily \label{struct_astra_1_1_device_create_info_a50048b4336662448fd6a80d3e54731ac} 
+uint32\+\_\+t Astra\+::\+Device\+Create\+Info\+::vk\+Version\+Major \{1\}}
+
+
+
+Definition at line \mbox{\hyperlink{_device_8h_source_l00037}{37}} of file \mbox{\hyperlink{_device_8h_source}{Device.\+h}}.
+
+\Hypertarget{struct_astra_1_1_device_create_info_a36f1bbc57d9e904ca2586990e03e2f15}\index{Astra::DeviceCreateInfo@{Astra::DeviceCreateInfo}!vkVersionMinor@{vkVersionMinor}}
+\index{vkVersionMinor@{vkVersionMinor}!Astra::DeviceCreateInfo@{Astra::DeviceCreateInfo}}
+\doxysubsubsection{\texorpdfstring{vkVersionMinor}{vkVersionMinor}}
+{\footnotesize\ttfamily \label{struct_astra_1_1_device_create_info_a36f1bbc57d9e904ca2586990e03e2f15} 
+uint32\+\_\+t Astra\+::\+Device\+Create\+Info\+::vk\+Version\+Minor \{3\}}
+
+
+
+Definition at line \mbox{\hyperlink{_device_8h_source_l00038}{38}} of file \mbox{\hyperlink{_device_8h_source}{Device.\+h}}.
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{_device_8h}{Device.\+h}}\end{DoxyCompactItemize}

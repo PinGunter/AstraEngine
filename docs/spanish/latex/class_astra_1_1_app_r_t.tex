@@ -1,0 +1,282 @@
+\doxysection{Referencia de la clase Astra\+::App\+RT}
+\hypertarget{class_astra_1_1_app_r_t}{}\label{class_astra_1_1_app_r_t}\index{Astra::AppRT@{Astra::AppRT}}
+
+
+Clase que deriva de \doxylink{class_astra_1_1_app}{App} para agregar los datos y métodos necesarios para usar trazado de rayos.  
+
+
+
+
+{\ttfamily \#include $<$App\+RT.\+h$>$}
+
+Diagrama de herencia de Astra\+::App\+RT\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_astra_1_1_app_r_t}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Métodos públicos}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_astra_1_1_app_r_t_ab303283d3fd7073a64255f37b67e5cea}{init}} (const std\+::vector$<$ \mbox{\hyperlink{class_astra_1_1_scene}{Scene}} \texorpdfstring{$\ast$}{*} $>$ \&scenes, \mbox{\hyperlink{class_astra_1_1_renderer}{Renderer}} \texorpdfstring{$\ast$}{*}renderer, \mbox{\hyperlink{class_astra_1_1_gui_controller}{Gui\+Controller}} \texorpdfstring{$\ast$}{*}gui=nullptr) override
+\begin{DoxyCompactList}\small\item\em Inicializa la aplicación. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_astra_1_1_app_r_t_a9cb1b581d6cd4145dc93bc6ed095bf7a}{destroy}} () override
+\end{DoxyCompactItemize}
+\doxysubsection*{Métodos públicos heredados de \mbox{\hyperlink{class_astra_1_1_app}{Astra\+::\+App}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_astra_1_1_app_a73b7eb438e4702f3095397f9e9bca3e9}{add\+Scene}} (\mbox{\hyperlink{class_astra_1_1_scene}{Scene}} \texorpdfstring{$\ast$}{*}s)
+\begin{DoxyCompactList}\small\item\em Añade una escena a la aplicación. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_astra_1_1_app_a5996d101f435b69e0fcfa4276e7ce2dd}{run}} ()=0
+\begin{DoxyCompactList}\small\item\em Método virtual que debe implementar la clase derivada. Se debe encargar de hacer el bucle de dibujado, hacer el polling de eventos (con \doxylink{class_astra_1_1_input_manager}{Input\+Manager}), actualizar la escena y dibujarla. Después del bucle se deberían destruir los recursos ~\newline
+Código de ejemplo\+: \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_astra_1_1_app_a80f3ac2c54dd36f55e1c8e92d1aa12dc}{\texorpdfstring{$\sim$}{\string~}\+App}} ()
+\item 
+bool \mbox{\hyperlink{class_astra_1_1_app_a6c20c6958469bf00650109dfa7b8f092}{is\+Minimized}} () const
+\item 
+int \& \mbox{\hyperlink{class_astra_1_1_app_a5514ecd8b10cb169198de6d307ba12bf}{get\+Current\+Scene\+Index\+Ref}} ()
+\item 
+int \mbox{\hyperlink{class_astra_1_1_app_a73e012df6ef613522855749438ea5739}{get\+Current\+Scene\+Index}} () const
+\item 
+virtual void \mbox{\hyperlink{class_astra_1_1_app_a5caf32412bda0afd92a579a9f35abfe9}{set\+Current\+Scene\+Index}} (int i)
+\item 
+\mbox{\hyperlink{class_astra_1_1_scene}{Scene}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_astra_1_1_app_a8e38409ab0365b46b079e3e090d64543}{get\+Current\+Scene}} ()
+\item 
+\mbox{\hyperlink{class_astra_1_1_renderer}{Renderer}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_astra_1_1_app_a7985d945b0284570462fb14eac519596}{get\+Renderer}} ()
+\item 
+\mbox{\hyperlink{namespace_astra_a8ff9af1a6f3d820347e90c1876815ac7}{App\+Status}} \mbox{\hyperlink{class_astra_1_1_app_a076a946cb42ccf2e5c173961056a6088}{get\+Status}} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Métodos protegidos}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_astra_1_1_app_r_t_af602f65c27fca89456f838e276066b5e}{create\+Rt\+Descriptor\+Set\+Layout}} ()
+\item 
+virtual void \mbox{\hyperlink{class_astra_1_1_app_r_t_a7d907ad2db460288f88b1ef01f38a7f3}{update\+Rt\+Descriptor\+Set}} ()
+\item 
+void \mbox{\hyperlink{class_astra_1_1_app_r_t_a1352d5b8316383433029475d7373edf0}{on\+Resize}} (int w, int h) override
+\begin{DoxyCompactList}\small\item\em Callback para el cambio de tamaño de ventana. Actualiza Im\+Gui, renderer, cámara y descriptor sets. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Métodos protegidos heredados de \mbox{\hyperlink{class_astra_1_1_app}{Astra\+::\+App}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_astra_1_1_app_a11af35428a6e6fb49fbf0db7bbc19f24}{create\+Pipelines}} ()=0
+\begin{DoxyCompactList}\small\item\em Método abstracto que cada clase derivada debe implementar. Debe crear las pipelines que se vayan a usar e introducir en el vector {\itshape \+\_\+pipelines}. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_astra_1_1_app_abf180a61fd7d11ea661b79ce1a8dd306}{destroy\+Pipelines}} ()
+\begin{DoxyCompactList}\small\item\em Destruye las pipelines dentro del vector de pipelines. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_astra_1_1_app_a606362d870fa16bdcdcc9c27c535673c}{create\+Descriptor\+Set\+Layout}} ()
+\begin{DoxyCompactList}\small\item\em Crea el layout de los descriptor sets básicos para rasterización. El descriptor set que crea tiene la siguiente estructura\+: ~\newline
+ Binding 0\+: Parámetros de Cámara ~\newline
+ Binding 1\+: Datos de las luces ~\newline
+ Binding 2\+: Datos de los objetos, direcciones de memoria para acceder a los buffers ~\newline
+ Binding 3\+: Texturas. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_astra_1_1_app_a59bbd624078274cf9971146a5fc44be9}{update\+Descriptor\+Set}} ()
+\begin{DoxyCompactList}\small\item\em Escribe y actualiza los datos del descriptor set. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_astra_1_1_app_aa523940c6e94a9573000497b8cf706ce}{reset\+Scene}} (bool recreate\+Pipelines=false)=0
+\begin{DoxyCompactList}\small\item\em Resetea la escena, se debe llamar cuando se cambie de escena o si se agregan modelos durante la ejecución. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_astra_1_1_app_ade19f12ee29e09336ca2957aabe27f77}{on\+File\+Drop}} (int count, const char \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}paths)
+\begin{DoxyCompactList}\small\item\em Callback para cuando se suelten archivos en la ventana. No hace nada por defecto. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_astra_1_1_app_a171181cf0916085614ce4c26e67aa5bb}{on\+Mouse\+Motion}} (int x, int y)
+\begin{DoxyCompactList}\small\item\em Callback de evento de movimiento de ratón. No hace nada por defecto. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_astra_1_1_app_a77eb75c2d49b6f8da756b5956ed76abe}{on\+Keyboard}} (int key, int scancode, int action, int mods)
+\begin{DoxyCompactList}\small\item\em Callback para cuando se pulsan teclas del teclado. No hace nada por defecto. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_astra_1_1_app_ac05462b0fbb0fb03e220e0c018e132fd}{on\+Mouse\+Button}} (int button, int action, int mods)
+\begin{DoxyCompactList}\small\item\em Callback para el click del ratón. No hace nada por defecto. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_astra_1_1_app_a7279c7df27948697cc290913f7ac2142}{on\+Mouse\+Wheel}} (int x, int y)
+\begin{DoxyCompactList}\small\item\em Callback para el evento de la rueda del ratón. No hace nada por defecto. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Atributos protegidos}
+\begin{DoxyCompactItemize}
+\item 
+nvvk\+::\+Descriptor\+Set\+Bindings \mbox{\hyperlink{class_astra_1_1_app_r_t_a6a53bbfbab8e62c63fd71f073a441814}{\+\_\+rt\+Desc\+Set\+Layout\+Bind}}
+\item 
+Vk\+Descriptor\+Pool \mbox{\hyperlink{class_astra_1_1_app_r_t_a086e5fcf0efa25c24dbaf21e8f5657a4}{\+\_\+rt\+Desc\+Pool}}
+\item 
+Vk\+Descriptor\+Set\+Layout \mbox{\hyperlink{class_astra_1_1_app_r_t_af9c0a7fbf7bf03a8348da08526b5ef3c}{\+\_\+rt\+Desc\+Set\+Layout}}
+\item 
+Vk\+Descriptor\+Set \mbox{\hyperlink{class_astra_1_1_app_r_t_a3cf26e511615b427061c61b645225fd6}{\+\_\+rt\+Desc\+Set}}
+\item 
+std\+::vector$<$ nvvk\+::\+Accel\+KHR $>$ \mbox{\hyperlink{class_astra_1_1_app_r_t_aee23a287032978c1f73a881006b8fbcf}{\+\_\+blas}}
+\item 
+std\+::vector$<$ Vk\+Acceleration\+Structure\+Instance\+KHR $>$ \mbox{\hyperlink{class_astra_1_1_app_r_t_a83b655cd0a5e22bc8d5c5a312cbdb5b7}{m\+\_\+tlas}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Atributos protegidos heredados de \mbox{\hyperlink{class_astra_1_1_app}{Astra\+::\+App}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{namespace_astra_a8ff9af1a6f3d820347e90c1876815ac7}{App\+Status}} \mbox{\hyperlink{class_astra_1_1_app_a3bc9811f86cd1a5024561639d7a4b66c}{\+\_\+status}} \{\mbox{\hyperlink{namespace_astra_a8ff9af1a6f3d820347e90c1876815ac7ae17d0f826f2eec26934c3863daa5643f}{Created}}\}
+\begin{DoxyCompactList}\small\item\em Estado de la aplicación, puede ser creada, en ejecución y destruida. \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{class_astra_1_1_scene}{Scene}} \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{class_astra_1_1_app_adb87fd803de6ee7e25abd60401c994d3}{\+\_\+scenes}}
+\begin{DoxyCompactList}\small\item\em Vector de escenas. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_astra_1_1_app_ae6cc26ea709d7ef2265f4407e2b5af30}{\+\_\+current\+Scene}} \{0\}
+\item 
+\mbox{\hyperlink{class_astra_1_1_gui_controller}{Gui\+Controller}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_astra_1_1_app_a52d71507b2525f05a4d2dbcd4e02c03d}{\+\_\+gui}}
+\item 
+\mbox{\hyperlink{class_astra_1_1_renderer}{Renderer}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_astra_1_1_app_a4f33a33fc7507626ecad79ca81b40300}{\+\_\+renderer}}
+\item 
+GLFWwindow \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_astra_1_1_app_ab0130baf56be7c76eaedcb15fc15644e}{\+\_\+window}}
+\item 
+nvvk\+::\+Resource\+Allocator\+Dma \mbox{\hyperlink{class_astra_1_1_app_ae0276b1ac70ead2e1cee9911225afa2f}{\+\_\+alloc}}
+\begin{DoxyCompactList}\small\item\em El asignador de resursos de la biblioteca nvpro\+\_\+core. Se utiliza en algunos métodos para asignar y liberar memoria. \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{class_astra_1_1_pipeline}{Pipeline}} \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{class_astra_1_1_app_a2e63845bc0780919cd3f473069d22cd1}{\+\_\+pipelines}}
+\begin{DoxyCompactList}\small\item\em Vector de pipelines. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_astra_1_1_app_a14ca3e1a5d85968b31c8ef5c966a5fa0}{\+\_\+selected\+Pipeline}} \{0\}
+\item 
+nvvk\+::\+Descriptor\+Set\+Bindings \mbox{\hyperlink{class_astra_1_1_app_ae02ec206dc8c714f457cd384147efdee}{\+\_\+desc\+Set\+Layout\+Bind}}
+\item 
+Vk\+Descriptor\+Pool \mbox{\hyperlink{class_astra_1_1_app_a4511cdd0d08ab487f80e8d7f40f16937}{\+\_\+desc\+Pool}}
+\item 
+Vk\+Descriptor\+Set\+Layout \mbox{\hyperlink{class_astra_1_1_app_a085f4d7ceb21cb366a22f1311aab812a}{\+\_\+desc\+Set\+Layout}}
+\item 
+Vk\+Descriptor\+Set \mbox{\hyperlink{class_astra_1_1_app_a8741aeb37c6e52cd9633f6b24b25789b}{\+\_\+desc\+Set}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Clase que deriva de \doxylink{class_astra_1_1_app}{App} para agregar los datos y métodos necesarios para usar trazado de rayos. 
+
+Definición en la línea \mbox{\hyperlink{_app_r_t_8h_source_l00012}{12}} del archivo \mbox{\hyperlink{_app_r_t_8h_source}{App\+RT.\+h}}.
+
+
+
+\doxysubsection{Documentación de funciones miembro}
+\Hypertarget{class_astra_1_1_app_r_t_af602f65c27fca89456f838e276066b5e}\index{Astra::AppRT@{Astra::AppRT}!createRtDescriptorSetLayout@{createRtDescriptorSetLayout}}
+\index{createRtDescriptorSetLayout@{createRtDescriptorSetLayout}!Astra::AppRT@{Astra::AppRT}}
+\doxysubsubsection{\texorpdfstring{createRtDescriptorSetLayout()}{createRtDescriptorSetLayout()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_app_r_t_af602f65c27fca89456f838e276066b5e} 
+void Astra\+::\+App\+RT\+::create\+Rt\+Descriptor\+Set\+Layout (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_app_r_t_8cpp_source_l00024}{24}} del archivo \mbox{\hyperlink{_app_r_t_8cpp_source}{App\+RT.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_app_r_t_a9cb1b581d6cd4145dc93bc6ed095bf7a}\index{Astra::AppRT@{Astra::AppRT}!destroy@{destroy}}
+\index{destroy@{destroy}!Astra::AppRT@{Astra::AppRT}}
+\doxysubsubsection{\texorpdfstring{destroy()}{destroy()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_app_r_t_a9cb1b581d6cd4145dc93bc6ed095bf7a} 
+void Astra\+::\+App\+RT\+::destroy (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplementado de \mbox{\hyperlink{class_astra_1_1_app_a861860c493edbeeff457ef21fbecaf88}{Astra\+::\+App}}.
+
+
+
+Definición en la línea \mbox{\hyperlink{_app_r_t_8cpp_source_l00014}{14}} del archivo \mbox{\hyperlink{_app_r_t_8cpp_source}{App\+RT.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_app_r_t_ab303283d3fd7073a64255f37b67e5cea}\index{Astra::AppRT@{Astra::AppRT}!init@{init}}
+\index{init@{init}!Astra::AppRT@{Astra::AppRT}}
+\doxysubsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_app_r_t_ab303283d3fd7073a64255f37b67e5cea} 
+void Astra\+::\+App\+RT\+::init (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ \mbox{\hyperlink{class_astra_1_1_scene}{Scene}} \texorpdfstring{$\ast$}{*} $>$ \&}]{scenes}{, }\item[{\mbox{\hyperlink{class_astra_1_1_renderer}{Renderer}} \texorpdfstring{$\ast$}{*}}]{renderer}{, }\item[{\mbox{\hyperlink{class_astra_1_1_gui_controller}{Gui\+Controller}} \texorpdfstring{$\ast$}{*}}]{gui}{ = {\ttfamily nullptr}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Inicializa la aplicación. 
+
+Inicializa al \doxylink{class_astra_1_1_input_manager}{Input\+Manager}, las Escenas (\doxylink{class_astra_1_1_scene}{Scene}), el \doxylink{class_astra_1_1_renderer}{Renderer} y la intefaz de usuario si hay (\doxylink{class_astra_1_1_gui_controller}{Gui\+Controller})
+
+Tambien crea y escribe los descriptor sets \begin{DoxyWarning}{Atención}
+Se debe llamar en cada clase hija que se cree! 
+\end{DoxyWarning}
+
+
+Reimplementado de \mbox{\hyperlink{class_astra_1_1_app_ab8c72b29f8b10069a05fba2bcddc8cee}{Astra\+::\+App}}.
+
+
+
+Definición en la línea \mbox{\hyperlink{_app_r_t_8cpp_source_l00003}{3}} del archivo \mbox{\hyperlink{_app_r_t_8cpp_source}{App\+RT.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_app_r_t_a1352d5b8316383433029475d7373edf0}\index{Astra::AppRT@{Astra::AppRT}!onResize@{onResize}}
+\index{onResize@{onResize}!Astra::AppRT@{Astra::AppRT}}
+\doxysubsubsection{\texorpdfstring{onResize()}{onResize()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_app_r_t_a1352d5b8316383433029475d7373edf0} 
+void Astra\+::\+App\+RT\+::on\+Resize (\begin{DoxyParamCaption}\item[{int}]{w}{, }\item[{int}]{h}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Callback para el cambio de tamaño de ventana. Actualiza Im\+Gui, renderer, cámara y descriptor sets. 
+
+
+
+Reimplementado de \mbox{\hyperlink{class_astra_1_1_app_af3eaf9278ff688d5e8c65f56313fc04e}{Astra\+::\+App}}.
+
+
+
+Definición en la línea \mbox{\hyperlink{_app_r_t_8cpp_source_l00054}{54}} del archivo \mbox{\hyperlink{_app_r_t_8cpp_source}{App\+RT.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_app_r_t_a7d907ad2db460288f88b1ef01f38a7f3}\index{Astra::AppRT@{Astra::AppRT}!updateRtDescriptorSet@{updateRtDescriptorSet}}
+\index{updateRtDescriptorSet@{updateRtDescriptorSet}!Astra::AppRT@{Astra::AppRT}}
+\doxysubsubsection{\texorpdfstring{updateRtDescriptorSet()}{updateRtDescriptorSet()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_app_r_t_a7d907ad2db460288f88b1ef01f38a7f3} 
+void Astra\+::\+App\+RT\+::update\+Rt\+Descriptor\+Set (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_app_r_t_8cpp_source_l00040}{40}} del archivo \mbox{\hyperlink{_app_r_t_8cpp_source}{App\+RT.\+cpp}}.
+
+
+
+\doxysubsection{Documentación de datos miembro}
+\Hypertarget{class_astra_1_1_app_r_t_aee23a287032978c1f73a881006b8fbcf}\index{Astra::AppRT@{Astra::AppRT}!\_blas@{\_blas}}
+\index{\_blas@{\_blas}!Astra::AppRT@{Astra::AppRT}}
+\doxysubsubsection{\texorpdfstring{\_blas}{\_blas}}
+{\footnotesize\ttfamily \label{class_astra_1_1_app_r_t_aee23a287032978c1f73a881006b8fbcf} 
+std\+::vector$<$nvvk\+::\+Accel\+KHR$>$ Astra\+::\+App\+RT\+::\+\_\+blas\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_app_r_t_8h_source_l00019}{19}} del archivo \mbox{\hyperlink{_app_r_t_8h_source}{App\+RT.\+h}}.
+
+\Hypertarget{class_astra_1_1_app_r_t_a086e5fcf0efa25c24dbaf21e8f5657a4}\index{Astra::AppRT@{Astra::AppRT}!\_rtDescPool@{\_rtDescPool}}
+\index{\_rtDescPool@{\_rtDescPool}!Astra::AppRT@{Astra::AppRT}}
+\doxysubsubsection{\texorpdfstring{\_rtDescPool}{\_rtDescPool}}
+{\footnotesize\ttfamily \label{class_astra_1_1_app_r_t_a086e5fcf0efa25c24dbaf21e8f5657a4} 
+Vk\+Descriptor\+Pool Astra\+::\+App\+RT\+::\+\_\+rt\+Desc\+Pool\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_app_r_t_8h_source_l00016}{16}} del archivo \mbox{\hyperlink{_app_r_t_8h_source}{App\+RT.\+h}}.
+
+\Hypertarget{class_astra_1_1_app_r_t_a3cf26e511615b427061c61b645225fd6}\index{Astra::AppRT@{Astra::AppRT}!\_rtDescSet@{\_rtDescSet}}
+\index{\_rtDescSet@{\_rtDescSet}!Astra::AppRT@{Astra::AppRT}}
+\doxysubsubsection{\texorpdfstring{\_rtDescSet}{\_rtDescSet}}
+{\footnotesize\ttfamily \label{class_astra_1_1_app_r_t_a3cf26e511615b427061c61b645225fd6} 
+Vk\+Descriptor\+Set Astra\+::\+App\+RT\+::\+\_\+rt\+Desc\+Set\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_app_r_t_8h_source_l00018}{18}} del archivo \mbox{\hyperlink{_app_r_t_8h_source}{App\+RT.\+h}}.
+
+\Hypertarget{class_astra_1_1_app_r_t_af9c0a7fbf7bf03a8348da08526b5ef3c}\index{Astra::AppRT@{Astra::AppRT}!\_rtDescSetLayout@{\_rtDescSetLayout}}
+\index{\_rtDescSetLayout@{\_rtDescSetLayout}!Astra::AppRT@{Astra::AppRT}}
+\doxysubsubsection{\texorpdfstring{\_rtDescSetLayout}{\_rtDescSetLayout}}
+{\footnotesize\ttfamily \label{class_astra_1_1_app_r_t_af9c0a7fbf7bf03a8348da08526b5ef3c} 
+Vk\+Descriptor\+Set\+Layout Astra\+::\+App\+RT\+::\+\_\+rt\+Desc\+Set\+Layout\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_app_r_t_8h_source_l00017}{17}} del archivo \mbox{\hyperlink{_app_r_t_8h_source}{App\+RT.\+h}}.
+
+\Hypertarget{class_astra_1_1_app_r_t_a6a53bbfbab8e62c63fd71f073a441814}\index{Astra::AppRT@{Astra::AppRT}!\_rtDescSetLayoutBind@{\_rtDescSetLayoutBind}}
+\index{\_rtDescSetLayoutBind@{\_rtDescSetLayoutBind}!Astra::AppRT@{Astra::AppRT}}
+\doxysubsubsection{\texorpdfstring{\_rtDescSetLayoutBind}{\_rtDescSetLayoutBind}}
+{\footnotesize\ttfamily \label{class_astra_1_1_app_r_t_a6a53bbfbab8e62c63fd71f073a441814} 
+nvvk\+::\+Descriptor\+Set\+Bindings Astra\+::\+App\+RT\+::\+\_\+rt\+Desc\+Set\+Layout\+Bind\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_app_r_t_8h_source_l00015}{15}} del archivo \mbox{\hyperlink{_app_r_t_8h_source}{App\+RT.\+h}}.
+
+\Hypertarget{class_astra_1_1_app_r_t_a83b655cd0a5e22bc8d5c5a312cbdb5b7}\index{Astra::AppRT@{Astra::AppRT}!m\_tlas@{m\_tlas}}
+\index{m\_tlas@{m\_tlas}!Astra::AppRT@{Astra::AppRT}}
+\doxysubsubsection{\texorpdfstring{m\_tlas}{m\_tlas}}
+{\footnotesize\ttfamily \label{class_astra_1_1_app_r_t_a83b655cd0a5e22bc8d5c5a312cbdb5b7} 
+std\+::vector$<$Vk\+Acceleration\+Structure\+Instance\+KHR$>$ Astra\+::\+App\+RT\+::m\+\_\+tlas\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definición en la línea \mbox{\hyperlink{_app_r_t_8h_source_l00020}{20}} del archivo \mbox{\hyperlink{_app_r_t_8h_source}{App\+RT.\+h}}.
+
+
+
+La documentación de esta clase está generada de los siguientes archivos\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{_app_r_t_8h}{App\+RT.\+h}}\item 
+src/\mbox{\hyperlink{_app_r_t_8cpp}{App\+RT.\+cpp}}\end{DoxyCompactItemize}

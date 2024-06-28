@@ -1,4 +1,6 @@
 /*
+ * This file has been slighty modified from the original one with its Copyright notice
+ *
  * Copyright (c) 2019-2021, NVIDIA CORPORATION.  All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,13 +19,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * \~spanish @file host_device.h
+ * Archivo que comparte declaraciones de tipos entre CPU y GPU
+ * \~english @file host_device.h
+ * File that contains Host-Device shared type declarations
+ */
 
 #ifndef COMMON_HOST_DEVICE
 #define COMMON_HOST_DEVICE
 
 #ifdef __cplusplus
 #include <glm/glm.hpp>
- // GLSL Type
+// GLSL Type
 using vec2 = glm::vec2;
 using vec3 = glm::vec3;
 using vec4 = glm::vec4;
@@ -55,28 +63,27 @@ eOutImage = 1   // Ray tracer output image
 END_BINDING();
 // clang-format on
 
-
 // Information of a obj model when referenced in a shader
 struct ObjDesc
 {
-	int      txtOffset;             // Texture index offset in the array of textures
-	uint64_t vertexAddress;         // Address of the Vertex buffer
-	uint64_t indexAddress;          // Address of the index buffer
-	uint64_t materialAddress;       // Address of the material buffer
-	uint64_t materialIndexAddress;  // Address of the triangle material index buffer
+	int txtOffset;				   // Texture index offset in the array of textures
+	uint64_t vertexAddress;		   // Address of the Vertex buffer
+	uint64_t indexAddress;		   // Address of the index buffer
+	uint64_t materialAddress;	   // Address of the material buffer
+	uint64_t materialIndexAddress; // Address of the triangle material index buffer
 };
 
 // Uniform buffer set at each frame
 struct CameraUniform
 {
-	mat4 viewProj;     // Camera view * projection
-	mat4 viewInverse;  // Camera inverse view matrix
-	mat4 projInverse;  // Camera inverse projection matrix
+	mat4 viewProj;	  // Camera view * projection
+	mat4 viewInverse; // Camera inverse view matrix
+	mat4 projInverse; // Camera inverse projection matrix
 };
 
 // Uniform for lights
 #ifdef __cplusplus
-struct alignas(16)LightSource
+struct alignas(16) LightSource
 #else
 struct LightSource
 #endif
@@ -87,7 +94,7 @@ struct LightSource
 	int type;
 };
 #ifdef __cplusplus
-struct alignas(16)LightsUniform
+struct alignas(16) LightsUniform
 #else
 struct LightsUniform
 #endif
@@ -98,20 +105,18 @@ struct LightsUniform
 // Push constant structure for the raster
 struct PushConstantRaster
 {
-	mat4  modelMatrix;  // matrix of the instance
-	uint  objIndex;
-	uint  nLights;
+	mat4 modelMatrix; // matrix of the instance
+	uint objIndex;
+	uint nLights;
 };
 
-
-//Push constant structure for the ray tracer
+// Push constant structure for the ray tracer
 struct PushConstantRay
 {
-	vec4  clearColor;
-	int  maxDepth;
-	int  nLights;
+	vec4 clearColor;
+	int maxDepth;
+	int nLights;
 };
-
 
 struct Vertex
 {
@@ -123,17 +128,16 @@ struct Vertex
 
 struct WaveFrontMaterial
 {
-	vec3  ambient;
-	vec3  diffuse;
-	vec3  specular;
-	vec3  transmittance;
-	vec3  emission;
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+	vec3 transmittance;
+	vec3 emission;
 	float shininess;
-	float ior;       // index of refraction
-	float dissolve;  // 1 == opaque; 0 == fully transparent
-	int   illum;     // illumination model (see http://www.fileformat.info/format/material/)
-	int   textureId;
+	float ior;		// index of refraction
+	float dissolve; // 1 == opaque; 0 == fully transparent
+	int illum;		// illumination model (see http://www.fileformat.info/format/material/)
+	int textureId;
 };
-
 
 #endif

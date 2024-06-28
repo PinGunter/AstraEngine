@@ -1,0 +1,90 @@
+\doxysection{Camera.\+h}
+\hypertarget{_camera_8h_source}{}\label{_camera_8h_source}\index{include/Camera.h@{include/Camera.h}}
+\mbox{\hyperlink{_camera_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00001}00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00002}00002\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_node3_d_8h}{Node3D.h}}>}}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00003}00003\ \textcolor{preprocessor}{\#include\ <glm/gtc/constants.hpp>}}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{host__device_8h}{host\_device.h}}>}}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00005}00005\ }
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00006}00006\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespace_astra}{Astra}}}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00007}00007\ \{}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00014}\mbox{\hyperlink{struct_astra_1_1_camera}{00014}}\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_astra_1_1_camera}{Camera}}}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00015}00015\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00016}\mbox{\hyperlink{struct_astra_1_1_camera_af9e2ab17562f182c51eb0fc869045ed8}{00016}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_astra_1_1_camera_af9e2ab17562f182c51eb0fc869045ed8}{nearPlane}}\{0.1f\};}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00017}\mbox{\hyperlink{struct_astra_1_1_camera_a706ad866bfbe4d4406842c99a25d6d6d}{00017}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_astra_1_1_camera_a706ad866bfbe4d4406842c99a25d6d6d}{farPlane}}\{1000.0f\};}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00018}\mbox{\hyperlink{struct_astra_1_1_camera_acc5142f4d25c0430441bd3e7f8f85410}{00018}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_astra_1_1_camera_acc5142f4d25c0430441bd3e7f8f85410}{fov}}\{60.0f\};}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00019}\mbox{\hyperlink{struct_astra_1_1_camera_a885ee1e557846f90802457457930cfad}{00019}}\ \ \ \ \ \ \ \ \ glm::vec3\ \mbox{\hyperlink{struct_astra_1_1_camera_a885ee1e557846f90802457457930cfad}{eye}}\{2.0f\};}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00020}\mbox{\hyperlink{struct_astra_1_1_camera_aeb2af2ff6512ccfa78d8bbe3c36feeef}{00020}}\ \ \ \ \ \ \ \ \ glm::vec3\ \mbox{\hyperlink{struct_astra_1_1_camera_aeb2af2ff6512ccfa78d8bbe3c36feeef}{up}}\{0.0f,\ 1.0f,\ 0.0f\};}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00021}\mbox{\hyperlink{struct_astra_1_1_camera_a031a8e131dc42472d4c309385abb7260}{00021}}\ \ \ \ \ \ \ \ \ glm::vec3\ \mbox{\hyperlink{struct_astra_1_1_camera_a031a8e131dc42472d4c309385abb7260}{centre}}\{0.0f\};}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00022}00022\ }
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00023}\mbox{\hyperlink{struct_astra_1_1_camera_a03280bcb605e22eaaa908ffa6a764993}{00023}}\ \ \ \ \ \ \ \ \ glm::mat4\ \mbox{\hyperlink{struct_astra_1_1_camera_a03280bcb605e22eaaa908ffa6a764993}{viewMatrix}}\{1.0f\};}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00024}00024\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00025}00025\ }
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00031}\mbox{\hyperlink{class_astra_1_1_camera_controller}{00031}}\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_astra_1_1_camera_controller}{CameraController}}}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00032}00032\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00033}00033\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00034}\mbox{\hyperlink{class_astra_1_1_camera_controller_a9588a24a4475c71c00b8cc9ae842bc4e}{00034}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_astra_1_1_camera}{Camera}}\ \&\mbox{\hyperlink{class_astra_1_1_camera_controller_a9588a24a4475c71c00b8cc9ae842bc4e}{\_camera}};}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00035}\mbox{\hyperlink{class_astra_1_1_camera_controller_ab4202d36b896492645aae2d8b8476284}{00035}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_astra_1_1_camera_controller_ab4202d36b896492645aae2d8b8476284}{\_sens}}\ =\ 0.01f;}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00036}\mbox{\hyperlink{class_astra_1_1_camera_controller_a9b5b920135ec52c7dffc13a342f40127}{00036}}\ \ \ \ \ \ \ \ \ uint32\_t\ \mbox{\hyperlink{class_astra_1_1_camera_controller_a52a9a6da00594f26f9d9a3743782b31e}{\_width}},\ \mbox{\hyperlink{class_astra_1_1_camera_controller_a9b5b920135ec52c7dffc13a342f40127}{\_height}};}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00037}00037\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_camera_controller_ab5958523ed020771b541bae3b3111883}{updateCamera}}();}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00038}00038\ }
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00039}00039\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00040}00040\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_astra_1_1_camera_controller_a8d2915583e8caf3e2cab9c94976df158}{CameraController}}(\mbox{\hyperlink{struct_astra_1_1_camera}{Camera}}\ \&cam);}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00041}\mbox{\hyperlink{class_astra_1_1_camera_controller_a104ca3d7ec5177028dcfc170c44483d5}{00041}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_camera_controller_a104ca3d7ec5177028dcfc170c44483d5}{setSens}}(\textcolor{keywordtype}{float}\ s)\ \{\ \mbox{\hyperlink{class_astra_1_1_camera_controller_ab4202d36b896492645aae2d8b8476284}{\_sens}}\ =\ s;\ \}}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00042}\mbox{\hyperlink{class_astra_1_1_camera_controller_a3a1f1a2b8aee88db38bc3d31d1c2a854}{00042}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_astra_1_1_camera_controller_a3a1f1a2b8aee88db38bc3d31d1c2a854}{getSens}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_astra_1_1_camera_controller_ab4202d36b896492645aae2d8b8476284}{\_sens}};\ \}}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00043}\mbox{\hyperlink{class_astra_1_1_camera_controller_a1463c208a27e62744b80f793f52b138c}{00043}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_camera_controller_a1463c208a27e62744b80f793f52b138c}{setWindowSize}}(uint32\_t\ w,\ uint32\_t\ h)\ \{\ \mbox{\hyperlink{class_astra_1_1_camera_controller_a52a9a6da00594f26f9d9a3743782b31e}{\_width}}\ =\ w,\ \mbox{\hyperlink{class_astra_1_1_camera_controller_a9b5b920135ec52c7dffc13a342f40127}{\_height}}\ =\ h;\ \}}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00044}00044\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ glm::mat4\ \&\mbox{\hyperlink{class_astra_1_1_camera_controller_a885e8808f36153cdc2d3dc6b2c424750}{getViewMatrix}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00045}00045\ \ \ \ \ \ \ \ \ glm::mat4\ \mbox{\hyperlink{class_astra_1_1_camera_controller_ad14dba33ee496de0f94aeeb6a9bc2b8a}{getProjectionMatrix}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00046}00046\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_camera_controller_a0c30433490a968e8ad8587accf06cb51}{setLookAt}}(\textcolor{keyword}{const}\ glm::vec3\ \&eye,\ \textcolor{keyword}{const}\ glm::vec3\ \&center,\ \textcolor{keyword}{const}\ glm::vec3\ \&up);}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00047}00047\ }
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00048}00048\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_astra_1_1_camera_controller_aace151f583ca45de0f29c8653a938981}{getNear}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00049}00049\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_astra_1_1_camera_controller_a4fa648f2bbd2b67296c4dcaf10942b49}{fetFar}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00050}00050\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_astra_1_1_camera_controller_a5cf4e9d3f0de82f8369177181e6cfa5c}{getFov}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00051}00051\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ glm::vec3\ \&\mbox{\hyperlink{class_astra_1_1_camera_controller_add88ec4dbf57b4fb886440d22133c68d}{getEye}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00052}00052\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ glm::vec3\ \&\mbox{\hyperlink{class_astra_1_1_camera_controller_a072161e481786564325277b7362496b5}{getUp}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00053}00053\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ glm::vec3\ \&\mbox{\hyperlink{class_astra_1_1_camera_controller_a8416185d80453bbac2e450350206546e}{getCentre}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00054}00054\ }
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00055}00055\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_astra_1_1_camera}{Camera}}\ \mbox{\hyperlink{class_astra_1_1_camera_controller_a6842a9c1a762378294953985835eae23}{getCamera}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00056}00056\ }
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00057}00057\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \&\mbox{\hyperlink{class_astra_1_1_camera_controller_a8997257c16f2980b9df6e081c9a66105}{getNearRef}}();}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00058}00058\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \&\mbox{\hyperlink{class_astra_1_1_camera_controller_a2c80c474afb9c93db0ccc996b843e208}{fetFarRef}}();}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00059}00059\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \&\mbox{\hyperlink{class_astra_1_1_camera_controller_ad678b0788336521dc54810745753feba}{getFovRef}}();}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00060}00060\ \ \ \ \ \ \ \ \ glm::vec3\ \&\mbox{\hyperlink{class_astra_1_1_camera_controller_a916a248648d178bca169296813e06b0a}{getEyeRef}}();}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00061}00061\ \ \ \ \ \ \ \ \ glm::vec3\ \&\mbox{\hyperlink{class_astra_1_1_camera_controller_a7200e2fb96d45d6fefe8873c1ee8c347}{getUpRef}}();}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00062}00062\ \ \ \ \ \ \ \ \ glm::vec3\ \&\mbox{\hyperlink{class_astra_1_1_camera_controller_a14ffc377f814b250b4c6728c45095130}{getCentreRef}}();}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00063}00063\ }
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00064}00064\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_camera_controller_ae6bd816e36590cbab2280c1784825170}{setNear}}(\textcolor{keywordtype}{float}\ n);}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00065}00065\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_camera_controller_a8d621e6d80334e18d60f30937e7d15c2}{setFar}}(\textcolor{keywordtype}{float}\ f);}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00066}00066\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_camera_controller_a583599b415faa1111f6f83d25734e578}{setFov}}(\textcolor{keywordtype}{float}\ f);}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00067}00067\ }
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00068}00068\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_astra_1_1_camera_controller_a1b6e87f810c996df92ed5712d720623f}{update}}();}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00069}00069\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_camera_uniform}{CameraUniform}}\ \mbox{\hyperlink{class_astra_1_1_camera_controller_a56dff81dc4fb87e1fb0f513bbfd8df0d}{getCameraUniform}}();}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00070}00070\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00076}\mbox{\hyperlink{class_astra_1_1_free_camera_controller}{00076}}\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_astra_1_1_free_camera_controller}{FreeCameraController}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_astra_1_1_camera_controller}{CameraController}}}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00077}00077\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00078}00078\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00079}\mbox{\hyperlink{class_astra_1_1_free_camera_controller_a7f07c84574a0563ae9fac3cef2dc2735}{00079}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_astra_1_1_free_camera_controller_a7f07c84574a0563ae9fac3cef2dc2735}{\_speed}}\ =\ 0.1f;}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00080}00080\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_free_camera_controller_a071d7226400e78e374d1062acb247e84}{move}}(\textcolor{keywordtype}{bool}\ front,\ \textcolor{keywordtype}{bool}\ back,\ \textcolor{keywordtype}{bool}\ right,\ \textcolor{keywordtype}{bool}\ left,\ \textcolor{keywordtype}{bool}\ up,\ \textcolor{keywordtype}{bool}\ down,\ \textcolor{keywordtype}{float}\ speed);}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00081}00081\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_free_camera_controller_aabe8e5a60c98ad01bc0e78bd921f4150}{rotate}}(\textcolor{keywordtype}{float}\ dx,\ \textcolor{keywordtype}{float}\ dy);}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00082}00082\ }
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00083}00083\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00084}00084\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_astra_1_1_free_camera_controller_a791089762d4c54a19e20340e676feb37}{FreeCameraController}}(\mbox{\hyperlink{struct_astra_1_1_camera}{Camera}}\ \&cam);}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00085}00085\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_astra_1_1_free_camera_controller_a33a1930a1c31eeaded9c22a75d2e17b0}{update}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00086}00086\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00092}\mbox{\hyperlink{class_astra_1_1_orbit_camera_controller}{00092}}\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_astra_1_1_orbit_camera_controller}{OrbitCameraController}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_astra_1_1_camera_controller}{CameraController}}}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00093}00093\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00094}00094\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00095}\mbox{\hyperlink{class_astra_1_1_orbit_camera_controller_ab9fb754b018f28f5cf6df8988c395452}{00095}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_astra_1_1_orbit_camera_controller_ab9fb754b018f28f5cf6df8988c395452}{maxXRotation}}\ =\ glm::pi<float>()\ *\ 0.4f;}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00096}\mbox{\hyperlink{class_astra_1_1_orbit_camera_controller_add0a50006fe51d1233ab8ab2e08997d0}{00096}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_astra_1_1_orbit_camera_controller_add0a50006fe51d1233ab8ab2e08997d0}{minXRotation}}\ =\ -\/glm::pi<float>()\ *\ 0.4f;}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00097}00097\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_orbit_camera_controller_aacb316faf020bb43ec37353293d697d7}{orbit}}(\textcolor{keywordtype}{float}\ x,\ \textcolor{keywordtype}{float}\ y);}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00098}00098\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_orbit_camera_controller_aab04728099d7e46c95ff5175ea52fe40}{pan}}(\textcolor{keywordtype}{float}\ x,\ \textcolor{keywordtype}{float}\ y);}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00099}00099\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_orbit_camera_controller_a8489fb490ee0a69716428921c472dc6d}{zoom}}(\textcolor{keywordtype}{float}\ increment);}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00100}00100\ }
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00101}00101\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00102}00102\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_astra_1_1_orbit_camera_controller_a25aad4715990c8c93a1be131cdbd8742}{OrbitCameraController}}(\mbox{\hyperlink{struct_astra_1_1_camera}{Camera}}\ \&cam);}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00103}00103\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_astra_1_1_orbit_camera_controller_a142a6cf6673a6b434cfd4a43018fc58d}{update}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00104}00104\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{_camera_8h_source_l00105}00105\ \}}
+
+\end{DoxyCode}

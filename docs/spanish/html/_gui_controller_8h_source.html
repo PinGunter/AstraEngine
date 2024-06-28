@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.11.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>AstraCore: Archivo de código fuente include/GuiController.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">AstraCore
+   </div>
+   <div id="projectbrief">Astra Core is a C++ library to develop visualization apps in Vulkan using rasterization or hardware-accelerated ray-tracing.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.11.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Buscar',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('_gui_controller_8h_source.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">GuiController.h</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="_gui_controller_8h.html">Ir a la documentación de este archivo.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#include &lt;vulkan/vulkan.h&gt;</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;imgui.h&gt;</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;ImGuizmo.h&gt;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;<a class="code" href="_renderer_8h.html">Renderer.h</a>&gt;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;GLFW/glfw3.h&gt;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;<a class="code" href="_app_8h.html">App.h</a>&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespace_astra.html">Astra</a></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>{</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>    <span class="keyword">class </span>App;</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    <span class="keyword">class </span>Renderer;</div>
+<div class="foldopen" id="foldopen00018" data-start="{" data-end="};">
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="class_astra_1_1_gui_controller.html">   18</a></span>    <span class="keyword">class </span><a class="code hl_class" href="class_astra_1_1_gui_controller.html">GuiController</a></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    {</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="class_astra_1_1_gui_controller.html#a70538530bc36e033e360880ef311df61">   20</a></span>        <span class="keyword">friend</span> <span class="keyword">class </span><a class="code hl_class" href="class_astra_1_1_renderer.html">Renderer</a>;</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="class_astra_1_1_gui_controller.html#a00b5ceb14c9647c4ecc8795aa3abc478">   23</a></span>        VkDescriptorPool <a class="code hl_variable" href="class_astra_1_1_gui_controller.html#a00b5ceb14c9647c4ecc8795aa3abc478">_imguiDescPool</a>;</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_gui_controller.html#a91b3466feea43511f47bacc9fca9a09c">init</a>(GLFWwindow *window, <a class="code hl_class" href="class_astra_1_1_renderer.html">Renderer</a> *renderer);</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_gui_controller.html#a6fd069e4878a003d2fcb3be52dbcbdef">startFrame</a>();</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_gui_controller.html#a5aaee6286d83ce7c859f5ecbb9a911f9">endFrame</a>(<span class="keyword">const</span> <a class="code hl_class" href="class_astra_1_1_command_list.html">CommandList</a> &amp;cmdList);</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_gui_controller.html#a706128cf04d3bf0482afbcc7be3ca3d2">destroy</a>();</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno"><a class="line" href="class_astra_1_1_gui_controller.html#a9402ad3f857e31e32b2d770bca6f7096">   50</a></span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_gui_controller.html#a9402ad3f857e31e32b2d770bca6f7096">draw</a>(<a class="code hl_class" href="class_astra_1_1_app.html">App</a> *app) = 0;</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    };</div>
+</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>}</div>
+<div class="ttc" id="a_app_8h_html"><div class="ttname"><a href="_app_8h.html">App.h</a></div></div>
+<div class="ttc" id="a_renderer_8h_html"><div class="ttname"><a href="_renderer_8h.html">Renderer.h</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html"><div class="ttname"><a href="class_astra_1_1_app.html">Astra::App</a></div><div class="ttdoc">Clase base para todas las aplicaciones que utilicen la biblioteca.</div><div class="ttdef"><b>Definition</b> <a href="_app_8h_source.html#l00021">App.h:22</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_command_list_html"><div class="ttname"><a href="class_astra_1_1_command_list.html">Astra::CommandList</a></div><div class="ttdoc">Clase que representa un objeto VkCommandBuffer de Vulkan. Proporciona métodos para realizar las funci...</div><div class="ttdef"><b>Definition</b> <a href="_command_list_8h_source.html#l00016">CommandList.h:17</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_gui_controller_html"><div class="ttname"><a href="class_astra_1_1_gui_controller.html">Astra::GuiController</a></div><div class="ttdoc">Clase sencilla que contiene métodos para dibujar una interfaz de ImGui.</div><div class="ttdef"><b>Definition</b> <a href="#l00018">GuiController.h:19</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_gui_controller_html_a00b5ceb14c9647c4ecc8795aa3abc478"><div class="ttname"><a href="class_astra_1_1_gui_controller.html#a00b5ceb14c9647c4ecc8795aa3abc478">Astra::GuiController::_imguiDescPool</a></div><div class="ttdeci">VkDescriptorPool _imguiDescPool</div><div class="ttdef"><b>Definition</b> <a href="#l00023">GuiController.h:23</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_gui_controller_html_a5aaee6286d83ce7c859f5ecbb9a911f9"><div class="ttname"><a href="class_astra_1_1_gui_controller.html#a5aaee6286d83ce7c859f5ecbb9a911f9">Astra::GuiController::endFrame</a></div><div class="ttdeci">void endFrame(const CommandList &amp;cmdList)</div><div class="ttdoc">Termina el frame de la interfaz.</div><div class="ttdef"><b>Definition</b> <a href="_gui_controller_8cpp_source.html#l00073">GuiController.cpp:73</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_gui_controller_html_a6fd069e4878a003d2fcb3be52dbcbdef"><div class="ttname"><a href="class_astra_1_1_gui_controller.html#a6fd069e4878a003d2fcb3be52dbcbdef">Astra::GuiController::startFrame</a></div><div class="ttdeci">void startFrame()</div><div class="ttdoc">Comienza el frame de la interfaz.</div><div class="ttdef"><b>Definition</b> <a href="_gui_controller_8cpp_source.html#l00066">GuiController.cpp:66</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_gui_controller_html_a706128cf04d3bf0482afbcc7be3ca3d2"><div class="ttname"><a href="class_astra_1_1_gui_controller.html#a706128cf04d3bf0482afbcc7be3ca3d2">Astra::GuiController::destroy</a></div><div class="ttdeci">void destroy()</div><div class="ttdoc">Destruye los recursos usados.</div><div class="ttdef"><b>Definition</b> <a href="_gui_controller_8cpp_source.html#l00079">GuiController.cpp:79</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_gui_controller_html_a91b3466feea43511f47bacc9fca9a09c"><div class="ttname"><a href="class_astra_1_1_gui_controller.html#a91b3466feea43511f47bacc9fca9a09c">Astra::GuiController::init</a></div><div class="ttdeci">void init(GLFWwindow *window, Renderer *renderer)</div><div class="ttdoc">Inicializa el backend de ImGui.</div><div class="ttdef"><b>Definition</b> <a href="_gui_controller_8cpp_source.html#l00009">GuiController.cpp:9</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_gui_controller_html_a9402ad3f857e31e32b2d770bca6f7096"><div class="ttname"><a href="class_astra_1_1_gui_controller.html#a9402ad3f857e31e32b2d770bca6f7096">Astra::GuiController::draw</a></div><div class="ttdeci">virtual void draw(App *app)=0</div><div class="ttdoc">Método abstracto que necesita ser sobreescrito por las clases hijas. La implementación de esta funció...</div></div>
+<div class="ttc" id="aclass_astra_1_1_renderer_html"><div class="ttname"><a href="class_astra_1_1_renderer.html">Astra::Renderer</a></div><div class="ttdoc">Clase renderer. Contiene todo lo necesario para renderizar la escena. Se encarga de todo el proceso d...</div><div class="ttdef"><b>Definition</b> <a href="_renderer_8h_source.html#l00031">Renderer.h:32</a></div></div>
+<div class="ttc" id="anamespace_astra_html"><div class="ttname"><a href="namespace_astra.html">Astra</a></div><div class="ttdef"><b>Definition</b> <a href="_app_8h_source.html#l00010">App.h:11</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="_gui_controller_8h.html">GuiController.h</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.11.0 </li>
+  </ul>
+</div>
+</body>
+</html>

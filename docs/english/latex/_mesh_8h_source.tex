@@ -1,0 +1,65 @@
+\doxysection{Mesh.\+h}
+\hypertarget{_mesh_8h_source}{}\label{_mesh_8h_source}\index{include/Mesh.h@{include/Mesh.h}}
+\mbox{\hyperlink{_mesh_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00001}00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00002}00002\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_node3_d_8h}{Node3D.h}}>}}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00003}00003\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00004}00004\ \textcolor{preprocessor}{\#include\ "{}nvvk/resourceallocator\_vk.hpp"{}}}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{host__device_8h}{host\_device.h}}>}}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00006}00006\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00007}00007\ \textcolor{preprocessor}{\#include\ <vulkan/vulkan.h>}}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00008}00008\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_command_list_8h}{CommandList.h}}>}}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00009}00009\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespace_astra}{Astra}}}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00010}00010\ \{}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00011}00011\ }
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00019}\mbox{\hyperlink{struct_astra_1_1_mesh}{00019}}\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_astra_1_1_mesh}{Mesh}}}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00020}00020\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00027}\mbox{\hyperlink{struct_astra_1_1_mesh_aa68556f8d889afd1e2c80a9b961b6bb5}{00027}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_astra_1_1_mesh_aa68556f8d889afd1e2c80a9b961b6bb5}{meshId}}\{-\/1\};}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00028}00028\ }
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00029}00029\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CPU\ side}}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00034}\mbox{\hyperlink{struct_astra_1_1_mesh_af407c90fd1619d0457e42d13dada6e30}{00034}}\ \ \ \ \ \ \ \ \ std::vector<uint32\_t>\ \mbox{\hyperlink{struct_astra_1_1_mesh_af407c90fd1619d0457e42d13dada6e30}{indices}};}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00039}\mbox{\hyperlink{struct_astra_1_1_mesh_acf7a4748c8c286a6fde381dd1c6c30c1}{00039}}\ \ \ \ \ \ \ \ \ std::vector<Vertex>\ \mbox{\hyperlink{struct_astra_1_1_mesh_acf7a4748c8c286a6fde381dd1c6c30c1}{vertices}};}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00044}\mbox{\hyperlink{struct_astra_1_1_mesh_a337e4d6b2c85a8ee583b49a83b4c7d12}{00044}}\ \ \ \ \ \ \ \ \ std::vector<WaveFrontMaterial>\ \mbox{\hyperlink{struct_astra_1_1_mesh_a337e4d6b2c85a8ee583b49a83b4c7d12}{materials}};}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00049}\mbox{\hyperlink{struct_astra_1_1_mesh_a64570fb8973d3150fbd2f9a3f1c20372}{00049}}\ \ \ \ \ \ \ \ \ std::vector<int32\_t>\ \mbox{\hyperlink{struct_astra_1_1_mesh_a64570fb8973d3150fbd2f9a3f1c20372}{materialIndices}};}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00054}\mbox{\hyperlink{struct_astra_1_1_mesh_a2301c56624eefd89a2d282cdfa1975d8}{00054}}\ \ \ \ \ \ \ \ \ std::vector<std::string>\ \mbox{\hyperlink{struct_astra_1_1_mesh_a2301c56624eefd89a2d282cdfa1975d8}{textures}};}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00055}00055\ }
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00056}00056\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CPU\ -\/\ GPU\ side}}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00061}\mbox{\hyperlink{struct_astra_1_1_mesh_ace229a779e302d71704a1e56a95d4d50}{00061}}\ \ \ \ \ \ \ \ \ nvvk::Buffer\ \mbox{\hyperlink{struct_astra_1_1_mesh_ace229a779e302d71704a1e56a95d4d50}{vertexBuffer}};}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00066}\mbox{\hyperlink{struct_astra_1_1_mesh_a6f9452d7726873e05d17684dc16bf088}{00066}}\ \ \ \ \ \ \ \ \ nvvk::Buffer\ \mbox{\hyperlink{struct_astra_1_1_mesh_a6f9452d7726873e05d17684dc16bf088}{indexBuffer}};}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00071}\mbox{\hyperlink{struct_astra_1_1_mesh_a0061f64cb3e9d0696cb9f7b05bf35e13}{00071}}\ \ \ \ \ \ \ \ \ nvvk::Buffer\ \mbox{\hyperlink{struct_astra_1_1_mesh_a0061f64cb3e9d0696cb9f7b05bf35e13}{matColorBuffer}};}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00076}\mbox{\hyperlink{struct_astra_1_1_mesh_a05db14d264e171b7e33fdfffb2dacb4e}{00076}}\ \ \ \ \ \ \ \ \ nvvk::Buffer\ \mbox{\hyperlink{struct_astra_1_1_mesh_a05db14d264e171b7e33fdfffb2dacb4e}{matIndexBuffer}};}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00077}00077\ }
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00078}00078\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ GPU\ side}}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00083}\mbox{\hyperlink{struct_astra_1_1_mesh_a98668ea9a5c051f2644f3d4b45803557}{00083}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_obj_desc}{ObjDesc}}\ \mbox{\hyperlink{struct_astra_1_1_mesh_a98668ea9a5c051f2644f3d4b45803557}{descriptor}}\{\};\ \textcolor{comment}{//\ gpu\ buffer\ addresses}}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00084}00084\ }
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00089}00089\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_astra_1_1_mesh_a9a63d329adc88e7a3ac3dd6ae5edd8af}{draw}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_astra_1_1_command_list}{CommandList}}\ \&cmdList)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00094}00094\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_astra_1_1_mesh_ac826d55fe2c397483683be7235abc4d2}{create}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_astra_1_1_command_list}{Astra::CommandList}}\ \&cmdList,\ nvvk::ResourceAllocatorDma\ *alloc,\ uint32\_t\ txtOffset);}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00099}00099\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_astra_1_1_mesh_a6e7d0a63990bc715f056d301028391d3}{createBuffers}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_astra_1_1_command_list}{Astra::CommandList}}\ \&cmdList,\ nvvk::ResourceAllocatorDma\ *alloc);}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00104}00104\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_astra_1_1_mesh_abd19871244621d82e8ef487786a076e3}{loadFromFile}}(\textcolor{keyword}{const}\ std::string\ \&path);}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00105}00105\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00106}00106\ }
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00111}\mbox{\hyperlink{class_astra_1_1_mesh_instance}{00111}}\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_astra_1_1_mesh_instance}{MeshInstance}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_astra_1_1_node3_d}{Node3D}}}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00112}00112\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00113}00113\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00114}\mbox{\hyperlink{class_astra_1_1_mesh_instance_ae2f38cc52b6b60a3ac2dd33fd16c6877}{00114}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_astra_1_1_mesh_instance_ae2f38cc52b6b60a3ac2dd33fd16c6877}{\_visible}}\{\textcolor{keyword}{true}\};}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00119}\mbox{\hyperlink{class_astra_1_1_mesh_instance_a54bfd0956551cced31ac5d1dde8aae68}{00119}}\ \ \ \ \ \ \ \ \ uint32\_t\ \mbox{\hyperlink{class_astra_1_1_mesh_instance_a54bfd0956551cced31ac5d1dde8aae68}{\_mesh}};\ \textcolor{comment}{//\ index\ reference\ to\ mesh\ in\ a\ scene.}}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00120}00120\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00121}00121\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_astra_1_1_mesh_instance_ad04d0aca9999bf43b30478e5722087b8}{MeshInstance}}(uint32\_t\ mesh,\ \textcolor{keyword}{const}\ glm::mat4\ \&transform\ =\ glm::mat4(1.0f),\ \textcolor{keyword}{const}\ std::string\ \&name\ =\ \textcolor{stringliteral}{"{}"{}});}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00122}00122\ }
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00123}00123\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_astra_1_1_mesh_instance}{MeshInstance}}\ \&\mbox{\hyperlink{class_astra_1_1_mesh_instance_aa512b694932c742acaf05ecb0598f86d}{operator=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_astra_1_1_mesh_instance}{MeshInstance}}\ \&other);}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00124}00124\ }
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00125}00125\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_mesh_instance_ad16da64467f3cf063beb8f2bf8f7b688}{setVisible}}(\textcolor{keywordtype}{bool}\ v);}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00126}00126\ }
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00127}00127\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_astra_1_1_mesh_instance_a6b7f006f5bee54b24295f913129b2718}{getVisible}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00128}00128\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \&\mbox{\hyperlink{class_astra_1_1_mesh_instance_a8e66ec135655353f5adb80ccfdf09658}{getVisibleRef}}();}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00129}00129\ \ \ \ \ \ \ \ \ uint32\_t\ \mbox{\hyperlink{class_astra_1_1_mesh_instance_affa9a3f5ae7ddcd2f94981ec31282fe7}{getMeshIndex}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00130}00130\ }
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00131}00131\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_astra_1_1_mesh_instance_a97add7be626089009b303ef3d1c56069}{update}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00132}00132\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_mesh_instance_a998db56708d18c0f700c42a33961ed9b}{destroy}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00133}00133\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_mesh_instance_a8886b4bb39ad99ae9a741451271aeb7d}{updatePushConstantRaster}}(\mbox{\hyperlink{struct_push_constant_raster}{PushConstantRaster}}\ \&pc)\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00134}00134\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_mesh_instance_a9ea0a85a3faf240b5f8e19239aeb5725}{updatePushConstantRT}}(\mbox{\hyperlink{struct_push_constant_ray}{PushConstantRay}}\ \&pc)\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00135}00135\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{_mesh_8h_source_l00136}00136\ \}}
+
+\end{DoxyCode}

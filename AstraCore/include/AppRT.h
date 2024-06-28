@@ -1,8 +1,16 @@
 #pragma once
 #include <App.h>
 
-namespace Astra {
-	class AppRT : public App {
+namespace Astra
+{
+	/**
+	 * \~spanish @class AppRT
+	 * \~spanish @brief Clase que deriva de App para agregar los datos y métodos necesarios para usar trazado de rayos.
+	 * \~english @class AppRT
+	 * \~english @brief Class that derives from App and adds the necessary data and methods to use ray-tracing.
+	 */
+	class AppRT : public App
+	{
 	protected:
 		nvvk::DescriptorSetBindings _rtDescSetLayoutBind;
 		VkDescriptorPool _rtDescPool;
@@ -16,7 +24,7 @@ namespace Astra {
 		void onResize(int w, int h) override;
 
 	public:
-		void init(const std::vector<Scene*>& scenes, Renderer* renderer, GuiController* gui = nullptr) override;
+		void init(const std::vector<Scene *> &scenes, Renderer *renderer, GuiController *gui = nullptr) override;
 		void destroy() override;
 	};
 

@@ -1,0 +1,33 @@
+\doxysection{Gui\+Controller.\+h}
+\hypertarget{_gui_controller_8h_source}{}\label{_gui_controller_8h_source}\index{include/GuiController.h@{include/GuiController.h}}
+\mbox{\hyperlink{_gui_controller_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8h_source_l00001}00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8h_source_l00002}00002\ \textcolor{preprocessor}{\#include\ <vulkan/vulkan.h>}}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8h_source_l00003}00003\ \textcolor{preprocessor}{\#include\ <imgui.h>}}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8h_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <ImGuizmo.h>}}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8h_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_renderer_8h}{Renderer.h}}>}}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8h_source_l00006}00006\ \textcolor{preprocessor}{\#include\ <GLFW/glfw3.h>}}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8h_source_l00007}00007\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_app_8h}{App.h}}>}}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8h_source_l00008}00008\ }
+\DoxyCodeLine{\Hypertarget{_gui_controller_8h_source_l00009}00009\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespace_astra}{Astra}}}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8h_source_l00010}00010\ \{}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8h_source_l00011}00011\ \ \ \ \ \textcolor{keyword}{class\ }App;}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8h_source_l00012}00012\ \ \ \ \ \textcolor{keyword}{class\ }Renderer;}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8h_source_l00018}\mbox{\hyperlink{class_astra_1_1_gui_controller}{00018}}\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_astra_1_1_gui_controller}{GuiController}}}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8h_source_l00019}00019\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8h_source_l00020}\mbox{\hyperlink{class_astra_1_1_gui_controller_a70538530bc36e033e360880ef311df61}{00020}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_astra_1_1_renderer}{Renderer}};}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8h_source_l00021}00021\ }
+\DoxyCodeLine{\Hypertarget{_gui_controller_8h_source_l00022}00022\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8h_source_l00023}\mbox{\hyperlink{class_astra_1_1_gui_controller_a00b5ceb14c9647c4ecc8795aa3abc478}{00023}}\ \ \ \ \ \ \ \ \ VkDescriptorPool\ \mbox{\hyperlink{class_astra_1_1_gui_controller_a00b5ceb14c9647c4ecc8795aa3abc478}{\_imguiDescPool}};}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8h_source_l00024}00024\ }
+\DoxyCodeLine{\Hypertarget{_gui_controller_8h_source_l00025}00025\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8h_source_l00030}00030\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_gui_controller_a91b3466feea43511f47bacc9fca9a09c}{init}}(GLFWwindow\ *window,\ \mbox{\hyperlink{class_astra_1_1_renderer}{Renderer}}\ *renderer);}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8h_source_l00035}00035\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_gui_controller_a6fd069e4878a003d2fcb3be52dbcbdef}{startFrame}}();}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8h_source_l00040}00040\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_gui_controller_a5aaee6286d83ce7c859f5ecbb9a911f9}{endFrame}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_astra_1_1_command_list}{CommandList}}\ \&cmdList);}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8h_source_l00045}00045\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_gui_controller_a706128cf04d3bf0482afbcc7be3ca3d2}{destroy}}();}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8h_source_l00050}\mbox{\hyperlink{class_astra_1_1_gui_controller_a9402ad3f857e31e32b2d770bca6f7096}{00050}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_astra_1_1_gui_controller_a9402ad3f857e31e32b2d770bca6f7096}{draw}}(\mbox{\hyperlink{class_astra_1_1_app}{App}}\ *app)\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8h_source_l00051}00051\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{_gui_controller_8h_source_l00052}00052\ \}}
+
+\end{DoxyCode}

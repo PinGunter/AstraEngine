@@ -1,0 +1,82 @@
+\doxysection{Astra\+::Offscreen\+Raster Class Reference}
+\hypertarget{class_astra_1_1_offscreen_raster}{}\label{class_astra_1_1_offscreen_raster}\index{Astra::OffscreenRaster@{Astra::OffscreenRaster}}
+
+
+Offscreen raster pipeline. Ready to use.  
+
+
+
+
+{\ttfamily \#include $<$Pipeline.\+h$>$}
+
+Inheritance diagram for Astra\+::Offscreen\+Raster\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_astra_1_1_offscreen_raster}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_astra_1_1_offscreen_raster_a2f561937a8d12c90a75c8c83f5f196c2}{create}} (Vk\+Device vkdev, const std\+::vector$<$ Vk\+Descriptor\+Set\+Layout $>$ \&descsets\+Layouts, Vk\+Render\+Pass rp) override
+\begin{DoxyCompactList}\small\item\em Has to be overriden. Provides the parameter list and generalization. (for upcasting) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_astra_1_1_raster_pipeline}{Astra\+::\+Raster\+Pipeline}}}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{class_astra_1_1_raster_pipeline_a9787abd24089c3fe06ef01886e2e901a}{does\+Ray\+Tracing}} () override
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_astra_1_1_pipeline}{Astra\+::\+Pipeline}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_astra_1_1_pipeline_a10f5a40a8dd3fe819337bd32308d7090}{destroy}} (nvvk\+::\+Resource\+Allocator \texorpdfstring{$\ast$}{*}alloc)
+\item 
+virtual void \mbox{\hyperlink{class_astra_1_1_pipeline_ad56780f344b4864e302ce0d156ca430e}{bind}} (const \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}} \&cmd\+List, const std\+::vector$<$ Vk\+Descriptor\+Set $>$ \&descsets)
+\begin{DoxyCompactList}\small\item\em Binds the pipeline to the render pass. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_astra_1_1_pipeline_a8515be541dc58ba430e605c7c95a970c}{push\+Constants}} (const \mbox{\hyperlink{class_astra_1_1_command_list}{Command\+List}} \&cmd\+List, uint32\+\_\+t shader\+Stages, uint32\+\_\+t size, void \texorpdfstring{$\ast$}{*}data)
+\begin{DoxyCompactList}\small\item\em Pushes push constants to the GPU. \end{DoxyCompactList}\item 
+Vk\+Pipeline \mbox{\hyperlink{class_astra_1_1_pipeline_a1c9854f4c8be4e1c56bd787a695f5db7}{get\+Pipeline}} () const
+\item 
+Vk\+Pipeline\+Layout \mbox{\hyperlink{class_astra_1_1_pipeline_a958467cd915b9aa421f1f0f6624197bb}{get\+Layout}} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_astra_1_1_pipeline}{Astra\+::\+Pipeline}}}
+\begin{DoxyCompactItemize}
+\item 
+Vk\+Pipeline\+Layout \mbox{\hyperlink{class_astra_1_1_pipeline_a91eee050a7e48f5eed88f375e99348b3}{\+\_\+layout}}
+\item 
+Vk\+Pipeline \mbox{\hyperlink{class_astra_1_1_pipeline_a5ce2b0f85964c6e531e66cb26c28d5d9}{\+\_\+pipeline}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Offscreen raster pipeline. Ready to use. 
+
+Definition at line \mbox{\hyperlink{_pipeline_8h_source_l00084}{84}} of file \mbox{\hyperlink{_pipeline_8h_source}{Pipeline.\+h}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_astra_1_1_offscreen_raster_a2f561937a8d12c90a75c8c83f5f196c2}\index{Astra::OffscreenRaster@{Astra::OffscreenRaster}!create@{create}}
+\index{create@{create}!Astra::OffscreenRaster@{Astra::OffscreenRaster}}
+\doxysubsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_offscreen_raster_a2f561937a8d12c90a75c8c83f5f196c2} 
+void Astra\+::\+Offscreen\+Raster\+::create (\begin{DoxyParamCaption}\item[{Vk\+Device}]{vkdev}{, }\item[{const std\+::vector$<$ Vk\+Descriptor\+Set\+Layout $>$ \&}]{descsets\+Layouts}{, }\item[{Vk\+Render\+Pass}]{rp}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Has to be overriden. Provides the parameter list and generalization. (for upcasting) 
+
+
+
+Implements \mbox{\hyperlink{class_astra_1_1_raster_pipeline_a366bd3f749ae1058fffdcd29a4ffd960}{Astra\+::\+Raster\+Pipeline}}.
+
+
+
+Definition at line \mbox{\hyperlink{_pipeline_8cpp_source_l00255}{255}} of file \mbox{\hyperlink{_pipeline_8cpp_source}{Pipeline.\+cpp}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{_pipeline_8h}{Pipeline.\+h}}\item 
+src/\mbox{\hyperlink{_pipeline_8cpp}{Pipeline.\+cpp}}\end{DoxyCompactItemize}

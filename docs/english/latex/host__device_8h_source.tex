@@ -1,0 +1,142 @@
+\doxysection{host\+\_\+device.\+h}
+\hypertarget{host__device_8h_source}{}\label{host__device_8h_source}\index{shaders/host\_device.h@{shaders/host\_device.h}}
+\mbox{\hyperlink{host__device_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00001}00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00002}00002\ \textcolor{comment}{\ *\ This\ file\ has\ been\ slighty\ modified\ from\ the\ original\ one\ with\ its\ Copyright\ notice}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00003}00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00004}00004\ \textcolor{comment}{\ *\ Copyright\ (c)\ 2019-\/2021,\ NVIDIA\ CORPORATION.\ \ All\ rights\ reserved.}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00005}00005\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00006}00006\ \textcolor{comment}{\ *\ Licensed\ under\ the\ Apache\ License,\ Version\ 2.0\ (the\ "{}License"{});}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00007}00007\ \textcolor{comment}{\ *\ you\ may\ not\ use\ this\ file\ except\ in\ compliance\ with\ the\ License.}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00008}00008\ \textcolor{comment}{\ *\ You\ may\ obtain\ a\ copy\ of\ the\ License\ at}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00009}00009\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00010}00010\ \textcolor{comment}{\ *\ \ \ \ \ http://www.apache.org/licenses/LICENSE-\/2.0}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00011}00011\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00012}00012\ \textcolor{comment}{\ *\ Unless\ required\ by\ applicable\ law\ or\ agreed\ to\ in\ writing,\ software}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00013}00013\ \textcolor{comment}{\ *\ distributed\ under\ the\ License\ is\ distributed\ on\ an\ "{}AS\ IS"{}\ BASIS,}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00014}00014\ \textcolor{comment}{\ *\ WITHOUT\ WARRANTIES\ OR\ CONDITIONS\ OF\ ANY\ KIND,\ either\ express\ or\ implied.}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00015}00015\ \textcolor{comment}{\ *\ See\ the\ License\ for\ the\ specific\ language\ governing\ permissions\ and}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00016}00016\ \textcolor{comment}{\ *\ limitations\ under\ the\ License.}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00017}00017\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00018}00018\ \textcolor{comment}{\ *\ SPDX-\/FileCopyrightText:\ Copyright\ (c)\ 2019-\/2021\ NVIDIA\ CORPORATION}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00019}00019\ \textcolor{comment}{\ *\ SPDX-\/License-\/Identifier:\ Apache-\/2.0}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00020}00020\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00021}00021\ }
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00029}00029\ \textcolor{preprocessor}{\#ifndef\ COMMON\_HOST\_DEVICE}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00030}00030\ \textcolor{preprocessor}{\#define\ COMMON\_HOST\_DEVICE}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00031}00031\ }
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00032}00032\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00033}00033\ \textcolor{preprocessor}{\#include\ <glm/glm.hpp>}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00034}00034\ \textcolor{comment}{//\ GLSL\ Type}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00035}00035\ \textcolor{keyword}{using\ }vec2\ =\ glm::vec2;}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00036}00036\ \textcolor{keyword}{using\ }vec3\ =\ glm::vec3;}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00037}00037\ \textcolor{keyword}{using\ }vec4\ =\ glm::vec4;}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00038}00038\ \textcolor{keyword}{using\ }mat4\ =\ glm::mat4;}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00039}00039\ \textcolor{keyword}{using\ }uint\ =\ \textcolor{keywordtype}{unsigned}\ int;}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00040}00040\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00041}00041\ }
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00042}00042\ \textcolor{comment}{//\ clang-\/format\ off}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00043}00043\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus\ }\textcolor{comment}{//\ Descriptor\ binding\ helper\ for\ C++\ and\ GLSL}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00044}00044\ \textcolor{preprocessor}{\#define\ START\_BINDING(a)\ enum\ a\ \{}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00045}00045\ \textcolor{preprocessor}{\#define\ END\_BINDING()\ \}}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00046}00046\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00047}\mbox{\hyperlink{host__device_8h_a5d22e2bab73d0585f1f80c58c8bfce7f}{00047}}\ \textcolor{preprocessor}{\#define\ START\_BINDING(a)\ \ const\ uint}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00048}\mbox{\hyperlink{host__device_8h_ae5325d07343164bf3f95addd22bd58ff}{00048}}\ \textcolor{preprocessor}{\#define\ END\_BINDING()\ }}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00049}00049\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00050}00050\ }
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00051}\mbox{\hyperlink{host__device_8h_a737b417f16ea225cf15e8d4c23df53dc}{00051}}\ \textcolor{preprocessor}{\#define\ MAX\_LIGHTS\ 32}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00052}00052\ }
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00053}00053\ \mbox{\hyperlink{host__device_8h_a5d22e2bab73d0585f1f80c58c8bfce7f}{START\_BINDING}}(SceneBindings)}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00054}\mbox{\hyperlink{host__device_8h_a4860280b349d9d8ec2350ca11f3b641d}{00054}}\ \mbox{\hyperlink{host__device_8h_a4860280b349d9d8ec2350ca11f3b641d}{eCamera}}\ =\ 0,\ \ \textcolor{comment}{//\ Global\ uniform\ containing\ camera\ matrices}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00055}\mbox{\hyperlink{host__device_8h_ad69eb2f1d6aee0920332335e499fb5be}{00055}}\ \mbox{\hyperlink{host__device_8h_ad69eb2f1d6aee0920332335e499fb5be}{eLights}}\ =\ 1,\ \textcolor{comment}{//\ Lights\ in\ the\ scene}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00056}\mbox{\hyperlink{host__device_8h_ac0a7b85169e65e1f7fa0b366679be31c}{00056}}\ \mbox{\hyperlink{host__device_8h_ac0a7b85169e65e1f7fa0b366679be31c}{eObjDescs}}\ =\ 2,\ \ \textcolor{comment}{//\ Access\ to\ the\ object\ descriptions}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00057}\mbox{\hyperlink{host__device_8h_a6a215ad266daed01634c13e6d1016574}{00057}}\ \mbox{\hyperlink{host__device_8h_a6a215ad266daed01634c13e6d1016574}{eTextures}}\ =\ 3\ \ \ \textcolor{comment}{//\ Access\ to\ textures}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00058}00058\ \mbox{\hyperlink{host__device_8h_ae5325d07343164bf3f95addd22bd58ff}{END\_BINDING}}();}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00059}00059\ }
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00060}00060\ \mbox{\hyperlink{host__device_8h_a5d22e2bab73d0585f1f80c58c8bfce7f}{START\_BINDING}}(RtxBindings)}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00061}\mbox{\hyperlink{host__device_8h_a9551ca624795b7df99e3f0617cff8ac6}{00061}}\ \mbox{\hyperlink{host__device_8h_a9551ca624795b7df99e3f0617cff8ac6}{eTlas}}\ =\ 0,\ \ \textcolor{comment}{//\ Top-\/level\ acceleration\ structure}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00062}\mbox{\hyperlink{host__device_8h_ac01e41c88086a29c04877b2b0eac46c7}{00062}}\ \mbox{\hyperlink{host__device_8h_ac01e41c88086a29c04877b2b0eac46c7}{eOutImage}}\ =\ 1\ \ \ \textcolor{comment}{//\ Ray\ tracer\ output\ image}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00063}00063\ \mbox{\hyperlink{host__device_8h_ae5325d07343164bf3f95addd22bd58ff}{END\_BINDING}}();}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00064}00064\ \textcolor{comment}{//\ clang-\/format\ on}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00065}00065\ }
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00066}00066\ \textcolor{comment}{//\ Information\ of\ a\ obj\ model\ when\ referenced\ in\ a\ shader}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00067}\mbox{\hyperlink{struct_obj_desc}{00067}}\ struct\ \mbox{\hyperlink{struct_obj_desc}{ObjDesc}}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00068}00068\ \{}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00069}\mbox{\hyperlink{struct_obj_desc_a27c6c4e1d95e423e37b13028032228fa}{00069}}\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_obj_desc_a27c6c4e1d95e423e37b13028032228fa}{txtOffset}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Texture\ index\ offset\ in\ the\ array\ of\ textures}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00070}\mbox{\hyperlink{struct_obj_desc_a581292e466da97229bdc61e958d53aac}{00070}}\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{struct_obj_desc_a581292e466da97229bdc61e958d53aac}{vertexAddress}};\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Address\ of\ the\ Vertex\ buffer}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00071}\mbox{\hyperlink{struct_obj_desc_ab1500fbbbc4cd182832e47c4ef465c27}{00071}}\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{struct_obj_desc_ab1500fbbbc4cd182832e47c4ef465c27}{indexAddress}};\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Address\ of\ the\ index\ buffer}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00072}\mbox{\hyperlink{struct_obj_desc_a8bd1273ab56a7e3323346951e4315b35}{00072}}\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{struct_obj_desc_a8bd1273ab56a7e3323346951e4315b35}{materialAddress}};\ \ \ \ \ \ \ \textcolor{comment}{//\ Address\ of\ the\ material\ buffer}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00073}\mbox{\hyperlink{struct_obj_desc_a590a69d69e80bcb5917cca22108a9ccc}{00073}}\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{struct_obj_desc_a590a69d69e80bcb5917cca22108a9ccc}{materialIndexAddress}};\ \textcolor{comment}{//\ Address\ of\ the\ triangle\ material\ index\ buffer}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00074}00074\ \};}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00075}00075\ }
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00076}00076\ \textcolor{comment}{//\ Uniform\ buffer\ set\ at\ each\ frame}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00077}\mbox{\hyperlink{struct_camera_uniform}{00077}}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_camera_uniform}{CameraUniform}}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00078}00078\ \{}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00079}\mbox{\hyperlink{struct_camera_uniform_a32d37627d0b8e295126e87a077c7ed42}{00079}}\ \ \ \ \ mat4\ \mbox{\hyperlink{struct_camera_uniform_a32d37627d0b8e295126e87a077c7ed42}{viewProj}};\ \ \ \ \textcolor{comment}{//\ Camera\ view\ *\ projection}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00080}\mbox{\hyperlink{struct_camera_uniform_a52bb4a9c5514c2adb87cc9349cc4e452}{00080}}\ \ \ \ \ mat4\ \mbox{\hyperlink{struct_camera_uniform_a52bb4a9c5514c2adb87cc9349cc4e452}{viewInverse}};\ \textcolor{comment}{//\ Camera\ inverse\ view\ matrix}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00081}\mbox{\hyperlink{struct_camera_uniform_a4701ed3f69b9f1e460f140acf6448ba2}{00081}}\ \ \ \ \ mat4\ \mbox{\hyperlink{struct_camera_uniform_a4701ed3f69b9f1e460f140acf6448ba2}{projInverse}};\ \textcolor{comment}{//\ Camera\ inverse\ projection\ matrix}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00082}00082\ \};}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00083}00083\ }
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00084}00084\ \textcolor{comment}{//\ Uniform\ for\ lights}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00085}00085\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00086}00086\ \textcolor{keyword}{struct\ }\textcolor{keyword}{alignas}(16)\ \mbox{\hyperlink{struct_light_source}{LightSource}}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00087}00087\ \#else}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00088}\mbox{\hyperlink{struct_light_source}{00088}}\ struct\ \mbox{\hyperlink{struct_light_source}{LightSource}}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00089}00089\ \#endif}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00090}00090\ \{}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00091}\mbox{\hyperlink{struct_light_source_a070e50f43bf9801e85a75f8881b9fbfa}{00091}}\ \ \ \ \ vec3\ \mbox{\hyperlink{struct_light_source_a070e50f43bf9801e85a75f8881b9fbfa}{position}};}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00092}\mbox{\hyperlink{struct_light_source_af490515d0a0fc5810c7b99b6a7779cb2}{00092}}\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_light_source_af490515d0a0fc5810c7b99b6a7779cb2}{intensity}};}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00093}\mbox{\hyperlink{struct_light_source_a4d6aec706202253ca7e5a4250d6be6bc}{00093}}\ \ \ \ \ vec3\ \mbox{\hyperlink{struct_light_source_a4d6aec706202253ca7e5a4250d6be6bc}{color}};}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00094}\mbox{\hyperlink{struct_light_source_a320aee26da7951239fa5e177d759ae16}{00094}}\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_light_source_a320aee26da7951239fa5e177d759ae16}{type}};}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00095}00095\ \};}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00096}00096\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00097}00097\ \textcolor{keyword}{struct\ }\textcolor{keyword}{alignas}(16)\ \mbox{\hyperlink{struct_lights_uniform}{LightsUniform}}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00098}00098\ \#else}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00099}\mbox{\hyperlink{struct_lights_uniform}{00099}}\ struct\ \mbox{\hyperlink{struct_lights_uniform}{LightsUniform}}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00100}00100\ \#endif}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00101}00101\ \{}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00102}\mbox{\hyperlink{struct_lights_uniform_a3b9f48c651315a903d07c3ccfcdb9c3e}{00102}}\ \ \ \ \ \mbox{\hyperlink{struct_light_source}{LightSource}}\ \mbox{\hyperlink{struct_lights_uniform_a3b9f48c651315a903d07c3ccfcdb9c3e}{lights}}[\mbox{\hyperlink{host__device_8h_a737b417f16ea225cf15e8d4c23df53dc}{MAX\_LIGHTS}}];}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00103}00103\ \};}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00104}00104\ }
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00105}00105\ \textcolor{comment}{//\ Push\ constant\ structure\ for\ the\ raster}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00106}\mbox{\hyperlink{struct_push_constant_raster}{00106}}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_push_constant_raster}{PushConstantRaster}}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00107}00107\ \{}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00108}\mbox{\hyperlink{struct_push_constant_raster_add80832ee1ce55763550098e8b754e9d}{00108}}\ \ \ \ \ mat4\ \mbox{\hyperlink{struct_push_constant_raster_add80832ee1ce55763550098e8b754e9d}{modelMatrix}};\ \textcolor{comment}{//\ matrix\ of\ the\ instance}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00109}\mbox{\hyperlink{struct_push_constant_raster_a441eded72b4457488a7b47a8b855592c}{00109}}\ \ \ \ \ uint\ \mbox{\hyperlink{struct_push_constant_raster_a441eded72b4457488a7b47a8b855592c}{objIndex}};}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00110}\mbox{\hyperlink{struct_push_constant_raster_aee9ae9370a991fd6b2e797765e8d7cb0}{00110}}\ \ \ \ \ uint\ \mbox{\hyperlink{struct_push_constant_raster_aee9ae9370a991fd6b2e797765e8d7cb0}{nLights}};}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00111}00111\ \};}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00112}00112\ }
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00113}00113\ \textcolor{comment}{//\ Push\ constant\ structure\ for\ the\ ray\ tracer}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00114}\mbox{\hyperlink{struct_push_constant_ray}{00114}}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_push_constant_ray}{PushConstantRay}}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00115}00115\ \{}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00116}\mbox{\hyperlink{struct_push_constant_ray_acb8cf80fb190d3627509644a6267fb75}{00116}}\ \ \ \ \ vec4\ \mbox{\hyperlink{struct_push_constant_ray_acb8cf80fb190d3627509644a6267fb75}{clearColor}};}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00117}\mbox{\hyperlink{struct_push_constant_ray_aa07b328b89801ed6cb3f0c5740096202}{00117}}\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_push_constant_ray_aa07b328b89801ed6cb3f0c5740096202}{maxDepth}};}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00118}\mbox{\hyperlink{struct_push_constant_ray_acfed23a07d64a3ccdc168b2f0a9dd8bb}{00118}}\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_push_constant_ray_acfed23a07d64a3ccdc168b2f0a9dd8bb}{nLights}};}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00119}00119\ \};}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00120}00120\ }
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00121}\mbox{\hyperlink{struct_vertex}{00121}}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_vertex}{Vertex}}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00122}00122\ \{}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00123}\mbox{\hyperlink{struct_vertex_ab7602d33d0aca370ecd74f53eb0cc400}{00123}}\ \ \ \ \ vec3\ \mbox{\hyperlink{struct_vertex_ab7602d33d0aca370ecd74f53eb0cc400}{pos}};}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00124}\mbox{\hyperlink{struct_vertex_a2965ce848ad0051ba6014058da55a93c}{00124}}\ \ \ \ \ vec3\ \mbox{\hyperlink{struct_vertex_a2965ce848ad0051ba6014058da55a93c}{nrm}};}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00125}\mbox{\hyperlink{struct_vertex_a03f0580ec35e8f2d8ea038ad4ea7b02d}{00125}}\ \ \ \ \ vec3\ \mbox{\hyperlink{struct_vertex_a03f0580ec35e8f2d8ea038ad4ea7b02d}{color}};}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00126}\mbox{\hyperlink{struct_vertex_a47f371218dc1f2ccab5427b37ce3aa22}{00126}}\ \ \ \ \ vec2\ \mbox{\hyperlink{struct_vertex_a47f371218dc1f2ccab5427b37ce3aa22}{texCoord}};}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00127}00127\ \};}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00128}00128\ }
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00129}\mbox{\hyperlink{struct_wave_front_material}{00129}}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_wave_front_material}{WaveFrontMaterial}}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00130}00130\ \{}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00131}\mbox{\hyperlink{struct_wave_front_material_ac7a765dc3dace101a9bc1e0b30251c24}{00131}}\ \ \ \ \ vec3\ \mbox{\hyperlink{struct_wave_front_material_ac7a765dc3dace101a9bc1e0b30251c24}{ambient}};}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00132}\mbox{\hyperlink{struct_wave_front_material_aec6032409d2746866a251987a6e3657b}{00132}}\ \ \ \ \ vec3\ \mbox{\hyperlink{struct_wave_front_material_aec6032409d2746866a251987a6e3657b}{diffuse}};}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00133}\mbox{\hyperlink{struct_wave_front_material_ada3a06cd901a7fa6ba82b3f88023938b}{00133}}\ \ \ \ \ vec3\ \mbox{\hyperlink{struct_wave_front_material_ada3a06cd901a7fa6ba82b3f88023938b}{specular}};}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00134}\mbox{\hyperlink{struct_wave_front_material_a1739a7f087c11752dd90214926ee7d41}{00134}}\ \ \ \ \ vec3\ \mbox{\hyperlink{struct_wave_front_material_a1739a7f087c11752dd90214926ee7d41}{transmittance}};}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00135}\mbox{\hyperlink{struct_wave_front_material_a2168fff72af3bcdb2d815eb472b7b48d}{00135}}\ \ \ \ \ vec3\ \mbox{\hyperlink{struct_wave_front_material_a2168fff72af3bcdb2d815eb472b7b48d}{emission}};}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00136}\mbox{\hyperlink{struct_wave_front_material_a5b9a8c9a9da412b4dcebafe2b0c14195}{00136}}\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_wave_front_material_a5b9a8c9a9da412b4dcebafe2b0c14195}{shininess}};}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00137}\mbox{\hyperlink{struct_wave_front_material_aa570c0ee20e91e79739568c7fcaf9c51}{00137}}\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_wave_front_material_aa570c0ee20e91e79739568c7fcaf9c51}{ior}};\ \ \ \ \ \ \ \textcolor{comment}{//\ index\ of\ refraction}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00138}\mbox{\hyperlink{struct_wave_front_material_aee69b82eb6364c1d1d5bbdd6054032fb}{00138}}\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_wave_front_material_aee69b82eb6364c1d1d5bbdd6054032fb}{dissolve}};\ \textcolor{comment}{//\ 1\ ==\ opaque;\ 0\ ==\ fully\ transparent}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00139}\mbox{\hyperlink{struct_wave_front_material_a9b68dcc17356e1db151b3b49b24ce3f7}{00139}}\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_wave_front_material_a9b68dcc17356e1db151b3b49b24ce3f7}{illum}};\ \ \ \ \ \textcolor{comment}{//\ illumination\ model\ (see\ http://www.fileformat.info/format/material/)}}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00140}\mbox{\hyperlink{struct_wave_front_material_a7838dbb5f9bbfcf0fc093b588044eb65}{00140}}\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_wave_front_material_a7838dbb5f9bbfcf0fc093b588044eb65}{textureId}};}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00141}00141\ \};}
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00142}00142\ }
+\DoxyCodeLine{\Hypertarget{host__device_8h_source_l00143}00143\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

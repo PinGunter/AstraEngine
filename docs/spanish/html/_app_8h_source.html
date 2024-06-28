@@ -1,0 +1,236 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.11.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>AstraCore: Archivo de código fuente include/App.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">AstraCore
+   </div>
+   <div id="projectbrief">Astra Core is a C++ library to develop visualization apps in Vulkan using rasterization or hardware-accelerated ray-tracing.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.11.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Buscar',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('_app_8h_source.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">App.h</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="_app_8h.html">Ir a la documentación de este archivo.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#include &lt;nvvk/resourceallocator_vk.hpp&gt;</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;<a class="code" href="_gui_controller_8h.html">GuiController.h</a>&gt;</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;<a class="code" href="_renderer_8h.html">Renderer.h</a>&gt;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;<a class="code" href="_device_8h.html">Device.h</a>&gt;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;<a class="code" href="_scene_8h.html">Scene.h</a>&gt;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;<a class="code" href="_command_list_8h.html">CommandList.h</a>&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;<a class="code" href="_input_manager_8h.html">InputManager.h</a>&gt;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="foldopen" id="foldopen00010" data-start="{" data-end="}">
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno"><a class="line" href="namespace_astra.html">   10</a></span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespace_astra.html">Astra</a></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>{</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    <span class="keyword">class </span><a class="code hl_class" href="class_astra_1_1_gui_controller.html">GuiController</a>;</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    <span class="keyword">class </span><a class="code hl_class" href="class_astra_1_1_renderer.html">Renderer</a>;</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    <span class="keyword">class </span><a class="code hl_class" href="class_astra_1_1_scene.html">Scene</a>;</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="foldopen" id="foldopen00021" data-start="{" data-end="};">
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="class_astra_1_1_app.html">   21</a></span>    <span class="keyword">class </span><a class="code hl_class" href="class_astra_1_1_app.html">App</a></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    {</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="class_astra_1_1_app.html#a70538530bc36e033e360880ef311df61">   23</a></span>        <span class="keyword">friend</span> <span class="keyword">class </span><a class="code hl_class" href="class_astra_1_1_renderer.html">Renderer</a>;</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="class_astra_1_1_app.html#af0e8c3dcc20b7ddcaf63506363a22821">   24</a></span>        <span class="keyword">friend</span> <span class="keyword">class </span><a class="code hl_class" href="class_astra_1_1_input_manager.html">InputManager</a>;</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="class_astra_1_1_app.html#a3bc9811f86cd1a5024561639d7a4b66c">   31</a></span>        <a class="code hl_enumeration" href="namespace_astra.html#a8ff9af1a6f3d820347e90c1876815ac7">AppStatus</a> <a class="code hl_variable" href="class_astra_1_1_app.html#a3bc9811f86cd1a5024561639d7a4b66c">_status</a>{<a class="code hl_enumvalue" href="namespace_astra.html#a8ff9af1a6f3d820347e90c1876815ac7ae17d0f826f2eec26934c3863daa5643f">Created</a>};</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="class_astra_1_1_app.html#adb87fd803de6ee7e25abd60401c994d3">   36</a></span>        std::vector&lt;Scene *&gt; <a class="code hl_variable" href="class_astra_1_1_app.html#adb87fd803de6ee7e25abd60401c994d3">_scenes</a>;</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="class_astra_1_1_app.html#ae6cc26ea709d7ef2265f4407e2b5af30">   37</a></span>        <span class="keywordtype">int</span> <a class="code hl_variable" href="class_astra_1_1_app.html#ae6cc26ea709d7ef2265f4407e2b5af30">_currentScene</a>{0};</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="class_astra_1_1_app.html#a52d71507b2525f05a4d2dbcd4e02c03d">   39</a></span>        <a class="code hl_class" href="class_astra_1_1_gui_controller.html">GuiController</a> *<a class="code hl_variable" href="class_astra_1_1_app.html#a52d71507b2525f05a4d2dbcd4e02c03d">_gui</a>;</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="class_astra_1_1_app.html#a4f33a33fc7507626ecad79ca81b40300">   40</a></span>        <a class="code hl_class" href="class_astra_1_1_renderer.html">Renderer</a> *<a class="code hl_variable" href="class_astra_1_1_app.html#a4f33a33fc7507626ecad79ca81b40300">_renderer</a>;</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno"><a class="line" href="class_astra_1_1_app.html#ab0130baf56be7c76eaedcb15fc15644e">   41</a></span>        GLFWwindow *<a class="code hl_variable" href="class_astra_1_1_app.html#ab0130baf56be7c76eaedcb15fc15644e">_window</a>;</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="class_astra_1_1_app.html#ae0276b1ac70ead2e1cee9911225afa2f">   47</a></span>        nvvk::ResourceAllocatorDma <a class="code hl_variable" href="class_astra_1_1_app.html#ae0276b1ac70ead2e1cee9911225afa2f">_alloc</a>;</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno"><a class="line" href="class_astra_1_1_app.html#a2e63845bc0780919cd3f473069d22cd1">   53</a></span>        std::vector&lt;Pipeline *&gt; <a class="code hl_variable" href="class_astra_1_1_app.html#a2e63845bc0780919cd3f473069d22cd1">_pipelines</a>;</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno"><a class="line" href="class_astra_1_1_app.html#a14ca3e1a5d85968b31c8ef5c966a5fa0">   54</a></span>        <span class="keywordtype">int</span> <a class="code hl_variable" href="class_astra_1_1_app.html#a14ca3e1a5d85968b31c8ef5c966a5fa0">_selectedPipeline</a>{0};</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno"><a class="line" href="class_astra_1_1_app.html#ae02ec206dc8c714f457cd384147efdee">   56</a></span>        nvvk::DescriptorSetBindings <a class="code hl_variable" href="class_astra_1_1_app.html#ae02ec206dc8c714f457cd384147efdee">_descSetLayoutBind</a>;</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno"><a class="line" href="class_astra_1_1_app.html#a4511cdd0d08ab487f80e8d7f40f16937">   57</a></span>        VkDescriptorPool <a class="code hl_variable" href="class_astra_1_1_app.html#a4511cdd0d08ab487f80e8d7f40f16937">_descPool</a>;</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno"><a class="line" href="class_astra_1_1_app.html#a085f4d7ceb21cb366a22f1311aab812a">   58</a></span>        VkDescriptorSetLayout <a class="code hl_variable" href="class_astra_1_1_app.html#a085f4d7ceb21cb366a22f1311aab812a">_descSetLayout</a>;</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno"><a class="line" href="class_astra_1_1_app.html#a8741aeb37c6e52cd9633f6b24b25789b">   59</a></span>        VkDescriptorSet <a class="code hl_variable" href="class_astra_1_1_app.html#a8741aeb37c6e52cd9633f6b24b25789b">_descSet</a>;</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno"><a class="line" href="class_astra_1_1_app.html#a11af35428a6e6fb49fbf0db7bbc19f24">   65</a></span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_app.html#a11af35428a6e6fb49fbf0db7bbc19f24">createPipelines</a>() = 0;</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_app.html#abf180a61fd7d11ea661b79ce1a8dd306">destroyPipelines</a>();</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_app.html#a606362d870fa16bdcdcc9c27c535673c">createDescriptorSetLayout</a>();</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_app.html#a59bbd624078274cf9971146a5fc44be9">updateDescriptorSet</a>();</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno"><a class="line" href="class_astra_1_1_app.html#aa523940c6e94a9573000497b8cf706ce">   98</a></span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_app.html#aa523940c6e94a9573000497b8cf706ce">resetScene</a>(<span class="keywordtype">bool</span> recreatePipelines = <span class="keyword">false</span>) = 0;</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_app.html#af3eaf9278ff688d5e8c65f56313fc04e">onResize</a>(<span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h);</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno"><a class="line" href="class_astra_1_1_app.html#ade19f12ee29e09336ca2957aabe27f77">  108</a></span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_app.html#ade19f12ee29e09336ca2957aabe27f77">onFileDrop</a>(<span class="keywordtype">int</span> count, <span class="keyword">const</span> <span class="keywordtype">char</span> **paths) {};</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno"><a class="line" href="class_astra_1_1_app.html#a171181cf0916085614ce4c26e67aa5bb">  113</a></span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_app.html#a171181cf0916085614ce4c26e67aa5bb">onMouseMotion</a>(<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y) {};</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno"><a class="line" href="class_astra_1_1_app.html#a77eb75c2d49b6f8da756b5956ed76abe">  118</a></span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_app.html#a77eb75c2d49b6f8da756b5956ed76abe">onKeyboard</a>(<span class="keywordtype">int</span> key, <span class="keywordtype">int</span> scancode, <span class="keywordtype">int</span> action, <span class="keywordtype">int</span> mods) {};</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno"><a class="line" href="class_astra_1_1_app.html#ac05462b0fbb0fb03e220e0c018e132fd">  123</a></span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_app.html#ac05462b0fbb0fb03e220e0c018e132fd">onMouseButton</a>(<span class="keywordtype">int</span> button, <span class="keywordtype">int</span> action, <span class="keywordtype">int</span> mods) {};</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno"><a class="line" href="class_astra_1_1_app.html#a7279c7df27948697cc290913f7ac2142">  128</a></span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_app.html#a7279c7df27948697cc290913f7ac2142">onMouseWheel</a>(<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y) {};</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span> </div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_app.html#ab8c72b29f8b10069a05fba2bcddc8cee">init</a>(<span class="keyword">const</span> std::vector&lt;Scene *&gt; &amp;scenes, <a class="code hl_class" href="class_astra_1_1_renderer.html">Renderer</a> *renderer, <a class="code hl_class" href="class_astra_1_1_gui_controller.html">GuiController</a> *gui = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_app.html#a73b7eb438e4702f3095397f9e9bca3e9">addScene</a>(<a class="code hl_class" href="class_astra_1_1_scene.html">Scene</a> *s);</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno"><a class="line" href="class_astra_1_1_app.html#a5996d101f435b69e0fcfa4276e7ce2dd">  181</a></span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_app.html#a5996d101f435b69e0fcfa4276e7ce2dd">run</a>() = 0;</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>        <a class="code hl_function" href="class_astra_1_1_app.html#a80f3ac2c54dd36f55e1c8e92d1aa12dc">~App</a>();</div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span> </div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_app.html#a861860c493edbeeff457ef21fbecaf88">destroy</a>();</div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="class_astra_1_1_app.html#a6c20c6958469bf00650109dfa7b8f092">isMinimized</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>        <span class="keywordtype">int</span> &amp;<a class="code hl_function" href="class_astra_1_1_app.html#a5514ecd8b10cb169198de6d307ba12bf">getCurrentSceneIndexRef</a>();</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>        <span class="keywordtype">int</span> <a class="code hl_function" href="class_astra_1_1_app.html#a73e012df6ef613522855749438ea5739">getCurrentSceneIndex</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_astra_1_1_app.html#a5caf32412bda0afd92a579a9f35abfe9">setCurrentSceneIndex</a>(<span class="keywordtype">int</span> i);</div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span> </div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>        <a class="code hl_class" href="class_astra_1_1_scene.html">Scene</a> *<a class="code hl_function" href="class_astra_1_1_app.html#a8e38409ab0365b46b079e3e090d64543">getCurrentScene</a>();</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>        <a class="code hl_class" href="class_astra_1_1_renderer.html">Renderer</a> *<a class="code hl_function" href="class_astra_1_1_app.html#a7985d945b0284570462fb14eac519596">getRenderer</a>();</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span> </div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>        <a class="code hl_enumeration" href="namespace_astra.html#a8ff9af1a6f3d820347e90c1876815ac7">AppStatus</a> <a class="code hl_function" href="class_astra_1_1_app.html#a076a946cb42ccf2e5c173961056a6088">getStatus</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>    };</div>
+</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>}</div>
+</div>
+<div class="ttc" id="a_command_list_8h_html"><div class="ttname"><a href="_command_list_8h.html">CommandList.h</a></div></div>
+<div class="ttc" id="a_device_8h_html"><div class="ttname"><a href="_device_8h.html">Device.h</a></div></div>
+<div class="ttc" id="a_gui_controller_8h_html"><div class="ttname"><a href="_gui_controller_8h.html">GuiController.h</a></div></div>
+<div class="ttc" id="a_input_manager_8h_html"><div class="ttname"><a href="_input_manager_8h.html">InputManager.h</a></div></div>
+<div class="ttc" id="a_renderer_8h_html"><div class="ttname"><a href="_renderer_8h.html">Renderer.h</a></div></div>
+<div class="ttc" id="a_scene_8h_html"><div class="ttname"><a href="_scene_8h.html">Scene.h</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html"><div class="ttname"><a href="class_astra_1_1_app.html">Astra::App</a></div><div class="ttdoc">Clase base para todas las aplicaciones que utilicen la biblioteca.</div><div class="ttdef"><b>Definition</b> <a href="#l00021">App.h:22</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_a076a946cb42ccf2e5c173961056a6088"><div class="ttname"><a href="class_astra_1_1_app.html#a076a946cb42ccf2e5c173961056a6088">Astra::App::getStatus</a></div><div class="ttdeci">AppStatus getStatus() const</div><div class="ttdef"><b>Definition</b> <a href="_app_8cpp_source.html#l00191">App.cpp:191</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_a085f4d7ceb21cb366a22f1311aab812a"><div class="ttname"><a href="class_astra_1_1_app.html#a085f4d7ceb21cb366a22f1311aab812a">Astra::App::_descSetLayout</a></div><div class="ttdeci">VkDescriptorSetLayout _descSetLayout</div><div class="ttdef"><b>Definition</b> <a href="#l00058">App.h:58</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_a11af35428a6e6fb49fbf0db7bbc19f24"><div class="ttname"><a href="class_astra_1_1_app.html#a11af35428a6e6fb49fbf0db7bbc19f24">Astra::App::createPipelines</a></div><div class="ttdeci">virtual void createPipelines()=0</div><div class="ttdoc">Método abstracto que cada clase derivada debe implementar. Debe crear las pipelines que se vayan a us...</div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_a14ca3e1a5d85968b31c8ef5c966a5fa0"><div class="ttname"><a href="class_astra_1_1_app.html#a14ca3e1a5d85968b31c8ef5c966a5fa0">Astra::App::_selectedPipeline</a></div><div class="ttdeci">int _selectedPipeline</div><div class="ttdef"><b>Definition</b> <a href="#l00054">App.h:54</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_a171181cf0916085614ce4c26e67aa5bb"><div class="ttname"><a href="class_astra_1_1_app.html#a171181cf0916085614ce4c26e67aa5bb">Astra::App::onMouseMotion</a></div><div class="ttdeci">virtual void onMouseMotion(int x, int y)</div><div class="ttdoc">Callback de evento de movimiento de ratón. No hace nada por defecto.</div><div class="ttdef"><b>Definition</b> <a href="#l00113">App.h:113</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_a2e63845bc0780919cd3f473069d22cd1"><div class="ttname"><a href="class_astra_1_1_app.html#a2e63845bc0780919cd3f473069d22cd1">Astra::App::_pipelines</a></div><div class="ttdeci">std::vector&lt; Pipeline * &gt; _pipelines</div><div class="ttdoc">Vector de pipelines.</div><div class="ttdef"><b>Definition</b> <a href="#l00053">App.h:53</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_a3bc9811f86cd1a5024561639d7a4b66c"><div class="ttname"><a href="class_astra_1_1_app.html#a3bc9811f86cd1a5024561639d7a4b66c">Astra::App::_status</a></div><div class="ttdeci">AppStatus _status</div><div class="ttdoc">Estado de la aplicación, puede ser creada, en ejecución y destruida.</div><div class="ttdef"><b>Definition</b> <a href="#l00031">App.h:31</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_a4511cdd0d08ab487f80e8d7f40f16937"><div class="ttname"><a href="class_astra_1_1_app.html#a4511cdd0d08ab487f80e8d7f40f16937">Astra::App::_descPool</a></div><div class="ttdeci">VkDescriptorPool _descPool</div><div class="ttdef"><b>Definition</b> <a href="#l00057">App.h:57</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_a4f33a33fc7507626ecad79ca81b40300"><div class="ttname"><a href="class_astra_1_1_app.html#a4f33a33fc7507626ecad79ca81b40300">Astra::App::_renderer</a></div><div class="ttdeci">Renderer * _renderer</div><div class="ttdef"><b>Definition</b> <a href="#l00040">App.h:40</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_a52d71507b2525f05a4d2dbcd4e02c03d"><div class="ttname"><a href="class_astra_1_1_app.html#a52d71507b2525f05a4d2dbcd4e02c03d">Astra::App::_gui</a></div><div class="ttdeci">GuiController * _gui</div><div class="ttdef"><b>Definition</b> <a href="#l00039">App.h:39</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_a5514ecd8b10cb169198de6d307ba12bf"><div class="ttname"><a href="class_astra_1_1_app.html#a5514ecd8b10cb169198de6d307ba12bf">Astra::App::getCurrentSceneIndexRef</a></div><div class="ttdeci">int &amp; getCurrentSceneIndexRef()</div><div class="ttdef"><b>Definition</b> <a href="_app_8cpp_source.html#l00159">App.cpp:159</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_a5996d101f435b69e0fcfa4276e7ce2dd"><div class="ttname"><a href="class_astra_1_1_app.html#a5996d101f435b69e0fcfa4276e7ce2dd">Astra::App::run</a></div><div class="ttdeci">virtual void run()=0</div><div class="ttdoc">Método virtual que debe implementar la clase derivada. Se debe encargar de hacer el bucle de dibujado...</div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_a59bbd624078274cf9971146a5fc44be9"><div class="ttname"><a href="class_astra_1_1_app.html#a59bbd624078274cf9971146a5fc44be9">Astra::App::updateDescriptorSet</a></div><div class="ttdeci">virtual void updateDescriptorSet()</div><div class="ttdoc">Escribe y actualiza los datos del descriptor set.</div><div class="ttdef"><b>Definition</b> <a href="_app_8cpp_source.html#l00040">App.cpp:40</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_a5caf32412bda0afd92a579a9f35abfe9"><div class="ttname"><a href="class_astra_1_1_app.html#a5caf32412bda0afd92a579a9f35abfe9">Astra::App::setCurrentSceneIndex</a></div><div class="ttdeci">virtual void setCurrentSceneIndex(int i)</div><div class="ttdef"><b>Definition</b> <a href="_app_8cpp_source.html#l00169">App.cpp:169</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_a606362d870fa16bdcdcc9c27c535673c"><div class="ttname"><a href="class_astra_1_1_app.html#a606362d870fa16bdcdcc9c27c535673c">Astra::App::createDescriptorSetLayout</a></div><div class="ttdeci">virtual void createDescriptorSetLayout()</div><div class="ttdoc">Crea el layout de los descriptor sets básicos para rasterización. El descriptor set que crea tiene la...</div><div class="ttdef"><b>Definition</b> <a href="_app_8cpp_source.html#l00018">App.cpp:18</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_a6c20c6958469bf00650109dfa7b8f092"><div class="ttname"><a href="class_astra_1_1_app.html#a6c20c6958469bf00650109dfa7b8f092">Astra::App::isMinimized</a></div><div class="ttdeci">bool isMinimized() const</div><div class="ttdef"><b>Definition</b> <a href="_app_8cpp_source.html#l00151">App.cpp:151</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_a7279c7df27948697cc290913f7ac2142"><div class="ttname"><a href="class_astra_1_1_app.html#a7279c7df27948697cc290913f7ac2142">Astra::App::onMouseWheel</a></div><div class="ttdeci">virtual void onMouseWheel(int x, int y)</div><div class="ttdoc">Callback para el evento de la rueda del ratón. No hace nada por defecto.</div><div class="ttdef"><b>Definition</b> <a href="#l00128">App.h:128</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_a73b7eb438e4702f3095397f9e9bca3e9"><div class="ttname"><a href="class_astra_1_1_app.html#a73b7eb438e4702f3095397f9e9bca3e9">Astra::App::addScene</a></div><div class="ttdeci">virtual void addScene(Scene *s)</div><div class="ttdoc">Añade una escena a la aplicación.</div><div class="ttdef"><b>Definition</b> <a href="_app_8cpp_source.html#l00116">App.cpp:116</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_a73e012df6ef613522855749438ea5739"><div class="ttname"><a href="class_astra_1_1_app.html#a73e012df6ef613522855749438ea5739">Astra::App::getCurrentSceneIndex</a></div><div class="ttdeci">int getCurrentSceneIndex() const</div><div class="ttdef"><b>Definition</b> <a href="_app_8cpp_source.html#l00164">App.cpp:164</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_a77eb75c2d49b6f8da756b5956ed76abe"><div class="ttname"><a href="class_astra_1_1_app.html#a77eb75c2d49b6f8da756b5956ed76abe">Astra::App::onKeyboard</a></div><div class="ttdeci">virtual void onKeyboard(int key, int scancode, int action, int mods)</div><div class="ttdoc">Callback para cuando se pulsan teclas del teclado. No hace nada por defecto.</div><div class="ttdef"><b>Definition</b> <a href="#l00118">App.h:118</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_a7985d945b0284570462fb14eac519596"><div class="ttname"><a href="class_astra_1_1_app.html#a7985d945b0284570462fb14eac519596">Astra::App::getRenderer</a></div><div class="ttdeci">Renderer * getRenderer()</div><div class="ttdef"><b>Definition</b> <a href="_app_8cpp_source.html#l00186">App.cpp:186</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_a80f3ac2c54dd36f55e1c8e92d1aa12dc"><div class="ttname"><a href="class_astra_1_1_app.html#a80f3ac2c54dd36f55e1c8e92d1aa12dc">Astra::App::~App</a></div><div class="ttdeci">~App()</div><div class="ttdef"><b>Definition</b> <a href="_app_8cpp_source.html#l00121">App.cpp:121</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_a861860c493edbeeff457ef21fbecaf88"><div class="ttname"><a href="class_astra_1_1_app.html#a861860c493edbeeff457ef21fbecaf88">Astra::App::destroy</a></div><div class="ttdeci">virtual void destroy()</div><div class="ttdef"><b>Definition</b> <a href="_app_8cpp_source.html#l00126">App.cpp:126</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_a8741aeb37c6e52cd9633f6b24b25789b"><div class="ttname"><a href="class_astra_1_1_app.html#a8741aeb37c6e52cd9633f6b24b25789b">Astra::App::_descSet</a></div><div class="ttdeci">VkDescriptorSet _descSet</div><div class="ttdef"><b>Definition</b> <a href="#l00059">App.h:59</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_a8e38409ab0365b46b079e3e090d64543"><div class="ttname"><a href="class_astra_1_1_app.html#a8e38409ab0365b46b079e3e090d64543">Astra::App::getCurrentScene</a></div><div class="ttdeci">Scene * getCurrentScene()</div><div class="ttdef"><b>Definition</b> <a href="_app_8cpp_source.html#l00181">App.cpp:181</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_aa523940c6e94a9573000497b8cf706ce"><div class="ttname"><a href="class_astra_1_1_app.html#aa523940c6e94a9573000497b8cf706ce">Astra::App::resetScene</a></div><div class="ttdeci">virtual void resetScene(bool recreatePipelines=false)=0</div><div class="ttdoc">Resetea la escena, se debe llamar cuando se cambie de escena o si se agregan modelos durante la ejecu...</div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_ab0130baf56be7c76eaedcb15fc15644e"><div class="ttname"><a href="class_astra_1_1_app.html#ab0130baf56be7c76eaedcb15fc15644e">Astra::App::_window</a></div><div class="ttdeci">GLFWwindow * _window</div><div class="ttdef"><b>Definition</b> <a href="#l00041">App.h:41</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_ab8c72b29f8b10069a05fba2bcddc8cee"><div class="ttname"><a href="class_astra_1_1_app.html#ab8c72b29f8b10069a05fba2bcddc8cee">Astra::App::init</a></div><div class="ttdeci">virtual void init(const std::vector&lt; Scene * &gt; &amp;scenes, Renderer *renderer, GuiController *gui=nullptr)</div><div class="ttdoc">Inicializa la aplicación.</div><div class="ttdef"><b>Definition</b> <a href="_app_8cpp_source.html#l00091">App.cpp:91</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_abf180a61fd7d11ea661b79ce1a8dd306"><div class="ttname"><a href="class_astra_1_1_app.html#abf180a61fd7d11ea661b79ce1a8dd306">Astra::App::destroyPipelines</a></div><div class="ttdeci">virtual void destroyPipelines()</div><div class="ttdoc">Destruye las pipelines dentro del vector de pipelines.</div><div class="ttdef"><b>Definition</b> <a href="_app_8cpp_source.html#l00008">App.cpp:8</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_ac05462b0fbb0fb03e220e0c018e132fd"><div class="ttname"><a href="class_astra_1_1_app.html#ac05462b0fbb0fb03e220e0c018e132fd">Astra::App::onMouseButton</a></div><div class="ttdeci">virtual void onMouseButton(int button, int action, int mods)</div><div class="ttdoc">Callback para el click del ratón. No hace nada por defecto.</div><div class="ttdef"><b>Definition</b> <a href="#l00123">App.h:123</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_adb87fd803de6ee7e25abd60401c994d3"><div class="ttname"><a href="class_astra_1_1_app.html#adb87fd803de6ee7e25abd60401c994d3">Astra::App::_scenes</a></div><div class="ttdeci">std::vector&lt; Scene * &gt; _scenes</div><div class="ttdoc">Vector de escenas.</div><div class="ttdef"><b>Definition</b> <a href="#l00036">App.h:36</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_ade19f12ee29e09336ca2957aabe27f77"><div class="ttname"><a href="class_astra_1_1_app.html#ade19f12ee29e09336ca2957aabe27f77">Astra::App::onFileDrop</a></div><div class="ttdeci">virtual void onFileDrop(int count, const char **paths)</div><div class="ttdoc">Callback para cuando se suelten archivos en la ventana. No hace nada por defecto.</div><div class="ttdef"><b>Definition</b> <a href="#l00108">App.h:108</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_ae0276b1ac70ead2e1cee9911225afa2f"><div class="ttname"><a href="class_astra_1_1_app.html#ae0276b1ac70ead2e1cee9911225afa2f">Astra::App::_alloc</a></div><div class="ttdeci">nvvk::ResourceAllocatorDma _alloc</div><div class="ttdoc">El asignador de resursos de la biblioteca nvpro_core. Se utiliza en algunos métodos para asignar y li...</div><div class="ttdef"><b>Definition</b> <a href="#l00047">App.h:47</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_ae02ec206dc8c714f457cd384147efdee"><div class="ttname"><a href="class_astra_1_1_app.html#ae02ec206dc8c714f457cd384147efdee">Astra::App::_descSetLayoutBind</a></div><div class="ttdeci">nvvk::DescriptorSetBindings _descSetLayoutBind</div><div class="ttdef"><b>Definition</b> <a href="#l00056">App.h:56</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_ae6cc26ea709d7ef2265f4407e2b5af30"><div class="ttname"><a href="class_astra_1_1_app.html#ae6cc26ea709d7ef2265f4407e2b5af30">Astra::App::_currentScene</a></div><div class="ttdeci">int _currentScene</div><div class="ttdef"><b>Definition</b> <a href="#l00037">App.h:37</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_app_html_af3eaf9278ff688d5e8c65f56313fc04e"><div class="ttname"><a href="class_astra_1_1_app.html#af3eaf9278ff688d5e8c65f56313fc04e">Astra::App::onResize</a></div><div class="ttdeci">virtual void onResize(int w, int h)</div><div class="ttdoc">Callback para el cambio de tamaño de ventana. Actualiza ImGui, renderer, cámara y descriptor sets.</div><div class="ttdef"><b>Definition</b> <a href="_app_8cpp_source.html#l00069">App.cpp:69</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_gui_controller_html"><div class="ttname"><a href="class_astra_1_1_gui_controller.html">Astra::GuiController</a></div><div class="ttdoc">Clase sencilla que contiene métodos para dibujar una interfaz de ImGui.</div><div class="ttdef"><b>Definition</b> <a href="_gui_controller_8h_source.html#l00018">GuiController.h:19</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_input_manager_html"><div class="ttname"><a href="class_astra_1_1_input_manager.html">Astra::InputManager</a></div><div class="ttdoc">Singleton. Clase que maneja todos los eventos del usuario y provee acceso global a estos....</div><div class="ttdef"><b>Definition</b> <a href="_input_manager_8h_source.html#l00017">InputManager.h:18</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_renderer_html"><div class="ttname"><a href="class_astra_1_1_renderer.html">Astra::Renderer</a></div><div class="ttdoc">Clase renderer. Contiene todo lo necesario para renderizar la escena. Se encarga de todo el proceso d...</div><div class="ttdef"><b>Definition</b> <a href="_renderer_8h_source.html#l00031">Renderer.h:32</a></div></div>
+<div class="ttc" id="aclass_astra_1_1_scene_html"><div class="ttname"><a href="class_astra_1_1_scene.html">Astra::Scene</a></div><div class="ttdoc">Clase Escena. Contiene las mallas, instancias, luces y cámara. Esta es para rasterización.</div><div class="ttdef"><b>Definition</b> <a href="_scene_8h_source.html#l00016">Scene.h:17</a></div></div>
+<div class="ttc" id="anamespace_astra_html"><div class="ttname"><a href="namespace_astra.html">Astra</a></div><div class="ttdef"><b>Definition</b> <a href="#l00010">App.h:11</a></div></div>
+<div class="ttc" id="anamespace_astra_html_a8ff9af1a6f3d820347e90c1876815ac7"><div class="ttname"><a href="namespace_astra.html#a8ff9af1a6f3d820347e90c1876815ac7">Astra::AppStatus</a></div><div class="ttdeci">AppStatus</div><div class="ttdef"><b>Definition</b> <a href="_globals_8h_source.html#l00013">Globals.h:13</a></div></div>
+<div class="ttc" id="anamespace_astra_html_a8ff9af1a6f3d820347e90c1876815ac7ae17d0f826f2eec26934c3863daa5643f"><div class="ttname"><a href="namespace_astra.html#a8ff9af1a6f3d820347e90c1876815ac7ae17d0f826f2eec26934c3863daa5643f">Astra::Created</a></div><div class="ttdeci">@ Created</div><div class="ttdef"><b>Definition</b> <a href="_globals_8h_source.html#l00014">Globals.h:14</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="_app_8h.html">App.h</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.11.0 </li>
+  </ul>
+</div>
+</body>
+</html>

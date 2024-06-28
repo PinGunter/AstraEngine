@@ -1,0 +1,179 @@
+\doxysection{Astra\+::Free\+Camera\+Controller Class Reference}
+\hypertarget{class_astra_1_1_free_camera_controller}{}\label{class_astra_1_1_free_camera_controller}\index{Astra::FreeCameraController@{Astra::FreeCameraController}}
+
+
+Free \doxylink{struct_astra_1_1_camera}{Camera} controls for the camera. WASD and QE for movement, CTRL for speed-\/up, right-\/click drag for rotating the camera.  
+
+
+
+
+{\ttfamily \#include $<$Camera.\+h$>$}
+
+Inheritance diagram for Astra\+::Free\+Camera\+Controller\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_astra_1_1_free_camera_controller}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_astra_1_1_free_camera_controller_a791089762d4c54a19e20340e676feb37}{Free\+Camera\+Controller}} (\mbox{\hyperlink{struct_astra_1_1_camera}{Camera}} \&cam)
+\item 
+bool \mbox{\hyperlink{class_astra_1_1_free_camera_controller_a33a1930a1c31eeaded9c22a75d2e17b0}{update}} () override
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_astra_1_1_camera_controller}{Astra\+::\+Camera\+Controller}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_astra_1_1_camera_controller_a8d2915583e8caf3e2cab9c94976df158}{Camera\+Controller}} (\mbox{\hyperlink{struct_astra_1_1_camera}{Camera}} \&cam)
+\item 
+void \mbox{\hyperlink{class_astra_1_1_camera_controller_a104ca3d7ec5177028dcfc170c44483d5}{set\+Sens}} (float s)
+\item 
+float \mbox{\hyperlink{class_astra_1_1_camera_controller_a3a1f1a2b8aee88db38bc3d31d1c2a854}{get\+Sens}} () const
+\item 
+void \mbox{\hyperlink{class_astra_1_1_camera_controller_a1463c208a27e62744b80f793f52b138c}{set\+Window\+Size}} (uint32\+\_\+t w, uint32\+\_\+t h)
+\item 
+const glm\+::mat4 \& \mbox{\hyperlink{class_astra_1_1_camera_controller_a885e8808f36153cdc2d3dc6b2c424750}{get\+View\+Matrix}} () const
+\item 
+glm\+::mat4 \mbox{\hyperlink{class_astra_1_1_camera_controller_ad14dba33ee496de0f94aeeb6a9bc2b8a}{get\+Projection\+Matrix}} () const
+\item 
+void \mbox{\hyperlink{class_astra_1_1_camera_controller_a0c30433490a968e8ad8587accf06cb51}{set\+Look\+At}} (const glm\+::vec3 \&eye, const glm\+::vec3 \&center, const glm\+::vec3 \&up)
+\item 
+float \mbox{\hyperlink{class_astra_1_1_camera_controller_aace151f583ca45de0f29c8653a938981}{get\+Near}} () const
+\item 
+float \mbox{\hyperlink{class_astra_1_1_camera_controller_a4fa648f2bbd2b67296c4dcaf10942b49}{fet\+Far}} () const
+\item 
+float \mbox{\hyperlink{class_astra_1_1_camera_controller_a5cf4e9d3f0de82f8369177181e6cfa5c}{get\+Fov}} () const
+\item 
+const glm\+::vec3 \& \mbox{\hyperlink{class_astra_1_1_camera_controller_add88ec4dbf57b4fb886440d22133c68d}{get\+Eye}} () const
+\item 
+const glm\+::vec3 \& \mbox{\hyperlink{class_astra_1_1_camera_controller_a072161e481786564325277b7362496b5}{get\+Up}} () const
+\item 
+const glm\+::vec3 \& \mbox{\hyperlink{class_astra_1_1_camera_controller_a8416185d80453bbac2e450350206546e}{get\+Centre}} () const
+\item 
+\mbox{\hyperlink{struct_astra_1_1_camera}{Camera}} \mbox{\hyperlink{class_astra_1_1_camera_controller_a6842a9c1a762378294953985835eae23}{get\+Camera}} () const
+\item 
+float \& \mbox{\hyperlink{class_astra_1_1_camera_controller_a8997257c16f2980b9df6e081c9a66105}{get\+Near\+Ref}} ()
+\item 
+float \& \mbox{\hyperlink{class_astra_1_1_camera_controller_a2c80c474afb9c93db0ccc996b843e208}{fet\+Far\+Ref}} ()
+\item 
+float \& \mbox{\hyperlink{class_astra_1_1_camera_controller_ad678b0788336521dc54810745753feba}{get\+Fov\+Ref}} ()
+\item 
+glm\+::vec3 \& \mbox{\hyperlink{class_astra_1_1_camera_controller_a916a248648d178bca169296813e06b0a}{get\+Eye\+Ref}} ()
+\item 
+glm\+::vec3 \& \mbox{\hyperlink{class_astra_1_1_camera_controller_a7200e2fb96d45d6fefe8873c1ee8c347}{get\+Up\+Ref}} ()
+\item 
+glm\+::vec3 \& \mbox{\hyperlink{class_astra_1_1_camera_controller_a14ffc377f814b250b4c6728c45095130}{get\+Centre\+Ref}} ()
+\item 
+void \mbox{\hyperlink{class_astra_1_1_camera_controller_ae6bd816e36590cbab2280c1784825170}{set\+Near}} (float n)
+\item 
+void \mbox{\hyperlink{class_astra_1_1_camera_controller_a8d621e6d80334e18d60f30937e7d15c2}{set\+Far}} (float f)
+\item 
+void \mbox{\hyperlink{class_astra_1_1_camera_controller_a583599b415faa1111f6f83d25734e578}{set\+Fov}} (float f)
+\item 
+\mbox{\hyperlink{struct_camera_uniform}{Camera\+Uniform}} \mbox{\hyperlink{class_astra_1_1_camera_controller_a56dff81dc4fb87e1fb0f513bbfd8df0d}{get\+Camera\+Uniform}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_astra_1_1_free_camera_controller_a071d7226400e78e374d1062acb247e84}{move}} (bool front, bool back, bool right, bool left, bool up, bool down, float speed)
+\item 
+void \mbox{\hyperlink{class_astra_1_1_free_camera_controller_aabe8e5a60c98ad01bc0e78bd921f4150}{rotate}} (float dx, float dy)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{class_astra_1_1_camera_controller}{Astra\+::\+Camera\+Controller}}}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_astra_1_1_camera_controller_ab5958523ed020771b541bae3b3111883}{update\+Camera}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+float \mbox{\hyperlink{class_astra_1_1_free_camera_controller_a7f07c84574a0563ae9fac3cef2dc2735}{\+\_\+speed}} = 0.\+1f
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_astra_1_1_camera_controller}{Astra\+::\+Camera\+Controller}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_astra_1_1_camera}{Camera}} \& \mbox{\hyperlink{class_astra_1_1_camera_controller_a9588a24a4475c71c00b8cc9ae842bc4e}{\+\_\+camera}}
+\item 
+float \mbox{\hyperlink{class_astra_1_1_camera_controller_ab4202d36b896492645aae2d8b8476284}{\+\_\+sens}} = 0.\+01f
+\item 
+uint32\+\_\+t \mbox{\hyperlink{class_astra_1_1_camera_controller_a52a9a6da00594f26f9d9a3743782b31e}{\+\_\+width}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{class_astra_1_1_camera_controller_a9b5b920135ec52c7dffc13a342f40127}{\+\_\+height}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Free \doxylink{struct_astra_1_1_camera}{Camera} controls for the camera. WASD and QE for movement, CTRL for speed-\/up, right-\/click drag for rotating the camera. 
+
+Definition at line \mbox{\hyperlink{_camera_8h_source_l00076}{76}} of file \mbox{\hyperlink{_camera_8h_source}{Camera.\+h}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_astra_1_1_free_camera_controller_a791089762d4c54a19e20340e676feb37}\index{Astra::FreeCameraController@{Astra::FreeCameraController}!FreeCameraController@{FreeCameraController}}
+\index{FreeCameraController@{FreeCameraController}!Astra::FreeCameraController@{Astra::FreeCameraController}}
+\doxysubsubsection{\texorpdfstring{FreeCameraController()}{FreeCameraController()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_free_camera_controller_a791089762d4c54a19e20340e676feb37} 
+Astra\+::\+Free\+Camera\+Controller\+::\+Free\+Camera\+Controller (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_astra_1_1_camera}{Camera}} \&}]{cam}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_camera_8cpp_source_l00138}{138}} of file \mbox{\hyperlink{_camera_8cpp_source}{Camera.\+cpp}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_astra_1_1_free_camera_controller_a071d7226400e78e374d1062acb247e84}\index{Astra::FreeCameraController@{Astra::FreeCameraController}!move@{move}}
+\index{move@{move}!Astra::FreeCameraController@{Astra::FreeCameraController}}
+\doxysubsubsection{\texorpdfstring{move()}{move()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_free_camera_controller_a071d7226400e78e374d1062acb247e84} 
+void Astra\+::\+Free\+Camera\+Controller\+::move (\begin{DoxyParamCaption}\item[{bool}]{front}{, }\item[{bool}]{back}{, }\item[{bool}]{right}{, }\item[{bool}]{left}{, }\item[{bool}]{up}{, }\item[{bool}]{down}{, }\item[{float}]{speed}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{_camera_8cpp_source_l00174}{174}} of file \mbox{\hyperlink{_camera_8cpp_source}{Camera.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_free_camera_controller_aabe8e5a60c98ad01bc0e78bd921f4150}\index{Astra::FreeCameraController@{Astra::FreeCameraController}!rotate@{rotate}}
+\index{rotate@{rotate}!Astra::FreeCameraController@{Astra::FreeCameraController}}
+\doxysubsubsection{\texorpdfstring{rotate()}{rotate()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_free_camera_controller_aabe8e5a60c98ad01bc0e78bd921f4150} 
+void Astra\+::\+Free\+Camera\+Controller\+::rotate (\begin{DoxyParamCaption}\item[{float}]{dx}{, }\item[{float}]{dy}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{_camera_8cpp_source_l00222}{222}} of file \mbox{\hyperlink{_camera_8cpp_source}{Camera.\+cpp}}.
+
+\Hypertarget{class_astra_1_1_free_camera_controller_a33a1930a1c31eeaded9c22a75d2e17b0}\index{Astra::FreeCameraController@{Astra::FreeCameraController}!update@{update}}
+\index{update@{update}!Astra::FreeCameraController@{Astra::FreeCameraController}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily \label{class_astra_1_1_free_camera_controller_a33a1930a1c31eeaded9c22a75d2e17b0} 
+bool Astra\+::\+Free\+Camera\+Controller\+::update (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_astra_1_1_camera_controller_a1b6e87f810c996df92ed5712d720623f}{Astra\+::\+Camera\+Controller}}.
+
+
+
+Definition at line \mbox{\hyperlink{_camera_8cpp_source_l00143}{143}} of file \mbox{\hyperlink{_camera_8cpp_source}{Camera.\+cpp}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_astra_1_1_free_camera_controller_a7f07c84574a0563ae9fac3cef2dc2735}\index{Astra::FreeCameraController@{Astra::FreeCameraController}!\_speed@{\_speed}}
+\index{\_speed@{\_speed}!Astra::FreeCameraController@{Astra::FreeCameraController}}
+\doxysubsubsection{\texorpdfstring{\_speed}{\_speed}}
+{\footnotesize\ttfamily \label{class_astra_1_1_free_camera_controller_a7f07c84574a0563ae9fac3cef2dc2735} 
+float Astra\+::\+Free\+Camera\+Controller\+::\+\_\+speed = 0.\+1f\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{_camera_8h_source_l00079}{79}} of file \mbox{\hyperlink{_camera_8h_source}{Camera.\+h}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{_camera_8h}{Camera.\+h}}\item 
+src/\mbox{\hyperlink{_camera_8cpp}{Camera.\+cpp}}\end{DoxyCompactItemize}
