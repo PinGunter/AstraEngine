@@ -186,6 +186,9 @@ namespace Astra
 		int& getCurrentSceneIndexRef();
 		int getCurrentSceneIndex() const;
 		virtual void setCurrentSceneIndex(int i);
+		int& getSelectedPipelineRef();
+		int getSelectedPipeline() const;
+		void setSelectedPipeline(int i);
 
 		Scene* getCurrentScene();
 		Renderer* getRenderer();

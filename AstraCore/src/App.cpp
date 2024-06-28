@@ -195,6 +195,26 @@ void Astra::App::setCurrentSceneIndex(int i)
 	}
 }
 
+int& Astra::App::getSelectedPipelineRef()
+{
+	return _selectedPipeline;
+}
+
+int Astra::App::getSelectedPipeline() const
+{
+	return _selectedPipeline;
+}
+
+void Astra::App::setSelectedPipeline(int i)
+{
+	if (i >= 0 && i < _pipelines.size()) {
+		_selectedPipeline = i;
+	}
+	else {
+		Astra::Log("Invalid pipeline selection", WARNING);
+	}
+}
+
 Astra::Scene* Astra::App::getCurrentScene()
 {
 	return _scenes[_currentScene];
