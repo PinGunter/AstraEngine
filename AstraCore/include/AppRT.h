@@ -22,9 +22,10 @@ namespace Astra
 		virtual void createRtDescriptorSetLayout();
 		virtual void updateRtDescriptorSet();
 		void onResize(int w, int h) override;
+		void resetScene(bool recreatePipelines) override;
 
 	public:
-		void init(const std::vector<Scene *> &scenes, Renderer *renderer, GuiController *gui = nullptr) override;
+		void init(const std::vector<Scene*>& scenes, Renderer* renderer, GuiController* gui = nullptr) override;
 		void destroy() override;
 	};
 
