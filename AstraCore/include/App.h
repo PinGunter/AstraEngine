@@ -28,17 +28,17 @@ namespace Astra
 		 *  \~spanish @brief Estado de la aplicación, puede ser creada, en ejecución y destruida
 		 *  \~english @brief Application state, can be created, running or destroyed
 		 */
-		AppStatus _status{Created};
+		AppStatus _status{ Created };
 		/**
 		 *  \~spanish @brief Vector de escenas
 		 *  \~english @brief Scene vector
 		 */
-		std::vector<Scene *> _scenes;
-		int _currentScene{0};
+		std::vector<Scene*> _scenes;
+		int _currentScene{ 0 };
 
-		GuiController *_gui;
-		Renderer *_renderer;
-		GLFWwindow *_window;
+		GuiController* _gui;
+		Renderer* _renderer;
+		GLFWwindow* _window;
 
 		/**
 		 *  \~spanish @brief El asignador de resursos de la biblioteca nvpro_core. Se utiliza en algunos métodos para asignar y liberar memoria.
@@ -50,8 +50,8 @@ namespace Astra
 		 *  \~spanish @brief Vector de pipelines
 		 *  \~english @brief Pipelines vector
 		 */
-		std::vector<Pipeline *> _pipelines;
-		int _selectedPipeline{0};
+		std::vector<Pipeline*> _pipelines;
+		int _selectedPipeline{ 0 };
 
 		nvvk::DescriptorSetBindings _descSetLayoutBind;
 		VkDescriptorPool _descPool;
@@ -95,7 +95,7 @@ namespace Astra
 		 *  \~english @brief Resets the scene. Should be called whenever the current scene changes or if models are added in runtime
 		 *  \~english @warning Calling the method while rendering will probably crash the scene as Descriptor Sets will be outdated as the shaders are running! Make sure to reset it before or after a render action.
 		 */
-		virtual void resetScene(bool recreatePipelines = false) = 0;
+		virtual void resetScene(bool recreatePipelines = false);
 		/**
 		 *  \~spanish @brief Callback para el cambio de tamaño de ventana. Actualiza ImGui, renderer, cámara y descriptor sets
 		 *  \~english @brief Window resize callback. Updates ImGui, renderer, camera and descriptor sets
@@ -105,7 +105,7 @@ namespace Astra
 		 *  \~spanish @brief Callback para cuando se suelten archivos en la ventana. No hace nada por defecto
 		 *  \~english @brief File drop callback. Does nothing by default
 		 */
-		virtual void onFileDrop(int count, const char **paths) {};
+		virtual void onFileDrop(int count, const char** paths) {};
 		/**
 		 *  \~spanish @brief Callback de evento de movimiento de ratón. No hace nada por defecto.
 		 *  \~english @brief Mouse motion callback. Does nothing by default
@@ -138,12 +138,12 @@ namespace Astra
 		 * 	\~english @brief Also creates and writes the descriptor sets
 		 *  \~english @brief Has to be called inside every derived class' init method!
 		 */
-		virtual void init(const std::vector<Scene *> &scenes, Renderer *renderer, GuiController *gui = nullptr);
+		virtual void init(const std::vector<Scene*>& scenes, Renderer* renderer, GuiController* gui = nullptr);
 		/**
 		 *  \~spanish @brief Añade una escena a la aplicación.
 		 *  \~english @brief Adds a scene to the app
 		 */
-		virtual void addScene(Scene *s);
+		virtual void addScene(Scene* s);
 		/**
 		 *  \~spanish @brief Método virtual que debe implementar la clase derivada. Se debe encargar de hacer el bucle de dibujado, hacer el polling de eventos (con InputManager), actualizar la escena y dibujarla. Después del bucle se deberían destruir los recursos \n
 		 * Código de ejemplo:
@@ -183,12 +183,15 @@ namespace Astra
 
 		virtual void destroy();
 		bool isMinimized() const;
-		int &getCurrentSceneIndexRef();
+		int& getCurrentSceneIndexRef();
 		int getCurrentSceneIndex() const;
 		virtual void setCurrentSceneIndex(int i);
+		int& getSelectedPipelineRef();
+		int getSelectedPipeline() const;
+		void setSelectedPipeline(int i);
 
-		Scene *getCurrentScene();
-		Renderer *getRenderer();
+		Scene* getCurrentScene();
+		Renderer* getRenderer();
 
 		AppStatus getStatus() const;
 	};

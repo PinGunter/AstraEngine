@@ -76,7 +76,14 @@ void Astra::Scene::loadModel(const std::string &filename, const glm::mat4 &trans
 		mesh.create(cmdList, _alloc, txtOffset);
 
 		// Creates all textures found
-		AstraDevice.createTextureImages(cmdBuf, mesh.textures, getTextures(), *_alloc);
+		// AstraDevice.createTextureImages(cmdBuf, mesh.textures, getTextures(), *_alloc);
+		for (auto p : mesh.textures)
+		{
+			getTextures().push_back(AstraDevice.createTextureImage(cmdList, p, *_alloc));
+		}
+		if (mesh.textures.empty() && getTextures().empty())
+			getTextures().push_back(AstraDevice.createTextureImage(cmdList, "", *_alloc, true));
+
 		cmdBufGet.submitAndWait(cmdBuf);
 		_alloc->finalizeAndReleaseStaging();
 
@@ -99,6 +106,9 @@ void Astra::Scene::loadModel(const std::string &filename, const glm::mat4 &trans
 
 void Astra::Scene::init(nvvk::ResourceAllocator *alloc)
 {
+	if (_lazymodels.empty() && _objModels.empty())
+		throw std::runtime_error("Cant create an empty scene. Please add a mesh to it to start!");
+
 	_alloc = (nvvk::ResourceAllocatorDma *)alloc;
 	for (auto &p : _lazymodels)
 	{
@@ -301,6 +311,10 @@ void Astra::Scene::updatePushConstant(PushConstantRay &pc)
 void Astra::SceneRT::init(nvvk::ResourceAllocator *alloc)
 {
 	Scene::init(alloc);
+	if (_objModels.empty())
+	{
+		throw std::runtime_error("A Ray Tracing Scene can't be empty!");
+	}
 	_rtBuilder.setup(AstraDevice.getVkDevice(), alloc, Astra::Device::getInstance().getGraphicsQueueIndex());
 	createBottomLevelAS();
 	createTopLevelAS();

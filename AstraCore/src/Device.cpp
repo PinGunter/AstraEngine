@@ -32,16 +32,15 @@ namespace Astra
 		// fill createInfo with default values if empty
 		if (createInfo.instanceLayers.empty())
 		{
-			if (createInfo.debug)
-			{
-				createInfo.instanceLayers.push_back("VK_LAYER_KHRONOS_validation");
-				createInfo.instanceLayers.push_back("VK_LAYER_LUNARG_monitor");
-			}
+
+			createInfo.instanceLayers.push_back("VK_LAYER_KHRONOS_validation");
+			createInfo.instanceLayers.push_back("VK_LAYER_LUNARG_monitor");
+
 		}
 
 		if (createInfo.instanceExtensions.empty())
 		{
-			uint32_t count{0};
+			uint32_t count{ 0 };
 			auto glfwExtensions = glfwGetRequiredInstanceExtensions(&count);
 
 			createInfo.instanceExtensions.resize(count);
@@ -51,10 +50,9 @@ namespace Astra
 				createInfo.instanceExtensions[i] = glfwExtensions[i];
 			}
 
-			if (createInfo.debug)
-			{
-				createInfo.instanceExtensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
-			}
+
+			createInfo.instanceExtensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+
 		}
 
 		if (createInfo.deviceExtensions.empty())
@@ -70,24 +68,24 @@ namespace Astra
 		contextInfo.verboseUsed = false;
 		contextInfo.verboseCompatibleDevices = false;
 		contextInfo.setVersion(createInfo.vkVersionMajor, createInfo.vkVersionMinor);
-		for (const auto &layer : createInfo.instanceLayers)
+		for (const auto& layer : createInfo.instanceLayers)
 		{
 			contextInfo.addInstanceLayer(layer.data(), true);
 		}
-		for (const auto &ext : createInfo.instanceExtensions)
+		for (const auto& ext : createInfo.instanceExtensions)
 		{
 			contextInfo.addInstanceExtension(ext.data(), true);
 		}
-		for (const auto &ext : createInfo.deviceExtensions)
+		for (const auto& ext : createInfo.deviceExtensions)
 		{
 			contextInfo.addDeviceExtension(ext.data(), true);
 		}
 
 		if (emptyRT)
 		{
-			VkPhysicalDeviceAccelerationStructureFeaturesKHR accelFeatures{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR};
+			VkPhysicalDeviceAccelerationStructureFeaturesKHR accelFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR };
 			contextInfo.addDeviceExtension(VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME, false, &accelFeatures); // to build acceleration structures
-			VkPhysicalDeviceRayTracingPipelineFeaturesKHR rtPipelineFeatures{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR};
+			VkPhysicalDeviceRayTracingPipelineFeaturesKHR rtPipelineFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR };
 			contextInfo.addDeviceExtension(VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME, false, &rtPipelineFeatures); // raytracing pipeline
 			contextInfo.addDeviceExtension(VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME);							// required by raytracing pipeline
 		}
@@ -132,7 +130,7 @@ namespace Astra
 			throw std::runtime_error("Error, device does not support presenting");
 		}
 
-		VkCommandPoolCreateInfo poolCreateInfo{VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO};
+		VkCommandPoolCreateInfo poolCreateInfo{ VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO };
 		poolCreateInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 		vkCreateCommandPool(_vkdevice, &poolCreateInfo, nullptr, &_cmdPool);
 
@@ -142,7 +140,7 @@ namespace Astra
 		_debug.setup(_vkdevice);
 
 		// raytracing init
-		VkPhysicalDeviceProperties2 prop2{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2};
+		VkPhysicalDeviceProperties2 prop2{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2 };
 		prop2.pNext = &_rtProperties;
 		vkGetPhysicalDeviceProperties2(AstraDevice.getPhysicalDevice(), &prop2);
 	}
@@ -180,7 +178,7 @@ namespace Astra
 		return _cmdPool;
 	}
 
-	GLFWwindow *Device::getWindow()
+	GLFWwindow* Device::getWindow()
 	{
 		return _window;
 	}
@@ -195,13 +193,13 @@ namespace Astra
 		return _rtProperties;
 	}
 
-	VkShaderModule Device::createShaderModule(const std::vector<char> &code)
+	VkShaderModule Device::createShaderModule(const std::vector<char>& code)
 	{
 		VkShaderModuleCreateInfo createInfo = {};
 		createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
 		createInfo.flags = {};
 		createInfo.codeSize = code.size();
-		createInfo.pCode = reinterpret_cast<const uint32_t *>(code.data());
+		createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
 
 		VkShaderModule shaderModule = VK_NULL_HANDLE;
 		if (vkCreateShaderModule(_vkdevice, &createInfo, nullptr, &shaderModule) != VK_SUCCESS)
@@ -212,13 +210,13 @@ namespace Astra
 		return shaderModule;
 	}
 
-	VkShaderModule Device::createShaderModule(const std::string &code)
+	VkShaderModule Device::createShaderModule(const std::string& code)
 	{
 		VkShaderModuleCreateInfo createInfo = {};
 		createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
 		createInfo.flags = {};
 		createInfo.codeSize = code.size();
-		createInfo.pCode = reinterpret_cast<const uint32_t *>(code.data());
+		createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
 
 		VkShaderModule shaderModule = VK_NULL_HANDLE;
 		if (vkCreateShaderModule(_vkdevice, &createInfo, nullptr, &shaderModule) != VK_SUCCESS)
@@ -235,7 +233,7 @@ namespace Astra
 			vkDestroySurfaceKHR(_instance, _surface, nullptr);
 	}
 
-	uint32_t Device::getMemoryType(uint32_t typeBits, const VkMemoryPropertyFlags &properties) const
+	uint32_t Device::getMemoryType(uint32_t typeBits, const VkMemoryPropertyFlags& properties) const
 	{
 		VkPhysicalDeviceMemoryProperties memoryProperties;
 		vkGetPhysicalDeviceMemoryProperties(_physicalDevice, &memoryProperties);
@@ -252,7 +250,7 @@ namespace Astra
 	{
 		int w, h;
 		glfwGetFramebufferSize(_window, &w, &h);
-		return {w, h};
+		return { w, h };
 	}
 
 	void Device::waitIdle()
@@ -265,7 +263,7 @@ namespace Astra
 		vkQueueWaitIdle(_queue);
 	}
 
-	nvvk::RaytracingBuilderKHR::BlasInput Device::objectToVkGeometry(const Astra::Mesh &model)
+	nvvk::RaytracingBuilderKHR::BlasInput Device::objectToVkGeometry(const Astra::Mesh& model)
 	{
 		size_t nbIndices = model.indices.size();
 		size_t nbVertices = model.vertices.size();
@@ -273,7 +271,7 @@ namespace Astra
 		uint32_t maxPrimitiveCount = nbIndices / 3;
 
 		// Describe buffer as array of VertexObj.
-		VkAccelerationStructureGeometryTrianglesDataKHR triangles{VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR};
+		VkAccelerationStructureGeometryTrianglesDataKHR triangles{ VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR };
 		triangles.vertexFormat = VK_FORMAT_R32G32B32_SFLOAT; // vec3 vertex position data.
 		triangles.vertexData.deviceAddress = model.descriptor.vertexAddress;
 		triangles.vertexStride = sizeof(Vertex);
@@ -285,7 +283,7 @@ namespace Astra
 		triangles.maxVertex = nbVertices - 1;
 
 		// Identify the above data as containing opaque triangles.
-		VkAccelerationStructureGeometryKHR asGeom{VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR};
+		VkAccelerationStructureGeometryKHR asGeom{ VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR };
 		asGeom.geometryType = VK_GEOMETRY_TYPE_TRIANGLES_KHR;
 		asGeom.flags = VK_GEOMETRY_OPAQUE_BIT_KHR;
 		asGeom.geometry.triangles = triangles;
@@ -305,26 +303,25 @@ namespace Astra
 		return input;
 	}
 
-	// TODO maybe rework so that it builds a single image and then from app keep track of all those.
-	void Device::createTextureImages(const Astra::CommandList &cmdList, const std::vector<std::string> &new_textures, std::vector<nvvk::Texture> &textures, nvvk::ResourceAllocatorDma &alloc)
+	nvvk::Texture Device::createTextureImage(const Astra::CommandList& cmdList, const std::string& path, nvvk::ResourceAllocatorDma& alloc, bool dummy)
 	{
-		VkSamplerCreateInfo samplerCreateInfo{VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO};
+		VkSamplerCreateInfo samplerCreateInfo{ VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO };
 		samplerCreateInfo.minFilter = VK_FILTER_LINEAR;
 		samplerCreateInfo.magFilter = VK_FILTER_LINEAR;
 		samplerCreateInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
 		samplerCreateInfo.maxLod = FLT_MAX;
 
 		VkFormat format = VK_FORMAT_R8G8B8A8_SRGB;
-		const auto &cmdBuf = cmdList.getCommandBuffer();
+		const auto& cmdBuf = cmdList.getCommandBuffer();
 
 		// If no textures are present, create a dummy one to accommodate the pipeline layout
-		if (new_textures.empty() && textures.empty())
+		if (dummy)
 		{
 			nvvk::Texture texture;
 
-			std::array<uint8_t, 4> color{255u, 255u, 255u, 255u};
+			std::array<uint8_t, 4> color{ 255u, 255u, 255u, 255u };
 			VkDeviceSize bufferSize = sizeof(color);
-			auto imgSize = VkExtent2D{1, 1};
+			auto imgSize = VkExtent2D{ 1, 1 };
 			auto imageCreateInfo = nvvk::makeImage2DCreateInfo(imgSize, format);
 
 			// Creating the dummy texture
@@ -334,52 +331,38 @@ namespace Astra
 
 			// The image format must be in VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			nvvk::cmdBarrierImageLayout(cmdBuf, texture.image, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-			textures.push_back(texture);
+			return texture;
 		}
 		else
 		{
-			// Uploading all images
-			for (const auto &texture : new_textures)
+			int texWidth, texHeight, texChannels;
+
+			stbi_uc* stbi_pixels = stbi_load(path.c_str(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+
+			std::array<stbi_uc, 4> color{ 255u, 0u, 255u, 255u };
+
+			stbi_uc* pixels = stbi_pixels;
+			// Handle failure
+			if (!stbi_pixels)
 			{
-				std::vector<std::string> defaultSearchPaths = {
-					NVPSystem::exePath() + PROJECT_RELDIRECTORY,
-					NVPSystem::exePath() + PROJECT_RELDIRECTORY "..",
-					std::string(PROJECT_NAME),
-				};
-
-				std::stringstream o;
-				int texWidth, texHeight, texChannels;
-				o << "media/textures/" << texture;
-				std::string txtFile = nvh::findFile(o.str(), defaultSearchPaths, true);
-
-				stbi_uc *stbi_pixels = stbi_load(txtFile.c_str(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
-
-				std::array<stbi_uc, 4> color{255u, 0u, 255u, 255u};
-
-				stbi_uc *pixels = stbi_pixels;
-				// Handle failure
-				if (!stbi_pixels)
-				{
-					texWidth = texHeight = 1;
-					texChannels = 4;
-					pixels = reinterpret_cast<stbi_uc *>(color.data());
-				}
-
-				VkDeviceSize bufferSize = static_cast<uint64_t>(texWidth) * texHeight * sizeof(uint8_t) * 4;
-				auto imgSize = VkExtent2D{(uint32_t)texWidth, (uint32_t)texHeight};
-				auto imageCreateInfo = nvvk::makeImage2DCreateInfo(imgSize, format, VK_IMAGE_USAGE_SAMPLED_BIT, true);
-
-				{
-					nvvk::Image image = alloc.createImage(cmdBuf, bufferSize, pixels, imageCreateInfo);
-					nvvk::cmdGenerateMipmaps(cmdBuf, image.image, format, imgSize, imageCreateInfo.mipLevels);
-					VkImageViewCreateInfo ivInfo = nvvk::makeImageViewCreateInfo(image.image, imageCreateInfo);
-					nvvk::Texture texture = alloc.createTexture(image, ivInfo, samplerCreateInfo);
-
-					textures.push_back(texture);
-				}
-
-				stbi_image_free(stbi_pixels);
+				texWidth = texHeight = 1;
+				texChannels = 4;
+				pixels = reinterpret_cast<stbi_uc*>(color.data());
 			}
+
+			VkDeviceSize bufferSize = static_cast<uint64_t>(texWidth) * texHeight * sizeof(uint8_t) * 4;
+			auto imgSize = VkExtent2D{ (uint32_t)texWidth, (uint32_t)texHeight };
+			auto imageCreateInfo = nvvk::makeImage2DCreateInfo(imgSize, format, VK_IMAGE_USAGE_SAMPLED_BIT, true);
+
+
+			nvvk::Image image = alloc.createImage(cmdBuf, bufferSize, pixels, imageCreateInfo);
+			nvvk::cmdGenerateMipmaps(cmdBuf, image.image, format, imgSize, imageCreateInfo.mipLevels);
+			VkImageViewCreateInfo ivInfo = nvvk::makeImageViewCreateInfo(image.image, imageCreateInfo);
+			nvvk::Texture texture = alloc.createTexture(image, ivInfo, samplerCreateInfo);
+
+			stbi_image_free(stbi_pixels);
+
+			return texture;
 		}
 	}
 

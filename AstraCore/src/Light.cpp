@@ -6,7 +6,7 @@ Astra::Light::Light() : Node3D()
 	_name = std::string("Light - ") + std::to_string(_id);
 }
 
-glm::vec3 &Astra::Light::getColorRef()
+glm::vec3& Astra::Light::getColorRef()
 {
 	return _color;
 }
@@ -16,12 +16,12 @@ glm::vec3 Astra::Light::getColor() const
 	return _color;
 }
 
-void Astra::Light::setColor(const glm::vec3 &c)
+void Astra::Light::setColor(const glm::vec3& c)
 {
 	_color = c;
 }
 
-float &Astra::Light::getIntensityRef()
+float& Astra::Light::getIntensityRef()
 {
 	return _intensity;
 }
@@ -59,7 +59,7 @@ LightSource Astra::Light::getLightSource() const
 	return src;
 }
 
-Astra::PointLight::PointLight(const glm::vec3 &color, float intensity)
+Astra::PointLight::PointLight(const glm::vec3& color, float intensity)
 {
 	_type = POINT;
 	_color = color;
@@ -67,8 +67,9 @@ Astra::PointLight::PointLight(const glm::vec3 &color, float intensity)
 	_name = std::string("Point Light - ") + std::to_string(_id);
 }
 
-Astra::DirectionalLight::DirectionalLight(const glm::vec3 &color, float intensity, const glm::vec3 &direction)
+Astra::DirectionalLight::DirectionalLight(const glm::vec3& color, float intensity, const glm::vec3& direction)
 {
+	translate(glm::vec3(0.1f)); // wrong behaviour when position is 0
 	_type = DIRECTIONAL;
 	_color = color;
 	_intensity = intensity;
@@ -76,7 +77,7 @@ Astra::DirectionalLight::DirectionalLight(const glm::vec3 &color, float intensit
 	_name = std::string("Directional Light - ") + std::to_string(_id);
 }
 
-glm::vec3 &Astra::DirectionalLight::getDirectionRef()
+glm::vec3& Astra::DirectionalLight::getDirectionRef()
 {
 	return _direction;
 }
@@ -86,13 +87,13 @@ glm::vec3 Astra::DirectionalLight::getDirection() const
 	return _direction;
 }
 
-void Astra::DirectionalLight::setDirection(const glm::vec3 &dir)
+void Astra::DirectionalLight::setDirection(const glm::vec3& dir)
 {
 	_direction = dir;
 }
 
-void Astra::DirectionalLight::rotate(const glm::vec3 &axis, const float &angle)
+void Astra::DirectionalLight::rotate(const glm::vec3& axis, const float& angle)
 {
 	auto homoDir = glm::rotate(glm::mat4(1.0f), angle, axis) * glm::vec4(_direction, 1.0f);
-	_direction = {homoDir.x / homoDir.w, homoDir.y / homoDir.w, homoDir.z / homoDir.w};
+	_direction = { homoDir.x / homoDir.w, homoDir.y / homoDir.w, homoDir.z / homoDir.w };
 }

@@ -12,7 +12,7 @@ namespace Astra
 		ERR
 	};
 
-	std::vector<char> readFile(const std::string &filename, bool binary);
+	std::vector<char> readShaderSource(const std::string &filename);
 
 	void Log(const std::string &s, LOG_LEVELS level = INFO);
 

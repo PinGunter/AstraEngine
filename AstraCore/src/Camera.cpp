@@ -6,8 +6,11 @@
 #include <Utils.h>
 #include <InputManager.h>
 
-Astra::CameraController::CameraController(Camera &cam) : _camera(cam)
+Astra::CameraController::CameraController(Camera& cam) : _camera(cam)
 {
+	auto size = AstraDevice.getWindowSize();
+	_width = size[0];
+	_height = size[1];
 	updateCamera();
 }
 
@@ -16,7 +19,7 @@ void Astra::CameraController::updateCamera()
 	_camera.viewMatrix = glm::lookAt(_camera.eye, _camera.centre, _camera.up);
 }
 
-const glm::mat4 &Astra::CameraController::getViewMatrix() const
+const glm::mat4& Astra::CameraController::getViewMatrix() const
 {
 	return _camera.viewMatrix;
 }
@@ -30,7 +33,7 @@ glm::mat4 Astra::CameraController::getProjectionMatrix() const
 	return proj;
 }
 
-void Astra::CameraController::setLookAt(const glm::vec3 &eye, const glm::vec3 &center, const glm::vec3 &up)
+void Astra::CameraController::setLookAt(const glm::vec3& eye, const glm::vec3& center, const glm::vec3& up)
 {
 	_camera.eye = eye;
 	_camera.centre = center;
@@ -53,17 +56,17 @@ float Astra::CameraController::getFov() const
 	return _camera.fov;
 }
 
-const glm::vec3 &Astra::CameraController::getEye() const
+const glm::vec3& Astra::CameraController::getEye() const
 {
 	return _camera.eye;
 }
 
-const glm::vec3 &Astra::CameraController::getUp() const
+const glm::vec3& Astra::CameraController::getUp() const
 {
 	return _camera.up;
 }
 
-const glm::vec3 &Astra::CameraController::getCentre() const
+const glm::vec3& Astra::CameraController::getCentre() const
 {
 	return _camera.centre;
 }
@@ -73,32 +76,32 @@ Astra::Camera Astra::CameraController::getCamera() const
 	return _camera;
 }
 
-float &Astra::CameraController::getNearRef()
+float& Astra::CameraController::getNearRef()
 {
 	return _camera.nearPlane;
 }
 
-float &Astra::CameraController::fetFarRef()
+float& Astra::CameraController::fetFarRef()
 {
 	return _camera.farPlane;
 }
 
-float &Astra::CameraController::getFovRef()
+float& Astra::CameraController::getFovRef()
 {
 	return _camera.fov;
 }
 
-glm::vec3 &Astra::CameraController::getEyeRef()
+glm::vec3& Astra::CameraController::getEyeRef()
 {
 	return _camera.eye;
 }
 
-glm::vec3 &Astra::CameraController::getUpRef()
+glm::vec3& Astra::CameraController::getUpRef()
 {
 	return _camera.up;
 }
 
-glm::vec3 &Astra::CameraController::getCentreRef()
+glm::vec3& Astra::CameraController::getCentreRef()
 {
 	return _camera.centre;
 }
@@ -135,7 +138,7 @@ CameraUniform Astra::CameraController::getCameraUniform()
 	return hostUBO;
 }
 
-Astra::FreeCameraController::FreeCameraController(Camera &cam) : CameraController(cam)
+Astra::FreeCameraController::FreeCameraController(Camera& cam) : CameraController(cam)
 {
 	_sens = 0.005f;
 }
@@ -253,7 +256,7 @@ void Astra::FreeCameraController::rotate(float dx, float dy)
 	_camera.centre = newCentre;
 }
 
-Astra::OrbitCameraController::OrbitCameraController(Camera &cam) : CameraController(cam)
+Astra::OrbitCameraController::OrbitCameraController(Camera& cam) : CameraController(cam)
 {
 }
 
