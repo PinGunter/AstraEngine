@@ -17,18 +17,18 @@ namespace Astra
 		VkPipeline _pipeline;
 
 	public:
-		virtual void destroy(nvvk::ResourceAllocator *alloc);
+		virtual void destroy(nvvk::ResourceAllocator* alloc);
 		inline virtual bool doesRayTracing() = 0;
 		/**
 		 * \~spanish @brief Método para activar la pipeline durante el renderizado
 		 * \~english @brief Binds the pipeline to the render pass
 		 */
-		virtual void bind(const CommandList &cmdList, const std::vector<VkDescriptorSet> &descsets);
+		virtual void bind(const CommandList& cmdList, const std::vector<VkDescriptorSet>& descsets);
 		/**
 		 * \~spanish @brief Sube las push constants a la GPU
 		 * \~english @brief Pushes push constants to the GPU
 		 */
-		virtual void pushConstants(const CommandList &cmdList, uint32_t shaderStages, uint32_t size, void *data);
+		virtual void pushConstants(const CommandList& cmdList, uint32_t shaderStages, uint32_t size, void* data);
 		VkPipeline getPipeline() const;
 		VkPipelineLayout getLayout() const;
 	};
@@ -44,7 +44,7 @@ namespace Astra
 		 * \~spanish @brief Se tiene que sobreescribir. Provee la lista de parámetros y generalización.
 		 * \~english @brief Has to be overriden. Provides the parameter list and generalization. (for upcasting)
 		 */
-		virtual void create(VkDevice vkdev, const std::vector<VkDescriptorSetLayout> &descsetsLayouts, VkRenderPass rp) = 0;
+		virtual void create(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsetsLayouts, VkRenderPass rp) = 0;
 		inline bool doesRayTracing() override
 		{
 			return false;
@@ -65,17 +65,17 @@ namespace Astra
 
 		nvvk::DescriptorSetBindings _rtDescSetLayoutBind;
 		std::vector<VkRayTracingShaderGroupCreateInfoKHR> _rtShaderGroups;
-		void createSBT(nvvk::ResourceAllocatorDma &alloc, const VkPhysicalDeviceRayTracingPipelinePropertiesKHR &rtProperties);
+		void createSBT(nvvk::ResourceAllocatorDma& alloc, const VkPhysicalDeviceRayTracingPipelinePropertiesKHR& rtProperties);
 
 	public:
-		void bind(const CommandList &cmdList, const std::vector<VkDescriptorSet> &descsets) override;
-		void create(VkDevice vkdev, const std::vector<VkDescriptorSetLayout> &descsetsLayouts, nvvk::ResourceAllocatorDma &alloc);
+		void bind(const CommandList& cmdList, const std::vector<VkDescriptorSet>& descsets) override;
+		virtual void create(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsetsLayouts, nvvk::ResourceAllocatorDma& alloc);
 		inline bool doesRayTracing() override
 		{
 			return true;
 		};
 		std::array<VkStridedDeviceAddressRegionKHR, 4> getSBTRegions();
-		void destroy(nvvk::ResourceAllocator *alloc) override;
+		void destroy(nvvk::ResourceAllocator* alloc) override;
 	};
 	/**
 	 * \~spanish @brief Pipeline de rasterización de ejemplo para dibujar escenas en el offscreen framebuffer. Lista para usarse
@@ -84,7 +84,7 @@ namespace Astra
 	class OffscreenRaster : public RasterPipeline
 	{
 	public:
-		void create(VkDevice vkdev, const std::vector<VkDescriptorSetLayout> &descsetsLayouts, VkRenderPass rp) override;
+		void create(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsetsLayouts, VkRenderPass rp) override;
 	};
 	/**
 	 * \~spanish @brief Pipeline que dibuja la textura resultante del offscreen render en pantalla. Aplica postprocesado también
@@ -93,6 +93,6 @@ namespace Astra
 	class PostPipeline : public RasterPipeline
 	{
 	public:
-		void create(VkDevice vkdev, const std::vector<VkDescriptorSetLayout> &descsetsLayouts, VkRenderPass rp) override;
+		void create(VkDevice vkdev, const std::vector<VkDescriptorSetLayout>& descsetsLayouts, VkRenderPass rp) override;
 	};
 }

@@ -116,7 +116,7 @@ void main()
         specularColor += computeSpecular(mat, gl_WorldRayDirectionEXT, L,lightUni.lights[i].color, worldNrm) * lightIntensity;
 
         // Tracing shadow ray only if the light is visible from the surface
-        if(dot(worldNrm, L) > 0)
+        if(pcRay.shadows && dot(worldNrm, L) > 0)
         {
             float tMin   = 0.001;
             float tMax   = lightDistance;
@@ -175,6 +175,8 @@ void main()
         prd.rayOrigin = origin;
         prd.rayDir = rayDir;
     }
-
+    if (!pcRay.shadows){
+        prd.attenuation = vec3(1.0);
+    }
     prd.hitValue = vec3(attenuation * (diffuseColor + specularColor)) * prd.attenuation;
 }

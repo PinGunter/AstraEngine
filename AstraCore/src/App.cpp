@@ -215,6 +215,11 @@ void Astra::App::setSelectedPipeline(int i)
 	}
 }
 
+int Astra::App::getScenesCount() const
+{
+	return _scenes.size();
+}
+
 Astra::Scene* Astra::App::getCurrentScene()
 {
 	return _scenes[_currentScene];

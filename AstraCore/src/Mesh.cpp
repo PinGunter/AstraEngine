@@ -128,11 +128,7 @@ void Astra::Mesh::loadFromFile(const std::string& path)
 		materials.emplace_back(m);
 	}
 
-	// If there were none, add a default
-	if (materials.empty())
-	{
-		materials.push_back(WaveFrontMaterial());
-	}
+
 
 	const tinyobj::attrib_t& attrib = reader.GetAttrib();
 
@@ -193,6 +189,18 @@ void Astra::Mesh::loadFromFile(const std::string& path)
 			v1.nrm = n;
 			v2.nrm = n;
 		}
+
+	}
+	// If there were none, add a default
+	if (materials.empty())
+	{
+		WaveFrontMaterial defaultMat{};
+		defaultMat.diffuse = glm::vec3(1, 0, 0);
+		defaultMat.illum = 2;
+		defaultMat.textureId = -1;
+		materials.push_back(defaultMat);
+
+		materialIndices.push_back(0);
 	}
 
 	// process texture paths

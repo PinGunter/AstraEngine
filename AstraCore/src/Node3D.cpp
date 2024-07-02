@@ -7,7 +7,7 @@ using namespace Astra;
 
 uint32_t Node3D::NodeCount = 0;
 
-Node3D::Node3D(const glm::mat4 &transform_mat, const std::string &name) : _transform(transform_mat), _name(name)
+Node3D::Node3D(const glm::mat4& transform_mat, const std::string& name) : _transform(transform_mat), _name(name)
 {
 	_id = NodeCount++;
 
@@ -17,17 +17,17 @@ Node3D::Node3D(const glm::mat4 &transform_mat, const std::string &name) : _trans
 	}
 }
 
-bool Astra::Node3D::operator==(const Node3D &other)
+bool Astra::Node3D::operator==(const Node3D& other)
 {
 	return _id == other._id;
 }
 
-void Astra::Node3D::addChild(Node3D *child)
+void Astra::Node3D::addChild(Node3D* child)
 {
 	_children.push_back(child);
 }
 
-void Astra::Node3D::removeChild(const Node3D &child)
+void Astra::Node3D::removeChild(const Node3D& child)
 {
 	auto eraser = _children.begin();
 	bool found = false;
@@ -43,17 +43,17 @@ void Astra::Node3D::removeChild(const Node3D &child)
 		_children.erase(eraser);
 }
 
-void Node3D::rotate(const glm::vec3 &axis, const float &angle)
+void Node3D::rotate(const glm::vec3& axis, const float& angle)
 {
 	_transform = glm::rotate(_transform, angle, axis);
 }
 
-void Node3D::scale(const glm::vec3 &scaling)
+void Node3D::scale(const glm::vec3& scaling)
 {
 	_transform = glm::scale(_transform, scaling);
 }
 
-void Node3D::translate(const glm::vec3 &position)
+void Node3D::translate(const glm::vec3& position)
 {
 	_transform = glm::translate(_transform, position);
 }
@@ -97,7 +97,46 @@ glm::vec3 Astra::Node3D::getScale() const
 	return scale;
 }
 
-std::string &Astra::Node3D::getNameRef()
+glm::vec3 Astra::Node3D::getPosition()
+{
+	glm::vec3 scale;
+	glm::quat rotation;
+	glm::vec3 translation;
+	glm::vec3 skew;
+	glm::vec4 perspective;
+
+	glm::decompose(_transform, scale, rotation, translation, skew, perspective);
+
+	return translation;
+}
+
+glm::vec3 Astra::Node3D::getRotation()
+{
+	glm::vec3 scale;
+	glm::quat rotation;
+	glm::vec3 translation;
+	glm::vec3 skew;
+	glm::vec4 perspective;
+
+	glm::decompose(_transform, scale, rotation, translation, skew, perspective);
+
+	return glm::eulerAngles(rotation);
+}
+
+glm::vec3 Astra::Node3D::getScale()
+{
+	glm::vec3 scale;
+	glm::quat rotation;
+	glm::vec3 translation;
+	glm::vec3 skew;
+	glm::vec4 perspective;
+
+	glm::decompose(_transform, scale, rotation, translation, skew, perspective);
+
+	return scale;
+}
+
+std::string& Astra::Node3D::getNameRef()
 {
 	return _name;
 }

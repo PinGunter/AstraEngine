@@ -50,10 +50,8 @@ LightSource Astra::Light::getLightSource() const
 {
 	LightSource src{};
 	src.color = _color;
-	// src.color = glm::vec4(_color, 1.0f);
 	src.intensity = _intensity;
 	src.position = getPosition();
-	// src.position = glm::vec4(getPosition(), 1.0f);
 	src.type = _type;
 
 	return src;
@@ -90,6 +88,17 @@ glm::vec3 Astra::DirectionalLight::getDirection() const
 void Astra::DirectionalLight::setDirection(const glm::vec3& dir)
 {
 	_direction = dir;
+}
+
+LightSource Astra::DirectionalLight::getLightSource() const
+{
+	LightSource src{};
+	src.color = _color;
+	src.intensity = _intensity;
+	src.position = _direction;
+	src.type = _type;
+
+	return src;
 }
 
 void Astra::DirectionalLight::rotate(const glm::vec3& axis, const float& angle)

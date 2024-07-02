@@ -16,8 +16,8 @@ namespace Astra
 	 */
 	class InputManager
 	{
-		App *_appPtr;
-		GLFWwindow *_window;
+		App* _appPtr;
+		GLFWwindow* _window;
 		glm::ivec2 _lastMousePos;
 		glm::ivec2 _mouseDelta;
 		glm::ivec2 _mouseWheel;
@@ -30,32 +30,32 @@ namespace Astra
 		void onMouseMotion(int x, int y);
 		void onMouseButton(int button, int action, int mods);
 		void onMouseWheel(double x, double y);
-		void onFileDrop(int count, const char **paths);
+		void onFileDrop(int count, const char** paths);
 
 		InputManager() {}
 		~InputManager() {}
 
-		static void cb_resize(GLFWwindow *window, int w, int h);
-		static void cb_keyboard(GLFWwindow *window, int key, int scancode, int action, int mods);
-		static void cb_mouseMotion(GLFWwindow *window, double x, double y);
-		static void cb_mouseButton(GLFWwindow *window, int button, int action, int mods);
-		static void cb_mouseWheel(GLFWwindow *window, double x, double y);
-		static void cb_fileDrop(GLFWwindow *window, int count, const char **paths);
+		static void cb_resize(GLFWwindow* window, int w, int h);
+		static void cb_keyboard(GLFWwindow* window, int key, int scancode, int action, int mods);
+		static void cb_mouseMotion(GLFWwindow* window, double x, double y);
+		static void cb_mouseButton(GLFWwindow* window, int button, int action, int mods);
+		static void cb_mouseWheel(GLFWwindow* window, double x, double y);
+		static void cb_fileDrop(GLFWwindow* window, int count, const char** paths);
 
 	public:
-		static InputManager &getInstance()
+		static InputManager& getInstance()
 		{
 			static InputManager instance;
 			return instance;
 		}
-		InputManager(const InputManager &) = delete;
-		InputManager &operator=(const InputManager &) = delete;
+		InputManager(const InputManager&) = delete;
+		InputManager& operator=(const InputManager&) = delete;
 
 		/**
 		 * \~spanish @brief Inicializa los callbacks
 		 * \~english @brief Inits and sets up the callbacks
 		 */
-		void init(GLFWwindow *window, App *app);
+		void init(GLFWwindow* window, App* app);
 		/**
 		 * \~spanish @brief Consulta los eventos de GLFW
 		 * @warning Este método se debe llamar al inicio de cada iteración del bucle de dibujado (método run()) de la aplicación!
@@ -119,6 +119,12 @@ namespace Astra
 		 * \~english @brief Returns whether the window should close or not.
 		 */
 		bool windowShouldClose() const;
+
+		/**
+		 * \~spanish @brief Establece el estado de si la ventana debería cerrar o no.
+		 * \~english @brief Stablishes the window should close variable
+		 */
+		void setWindowShouldClose(bool s);
 	};
 
 #define Input InputManager::getInstance()
