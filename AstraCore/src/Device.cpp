@@ -8,8 +8,8 @@
 #include <stb_image.h>
 #include <nvvk/buffers_vk.hpp>
 
-constexpr auto SAMPLE_WIDTH = 1280;
-constexpr auto SAMPLE_HEIGHT = 720;
+constexpr auto SAMPLE_WIDTH = 2560;
+constexpr auto SAMPLE_HEIGHT = 1440;
 
 namespace Astra
 {
@@ -27,6 +27,7 @@ namespace Astra
 			throw std::runtime_error("Error initializing glfw");
 		}
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+		glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 		_window = glfwCreateWindow(SAMPLE_WIDTH, SAMPLE_HEIGHT, "Astra App", nullptr, nullptr);
 
 		// fill createInfo with default values if empty

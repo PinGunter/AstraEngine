@@ -23,10 +23,10 @@ namespace Astra
 
 	public:
 		Light();
-		glm::vec3 &getColorRef();
+		glm::vec3& getColorRef();
 		glm::vec3 getColor() const;
-		void setColor(const glm::vec3 &c);
-		float &getIntensityRef();
+		void setColor(const glm::vec3& c);
+		float& getIntensityRef();
 		float getIntensity() const;
 		void setIntensity(float i);
 		LightType getType() const;
@@ -47,7 +47,7 @@ namespace Astra
 	class PointLight : public Light
 	{
 	public:
-		PointLight(const glm::vec3 &color, float intensity);
+		PointLight(const glm::vec3& color, float intensity);
 	};
 
 	/**
@@ -60,11 +60,12 @@ namespace Astra
 		glm::vec3 _direction;
 
 	public:
-		DirectionalLight(const glm::vec3 &color, float intensity, const glm::vec3 &direction);
-		glm::vec3 &getDirectionRef();
+		DirectionalLight(const glm::vec3& color, float intensity, const glm::vec3& direction);
+		glm::vec3& getDirectionRef();
 		glm::vec3 getDirection() const;
-		void setDirection(const glm::vec3 &dir);
+		void setDirection(const glm::vec3& dir);
+		LightSource getLightSource() const override;
 
-		void rotate(const glm::vec3 &axis, const float &angle) override;
+		void rotate(const glm::vec3& axis, const float& angle) override;
 	};
 }

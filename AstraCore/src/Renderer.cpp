@@ -65,6 +65,7 @@ void Astra::Renderer::renderRaytrace(const CommandList& cmdList, SceneRT* scene,
 	pushConstant.clearColor = _clearColor;
 	_maxDepth = std::min(static_cast<uint32_t>(_maxDepth), AstraDevice.getRtProperties().maxRayRecursionDepth - 1);
 	pushConstant.maxDepth = _maxDepth;
+	pushConstant.shadows = _useShadows;
 
 	Pipeline* rtPl = (Pipeline*)pipeline;
 	RenderContext<PushConstantRay> renderContext(rtPl, pushConstant, cmdList, VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_MISS_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR);
@@ -305,6 +306,21 @@ int Astra::Renderer::getMaxDepth() const
 void Astra::Renderer::setMaxDepth(int depth)
 {
 	_maxDepth = depth;
+}
+
+bool& Astra::Renderer::getUseShadowsRef()
+{
+	return _useShadows;
+}
+
+bool Astra::Renderer::getUseShadows() const
+{
+	return _useShadows;
+}
+
+void Astra::Renderer::setUseShadows(bool use)
+{
+	_useShadows = use;
 }
 
 void Astra::Renderer::createFrameBuffers()

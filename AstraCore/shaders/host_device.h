@@ -19,19 +19,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * \~spanish @file host_device.h
- * Archivo que comparte declaraciones de tipos entre CPU y GPU
- * \~english @file host_device.h
- * File that contains Host-Device shared type declarations
- */
+ /**
+  * \~spanish @file host_device.h
+  * Archivo que comparte declaraciones de tipos entre CPU y GPU
+  * \~english @file host_device.h
+  * File that contains Host-Device shared type declarations
+  */
 
 #ifndef COMMON_HOST_DEVICE
 #define COMMON_HOST_DEVICE
 
 #ifdef __cplusplus
 #include <glm/glm.hpp>
-// GLSL Type
+  // GLSL Type
 using vec2 = glm::vec2;
 using vec3 = glm::vec3;
 using vec4 = glm::vec4;
@@ -116,6 +116,7 @@ struct PushConstantRay
 	vec4 clearColor;
 	int maxDepth;
 	int nLights;
+	bool shadows;
 };
 
 struct Vertex

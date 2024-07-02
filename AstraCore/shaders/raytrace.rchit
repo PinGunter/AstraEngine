@@ -96,7 +96,7 @@ void main()
         specularColor += computeSpecular(mat, gl_WorldRayDirectionEXT, L,lightUni.lights[i].color, worldNrm) * lightIntensity;
 
         // Tracing shadow ray only if the light is visible from the surface
-        if(dot(worldNrm, L) > 0)
+        if(pcRay.shadows && dot(worldNrm, L) > 0)
         {
 
             vec3  origin = gl_WorldRayOriginEXT + gl_WorldRayDirectionEXT * gl_HitTEXT;

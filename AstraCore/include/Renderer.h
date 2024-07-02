@@ -61,6 +61,7 @@ namespace Astra
 		App* _app;
 		glm::vec4 _clearColor;
 		int _maxDepth{ 10 };
+		bool _useShadows = false;
 
 		void renderRaster(const CommandList& cmdBuf, Scene* scene, RasterPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets);
 		void renderRaytrace(const CommandList& cmdBuf, SceneRT* scene, RayTracingPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets);
@@ -114,6 +115,9 @@ namespace Astra
 		int& getMaxDepthRef();
 		int getMaxDepth() const;
 		void setMaxDepth(int depth);
+		bool& getUseShadowsRef();
+		bool getUseShadows() const;
+		void setUseShadows(bool use);
 
 		const nvvk::Texture& getOffscreenColor() const;
 		VkRenderPass getOffscreenRenderPass() const;
