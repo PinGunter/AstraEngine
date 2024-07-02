@@ -25,44 +25,25 @@
 var NAVTREE =
 [
   [ "AstraCore", "index.html", [
-    [ "Espacios de nombres", "namespaces.html", [
-      [ "Lista de espacios de nombres", "namespaces.html", "namespaces_dup" ],
-      [ "Miembros del espacio de nombres ", "namespacemembers.html", [
-        [ "Todos", "namespacemembers.html", null ],
-        [ "Funciones", "namespacemembers_func.html", null ],
-        [ "Enumeraciones", "namespacemembers_enum.html", null ],
-        [ "Valores de enumeraciones", "namespacemembers_eval.html", null ]
-      ] ]
-    ] ],
     [ "Clases", "annotated.html", [
       [ "Lista de clases", "annotated.html", "annotated_dup" ],
       [ "Índice de clases", "classes.html", null ],
       [ "Jerarquía de clases", "hierarchy.html", "hierarchy" ],
       [ "Miembros de clases", "functions.html", [
-        [ "Todos", "functions.html", "functions_dup" ],
-        [ "Funciones", "functions_func.html", "functions_func" ],
-        [ "Variables", "functions_vars.html", null ],
-        [ "Símbolos relacionados", "functions_rela.html", null ]
+        [ "Todos", "functions.html", null ],
+        [ "Funciones", "functions_func.html", null ],
+        [ "Variables", "functions_vars.html", null ]
       ] ]
     ] ],
     [ "Archivos", "files.html", [
-      [ "Lista de archivos", "files.html", "files_dup" ],
-      [ "Miembros de los archivos", "globals.html", [
-        [ "Todos", "globals.html", null ],
-        [ "Variables", "globals_vars.html", null ],
-        [ "defines", "globals_defs.html", null ]
-      ] ]
+      [ "Lista de archivos", "files.html", "files_dup" ]
     ] ]
   ] ]
 ];
 
 var NAVTREEINDEX =
 [
-"_app_8cpp.html",
-"class_astra_1_1_app.html#ae02ec206dc8c714f457cd384147efdee",
-"class_astra_1_1_light.html#a180a377c9c41fc957000464701b7aaae",
-"class_astra_1_1_renderer.html#a8ca10e4dac7c21c691e9ed6be31774f7",
-"namespace_astra.html#a3d72d58e22aab0e2bf4433841dd9efc8a178cbac6577442f30492c417dc98e97e"
+"_app_8h_source.html"
 ];
 
 var SYNCONMSG = 'pulsar para deshabilitar sincronización';

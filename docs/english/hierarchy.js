@@ -8,14 +8,11 @@ var hierarchy =
       [ "Astra::FreeCameraController", "class_astra_1_1_free_camera_controller.html", null ],
       [ "Astra::OrbitCameraController", "class_astra_1_1_orbit_camera_controller.html", null ]
     ] ],
-    [ "CameraUniform", "struct_camera_uniform.html", null ],
     [ "Astra::CommandList", "class_astra_1_1_command_list.html", null ],
     [ "Astra::Device", "class_astra_1_1_device.html", null ],
     [ "Astra::DeviceCreateInfo", "struct_astra_1_1_device_create_info.html", null ],
     [ "Astra::GuiController", "class_astra_1_1_gui_controller.html", null ],
     [ "Astra::InputManager", "class_astra_1_1_input_manager.html", null ],
-    [ "LightSource", "struct_light_source.html", null ],
-    [ "LightsUniform", "struct_lights_uniform.html", null ],
     [ "Astra::Mesh", "struct_astra_1_1_mesh.html", null ],
     [ "Astra::Node3D", "class_astra_1_1_node3_d.html", [
       [ "Astra::Light", "class_astra_1_1_light.html", [
@@ -24,7 +21,6 @@ var hierarchy =
       ] ],
       [ "Astra::MeshInstance", "class_astra_1_1_mesh_instance.html", null ]
     ] ],
-    [ "ObjDesc", "struct_obj_desc.html", null ],
     [ "Astra::Pipeline", "class_astra_1_1_pipeline.html", [
       [ "Astra::RasterPipeline", "class_astra_1_1_raster_pipeline.html", [
         [ "Astra::OffscreenRaster", "class_astra_1_1_offscreen_raster.html", null ],
@@ -32,13 +28,9 @@ var hierarchy =
       ] ],
       [ "Astra::RayTracingPipeline", "class_astra_1_1_ray_tracing_pipeline.html", null ]
     ] ],
-    [ "PushConstantRaster", "struct_push_constant_raster.html", null ],
-    [ "PushConstantRay", "struct_push_constant_ray.html", null ],
     [ "Astra::RenderContext< T >", "struct_astra_1_1_render_context.html", null ],
     [ "Astra::Renderer", "class_astra_1_1_renderer.html", null ],
     [ "Astra::Scene", "class_astra_1_1_scene.html", [
       [ "Astra::SceneRT", "class_astra_1_1_scene_r_t.html", null ]
-    ] ],
-    [ "Vertex", "struct_vertex.html", null ],
-    [ "WaveFrontMaterial", "struct_wave_front_material.html", null ]
+    ] ]
 ];

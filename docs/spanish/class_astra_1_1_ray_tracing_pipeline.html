@@ -125,54 +125,67 @@ Métodos públicos</h2></td></tr>
 <tr class="memitem:aa16a411249e33177d9d90fec7ac44eeb" id="r_aa16a411249e33177d9d90fec7ac44eeb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa16a411249e33177d9d90fec7ac44eeb">bind</a> (const <a class="el" href="class_astra_1_1_command_list.html">CommandList</a> &amp;cmdList, const std::vector&lt; VkDescriptorSet &gt; &amp;descsets) override</td></tr>
 <tr class="memdesc:aa16a411249e33177d9d90fec7ac44eeb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Método para activar la pipeline durante el renderizado.  <br /></td></tr>
 <tr class="separator:aa16a411249e33177d9d90fec7ac44eeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac610b942564a0e31e7ed3e1b532d818a" id="r_ac610b942564a0e31e7ed3e1b532d818a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac610b942564a0e31e7ed3e1b532d818a">create</a> (VkDevice vkdev, const std::vector&lt; VkDescriptorSetLayout &gt; &amp;descsetsLayouts, nvvk::ResourceAllocatorDma &amp;alloc)</td></tr>
-<tr class="separator:ac610b942564a0e31e7ed3e1b532d818a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb5973ad2f0594a10674ac0ee6272cb5" id="r_afb5973ad2f0594a10674ac0ee6272cb5"><td class="memItemLeft" align="right" valign="top"><a id="afb5973ad2f0594a10674ac0ee6272cb5" name="afb5973ad2f0594a10674ac0ee6272cb5"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (VkDevice vkdev, const std::vector&lt; VkDescriptorSetLayout &gt; &amp;descsetsLayouts, nvvk::ResourceAllocatorDma &amp;alloc)</td></tr>
+<tr class="separator:afb5973ad2f0594a10674ac0ee6272cb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a214b2e3efbddc7df2a09801b7aeef2cb" id="r_a214b2e3efbddc7df2a09801b7aeef2cb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a214b2e3efbddc7df2a09801b7aeef2cb">doesRayTracing</a> () override</td></tr>
 <tr class="separator:a214b2e3efbddc7df2a09801b7aeef2cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae645143b433c26a9c8f715cebaff61b6" id="r_ae645143b433c26a9c8f715cebaff61b6"><td class="memItemLeft" align="right" valign="top">std::array&lt; VkStridedDeviceAddressRegionKHR, 4 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae645143b433c26a9c8f715cebaff61b6">getSBTRegions</a> ()</td></tr>
+<tr class="memitem:ae645143b433c26a9c8f715cebaff61b6" id="r_ae645143b433c26a9c8f715cebaff61b6"><td class="memItemLeft" align="right" valign="top"><a id="ae645143b433c26a9c8f715cebaff61b6" name="ae645143b433c26a9c8f715cebaff61b6"></a>
+std::array&lt; VkStridedDeviceAddressRegionKHR, 4 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getSBTRegions</b> ()</td></tr>
 <tr class="separator:ae645143b433c26a9c8f715cebaff61b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a43b5d611bf8ce65c0990ef3bdb627273" id="r_a43b5d611bf8ce65c0990ef3bdb627273"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a43b5d611bf8ce65c0990ef3bdb627273">destroy</a> (nvvk::ResourceAllocator *alloc) override</td></tr>
 <tr class="separator:a43b5d611bf8ce65c0990ef3bdb627273"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_astra_1_1_pipeline"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_class_astra_1_1_pipeline')"><img src="closed.png" alt="-"/>&#160;Métodos públicos heredados de <a class="el" href="class_astra_1_1_pipeline.html">Astra::Pipeline</a></td></tr>
-<tr class="memitem:a8515be541dc58ba430e605c7c95a970c inherit pub_methods_class_astra_1_1_pipeline" id="r_a8515be541dc58ba430e605c7c95a970c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_astra_1_1_pipeline.html#a8515be541dc58ba430e605c7c95a970c">pushConstants</a> (const <a class="el" href="class_astra_1_1_command_list.html">CommandList</a> &amp;cmdList, uint32_t shaderStages, uint32_t size, void *data)</td></tr>
-<tr class="memdesc:a8515be541dc58ba430e605c7c95a970c inherit pub_methods_class_astra_1_1_pipeline"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sube las push constants a la GPU.  <br /></td></tr>
-<tr class="separator:a8515be541dc58ba430e605c7c95a970c inherit pub_methods_class_astra_1_1_pipeline"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c9854f4c8be4e1c56bd787a695f5db7 inherit pub_methods_class_astra_1_1_pipeline" id="r_a1c9854f4c8be4e1c56bd787a695f5db7"><td class="memItemLeft" align="right" valign="top">VkPipeline&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_astra_1_1_pipeline.html#a1c9854f4c8be4e1c56bd787a695f5db7">getPipeline</a> () const</td></tr>
+<tr class="memitem:a89064c1a627b8c33c505fec91faaa5ff inherit pub_methods_class_astra_1_1_pipeline" id="r_a89064c1a627b8c33c505fec91faaa5ff"><td class="memItemLeft" align="right" valign="top">
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>pushConstants</b> (const <a class="el" href="class_astra_1_1_command_list.html">CommandList</a> &amp;cmdList, uint32_t shaderStages, uint32_t size, void *data)</td></tr>
+<tr class="memdesc:a89064c1a627b8c33c505fec91faaa5ff inherit pub_methods_class_astra_1_1_pipeline"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sube las push constants a la GPU. <br /></td></tr>
+<tr class="separator:a89064c1a627b8c33c505fec91faaa5ff inherit pub_methods_class_astra_1_1_pipeline"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c9854f4c8be4e1c56bd787a695f5db7 inherit pub_methods_class_astra_1_1_pipeline" id="r_a1c9854f4c8be4e1c56bd787a695f5db7"><td class="memItemLeft" align="right" valign="top">
+VkPipeline&#160;</td><td class="memItemRight" valign="bottom"><b>getPipeline</b> () const</td></tr>
 <tr class="separator:a1c9854f4c8be4e1c56bd787a695f5db7 inherit pub_methods_class_astra_1_1_pipeline"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a958467cd915b9aa421f1f0f6624197bb inherit pub_methods_class_astra_1_1_pipeline" id="r_a958467cd915b9aa421f1f0f6624197bb"><td class="memItemLeft" align="right" valign="top">VkPipelineLayout&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_astra_1_1_pipeline.html#a958467cd915b9aa421f1f0f6624197bb">getLayout</a> () const</td></tr>
+<tr class="memitem:a958467cd915b9aa421f1f0f6624197bb inherit pub_methods_class_astra_1_1_pipeline" id="r_a958467cd915b9aa421f1f0f6624197bb"><td class="memItemLeft" align="right" valign="top">
+VkPipelineLayout&#160;</td><td class="memItemRight" valign="bottom"><b>getLayout</b> () const</td></tr>
 <tr class="separator:a958467cd915b9aa421f1f0f6624197bb inherit pub_methods_class_astra_1_1_pipeline"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Métodos protegidos</h2></td></tr>
-<tr class="memitem:a1522ae81c8a70bb52ccb8af036178f0f" id="r_a1522ae81c8a70bb52ccb8af036178f0f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1522ae81c8a70bb52ccb8af036178f0f">createSBT</a> (nvvk::ResourceAllocatorDma &amp;alloc, const VkPhysicalDeviceRayTracingPipelinePropertiesKHR &amp;rtProperties)</td></tr>
+<tr class="memitem:a1522ae81c8a70bb52ccb8af036178f0f" id="r_a1522ae81c8a70bb52ccb8af036178f0f"><td class="memItemLeft" align="right" valign="top"><a id="a1522ae81c8a70bb52ccb8af036178f0f" name="a1522ae81c8a70bb52ccb8af036178f0f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>createSBT</b> (nvvk::ResourceAllocatorDma &amp;alloc, const VkPhysicalDeviceRayTracingPipelinePropertiesKHR &amp;rtProperties)</td></tr>
 <tr class="separator:a1522ae81c8a70bb52ccb8af036178f0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Atributos protegidos</h2></td></tr>
-<tr class="memitem:a120fea50a9c7d7d2f6af232065446c91" id="r_a120fea50a9c7d7d2f6af232065446c91"><td class="memItemLeft" align="right" valign="top">VkStridedDeviceAddressRegionKHR&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a120fea50a9c7d7d2f6af232065446c91">_rgenRegion</a> {}</td></tr>
+<tr class="memitem:a120fea50a9c7d7d2f6af232065446c91" id="r_a120fea50a9c7d7d2f6af232065446c91"><td class="memItemLeft" align="right" valign="top"><a id="a120fea50a9c7d7d2f6af232065446c91" name="a120fea50a9c7d7d2f6af232065446c91"></a>
+VkStridedDeviceAddressRegionKHR&#160;</td><td class="memItemRight" valign="bottom"><b>_rgenRegion</b> {}</td></tr>
 <tr class="separator:a120fea50a9c7d7d2f6af232065446c91"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae0947f7403bcb83c10fb0d827ff839cc" id="r_ae0947f7403bcb83c10fb0d827ff839cc"><td class="memItemLeft" align="right" valign="top">VkStridedDeviceAddressRegionKHR&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae0947f7403bcb83c10fb0d827ff839cc">_missRegion</a> {}</td></tr>
+<tr class="memitem:ae0947f7403bcb83c10fb0d827ff839cc" id="r_ae0947f7403bcb83c10fb0d827ff839cc"><td class="memItemLeft" align="right" valign="top"><a id="ae0947f7403bcb83c10fb0d827ff839cc" name="ae0947f7403bcb83c10fb0d827ff839cc"></a>
+VkStridedDeviceAddressRegionKHR&#160;</td><td class="memItemRight" valign="bottom"><b>_missRegion</b> {}</td></tr>
 <tr class="separator:ae0947f7403bcb83c10fb0d827ff839cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afb865c65541be4477dca9d8137163a0b" id="r_afb865c65541be4477dca9d8137163a0b"><td class="memItemLeft" align="right" valign="top">VkStridedDeviceAddressRegionKHR&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afb865c65541be4477dca9d8137163a0b">_hitRegion</a> {}</td></tr>
+<tr class="memitem:afb865c65541be4477dca9d8137163a0b" id="r_afb865c65541be4477dca9d8137163a0b"><td class="memItemLeft" align="right" valign="top"><a id="afb865c65541be4477dca9d8137163a0b" name="afb865c65541be4477dca9d8137163a0b"></a>
+VkStridedDeviceAddressRegionKHR&#160;</td><td class="memItemRight" valign="bottom"><b>_hitRegion</b> {}</td></tr>
 <tr class="separator:afb865c65541be4477dca9d8137163a0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abed89e86170a3496bb874b618a8de9b1" id="r_abed89e86170a3496bb874b618a8de9b1"><td class="memItemLeft" align="right" valign="top">VkStridedDeviceAddressRegionKHR&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abed89e86170a3496bb874b618a8de9b1">_callRegion</a> {}</td></tr>
+<tr class="memitem:abed89e86170a3496bb874b618a8de9b1" id="r_abed89e86170a3496bb874b618a8de9b1"><td class="memItemLeft" align="right" valign="top"><a id="abed89e86170a3496bb874b618a8de9b1" name="abed89e86170a3496bb874b618a8de9b1"></a>
+VkStridedDeviceAddressRegionKHR&#160;</td><td class="memItemRight" valign="bottom"><b>_callRegion</b> {}</td></tr>
 <tr class="separator:abed89e86170a3496bb874b618a8de9b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c22ebea35af0ec392cf9cdd6b74b7d8" id="r_a5c22ebea35af0ec392cf9cdd6b74b7d8"><td class="memItemLeft" align="right" valign="top">nvvk::Buffer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5c22ebea35af0ec392cf9cdd6b74b7d8">_rtSBTBuffer</a></td></tr>
+<tr class="memitem:a5c22ebea35af0ec392cf9cdd6b74b7d8" id="r_a5c22ebea35af0ec392cf9cdd6b74b7d8"><td class="memItemLeft" align="right" valign="top"><a id="a5c22ebea35af0ec392cf9cdd6b74b7d8" name="a5c22ebea35af0ec392cf9cdd6b74b7d8"></a>
+nvvk::Buffer&#160;</td><td class="memItemRight" valign="bottom"><b>_rtSBTBuffer</b></td></tr>
 <tr class="separator:a5c22ebea35af0ec392cf9cdd6b74b7d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b14e106b05fbc9595324607a762afd5" id="r_a8b14e106b05fbc9595324607a762afd5"><td class="memItemLeft" align="right" valign="top">nvvk::DescriptorSetBindings&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8b14e106b05fbc9595324607a762afd5">_rtDescSetLayoutBind</a></td></tr>
+<tr class="memitem:a8b14e106b05fbc9595324607a762afd5" id="r_a8b14e106b05fbc9595324607a762afd5"><td class="memItemLeft" align="right" valign="top"><a id="a8b14e106b05fbc9595324607a762afd5" name="a8b14e106b05fbc9595324607a762afd5"></a>
+nvvk::DescriptorSetBindings&#160;</td><td class="memItemRight" valign="bottom"><b>_rtDescSetLayoutBind</b></td></tr>
 <tr class="separator:a8b14e106b05fbc9595324607a762afd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1e6dc5eb12b4b8029001183bba1cc5f0" id="r_a1e6dc5eb12b4b8029001183bba1cc5f0"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkRayTracingShaderGroupCreateInfoKHR &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1e6dc5eb12b4b8029001183bba1cc5f0">_rtShaderGroups</a></td></tr>
+<tr class="memitem:a1e6dc5eb12b4b8029001183bba1cc5f0" id="r_a1e6dc5eb12b4b8029001183bba1cc5f0"><td class="memItemLeft" align="right" valign="top"><a id="a1e6dc5eb12b4b8029001183bba1cc5f0" name="a1e6dc5eb12b4b8029001183bba1cc5f0"></a>
+std::vector&lt; VkRayTracingShaderGroupCreateInfoKHR &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>_rtShaderGroups</b></td></tr>
 <tr class="separator:a1e6dc5eb12b4b8029001183bba1cc5f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_class_astra_1_1_pipeline"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pro_attribs_class_astra_1_1_pipeline')"><img src="closed.png" alt="-"/>&#160;Atributos protegidos heredados de <a class="el" href="class_astra_1_1_pipeline.html">Astra::Pipeline</a></td></tr>
-<tr class="memitem:a91eee050a7e48f5eed88f375e99348b3 inherit pro_attribs_class_astra_1_1_pipeline" id="r_a91eee050a7e48f5eed88f375e99348b3"><td class="memItemLeft" align="right" valign="top">VkPipelineLayout&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_astra_1_1_pipeline.html#a91eee050a7e48f5eed88f375e99348b3">_layout</a></td></tr>
+<tr class="memitem:a91eee050a7e48f5eed88f375e99348b3 inherit pro_attribs_class_astra_1_1_pipeline" id="r_a91eee050a7e48f5eed88f375e99348b3"><td class="memItemLeft" align="right" valign="top">
+VkPipelineLayout&#160;</td><td class="memItemRight" valign="bottom"><b>_layout</b></td></tr>
 <tr class="separator:a91eee050a7e48f5eed88f375e99348b3 inherit pro_attribs_class_astra_1_1_pipeline"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ce2b0f85964c6e531e66cb26c28d5d9 inherit pro_attribs_class_astra_1_1_pipeline" id="r_a5ce2b0f85964c6e531e66cb26c28d5d9"><td class="memItemLeft" align="right" valign="top">VkPipeline&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_astra_1_1_pipeline.html#a5ce2b0f85964c6e531e66cb26c28d5d9">_pipeline</a></td></tr>
+<tr class="memitem:a5ce2b0f85964c6e531e66cb26c28d5d9 inherit pro_attribs_class_astra_1_1_pipeline" id="r_a5ce2b0f85964c6e531e66cb26c28d5d9"><td class="memItemLeft" align="right" valign="top">
+VkPipeline&#160;</td><td class="memItemRight" valign="bottom"><b>_pipeline</b></td></tr>
 <tr class="separator:a5ce2b0f85964c6e531e66cb26c28d5d9 inherit pro_attribs_class_astra_1_1_pipeline"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Descripción detallada</h2>
 <div class="textblock"><p>Clase de pipeline de trazado de rayos. Está completamente implementada para usarse. </p>
-
-<p class="definition">Definición en la línea <a class="el" href="_pipeline_8h_source.html#l00057">57</a> del archivo <a class="el" href="_pipeline_8h_source.html">Pipeline.h</a>.</p>
 </div><h2 class="groupheader">Documentación de funciones miembro</h2>
 <a id="aa16a411249e33177d9d90fec7ac44eeb" name="aa16a411249e33177d9d90fec7ac44eeb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa16a411249e33177d9d90fec7ac44eeb">&#9670;&#160;</a></span>bind()</h2>
@@ -203,68 +216,7 @@ Atributos protegidos</h2></td></tr>
 
 <p>Método para activar la pipeline durante el renderizado. </p>
 
-<p>Reimplementado de <a class="el" href="class_astra_1_1_pipeline.html#ad56780f344b4864e302ce0d156ca430e">Astra::Pipeline</a>.</p>
-
-<p class="definition">Definición en la línea <a class="el" href="_pipeline_8cpp_source.html#l00249">249</a> del archivo <a class="el" href="_pipeline_8cpp_source.html">Pipeline.cpp</a>.</p>
-
-</div>
-</div>
-<a id="ac610b942564a0e31e7ed3e1b532d818a" name="ac610b942564a0e31e7ed3e1b532d818a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac610b942564a0e31e7ed3e1b532d818a">&#9670;&#160;</a></span>create()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Astra::RayTracingPipeline::create </td>
-          <td>(</td>
-          <td class="paramtype">VkDevice</td>          <td class="paramname"><span class="paramname"><em>vkdev</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::vector&lt; VkDescriptorSetLayout &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>descsetsLayouts</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">nvvk::ResourceAllocatorDma &amp;</td>          <td class="paramname"><span class="paramname"><em>alloc</em></span>&#160;)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definición en la línea <a class="el" href="_pipeline_8cpp_source.html#l00041">41</a> del archivo <a class="el" href="_pipeline_8cpp_source.html">Pipeline.cpp</a>.</p>
-
-</div>
-</div>
-<a id="a1522ae81c8a70bb52ccb8af036178f0f" name="a1522ae81c8a70bb52ccb8af036178f0f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1522ae81c8a70bb52ccb8af036178f0f">&#9670;&#160;</a></span>createSBT()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Astra::RayTracingPipeline::createSBT </td>
-          <td>(</td>
-          <td class="paramtype">nvvk::ResourceAllocatorDma &amp;</td>          <td class="paramname"><span class="paramname"><em>alloc</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const VkPhysicalDeviceRayTracingPipelinePropertiesKHR &amp;</td>          <td class="paramname"><span class="paramname"><em>rtProperties</em></span>&#160;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definición en la línea <a class="el" href="_pipeline_8cpp_source.html#l00180">180</a> del archivo <a class="el" href="_pipeline_8cpp_source.html">Pipeline.cpp</a>.</p>
+<p>Reimplementado de <a class="el" href="class_astra_1_1_pipeline.html#a61e577650a1c1eed09ae3763af010e84">Astra::Pipeline</a>.</p>
 
 </div>
 </div>
@@ -291,9 +243,7 @@ Atributos protegidos</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplementado de <a class="el" href="class_astra_1_1_pipeline.html#a10f5a40a8dd3fe819337bd32308d7090">Astra::Pipeline</a>.</p>
-
-<p class="definition">Definición en la línea <a class="el" href="_pipeline_8cpp_source.html#l00174">174</a> del archivo <a class="el" href="_pipeline_8cpp_source.html">Pipeline.cpp</a>.</p>
+<p>Reimplementado de <a class="el" href="class_astra_1_1_pipeline.html">Astra::Pipeline</a>.</p>
 
 </div>
 </div>
@@ -320,210 +270,19 @@ Atributos protegidos</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implementa <a class="el" href="class_astra_1_1_pipeline.html#ab830986181ee4bc8533d0c2ab575188e">Astra::Pipeline</a>.</p>
-
-<p class="definition">Definición en la línea <a class="el" href="_pipeline_8h_source.html#l00073">73</a> del archivo <a class="el" href="_pipeline_8h_source.html">Pipeline.h</a>.</p>
+<p>Implementa <a class="el" href="class_astra_1_1_pipeline.html">Astra::Pipeline</a>.</p>
 
 </div>
 </div>
-<a id="ae645143b433c26a9c8f715cebaff61b6" name="ae645143b433c26a9c8f715cebaff61b6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae645143b433c26a9c8f715cebaff61b6">&#9670;&#160;</a></span>getSBTRegions()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::array&lt; VkStridedDeviceAddressRegionKHR, 4 &gt; Astra::RayTracingPipeline::getSBTRegions </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definición en la línea <a class="el" href="_pipeline_8cpp_source.html#l00169">169</a> del archivo <a class="el" href="_pipeline_8cpp_source.html">Pipeline.cpp</a>.</p>
-
-</div>
-</div>
-<h2 class="groupheader">Documentación de datos miembro</h2>
-<a id="abed89e86170a3496bb874b618a8de9b1" name="abed89e86170a3496bb874b618a8de9b1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abed89e86170a3496bb874b618a8de9b1">&#9670;&#160;</a></span>_callRegion</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">VkStridedDeviceAddressRegionKHR Astra::RayTracingPipeline::_callRegion {}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definición en la línea <a class="el" href="_pipeline_8h_source.html#l00063">63</a> del archivo <a class="el" href="_pipeline_8h_source.html">Pipeline.h</a>.</p>
-
-</div>
-</div>
-<a id="afb865c65541be4477dca9d8137163a0b" name="afb865c65541be4477dca9d8137163a0b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afb865c65541be4477dca9d8137163a0b">&#9670;&#160;</a></span>_hitRegion</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">VkStridedDeviceAddressRegionKHR Astra::RayTracingPipeline::_hitRegion {}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definición en la línea <a class="el" href="_pipeline_8h_source.html#l00062">62</a> del archivo <a class="el" href="_pipeline_8h_source.html">Pipeline.h</a>.</p>
-
-</div>
-</div>
-<a id="ae0947f7403bcb83c10fb0d827ff839cc" name="ae0947f7403bcb83c10fb0d827ff839cc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae0947f7403bcb83c10fb0d827ff839cc">&#9670;&#160;</a></span>_missRegion</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">VkStridedDeviceAddressRegionKHR Astra::RayTracingPipeline::_missRegion {}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definición en la línea <a class="el" href="_pipeline_8h_source.html#l00061">61</a> del archivo <a class="el" href="_pipeline_8h_source.html">Pipeline.h</a>.</p>
-
-</div>
-</div>
-<a id="a120fea50a9c7d7d2f6af232065446c91" name="a120fea50a9c7d7d2f6af232065446c91"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a120fea50a9c7d7d2f6af232065446c91">&#9670;&#160;</a></span>_rgenRegion</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">VkStridedDeviceAddressRegionKHR Astra::RayTracingPipeline::_rgenRegion {}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definición en la línea <a class="el" href="_pipeline_8h_source.html#l00060">60</a> del archivo <a class="el" href="_pipeline_8h_source.html">Pipeline.h</a>.</p>
-
-</div>
-</div>
-<a id="a8b14e106b05fbc9595324607a762afd5" name="a8b14e106b05fbc9595324607a762afd5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8b14e106b05fbc9595324607a762afd5">&#9670;&#160;</a></span>_rtDescSetLayoutBind</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">nvvk::DescriptorSetBindings Astra::RayTracingPipeline::_rtDescSetLayoutBind</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definición en la línea <a class="el" href="_pipeline_8h_source.html#l00066">66</a> del archivo <a class="el" href="_pipeline_8h_source.html">Pipeline.h</a>.</p>
-
-</div>
-</div>
-<a id="a5c22ebea35af0ec392cf9cdd6b74b7d8" name="a5c22ebea35af0ec392cf9cdd6b74b7d8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5c22ebea35af0ec392cf9cdd6b74b7d8">&#9670;&#160;</a></span>_rtSBTBuffer</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">nvvk::Buffer Astra::RayTracingPipeline::_rtSBTBuffer</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definición en la línea <a class="el" href="_pipeline_8h_source.html#l00064">64</a> del archivo <a class="el" href="_pipeline_8h_source.html">Pipeline.h</a>.</p>
-
-</div>
-</div>
-<a id="a1e6dc5eb12b4b8029001183bba1cc5f0" name="a1e6dc5eb12b4b8029001183bba1cc5f0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1e6dc5eb12b4b8029001183bba1cc5f0">&#9670;&#160;</a></span>_rtShaderGroups</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;VkRayTracingShaderGroupCreateInfoKHR&gt; Astra::RayTracingPipeline::_rtShaderGroups</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definición en la línea <a class="el" href="_pipeline_8h_source.html#l00067">67</a> del archivo <a class="el" href="_pipeline_8h_source.html">Pipeline.h</a>.</p>
-
-</div>
-</div>
-<hr/>La documentación de esta clase está generada de los siguientes archivos:<ul>
-<li>include/<a class="el" href="_pipeline_8h_source.html">Pipeline.h</a></li>
-<li>src/<a class="el" href="_pipeline_8cpp_source.html">Pipeline.cpp</a></li>
+<hr/>La documentación de esta clase está generada del siguiente archivo:<ul>
+<li>C:/Users/pingu/AstraEngine/AstraCore/include/<a class="el" href="_pipeline_8h_source.html">Pipeline.h</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespace_astra.html">Astra</a></li><li class="navelem"><a class="el" href="class_astra_1_1_ray_tracing_pipeline.html">RayTracingPipeline</a></li>
+    <li class="navelem"><b>Astra</b></li><li class="navelem"><a class="el" href="class_astra_1_1_ray_tracing_pipeline.html">RayTracingPipeline</a></li>
     <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.11.0 </li>
   </ul>
 </div>

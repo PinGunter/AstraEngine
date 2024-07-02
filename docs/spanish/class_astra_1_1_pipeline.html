@@ -124,35 +124,40 @@ Diagrama de herencia de Astra::Pipeline</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Métodos públicos</h2></td></tr>
-<tr class="memitem:a10f5a40a8dd3fe819337bd32308d7090" id="r_a10f5a40a8dd3fe819337bd32308d7090"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a10f5a40a8dd3fe819337bd32308d7090">destroy</a> (nvvk::ResourceAllocator *alloc)</td></tr>
-<tr class="separator:a10f5a40a8dd3fe819337bd32308d7090"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab830986181ee4bc8533d0c2ab575188e" id="r_ab830986181ee4bc8533d0c2ab575188e"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab830986181ee4bc8533d0c2ab575188e">doesRayTracing</a> ()=0</td></tr>
+<tr class="memitem:a20ab4a8cd96ab880d075504e63870629" id="r_a20ab4a8cd96ab880d075504e63870629"><td class="memItemLeft" align="right" valign="top"><a id="a20ab4a8cd96ab880d075504e63870629" name="a20ab4a8cd96ab880d075504e63870629"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>destroy</b> (nvvk::ResourceAllocator *alloc)</td></tr>
+<tr class="separator:a20ab4a8cd96ab880d075504e63870629"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab830986181ee4bc8533d0c2ab575188e" id="r_ab830986181ee4bc8533d0c2ab575188e"><td class="memItemLeft" align="right" valign="top"><a id="ab830986181ee4bc8533d0c2ab575188e" name="ab830986181ee4bc8533d0c2ab575188e"></a>
+virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>doesRayTracing</b> ()=0</td></tr>
 <tr class="separator:ab830986181ee4bc8533d0c2ab575188e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad56780f344b4864e302ce0d156ca430e" id="r_ad56780f344b4864e302ce0d156ca430e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad56780f344b4864e302ce0d156ca430e">bind</a> (const <a class="el" href="class_astra_1_1_command_list.html">CommandList</a> &amp;cmdList, const std::vector&lt; VkDescriptorSet &gt; &amp;descsets)</td></tr>
-<tr class="memdesc:ad56780f344b4864e302ce0d156ca430e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Método para activar la pipeline durante el renderizado.  <br /></td></tr>
-<tr class="separator:ad56780f344b4864e302ce0d156ca430e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8515be541dc58ba430e605c7c95a970c" id="r_a8515be541dc58ba430e605c7c95a970c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8515be541dc58ba430e605c7c95a970c">pushConstants</a> (const <a class="el" href="class_astra_1_1_command_list.html">CommandList</a> &amp;cmdList, uint32_t shaderStages, uint32_t size, void *data)</td></tr>
-<tr class="memdesc:a8515be541dc58ba430e605c7c95a970c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sube las push constants a la GPU.  <br /></td></tr>
-<tr class="separator:a8515be541dc58ba430e605c7c95a970c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c9854f4c8be4e1c56bd787a695f5db7" id="r_a1c9854f4c8be4e1c56bd787a695f5db7"><td class="memItemLeft" align="right" valign="top">VkPipeline&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1c9854f4c8be4e1c56bd787a695f5db7">getPipeline</a> () const</td></tr>
+<tr class="memitem:a61e577650a1c1eed09ae3763af010e84" id="r_a61e577650a1c1eed09ae3763af010e84"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a61e577650a1c1eed09ae3763af010e84">bind</a> (const <a class="el" href="class_astra_1_1_command_list.html">CommandList</a> &amp;cmdList, const std::vector&lt; VkDescriptorSet &gt; &amp;descsets)</td></tr>
+<tr class="memdesc:a61e577650a1c1eed09ae3763af010e84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Método para activar la pipeline durante el renderizado.  <br /></td></tr>
+<tr class="separator:a61e577650a1c1eed09ae3763af010e84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89064c1a627b8c33c505fec91faaa5ff" id="r_a89064c1a627b8c33c505fec91faaa5ff"><td class="memItemLeft" align="right" valign="top"><a id="a89064c1a627b8c33c505fec91faaa5ff" name="a89064c1a627b8c33c505fec91faaa5ff"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>pushConstants</b> (const <a class="el" href="class_astra_1_1_command_list.html">CommandList</a> &amp;cmdList, uint32_t shaderStages, uint32_t size, void *data)</td></tr>
+<tr class="memdesc:a89064c1a627b8c33c505fec91faaa5ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sube las push constants a la GPU. <br /></td></tr>
+<tr class="separator:a89064c1a627b8c33c505fec91faaa5ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c9854f4c8be4e1c56bd787a695f5db7" id="r_a1c9854f4c8be4e1c56bd787a695f5db7"><td class="memItemLeft" align="right" valign="top"><a id="a1c9854f4c8be4e1c56bd787a695f5db7" name="a1c9854f4c8be4e1c56bd787a695f5db7"></a>
+VkPipeline&#160;</td><td class="memItemRight" valign="bottom"><b>getPipeline</b> () const</td></tr>
 <tr class="separator:a1c9854f4c8be4e1c56bd787a695f5db7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a958467cd915b9aa421f1f0f6624197bb" id="r_a958467cd915b9aa421f1f0f6624197bb"><td class="memItemLeft" align="right" valign="top">VkPipelineLayout&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a958467cd915b9aa421f1f0f6624197bb">getLayout</a> () const</td></tr>
+<tr class="memitem:a958467cd915b9aa421f1f0f6624197bb" id="r_a958467cd915b9aa421f1f0f6624197bb"><td class="memItemLeft" align="right" valign="top"><a id="a958467cd915b9aa421f1f0f6624197bb" name="a958467cd915b9aa421f1f0f6624197bb"></a>
+VkPipelineLayout&#160;</td><td class="memItemRight" valign="bottom"><b>getLayout</b> () const</td></tr>
 <tr class="separator:a958467cd915b9aa421f1f0f6624197bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Atributos protegidos</h2></td></tr>
-<tr class="memitem:a91eee050a7e48f5eed88f375e99348b3" id="r_a91eee050a7e48f5eed88f375e99348b3"><td class="memItemLeft" align="right" valign="top">VkPipelineLayout&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a91eee050a7e48f5eed88f375e99348b3">_layout</a></td></tr>
+<tr class="memitem:a91eee050a7e48f5eed88f375e99348b3" id="r_a91eee050a7e48f5eed88f375e99348b3"><td class="memItemLeft" align="right" valign="top"><a id="a91eee050a7e48f5eed88f375e99348b3" name="a91eee050a7e48f5eed88f375e99348b3"></a>
+VkPipelineLayout&#160;</td><td class="memItemRight" valign="bottom"><b>_layout</b></td></tr>
 <tr class="separator:a91eee050a7e48f5eed88f375e99348b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ce2b0f85964c6e531e66cb26c28d5d9" id="r_a5ce2b0f85964c6e531e66cb26c28d5d9"><td class="memItemLeft" align="right" valign="top">VkPipeline&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5ce2b0f85964c6e531e66cb26c28d5d9">_pipeline</a></td></tr>
+<tr class="memitem:a5ce2b0f85964c6e531e66cb26c28d5d9" id="r_a5ce2b0f85964c6e531e66cb26c28d5d9"><td class="memItemLeft" align="right" valign="top"><a id="a5ce2b0f85964c6e531e66cb26c28d5d9" name="a5ce2b0f85964c6e531e66cb26c28d5d9"></a>
+VkPipeline&#160;</td><td class="memItemRight" valign="bottom"><b>_pipeline</b></td></tr>
 <tr class="separator:a5ce2b0f85964c6e531e66cb26c28d5d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Descripción detallada</h2>
 <div class="textblock"><p>Clase abstracta que representa una pipeline de Vulkan. </p>
-
-<p class="definition">Definición en la línea <a class="el" href="_pipeline_8h_source.html#l00013">13</a> del archivo <a class="el" href="_pipeline_8h_source.html">Pipeline.h</a>.</p>
 </div><h2 class="groupheader">Documentación de funciones miembro</h2>
-<a id="ad56780f344b4864e302ce0d156ca430e" name="ad56780f344b4864e302ce0d156ca430e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad56780f344b4864e302ce0d156ca430e">&#9670;&#160;</a></span>bind()</h2>
+<a id="a61e577650a1c1eed09ae3763af010e84" name="a61e577650a1c1eed09ae3763af010e84"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61e577650a1c1eed09ae3763af010e84">&#9670;&#160;</a></span>bind()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -161,7 +166,7 @@ Atributos protegidos</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Astra::Pipeline::bind </td>
+          <td class="memname">virtual void Astra::Pipeline::bind </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="class_astra_1_1_command_list.html">CommandList</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>cmdList</em></span>, </td>
         </tr>
@@ -182,206 +187,17 @@ Atributos protegidos</h2></td></tr>
 
 <p>Reimplementado en <a class="el" href="class_astra_1_1_ray_tracing_pipeline.html#aa16a411249e33177d9d90fec7ac44eeb">Astra::RayTracingPipeline</a>.</p>
 
-<p class="definition">Definición en la línea <a class="el" href="_pipeline_8cpp_source.html#l00020">20</a> del archivo <a class="el" href="_pipeline_8cpp_source.html">Pipeline.cpp</a>.</p>
-
 </div>
 </div>
-<a id="a10f5a40a8dd3fe819337bd32308d7090" name="a10f5a40a8dd3fe819337bd32308d7090"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a10f5a40a8dd3fe819337bd32308d7090">&#9670;&#160;</a></span>destroy()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Astra::Pipeline::destroy </td>
-          <td>(</td>
-          <td class="paramtype">nvvk::ResourceAllocator *</td>          <td class="paramname"><span class="paramname"><em>alloc</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Reimplementado en <a class="el" href="class_astra_1_1_ray_tracing_pipeline.html#a43b5d611bf8ce65c0990ef3bdb627273">Astra::RayTracingPipeline</a>.</p>
-
-<p class="definition">Definición en la línea <a class="el" href="_pipeline_8cpp_source.html#l00012">12</a> del archivo <a class="el" href="_pipeline_8cpp_source.html">Pipeline.cpp</a>.</p>
-
-</div>
-</div>
-<a id="ab830986181ee4bc8533d0c2ab575188e" name="ab830986181ee4bc8533d0c2ab575188e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab830986181ee4bc8533d0c2ab575188e">&#9670;&#160;</a></span>doesRayTracing()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual bool Astra::Pipeline::doesRayTracing </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Implementado en <a class="el" href="class_astra_1_1_raster_pipeline.html#a9787abd24089c3fe06ef01886e2e901a">Astra::RasterPipeline</a> y <a class="el" href="class_astra_1_1_ray_tracing_pipeline.html#a214b2e3efbddc7df2a09801b7aeef2cb">Astra::RayTracingPipeline</a>.</p>
-
-</div>
-</div>
-<a id="a958467cd915b9aa421f1f0f6624197bb" name="a958467cd915b9aa421f1f0f6624197bb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a958467cd915b9aa421f1f0f6624197bb">&#9670;&#160;</a></span>getLayout()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">VkPipelineLayout Astra::Pipeline::getLayout </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definición en la línea <a class="el" href="_pipeline_8cpp_source.html#l00036">36</a> del archivo <a class="el" href="_pipeline_8cpp_source.html">Pipeline.cpp</a>.</p>
-
-</div>
-</div>
-<a id="a1c9854f4c8be4e1c56bd787a695f5db7" name="a1c9854f4c8be4e1c56bd787a695f5db7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1c9854f4c8be4e1c56bd787a695f5db7">&#9670;&#160;</a></span>getPipeline()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">VkPipeline Astra::Pipeline::getPipeline </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definición en la línea <a class="el" href="_pipeline_8cpp_source.html#l00031">31</a> del archivo <a class="el" href="_pipeline_8cpp_source.html">Pipeline.cpp</a>.</p>
-
-</div>
-</div>
-<a id="a8515be541dc58ba430e605c7c95a970c" name="a8515be541dc58ba430e605c7c95a970c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8515be541dc58ba430e605c7c95a970c">&#9670;&#160;</a></span>pushConstants()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Astra::Pipeline::pushConstants </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="class_astra_1_1_command_list.html">CommandList</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>cmdList</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t</td>          <td class="paramname"><span class="paramname"><em>shaderStages</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t</td>          <td class="paramname"><span class="paramname"><em>size</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">void *</td>          <td class="paramname"><span class="paramname"><em>data</em></span>&#160;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Sube las push constants a la GPU. </p>
-
-<p class="definition">Definición en la línea <a class="el" href="_pipeline_8cpp_source.html#l00026">26</a> del archivo <a class="el" href="_pipeline_8cpp_source.html">Pipeline.cpp</a>.</p>
-
-</div>
-</div>
-<h2 class="groupheader">Documentación de datos miembro</h2>
-<a id="a91eee050a7e48f5eed88f375e99348b3" name="a91eee050a7e48f5eed88f375e99348b3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a91eee050a7e48f5eed88f375e99348b3">&#9670;&#160;</a></span>_layout</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">VkPipelineLayout Astra::Pipeline::_layout</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definición en la línea <a class="el" href="_pipeline_8h_source.html#l00016">16</a> del archivo <a class="el" href="_pipeline_8h_source.html">Pipeline.h</a>.</p>
-
-</div>
-</div>
-<a id="a5ce2b0f85964c6e531e66cb26c28d5d9" name="a5ce2b0f85964c6e531e66cb26c28d5d9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5ce2b0f85964c6e531e66cb26c28d5d9">&#9670;&#160;</a></span>_pipeline</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">VkPipeline Astra::Pipeline::_pipeline</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definición en la línea <a class="el" href="_pipeline_8h_source.html#l00017">17</a> del archivo <a class="el" href="_pipeline_8h_source.html">Pipeline.h</a>.</p>
-
-</div>
-</div>
-<hr/>La documentación de esta clase está generada de los siguientes archivos:<ul>
-<li>include/<a class="el" href="_pipeline_8h_source.html">Pipeline.h</a></li>
-<li>src/<a class="el" href="_pipeline_8cpp_source.html">Pipeline.cpp</a></li>
+<hr/>La documentación de esta clase está generada del siguiente archivo:<ul>
+<li>C:/Users/pingu/AstraEngine/AstraCore/include/<a class="el" href="_pipeline_8h_source.html">Pipeline.h</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespace_astra.html">Astra</a></li><li class="navelem"><a class="el" href="class_astra_1_1_pipeline.html">Pipeline</a></li>
+    <li class="navelem"><b>Astra</b></li><li class="navelem"><a class="el" href="class_astra_1_1_pipeline.html">Pipeline</a></li>
     <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.11.0 </li>
   </ul>
 </div>

@@ -1,28 +1,6 @@
 var class_astra_1_1_node3_d =
 [
-    [ "Node3D", "class_astra_1_1_node3_d.html#a3b48ae464f50048ccfc974171958d606", null ],
-    [ "addChild", "class_astra_1_1_node3_d.html#a0bf8e1597841a4ffed8df6a602d44a58", null ],
-    [ "destroy", "class_astra_1_1_node3_d.html#a926e3386b624f3978ba42d622441cb11", null ],
-    [ "getChildren", "class_astra_1_1_node3_d.html#af936e9ebcd420068a5c064809dbc3514", null ],
-    [ "getID", "class_astra_1_1_node3_d.html#a26ceddfab38b142ffde715413c8816d1", null ],
-    [ "getName", "class_astra_1_1_node3_d.html#ae5c0483b6c8e7fad4df446daa3a8f541", null ],
-    [ "getNameRef", "class_astra_1_1_node3_d.html#ac40d03c56bb5d049325a6351367c13b1", null ],
-    [ "getPosition", "class_astra_1_1_node3_d.html#a8d7b9aabaf915d4e3748a260529bd900", null ],
-    [ "getRotation", "class_astra_1_1_node3_d.html#aee17f0a570da3f3571f865d05f76ff3f", null ],
-    [ "getScale", "class_astra_1_1_node3_d.html#a98710aad404be9c8e2d4a35083092c9e", null ],
-    [ "getTransform", "class_astra_1_1_node3_d.html#a9348a344b09742837426353889391da2", null ],
-    [ "getTransformRef", "class_astra_1_1_node3_d.html#a51ae640c177d0339a8df8ccee39338af", null ],
-    [ "operator==", "class_astra_1_1_node3_d.html#a786417d244594c602e153ab0ec105d4b", null ],
-    [ "removeChild", "class_astra_1_1_node3_d.html#a077fb296fe077d55dc4c256aea2a6f97", null ],
-    [ "rotate", "class_astra_1_1_node3_d.html#a546031f4ceabb3a2d38f6d7eeb16c9c6", null ],
-    [ "scale", "class_astra_1_1_node3_d.html#a62536798c9a4d02e60119b98d79f8b7a", null ],
-    [ "setName", "class_astra_1_1_node3_d.html#a0f6f83ee7837fc764d82c549934c1d11", null ],
-    [ "translate", "class_astra_1_1_node3_d.html#a846b75e2ce3b844ea428ad0401a1a5ef", null ],
     [ "update", "class_astra_1_1_node3_d.html#ae93ca254ff0610db3ed3a51e1f87b2f7", null ],
     [ "updatePushConstantRaster", "class_astra_1_1_node3_d.html#a2dcc90a52b2155a505346673e19d85cf", null ],
-    [ "updatePushConstantRT", "class_astra_1_1_node3_d.html#a2f981ba31b2b5d7aed1b7b742bba5aaa", null ],
-    [ "_children", "class_astra_1_1_node3_d.html#a202652b6f4455eb4d7c679b26e146b68", null ],
-    [ "_id", "class_astra_1_1_node3_d.html#aab151ec6499dce5ac1076a521cb04663", null ],
-    [ "_name", "class_astra_1_1_node3_d.html#a48307dedbeb3506f904e75150bfbc7f0", null ],
-    [ "_transform", "class_astra_1_1_node3_d.html#ac3fc8c9959d2c1eaac876a3ccd6cf0dc", null ]
+    [ "updatePushConstantRT", "class_astra_1_1_node3_d.html#a2f981ba31b2b5d7aed1b7b742bba5aaa", null ]
 ];

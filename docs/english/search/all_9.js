@@ -1,20 +1,8 @@
 var searchData=
 [
-  ['illum_0',['illum',['../struct_wave_front_material.html#a9b68dcc17356e1db151b3b49b24ce3f7',1,'WaveFrontMaterial']]],
-  ['indexaddress_1',['indexAddress',['../struct_obj_desc.html#ab1500fbbbc4cd182832e47c4ef465c27',1,'ObjDesc']]],
-  ['indexbuffer_2',['indexBuffer',['../struct_astra_1_1_mesh.html#a6f9452d7726873e05d17684dc16bf088',1,'Astra::Mesh']]],
-  ['indices_3',['indices',['../struct_astra_1_1_mesh.html#af407c90fd1619d0457e42d13dada6e30',1,'Astra::Mesh']]],
-  ['info_4',['INFO',['../namespace_astra.html#acf6c5f0b748e38d6bf86ed31ba882e42af8a02e11787ab2ba10d470de8b59773e',1,'Astra']]],
-  ['init_5',['init',['../class_astra_1_1_app.html#ab8c72b29f8b10069a05fba2bcddc8cee',1,'Astra::App::init()'],['../class_astra_1_1_app_r_t.html#ab303283d3fd7073a64255f37b67e5cea',1,'Astra::AppRT::init()'],['../class_astra_1_1_gui_controller.html#a91b3466feea43511f47bacc9fca9a09c',1,'Astra::GuiController::init()'],['../class_astra_1_1_input_manager.html#a7fdeaf6e8d18cf1908097b01cee23799',1,'Astra::InputManager::init()'],['../class_astra_1_1_renderer.html#a44915ed5cc166cec22cea4af7b1e7274',1,'Astra::Renderer::init()'],['../class_astra_1_1_scene.html#ade431180c9dd89931860d9e52ad4351d',1,'Astra::Scene::init()'],['../class_astra_1_1_scene_r_t.html#ab97856b9443916f030617b2424c49087',1,'Astra::SceneRT::init()']]],
-  ['initdevice_6',['initDevice',['../class_astra_1_1_device.html#a007fe12254cf51694e6b4411e473d011',1,'Astra::Device']]],
-  ['input_7',['Input',['../_input_manager_8h.html#afca87b5481ad35a34ecd859921e65f30',1,'InputManager.h']]],
-  ['inputmanager_8',['InputManager',['../class_astra_1_1_input_manager.html',1,'Astra::InputManager'],['../class_astra_1_1_app.html#af0e8c3dcc20b7ddcaf63506363a22821',1,'Astra::App::InputManager'],['../class_astra_1_1_input_manager.html#aebcd961ac66f9dabe60e227cd2d02b1e',1,'Astra::InputManager::InputManager()']]],
-  ['inputmanager_2ecpp_9',['InputManager.cpp',['../_input_manager_8cpp.html',1,'']]],
-  ['inputmanager_2eh_10',['InputManager.h',['../_input_manager_8h.html',1,'']]],
-  ['instanceextensions_11',['instanceExtensions',['../struct_astra_1_1_device_create_info.html#ad72c75f71da8ffc26af01b68102db729',1,'Astra::DeviceCreateInfo']]],
-  ['instancelayers_12',['instanceLayers',['../struct_astra_1_1_device_create_info.html#a62e9a1422c8d57c914ae4656fd50afac',1,'Astra::DeviceCreateInfo']]],
-  ['intensity_13',['intensity',['../struct_light_source.html#af490515d0a0fc5810c7b99b6a7779cb2',1,'LightSource']]],
-  ['ior_14',['ior',['../struct_wave_front_material.html#aa570c0ee20e91e79739568c7fcaf9c51',1,'WaveFrontMaterial']]],
-  ['isminimized_15',['isMinimized',['../class_astra_1_1_app.html#a6c20c6958469bf00650109dfa7b8f092',1,'Astra::App']]],
-  ['isrt_16',['isRt',['../class_astra_1_1_scene.html#a3089aac4839d406a72da45159302c52d',1,'Astra::Scene::isRt()'],['../class_astra_1_1_scene_r_t.html#aecde99c5770ef46b87586b326f360af5',1,'Astra::SceneRT::isRt()']]]
+  ['indexbuffer_0',['indexBuffer',['../struct_astra_1_1_mesh.html#a6f9452d7726873e05d17684dc16bf088',1,'Astra::Mesh']]],
+  ['indices_1',['indices',['../struct_astra_1_1_mesh.html#af407c90fd1619d0457e42d13dada6e30',1,'Astra::Mesh']]],
+  ['init_2',['init',['../class_astra_1_1_app.html#a4111ef62a41c4a563a09af97856e3048',1,'Astra::App::init()'],['../class_astra_1_1_app_r_t.html#ab303283d3fd7073a64255f37b67e5cea',1,'Astra::AppRT::init()'],['../class_astra_1_1_gui_controller.html#a83908ca9abaf5facc44e2886f7183dca',1,'Astra::GuiController::init()'],['../class_astra_1_1_input_manager.html#a7fdeaf6e8d18cf1908097b01cee23799',1,'Astra::InputManager::init()']]],
+  ['initdevice_3',['initDevice',['../class_astra_1_1_device.html#a007fe12254cf51694e6b4411e473d011',1,'Astra::Device']]],
+  ['inputmanager_4',['InputManager',['../class_astra_1_1_input_manager.html',1,'Astra']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ambient_0',['ambient',['../struct_wave_front_material.html#ac7a765dc3dace101a9bc1e0b30251c24',1,'WaveFrontMaterial']]]
+  ['descriptor_0',['descriptor',['../struct_astra_1_1_mesh.html#a98668ea9a5c051f2644f3d4b45803557',1,'Astra::Mesh']]]
 ];
