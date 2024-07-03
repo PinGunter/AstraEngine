@@ -40,6 +40,6 @@ Aside from improving on the library itself (better quality code, improved Vulkan
 * [ ] Async obj loader
 - [ ] Scene graph support
 
-- [ ] FPS Camera
+- [x] Free Camera
 
 - [x] Multiple colored lights
