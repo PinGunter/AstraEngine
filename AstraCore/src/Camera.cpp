@@ -145,16 +145,25 @@ Astra::FreeCameraController::FreeCameraController(Camera& cam) : CameraControlle
 
 bool Astra::FreeCameraController::update()
 {
+	bool updated = false;
 	CameraController::update();
 
-	move(
-		Input.keyPressed(Key_W),
-		Input.keyPressed(Key_S),
-		Input.keyPressed(Key_D),
-		Input.keyPressed(Key_A),
-		Input.keyPressed(Key_Q),
-		Input.keyPressed(Key_E),
-		(Input.keyPressed(Key_LeftControl) ? _speed * 10 : _speed));
+	if (Input.keyPressed(Key_W) ||
+		Input.keyPressed(Key_S) ||
+		Input.keyPressed(Key_D) ||
+		Input.keyPressed(Key_A) ||
+		Input.keyPressed(Key_Q) ||
+		Input.keyPressed(Key_E)) {
+		move(
+			Input.keyPressed(Key_W),
+			Input.keyPressed(Key_S),
+			Input.keyPressed(Key_D),
+			Input.keyPressed(Key_A),
+			Input.keyPressed(Key_Q),
+			Input.keyPressed(Key_E),
+			(Input.keyPressed(Key_LeftControl) ? _speed * 10 : _speed));
+		updated = true;
+	}
 
 	if (Input.mouseClick(Right))
 	{
@@ -164,6 +173,7 @@ bool Astra::FreeCameraController::update()
 		float dx = delta.x * _sens;
 		float dy = delta.y * _sens;
 		rotate(dx, dy);
+		updated = true;
 	}
 	else
 	{
@@ -171,7 +181,7 @@ bool Astra::FreeCameraController::update()
 	}
 
 	updateCamera();
-	return true;
+	return updated;
 }
 
 void Astra::FreeCameraController::move(bool front, bool back, bool right, bool left, bool up, bool down, float speed)
@@ -264,8 +274,10 @@ bool Astra::OrbitCameraController::update()
 {
 	glm::vec2 delta = Input.getMouseDelta();
 	float wheel = Input.getMouseWheel().y;
+	bool updated = false;
 	if (Input.mouseClick(Right))
 	{
+		updated = true;
 		if (Input.keyPressed(Key_LeftControl))
 		{
 			zoom(delta.y);
@@ -277,13 +289,17 @@ bool Astra::OrbitCameraController::update()
 	}
 	else if (Input.mouseClick(Middle))
 	{
+		updated = true;
 		pan(delta.x, delta.y);
 	}
 
-	zoom(wheel * 10.0f);
+	if (wheel != 0) {
+		updated = true;
+		zoom(wheel * 10.0f);
+	}
 
 	updateCamera();
-	return true;
+	return updated;
 }
 
 void Astra::OrbitCameraController::orbit(float dx, float dy)
