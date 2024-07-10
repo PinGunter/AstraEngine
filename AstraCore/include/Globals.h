@@ -1,8 +1,15 @@
 #pragma once
 #include <vulkan/vulkan.h>
 #include <GLFW/glfw3.h>
+#include <nvp/nvpsystem.hpp>
 
 namespace Astra {
+
+	static std::vector<std::string> defaultSearchPaths = {
+		NVPSystem::exePath() + PROJECT_RELDIRECTORY,
+		NVPSystem::exePath() + PROJECT_RELDIRECTORY "..",
+		std::string(PROJECT_NAME),
+	};
 
 	enum PipelineBindPoints {
 		Graphics = VK_PIPELINE_BIND_POINT_GRAPHICS,

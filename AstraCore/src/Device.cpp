@@ -2,14 +2,12 @@
 #include <nvvk/context_vk.hpp>
 #include <stdexcept>
 #include <nvvk/images_vk.hpp>
-#include <nvpsystem.hpp>
-#include <nvh/fileoperations.hpp>
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
-#include <nvvk/buffers_vk.hpp>
+#include <icon.h>
 
-constexpr auto SAMPLE_WIDTH = 2560;
-constexpr auto SAMPLE_HEIGHT = 1440;
+constexpr auto SAMPLE_WIDTH = 1280;
+constexpr auto SAMPLE_HEIGHT = 720;
 
 namespace Astra
 {
@@ -27,8 +25,15 @@ namespace Astra
 			throw std::runtime_error("Error initializing glfw");
 		}
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-		glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+		//glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 		_window = glfwCreateWindow(SAMPLE_WIDTH, SAMPLE_HEIGHT, "Astra App", nullptr, nullptr);
+
+		// Astra Icon :)
+		GLFWimage images[1];
+		images[0].pixels = icon_data;
+		images[0].height = icon_data_height;
+		images[0].width = icon_data_width;
+		glfwSetWindowIcon(_window, 1, images);
 
 		// fill createInfo with default values if empty
 		if (createInfo.instanceLayers.empty())
@@ -60,7 +65,7 @@ namespace Astra
 		{
 			createInfo.deviceExtensions.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
 			// createInfo.deviceExtensions.push_back(VK_KHR_SHADER_NON_SEMANTIC_INFO_EXTENSION_NAME); // enable shader printf
-
+			createInfo.deviceExtensions.push_back(VK_KHR_SHADER_CLOCK_EXTENSION_NAME);
 			emptyRT = createInfo.useRT;
 		}
 

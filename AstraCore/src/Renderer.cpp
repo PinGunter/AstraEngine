@@ -452,10 +452,12 @@ Astra::CommandList Astra::Renderer::beginFrame()
 	prepareFrame();
 	uint32_t currentFrame = _swapchain.getActiveImageIndex();
 	auto& cmdList = _commandLists[currentFrame];
+	vkResetFences(AstraDevice.getVkDevice(), 1, &_fences[currentFrame]);
+	vkResetCommandBuffer(cmdList.getCommandBuffer(), 0);
 
 	// begin command buffer
 	VkCommandBufferBeginInfo beginInfo{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
-	beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+	beginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
 	cmdList.begin(beginInfo);
 	return cmdList;
 }
@@ -477,7 +479,6 @@ void Astra::Renderer::endFrame(const CommandList& cmdList)
 {
 	cmdList.end();
 	uint32_t imageIndex = _swapchain.getActiveImageIndex();
-	vkResetFences(AstraDevice.getVkDevice(), 1, &_fences[imageIndex]);
 
 	const uint32_t deviceMask = 0b0000'0001;
 	const std::array<uint32_t, 2> deviceIndex = { 0, 1 };

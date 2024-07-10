@@ -61,7 +61,7 @@ namespace Astra
 		App* _app;
 		glm::vec4 _clearColor;
 		int _maxDepth{ 10 };
-		bool _useShadows = false;
+		bool _useShadows = true;
 
 		void renderRaster(const CommandList& cmdBuf, Scene* scene, RasterPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets);
 		void renderRaytrace(const CommandList& cmdBuf, SceneRT* scene, RayTracingPipeline* pipeline, const std::vector<VkDescriptorSet>& descSets);

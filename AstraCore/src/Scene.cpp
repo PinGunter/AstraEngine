@@ -52,7 +52,7 @@ void Astra::Scene::loadModel(const std::string& filename, const glm::mat4& trans
 	// we cant load models until we have access to the resource allocator
 	// if we have it, just create it
 	// if we dont, postpone the operation to the init stage
-	if (_alloc)
+	if (_alloc != nullptr)
 	{
 		// find the offset for this model
 		auto txtOffset = static_cast<uint32_t>(getTextures().size());
