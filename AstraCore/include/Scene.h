@@ -45,7 +45,8 @@ namespace Astra
 		virtual void loadModel(const std::string& filepath, const glm::mat4& transform = glm::mat4(1.0f));
 		virtual void init(nvvk::ResourceAllocator* alloc);
 		virtual void destroy();
-		virtual void addModel(const Mesh& model);
+		virtual void addShape(Astra::Mesh& m);
+		virtual void addModel(Mesh& model);
 		virtual void addInstance(const MeshInstance& instance);
 		virtual void removeInstance(const MeshInstance& n);
 		virtual void addLight(Light* l);
