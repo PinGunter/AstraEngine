@@ -121,7 +121,7 @@ void Astra::CameraController::setFov(float f)
 	_camera.fov = f;
 }
 
-bool Astra::CameraController::update()
+bool Astra::CameraController::update(float delta)
 {
 	// update camera params
 	updateCamera();
@@ -143,10 +143,10 @@ Astra::FreeCameraController::FreeCameraController(Camera& cam) : CameraControlle
 	_sens = 0.005f;
 }
 
-bool Astra::FreeCameraController::update()
+bool Astra::FreeCameraController::update(float delta)
 {
 	bool updated = false;
-	CameraController::update();
+	CameraController::update(delta);
 
 	if (Input.keyPressed(Key_W) ||
 		Input.keyPressed(Key_S) ||
@@ -161,7 +161,7 @@ bool Astra::FreeCameraController::update()
 			Input.keyPressed(Key_A),
 			Input.keyPressed(Key_Q),
 			Input.keyPressed(Key_E),
-			(Input.keyPressed(Key_LeftControl) ? _speed * 10 : _speed));
+			(Input.keyPressed(Key_LeftControl) ? delta * _speed * 10 : delta * _speed));
 		updated = true;
 	}
 
@@ -270,7 +270,7 @@ Astra::OrbitCameraController::OrbitCameraController(Camera& cam) : CameraControl
 {
 }
 
-bool Astra::OrbitCameraController::update()
+bool Astra::OrbitCameraController::update(float deltaT)
 {
 	glm::vec2 delta = Input.getMouseDelta();
 	float wheel = Input.getMouseWheel().y;

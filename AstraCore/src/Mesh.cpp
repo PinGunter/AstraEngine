@@ -44,7 +44,7 @@ uint32_t Astra::MeshInstance::getMeshIndex() const
 	return _mesh;
 }
 
-bool Astra::MeshInstance::update()
+bool Astra::MeshInstance::update(float delta)
 {
 	return false;
 }
@@ -78,6 +78,17 @@ void Astra::Mesh::create(const Astra::CommandList& cmdList, nvvk::ResourceAlloca
 	descriptor.indexAddress = nvvk::getBufferDeviceAddress(AstraDevice.getVkDevice(), indexBuffer.buffer);
 	descriptor.materialAddress = nvvk::getBufferDeviceAddress(AstraDevice.getVkDevice(), matColorBuffer.buffer);
 	descriptor.materialIndexAddress = nvvk::getBufferDeviceAddress(AstraDevice.getVkDevice(), matIndexBuffer.buffer);
+	
+	//TODO / FIXME
+	// Maybe, texture creation should be done in loading from file?
+	// We are creating the buffers in this function but also loading and creating
+	// the textures
+	for (auto path : texturePaths) {
+		textures.push_back(AstraDevice.createTextureImage(cmdList, path, *alloc));
+	}
+	if (texturePaths.empty()) {
+		textures.push_back(AstraDevice.createTextureImage(cmdList, "", *alloc, true));
+	}
 }
 
 void Astra::Mesh::createBuffers(const Astra::CommandList& cmdList, nvvk::ResourceAllocatorDma* alloc)
@@ -121,8 +132,8 @@ void Astra::Mesh::loadFromFile(const std::string& path)
 		m.illum = material.illum;
 		if (!material.diffuse_texname.empty())
 		{
-			textures.push_back(material.diffuse_texname);
-			m.textureId = static_cast<int>(textures.size()) - 1;
+			texturePaths.push_back(material.diffuse_texname);
+			m.textureId = static_cast<int>(texturePaths.size()) - 1;
 		}
 
 		materials.emplace_back(m);
@@ -207,10 +218,38 @@ void Astra::Mesh::loadFromFile(const std::string& path)
 	// if they are relative, add the base path
 	std::filesystem::path meshPath(path);
 	meshPath.remove_filename();
-	for (std::string& texturePathStr : textures) {
+	for (std::string& texturePathStr : texturePaths) {
 		std::filesystem::path txtPath(texturePathStr);
 		if (txtPath.is_relative()) {
 			texturePathStr = (meshPath / txtPath).string(); // the "/" operator appends paths 
 		}
 	}
+}
+
+void Astra::Mesh::fromGeoMat(const Astra::Geometry& geom, const WaveFrontMaterial &material)
+{
+	// vertices
+	vertices.resize(geom.vertices.size());
+	for (int i = 0; i < vertices.size(); i++) {
+		vertices[i] = {
+			geom.vertices[i],
+			geom.normals[i], // normal
+			glm::vec3(1.0f,1.0f,0.0f), // color
+			glm::vec2(1.0f) // tex
+		};
+	}
+
+	// indices
+	indices.resize(3 * geom.indices.size());
+	int geoIndIt = 0;
+	for (int i = 0; i < indices.size(); i += 3) {
+		indices[i] = geom.indices[geoIndIt].x;
+		indices[i+1] = geom.indices[geoIndIt].y;
+		indices[i+2] = geom.indices[geoIndIt].z;
+		geoIndIt++;
+	}
+
+	materials = { material };
+	materialIndices.resize(geom.indices.size());
+	for (int i = 0; i < materialIndices.size(); i++) materialIndices[i] = 0;
 }
