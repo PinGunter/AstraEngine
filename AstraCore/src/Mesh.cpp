@@ -44,7 +44,7 @@ uint32_t Astra::MeshInstance::getMeshIndex() const
 	return _mesh;
 }
 
-bool Astra::MeshInstance::update()
+bool Astra::MeshInstance::update(float delta)
 {
 	return false;
 }
@@ -226,16 +226,16 @@ void Astra::Mesh::loadFromFile(const std::string& path)
 	}
 }
 
-void Astra::Mesh::fromGeoMat(const Astra::Geometry& geom, const WaveFrontMaterial material)
+void Astra::Mesh::fromGeoMat(const Astra::Geometry& geom, const WaveFrontMaterial &material)
 {
 	// vertices
 	vertices.resize(geom.vertices.size());
 	for (int i = 0; i < vertices.size(); i++) {
 		vertices[i] = {
 			geom.vertices[i],
-			{}, // normal
-			{}, // color
-			{} // tex
+			geom.normals[i], // normal
+			glm::vec3(1.0f,1.0f,0.0f), // color
+			glm::vec2(1.0f) // tex
 		};
 	}
 
@@ -249,20 +249,7 @@ void Astra::Mesh::fromGeoMat(const Astra::Geometry& geom, const WaveFrontMateria
 		geoIndIt++;
 	}
 
-	// vertex normals
-	for (size_t i = 0; i < indices.size(); i += 3)
-	{
-		Vertex& v0 = vertices[indices[i + 0]];
-		Vertex& v1 = vertices[indices[i + 1]];
-		Vertex& v2 = vertices[indices[i + 2]];
-
-		glm::vec3 n = glm::normalize(glm::cross((v1.pos - v0.pos), (v2.pos - v0.pos)));
-		v0.nrm = n;
-		v1.nrm = n;
-		v2.nrm = n;
-	}
-
-
 	materials = { material };
-	materialIndices = { 0 };
+	materialIndices.resize(geom.indices.size());
+	for (int i = 0; i < materialIndices.size(); i++) materialIndices[i] = 0;
 }

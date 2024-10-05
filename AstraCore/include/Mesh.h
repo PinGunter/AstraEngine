@@ -16,6 +16,7 @@ namespace Astra
 	struct Geometry {
 		std::vector<glm::ivec3> indices;
 		std::vector<glm::vec3> vertices;
+		std::vector<glm::vec3> normals;
 	};
 
 
@@ -118,7 +119,7 @@ namespace Astra
 		* \~spanish @brief Inicializa un mesh a partir de una geometria y un material, para figuras simples
 		* \~english @brief Initializes a mesh from a geometry and material, for simple objects
 		*/
-		void fromGeoMat(const Astra::Geometry& geom, const WaveFrontMaterial material);
+		void fromGeoMat(const Astra::Geometry& geom, const WaveFrontMaterial &material);
 
 	private:
 		/**
@@ -152,7 +153,7 @@ namespace Astra
 		bool &getVisibleRef();
 		uint32_t getMeshIndex() const;
 
-		bool update() override;
+		bool update(float delta) override;
 		void destroy() override;
 		void updatePushConstantRaster(PushConstantRaster &pc) const override;
 		void updatePushConstantRT(PushConstantRay &pc) const override;

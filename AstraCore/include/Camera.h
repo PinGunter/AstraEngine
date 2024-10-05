@@ -65,7 +65,7 @@ namespace Astra
 		void setFar(float f);
 		void setFov(float f);
 
-		virtual bool update();
+		virtual bool update(float delta);
 		CameraUniform getCameraUniform();
 	};
 	/**
@@ -76,13 +76,13 @@ namespace Astra
 	class FreeCameraController : public CameraController
 	{
 	protected:
-		float _speed = 0.1f;
+		float _speed = 10.0f;
 		void move(bool front, bool back, bool right, bool left, bool up, bool down, float speed);
 		void rotate(float dx, float dy);
 
 	public:
 		FreeCameraController(Camera& cam);
-		bool update() override;
+		bool update(float delta) override;
 	};
 	/**
 	 * @class OrbitCameraController
@@ -100,6 +100,6 @@ namespace Astra
 
 	public:
 		OrbitCameraController(Camera& cam);
-		bool update() override;
+		bool update(float delta) override;
 	};
 }

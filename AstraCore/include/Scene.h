@@ -52,7 +52,7 @@ namespace Astra
 		virtual void addLight(Light* l);
 		virtual void removeLight(Light* l);
 		virtual void setCamera(CameraController* c);
-		virtual void update(const CommandList& cmdList);
+		virtual void update(const CommandList& cmdList, float delta);
 		virtual void draw(RenderContext<PushConstantRaster>& renderContext);
 
 		const std::vector<Light*>& getLights() const;
@@ -94,7 +94,7 @@ namespace Astra
 
 	public:
 		void init(nvvk::ResourceAllocator* alloc) override;
-		void update(const CommandList& cmdList) override;
+		void update(const CommandList& cmdList, float delta) override;
 		/**
 		 * \~spanish @brief Crea la estructura de aceleración de bajo nivel
 		 * \~english @brief Creates the bottom level acceleration structure

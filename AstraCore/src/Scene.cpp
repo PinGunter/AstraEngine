@@ -171,10 +171,10 @@ void Astra::Scene::addShape(Astra::Mesh& mesh) {
 	// adds the model to the scene
 	addModel(mesh);
 
-	// creates an instance of the model
-	Astra::MeshInstance instance(mesh.meshId);
-	instance.setName(instance.getName());
-	addInstance(instance);
+	//// creates an instance of the model
+	//Astra::MeshInstance instance(mesh.meshId);
+	//instance.setName(instance.getName());
+	//addInstance(instance);
 
 	// creates the descriptor buffer
 	createObjDescBuffer();
@@ -235,26 +235,26 @@ void Astra::Scene::setCamera(CameraController* c)
 	_camera = c;
 }
 
-void Astra::Scene::update(const CommandList& cmdList)
+void Astra::Scene::update(const CommandList& cmdList, float delta)
 {
 	// updating lights
 	_lightsUniform = {};
 	//_lightsUniform.nLights = _lights.size();
 	for (int i = 0; i < _lights.size(); i++)
 	{
-		_lights[i]->update();
+		_lights[i]->update(delta);
 		_lightsUniform.lights[i] = _lights[i]->getLightSource();
 	}
 	updateLightsUBO(cmdList);
 
 	// updating camera
-	_camera->update();
+	_camera->update(delta);
 	updateCameraUBO(cmdList);
 
 	// updating instances
 	for (auto& i : _instances)
 	{
-		i.update();
+		i.update(delta);
 	}
 }
 
@@ -354,13 +354,13 @@ void Astra::SceneRT::init(nvvk::ResourceAllocator* alloc)
 	createTopLevelAS();
 }
 
-void Astra::SceneRT::update(const CommandList& cmdList)
+void Astra::SceneRT::update(const CommandList& cmdList, float delta)
 {
-	Astra::Scene::update(cmdList);
+	Astra::Scene::update(cmdList, delta);
 	std::vector<int> asupdates;
 	for (int i = 0; i < _instances.size(); i++)
 	{
-		if (_instances[i].update())
+		if (_instances[i].update(delta))
 		{
 			asupdates.push_back(i);
 		}

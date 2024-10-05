@@ -31,7 +31,7 @@ namespace Astra
 		void setIntensity(float i);
 		LightType getType() const;
 
-		bool update() override;
+		bool update(float delta) override;
 
 		/**
 		 * \~spanish @brief Devuelve un objeto de tipo LightSource, que está compartido entre CPU y GPU.

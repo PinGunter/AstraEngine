@@ -178,5 +178,6 @@ void main()
     if (!pcRay.shadows){
         prd.attenuation = vec3(1.0);
     }
+
     prd.hitValue = vec3(attenuation * (diffuseColor + specularColor)) * prd.attenuation;
 }
