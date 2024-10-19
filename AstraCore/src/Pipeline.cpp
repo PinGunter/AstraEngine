@@ -51,12 +51,6 @@ void Astra::RayTracingPipeline::create(VkDevice vkdev, const std::vector<VkDescr
 		throw std::runtime_error("Device does not support ray recursion");
 	}
 
-	std::vector<std::string> defaultSearchPaths = {
-		NVPSystem::exePath() + PROJECT_RELDIRECTORY,
-		NVPSystem::exePath() + PROJECT_RELDIRECTORY "..",
-		std::string(PROJECT_NAME),
-	};
-
 	enum StageIndices
 	{
 		eRaygen,
@@ -254,12 +248,6 @@ void Astra::RayTracingPipeline::bind(const CommandList &cmdList, const std::vect
 
 void Astra::OffscreenRaster::create(VkDevice vkdev, const std::vector<VkDescriptorSetLayout> &descsetsLayouts, VkRenderPass rp)
 {
-	std::vector<std::string> defaultSearchPaths = {
-		NVPSystem::exePath() + PROJECT_RELDIRECTORY,
-		NVPSystem::exePath() + PROJECT_RELDIRECTORY "..",
-		std::string(PROJECT_NAME),
-	};
-
 	VkPushConstantRange pushConstantRanges = {VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(PushConstantRaster)};
 
 	// Creating the Pipeline Layout
@@ -288,12 +276,6 @@ void Astra::OffscreenRaster::create(VkDevice vkdev, const std::vector<VkDescript
 
 void Astra::PostPipeline::create(VkDevice vkdev, const std::vector<VkDescriptorSetLayout> &descsetsLayouts, VkRenderPass rp)
 {
-	std::vector<std::string> defaultSearchPaths = {
-		NVPSystem::exePath() + PROJECT_RELDIRECTORY,
-		NVPSystem::exePath() + PROJECT_RELDIRECTORY "..",
-		std::string(PROJECT_NAME),
-	};
-
 	// Push constants in the fragment shader
 	VkPushConstantRange pushConstantRanges = {VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(float)};
 

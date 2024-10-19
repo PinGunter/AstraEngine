@@ -4,6 +4,7 @@
 #include <nvvk/buffers_vk.hpp>
 #include <Utils.h>
 #include <glm/gtx/transform.hpp>
+#include "app.h"
 
 void Astra::App::destroyPipelines()
 {

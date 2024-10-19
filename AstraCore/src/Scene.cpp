@@ -52,7 +52,7 @@ void Astra::Scene::loadModel(const std::string& filename, const glm::mat4& trans
 	// we cant load models until we have access to the resource allocator
 	// if we have it, just create it
 	// if we dont, postpone the operation to the init stage
-	if (_alloc)
+	if (_alloc != nullptr)
 	{
 		// find the offset for this model
 		auto txtOffset = static_cast<uint32_t>(getTextures().size());
@@ -76,14 +76,12 @@ void Astra::Scene::loadModel(const std::string& filename, const glm::mat4& trans
 		// creates the buffers and descriptors neeeded
 		mesh.create(cmdList, _alloc, txtOffset);
 
-		// Creates all textures found
-		// AstraDevice.createTextureImages(cmdBuf, mesh.textures, getTextures(), *_alloc);
-		for (auto p : mesh.textures)
+		// Adds mesh textures to the scene texture buffer
+
+		for (const auto &p : mesh.textures)
 		{
-			getTextures().push_back(AstraDevice.createTextureImage(cmdList, p, *_alloc));
+			getTextures().push_back(p);
 		}
-		if (mesh.textures.empty() && getTextures().empty())
-			getTextures().push_back(AstraDevice.createTextureImage(cmdList, "", *_alloc, true));
 
 		cmdBufGet.submitAndWait(cmdBuf);
 		_alloc->finalizeAndReleaseStaging();
@@ -147,7 +145,42 @@ void Astra::Scene::destroy()
 	_alloc->destroy(_lightsUBO);
 }
 
-void Astra::Scene::addModel(const Astra::Mesh& model)
+void Astra::Scene::addShape(Astra::Mesh& mesh) {
+	// find the offset for this model
+	auto txtOffset = static_cast<uint32_t>(getTextures().size());
+	// allocating cmdbuffers
+	nvvk::CommandPool cmdBufGet(AstraDevice.getVkDevice(), AstraDevice.getGraphicsQueueIndex());
+	VkCommandBuffer cmdBuf = cmdBufGet.createCommandBuffer();
+	Astra::CommandList cmdList(cmdBuf);
+
+	mesh.meshId = getModels().size();
+
+	// creates the buffers and descriptors neeeded
+	mesh.create(cmdList, _alloc, txtOffset);
+
+	// Adds mesh textures to the scene texture buffer
+
+	for (const auto& p : mesh.textures)
+	{
+		getTextures().push_back(p);
+	}
+
+	cmdBufGet.submitAndWait(cmdBuf);
+	_alloc->finalizeAndReleaseStaging();
+
+	// adds the model to the scene
+	addModel(mesh);
+
+	//// creates an instance of the model
+	//Astra::MeshInstance instance(mesh.meshId);
+	//instance.setName(instance.getName());
+	//addInstance(instance);
+
+	// creates the descriptor buffer
+	createObjDescBuffer();
+}
+
+void Astra::Scene::addModel(Astra::Mesh& model)
 {
 	_objModels.push_back(model);
 }
@@ -202,26 +235,26 @@ void Astra::Scene::setCamera(CameraController* c)
 	_camera = c;
 }
 
-void Astra::Scene::update(const CommandList& cmdList)
+void Astra::Scene::update(const CommandList& cmdList, float delta)
 {
 	// updating lights
 	_lightsUniform = {};
 	//_lightsUniform.nLights = _lights.size();
 	for (int i = 0; i < _lights.size(); i++)
 	{
-		_lights[i]->update();
+		_lights[i]->update(delta);
 		_lightsUniform.lights[i] = _lights[i]->getLightSource();
 	}
 	updateLightsUBO(cmdList);
 
 	// updating camera
-	_camera->update();
+	_camera->update(delta);
 	updateCameraUBO(cmdList);
 
 	// updating instances
 	for (auto& i : _instances)
 	{
-		i.update();
+		i.update(delta);
 	}
 }
 
@@ -321,13 +354,13 @@ void Astra::SceneRT::init(nvvk::ResourceAllocator* alloc)
 	createTopLevelAS();
 }
 
-void Astra::SceneRT::update(const CommandList& cmdList)
+void Astra::SceneRT::update(const CommandList& cmdList, float delta)
 {
-	Astra::Scene::update(cmdList);
+	Astra::Scene::update(cmdList, delta);
 	std::vector<int> asupdates;
 	for (int i = 0; i < _instances.size(); i++)
 	{
-		if (_instances[i].update())
+		if (_instances[i].update(delta))
 		{
 			asupdates.push_back(i);
 		}

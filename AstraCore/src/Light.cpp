@@ -41,7 +41,7 @@ Astra::LightType Astra::Light::getType() const
 	return _type;
 }
 
-bool Astra::Light::update()
+bool Astra::Light::update(float delta)
 {
 	return false;
 }

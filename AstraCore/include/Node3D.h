@@ -66,7 +66,7 @@ namespace Astra
 		 * \~english @brief This method is callen in every iteration of the app run loop
 		 * @return Should return true if it modifies anything within the Node so that it's known. Useful for rebuilding acceleration structures.
 		 */
-		virtual bool update() { return false; };
+		virtual bool update(float delta) { return false; };
 
 		/**
 		 * \~spanish @brief Método para actualizar la push constant de rasterización

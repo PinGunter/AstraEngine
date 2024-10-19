@@ -65,7 +65,7 @@ namespace Astra
 
 		nvvk::DescriptorSetBindings _rtDescSetLayoutBind;
 		std::vector<VkRayTracingShaderGroupCreateInfoKHR> _rtShaderGroups;
-		void createSBT(nvvk::ResourceAllocatorDma& alloc, const VkPhysicalDeviceRayTracingPipelinePropertiesKHR& rtProperties);
+		virtual void createSBT(nvvk::ResourceAllocatorDma& alloc, const VkPhysicalDeviceRayTracingPipelinePropertiesKHR& rtProperties);
 
 	public:
 		void bind(const CommandList& cmdList, const std::vector<VkDescriptorSet>& descsets) override;

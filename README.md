@@ -17,6 +17,10 @@ It currently supports ray-traced shadows, reflections and refraction.
 
 #### Screenshots
 
+Simple pathtracing:
+
+![](img/pathtracer.png)
+
 Reflections:
 
 ![](img/reflections.png)
@@ -33,7 +37,7 @@ And the classic Sponza Palace:
 
 Aside from improving on the library itself (better quality code, improved Vulkan abstractions, etc.). Some of the future goals include:
 
-* [ ] Pathtracer (at least a simple one)
+* [x] Pathtracer (at least a simple one)
 
 * [ ] Game example
 

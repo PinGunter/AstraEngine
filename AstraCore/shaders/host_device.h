@@ -117,6 +117,7 @@ struct PushConstantRay
 	int maxDepth;
 	int nLights;
 	bool shadows;
+	int frame;
 };
 
 struct Vertex

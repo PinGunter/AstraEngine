@@ -8,6 +8,17 @@
 #include <CommandList.h>
 namespace Astra
 {
+	/**
+	* @struct Geometry
+	* \~spanish @brief Representa una geometría sencilla, vector de vertices y caras
+	* \~english @brief Represents a simple geometry, just a vertex and face vectors
+	*/
+	struct Geometry {
+		std::vector<glm::ivec3> indices;
+		std::vector<glm::vec3> vertices;
+		std::vector<glm::vec3> normals;
+	};
+
 
 	/**
 	 * @struct Mesh
@@ -25,6 +36,12 @@ namespace Astra
 		 * @warning This is must be unique in a scene basis and has to always be initialized.
 		 */
 		int meshId{-1};
+
+		/**
+		* \~spanish @brief Nombre del objeto
+		* \~english @brief name of the object
+		*/
+		std::string name;
 
 		// CPU side
 		/**
@@ -51,7 +68,12 @@ namespace Astra
 		 * \~spanish @brief Vector de texturas en CPU
 		 * \~english @brief Texture vector on CPU
 		 */
-		std::vector<std::string> textures;
+		std::vector<nvvk::Texture> textures;
+		/**
+		 * \~spanish @brief Vector de texturas (paths) en CPU
+		 * \~english @brief Texture path vector on CPU
+		 */
+		std::vector<std::string> texturePaths;
 
 		// CPU - GPU side
 		/**
@@ -92,16 +114,25 @@ namespace Astra
 		 * \~english @brief Creates the buffers and stores the device buffer addresses
 		 */
 		void create(const Astra::CommandList &cmdList, nvvk::ResourceAllocatorDma *alloc, uint32_t txtOffset);
-		/**
-		 * \~spanish @brief Crea los buffers
-		 * \~english @brief Creates the buffers
-		 */
-		void createBuffers(const Astra::CommandList &cmdList, nvvk::ResourceAllocatorDma *alloc);
+		
 		/**
 		 * \~spanish @brief Carga un modelo obj y almacena la información en los vectores de la CPU
 		 * \~english @brief Loads an obj file and stores the data in the CPU vectors
 		 */
 		void loadFromFile(const std::string &path);
+
+		/**
+		* \~spanish @brief Inicializa un mesh a partir de una geometria y un material, para figuras simples
+		* \~english @brief Initializes a mesh from a geometry and material, for simple objects
+		*/
+		void fromGeoMat(const Astra::Geometry& geom, const WaveFrontMaterial &material);
+
+	private:
+		/**
+		 * \~spanish @brief Crea los buffers
+		 * \~english @brief Creates the buffers
+		 */
+		void createBuffers(const Astra::CommandList& cmdList, nvvk::ResourceAllocatorDma* alloc);
 	};
 
 	/**
@@ -128,7 +159,7 @@ namespace Astra
 		bool &getVisibleRef();
 		uint32_t getMeshIndex() const;
 
-		bool update() override;
+		bool update(float delta) override;
 		void destroy() override;
 		void updatePushConstantRaster(PushConstantRaster &pc) const override;
 		void updatePushConstantRT(PushConstantRay &pc) const override;
