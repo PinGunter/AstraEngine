@@ -37,6 +37,12 @@ namespace Astra
 		 */
 		int meshId{-1};
 
+		/**
+		* \~spanish @brief Nombre del objeto
+		* \~english @brief name of the object
+		*/
+		std::string name;
+
 		// CPU side
 		/**
 		 * \~spanish @brief Vector de índices en CPU

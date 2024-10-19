@@ -65,7 +65,6 @@ namespace Astra
 		{
 			createInfo.deviceExtensions.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
 			// createInfo.deviceExtensions.push_back(VK_KHR_SHADER_NON_SEMANTIC_INFO_EXTENSION_NAME); // enable shader printf
-			createInfo.deviceExtensions.push_back(VK_KHR_SHADER_CLOCK_EXTENSION_NAME);
 			emptyRT = createInfo.useRT;
 		}
 
@@ -86,6 +85,8 @@ namespace Astra
 		{
 			contextInfo.addDeviceExtension(ext.data(), true);
 		}
+		VkPhysicalDeviceShaderClockFeaturesKHR clockFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CLOCK_FEATURES_KHR };
+		contextInfo.addDeviceExtension(VK_KHR_SHADER_CLOCK_EXTENSION_NAME, false, &clockFeatures);
 
 		if (emptyRT)
 		{

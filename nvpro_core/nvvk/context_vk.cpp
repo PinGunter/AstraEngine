@@ -593,6 +593,7 @@ bool Context::initDevice(uint32_t deviceIndex, const ContextCreateInfo& info)
     {
       lastCoreFeature = (ExtensionHeader*)lastCoreFeature->pNext;
     }
+    
     lastCoreFeature->pNext = featureStructs[0];
 
     // query support
