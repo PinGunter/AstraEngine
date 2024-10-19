@@ -19,7 +19,7 @@ It currently supports ray-traced shadows, reflections and refraction.
 
 Simple pathtracing:
 
-![](img\pathtracer.png)
+![](img/pathtracer.png)
 
 Reflections:
 
