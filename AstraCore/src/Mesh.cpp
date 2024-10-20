@@ -130,6 +130,8 @@ void Astra::Mesh::loadFromFile(const std::string& path)
 		m.ior = material.ior;
 		m.shininess = material.shininess;
 		m.illum = material.illum;
+		m.roughness = material.roughness;
+		m.metalness = material.metallic;
 		if (!material.diffuse_texname.empty())
 		{
 			texturePaths.push_back(material.diffuse_texname);
