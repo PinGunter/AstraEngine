@@ -114,6 +114,7 @@ struct PushConstantRaster
 struct PushConstantRay
 {
 	vec4 clearColor;
+	vec4 clearColor2;
 	int maxDepth;
 	int nLights;
 	bool shadows;
