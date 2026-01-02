@@ -4,13 +4,17 @@
 #pragma once
 
 #include <vk_types.h>
+#include <deletion_queue.h>
 
 struct FrameData {
 	VkCommandPool _commandPool;
 	VkCommandBuffer _mainCommandBuffer;
+	VkSemaphore _swapchainSemaphore, _renderSemaphore;
+	VkFence _renderFence;
+	DeletionQueue _deletionQueue;
 };
 
-constexpr unsigned int FRAME_OVERLAP = 2;
+constexpr unsigned int FRAME_OVERLAP = 3;
 
 class VulkanEngine {
 private:
@@ -41,6 +45,8 @@ public:
 	std::vector<VkImageView> _swapchainImageViews;
 	VkExtent2D _swapchainExtent;
 
+	VmaAllocator _allocator;
+	DeletionQueue _deletionQueue;
 
 	bool _isInitialized{ false };
 	int _frameNumber {0};
