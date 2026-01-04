@@ -9,12 +9,12 @@
 struct FrameData {
 	VkCommandPool _commandPool;
 	VkCommandBuffer _mainCommandBuffer;
-	VkSemaphore _swapchainSemaphore, _renderSemaphore;
+	VkSemaphore _swapchainSemaphore;
 	VkFence _renderFence;
 	DeletionQueue _deletionQueue;
 };
 
-constexpr unsigned int FRAME_OVERLAP = 3;
+constexpr unsigned int FRAME_OVERLAP = 2;
 
 class VulkanEngine {
 private:
@@ -25,14 +25,25 @@ private:
 	void create_swapchain(uint32_t width, uint32_t height);
 	void destroy_swapchain();
 
+	void draw_background(VkCommandBuffer cmd);
+
 public:
 	VkInstance _instance;
 	VkDebugUtilsMessengerEXT _debugMessenger;
 	VkPhysicalDevice _physicalDevice;
 	VkDevice _device;
 	VkSurfaceKHR _surface;
+
 	VkSwapchainKHR _swapchain;
 	VkFormat _swapchainImageFormat;
+	std::vector<VkImage> _swapchainImages;
+	std::vector<VkImageView> _swapchainImageViews;
+	VkExtent2D _swapchainExtent;
+
+	AllocatedImage _drawImage;
+	VkExtent2D _drawExtent;
+
+	std::vector<VkSemaphore> _renderSemaphores;
 
 	FrameData _frames[FRAME_OVERLAP];
 
@@ -40,10 +51,6 @@ public:
 
 	VkQueue _graphicsQueue;
 	uint32_t _graphicsQueueFamily;
-
-	std::vector<VkImage> _swapchainImages;
-	std::vector<VkImageView> _swapchainImageViews;
-	VkExtent2D _swapchainExtent;
 
 	VmaAllocator _allocator;
 	DeletionQueue _deletionQueue;
@@ -68,4 +75,10 @@ public:
 
 	//run main loop
 	void run();
+
+	VulkanEngine() = default;
+	VulkanEngine(const VulkanEngine&) = delete;
+	VulkanEngine& operator=(const VulkanEngine&) = delete;
+	VulkanEngine(VulkanEngine&&) = delete;
+	VulkanEngine& operator=(VulkanEngine&&) = delete;
 };
