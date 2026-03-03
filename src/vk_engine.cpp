@@ -571,6 +571,7 @@ void VulkanEngine::run()
                     stop_rendering = false;
                 }
             }
+            ImGui_ImplSDL2_ProcessEvent(&e);
         }
 
         // do not draw if we are minimized
