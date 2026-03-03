@@ -26,10 +26,12 @@ private:
 	void init_descriptors();
 	void init_pipelines();
 	void init_background_pipelines();
+	void init_imgui();
 
 	void create_swapchain(uint32_t width, uint32_t height);
 	void destroy_swapchain();
 
+	void draw_imgui(VkCommandBuffer cmd, VkImageView targetImageView);
 	void draw_background(VkCommandBuffer cmd);
 
 public:
@@ -61,6 +63,11 @@ public:
 
 	FrameData& get_current_frame() { return _frames[_frameNumber % FRAME_OVERLAP]; }
 
+	// immediate submit structures (for imgui)
+	VkFence _immFence;
+	VkCommandBuffer _immCommandBuffer;
+	VkCommandPool _immCommandPool;
+
 	VkQueue _graphicsQueue;
 	uint32_t _graphicsQueueFamily;
 
@@ -87,6 +94,8 @@ public:
 
 	//run main loop
 	void run();
+
+	void immediate_submit(std::function<void(VkCommandBuffer cmd)>&& function);
 
 	VulkanEngine() = default;
 	VulkanEngine(const VulkanEngine&) = delete;
