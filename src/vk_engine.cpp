@@ -1,4 +1,4 @@
-﻿//> includes
+//> includes
 #include "vk_engine.h"
 #include "imgui.h"
 #include "imgui_impl_sdl2.h"
@@ -36,18 +36,18 @@ void VulkanEngine::init_vulkan()
     vkb::Instance vkb_instance = instance.value();
 
     _instance = vkb_instance.instance;
-    _deletionQueue.push_function([&]() {
+    _deletionQueue.push_function([=]() {
         vkDestroyInstance(_instance, nullptr);
         }, "instance");
 
     _debugMessenger = vkb_instance.debug_messenger;
-    _deletionQueue.push_function([&]() {
+    _deletionQueue.push_function([=]() {
         vkb::destroy_debug_utils_messenger(_instance, _debugMessenger);
         }, "debug_messenger");
 
     // -- Device --
     SDL_Vulkan_CreateSurface(_window, _instance, &_surface);
-    _deletionQueue.push_function([&]() {
+    _deletionQueue.push_function([=]() {
         vkDestroySurfaceKHR(_instance, _surface, nullptr);
         }, "surface");
 
@@ -76,7 +76,7 @@ void VulkanEngine::init_vulkan()
     _device = vkbDevice.device;
     _physicalDevice = physicalDevice.physical_device;
 
-    _deletionQueue.push_function([&]() {
+    _deletionQueue.push_function([=]() {
         vkDestroyDevice(_device, nullptr);
         }, "device");
 
@@ -91,7 +91,7 @@ void VulkanEngine::init_vulkan()
     allocatorInfo.flags = VMA_ALLOCATOR_CREATE_BUFFER_DEVICE_ADDRESS_BIT;
     vmaCreateAllocator(&allocatorInfo, &_allocator);
 
-    _deletionQueue.push_function([&]() {
+    _deletionQueue.push_function([=]() {
         vmaDestroyAllocator(_allocator);
         }, "allocator");
 }
@@ -101,7 +101,7 @@ void VulkanEngine::init_swapchain()
     create_swapchain(_windowExtent.width, _windowExtent.height);
 
 
-    _deletionQueue.push_function([&]() {
+    _deletionQueue.push_function([=]() {
         destroy_swapchain();
         }, "swapchain");
 
@@ -164,9 +164,9 @@ void VulkanEngine::init_commands()
 
     VK_CHECK(vkAllocateCommandBuffers(_device, &cmdAllocInfo, &_immCommandBuffer));
 
-    _deletionQueue.push_function([this]() {
+    _deletionQueue.push_function([=]() {
         vkDestroyCommandPool(_device, _immCommandPool, nullptr);
-        });
+        }, "imm command pool");
 
 }
 
@@ -198,9 +198,9 @@ void VulkanEngine::init_sync_structures()
 
     // for imgui
     VK_CHECK(vkCreateFence(_device, &fenceCreateInfo, nullptr, &_immFence));
-    _deletionQueue.push_function([this]() {
+    _deletionQueue.push_function([=]() {
         vkDestroyFence(_device, _immFence, nullptr);
-        });
+        }, "imm fence");
 }
 
 void VulkanEngine::init_descriptors()
@@ -239,11 +239,11 @@ void VulkanEngine::init_descriptors()
 
     vkUpdateDescriptorSets(_device, 1, &drawImageWrite, 0, nullptr);
 
-    _deletionQueue.push_function([&]() {
+    _deletionQueue.push_function([=]() {
         globalDescriptorAllocator.destroy_pool(_device);
 
         vkDestroyDescriptorSetLayout(_device, _drawImageDescriptorLayout, nullptr);
-        });
+        }, "global descriptors");
        
 }
 
@@ -255,37 +255,76 @@ void VulkanEngine::init_pipelines()
 void VulkanEngine::init_background_pipelines()
 {
     // layout
-    VkPipelineLayoutCreateInfo computeLayout{ .sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO };
-    computeLayout.pNext = nullptr;
-    computeLayout.pSetLayouts = &_drawImageDescriptorLayout;
-    computeLayout.setLayoutCount = 1;
+    VkPipelineLayoutCreateInfo computeLayoutCreateInfo{ .sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO };
+    computeLayoutCreateInfo.pNext = nullptr;
+    computeLayoutCreateInfo.pSetLayouts = &_drawImageDescriptorLayout;
+    computeLayoutCreateInfo.setLayoutCount = 1;
 
-    VK_CHECK(vkCreatePipelineLayout(_device, &computeLayout, nullptr, &_gradientPipelineLayout));
+	VkPushConstantRange pushConstantRange{};
+	pushConstantRange.offset = 0;
+    pushConstantRange.size = sizeof(ComputePushConstants);
+	pushConstantRange.stageFlags = VK_SHADER_STAGE_COMPUTE_BIT;
 
-    VkShaderModule computeDrawShader;
-    if (!vkutil::load_shader_module("../../shaders/gradient.comp.spv", _device, &computeDrawShader)) {
-        fmt::print("Error when building the compute shader\n");
+	computeLayoutCreateInfo.pPushConstantRanges = &pushConstantRange;
+	computeLayoutCreateInfo.pushConstantRangeCount = 1;
+
+	VkPipelineLayout layout;
+    VK_CHECK(vkCreatePipelineLayout(_device, &computeLayoutCreateInfo, nullptr, &layout));
+
+    VkShaderModule gradientShader;
+    if (!vkutil::load_shader_module("../shaders/gradient_color.comp.spv", _device, &gradientShader)) {
+        fmt::print("Error when building the compute shader (gradient)\n");
+    }
+
+    VkShaderModule skyShader;
+    if (!vkutil::load_shader_module("../shaders/sky.comp.spv", _device, &skyShader)) {
+        fmt::print("Error when building the compute shader (sky)\n");
     }
 
     VkPipelineShaderStageCreateInfo stageInfo{ .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO };
     stageInfo.pNext = nullptr;
     stageInfo.stage = VK_SHADER_STAGE_COMPUTE_BIT;
-    stageInfo.module = computeDrawShader;
+    stageInfo.module = gradientShader;
     stageInfo.pName = "main";
 
     VkComputePipelineCreateInfo computePipelineCreateInfo{ .sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO };
     computePipelineCreateInfo.pNext = nullptr;
-    computePipelineCreateInfo.layout = _gradientPipelineLayout;
+    computePipelineCreateInfo.layout = layout;
     computePipelineCreateInfo.stage = stageInfo;
 
-    VK_CHECK(vkCreateComputePipelines(_device, VK_NULL_HANDLE, 1, &computePipelineCreateInfo, nullptr, &_gradientPipeline));
+    ComputeEffect gradient;
+    gradient.layout = layout;
+    gradient.name = "gradient";
+    gradient.data = {};
 
-    vkDestroyShaderModule(_device, computeDrawShader, nullptr);
+	gradient.data.data1 = glm::vec4(1.f, 0.f, 0.f, 1.f);
+	gradient.data.data2 = glm::vec4(0.f, 0.f, 1.f, 1.f);
 
-    _deletionQueue.push_function([&]() {
-        vkDestroyPipelineLayout(_device, _gradientPipelineLayout, nullptr);
-        vkDestroyPipeline(_device, _gradientPipeline, nullptr);
-        });
+    VK_CHECK(vkCreateComputePipelines(_device, VK_NULL_HANDLE, 1, &computePipelineCreateInfo, nullptr, &gradient.pipeline));
+
+
+	computePipelineCreateInfo.stage.module = skyShader;
+
+	ComputeEffect sky;
+	sky.layout = layout;
+	sky.name = "sky";
+	sky.data = {};
+    sky.data.data1 = glm::vec4(0.1f, 0.2f, 0.4f, 0.97f);
+
+    VK_CHECK(vkCreateComputePipelines(_device, VK_NULL_HANDLE, 1, &computePipelineCreateInfo, nullptr, &sky.pipeline));
+
+	backgroundEffects.push_back(gradient);
+	backgroundEffects.push_back(sky);
+
+    vkDestroyShaderModule(_device, gradientShader, nullptr);
+    vkDestroyShaderModule(_device, skyShader, nullptr);
+
+
+    _deletionQueue.push_function([=]() {
+        vkDestroyPipelineLayout(_device, layout, nullptr);
+        vkDestroyPipeline(_device, gradient.pipeline, nullptr);
+        vkDestroyPipeline(_device, sky.pipeline, nullptr);
+        }, "background pipelines");
 }
 
 void VulkanEngine::init_imgui()
@@ -349,8 +388,10 @@ void VulkanEngine::init_imgui()
     // add the destroy the imgui created structures
     _deletionQueue.push_function([=]() {
         ImGui_ImplVulkan_Shutdown();
+        ImGui_ImplSDL2_Shutdown();
+        ImGui::DestroyContext();
         vkDestroyDescriptorPool(_device, imguiPool, nullptr);
-        });
+        }, "imgui cleanup");
 }
 
 void VulkanEngine::create_swapchain(uint32_t width, uint32_t height)
@@ -396,10 +437,22 @@ void VulkanEngine::draw_imgui(VkCommandBuffer cmd, VkImageView targetImageView)
 
 void VulkanEngine::draw_background(VkCommandBuffer cmd)
 {
-    vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_COMPUTE, _gradientPipeline);
+	ComputeEffect& effect = backgroundEffects[currentBackgroundEffect];
 
-    vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_COMPUTE, _gradientPipelineLayout, 0, 1, &_drawImageDescriptors, 0, nullptr);
+	// print to the console the data for debug
+	    fmt::print("Background Effect: {}\n", effect.name);
+	    fmt::print("Data1: {}, {}, {}, {}\n", effect.data.data1.x, effect.data.data1.y, effect.data.data1.z, effect.data.data1.w);
+	    fmt::print("Data2: {}, {}, {}, {}\n", effect.data.data2.x, effect.data.data2.y, effect.data.data2.z, effect.data.data2.w);
+	    fmt::print("Data3: {}, {}, {}, {}\n", effect.data.data3.x, effect.data.data3.y, effect.data.data3.z, effect.data.data3.w);
+	    fmt::print("Data4: {}, {}, {}, {}\n", effect.data.data4.x, effect.data.data4.y, effect.data.data4.z, effect.data.data4.w);
     
+
+    vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_COMPUTE, effect.pipeline);
+
+    vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_COMPUTE, effect.layout, 0, 1, &_drawImageDescriptors, 0, nullptr);
+
+    vkCmdPushConstants(cmd, effect.layout, VK_SHADER_STAGE_COMPUTE_BIT, 0, sizeof(ComputePushConstants), &effect.data);
+
     vkCmdDispatch(cmd, std::ceil(_drawExtent.width / 16.0), std::ceil(_drawExtent.height / 16.0), 1);
 }
 
@@ -413,6 +466,10 @@ void VulkanEngine::init()
     // We initialize SDL and create a window with it.
     SDL_Init(SDL_INIT_VIDEO);
 
+    _deletionQueue.push_function([=]() {
+        SDL_Quit();
+        }, "sdl_quit");
+
     SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_VULKAN);
 
     _window = SDL_CreateWindow(
@@ -423,7 +480,7 @@ void VulkanEngine::init()
         _windowExtent.height,
         window_flags);
 
-    _deletionQueue.push_function([&]() {
+    _deletionQueue.push_function([=]() {
         SDL_DestroyWindow(_window);
         }, "sdl window");
 
@@ -585,7 +642,20 @@ void VulkanEngine::run()
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
 
-        ImGui::ShowDemoWindow();
+        if (ImGui::Begin("Background")) {
+			ComputeEffect& selected = backgroundEffects[currentBackgroundEffect];
+
+            ImGui::Text("Selected effect", selected.name);
+
+            ImGui::SliderInt("Effect Index", &currentBackgroundEffect, 0, backgroundEffects.size() - 1);
+
+            ImGui::ColorPicker4("data1", (float*)&selected.data.data1);
+            ImGui::ColorPicker4("data2", (float*)&selected.data.data2);
+            ImGui::InputFloat4("data3", (float*)&selected.data.data3);
+            ImGui::InputFloat4("data4", (float*)&selected.data.data4);
+        }
+		ImGui::End();
+
 
         ImGui::Render();
 
